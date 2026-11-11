@@ -1,10 +1,10 @@
 {
-  "name": "maru-ghar-functions",
+  "name": "maru-ghar-web",
   "private": true,
-  "main": "index.js",
-  "engines": { "node": "22" },
-  "dependencies": {
-    "firebase-admin": "^12.7.0",
-    "firebase-functions": "^6.1.0"
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "copy-web": "node scripts/copy-web.mjs",
+    "test": "node smoke-check.mjs && node i18n-check.mjs && node i18n-coverage-check.mjs && node i18n-dom-regression-check.mjs && node ui-regression-check.mjs && node customer-auth-check.mjs && node verification-audit-check.mjs && node maps-whatsapp-check.mjs && node notifications-audit-check.mjs && node final-firestore-rules-check.mjs && node firebase-deploy-preflight.mjs"
   }
 }
