@@ -118,6 +118,30 @@ function printPropertyPDF(p){const lang=mgCurrentLanguage(),locale=lang==='hi'?'
 :where(button,input[type="button"],input[type="submit"],.btn):disabled{filter:grayscale(.25);opacity:.62;cursor:not-allowed}
 @media(prefers-reduced-motion:reduce){#mg-premium-3d-buttons-v1 :where(*){transition:none!important}}
 </style>
+
+<style id="mg-unified-button-finish-v3">
+/* One consistent premium button language across the entire Maru Ghar site. */
+:where(button,input[type="button"],input[type="submit"],input[type="reset"],a[role="button"],.btn,.outline,.wa-btn,.contact-wa,.mg-head-action,.mg-chip,.mg-mapbtn,.mg-compare-shortcut,.mg-contact-trigger,.mg-contact-main,.mg-mobile-nav a,.mg-settings-grid button,.admin-shortcuts a,.admin-shortcuts button,.admin-quick a,.admin-quick button,.backup-actions button,.login-submit,.mg-submit-toggle,.mg-tools button,.cats .cat,.searchbox button,.morefilters button,.property-foot a,.property-foot button,.admin-settings>summary,.primary,.approve,.reject){
+  background:linear-gradient(145deg,#fff4cf 0%,#e8edf2 34%,#c5ced7 58%,#f0d58d 100%)!important;
+  color:#17382f!important;
+  border:1px solid #c9a34e!important;
+  border-radius:13px!important;
+  font-weight:800!important;
+  box-shadow:0 4px 0 #8b713b,0 8px 14px rgba(0,0,0,.20),inset 0 2px 3px rgba(255,255,255,.9),inset 0 -1px 2px rgba(74,58,24,.14)!important;
+  text-shadow:0 1px 0 rgba(255,255,255,.75)!important;
+  transition:transform .15s ease,box-shadow .15s ease,filter .15s ease!important;
+}
+@media(hover:hover){
+:where(button,input[type="button"],input[type="submit"],input[type="reset"],a[role="button"],.btn,.outline,.wa-btn,.contact-wa,.mg-head-action,.mg-chip,.mg-mapbtn,.mg-compare-shortcut,.mg-contact-trigger,.mg-contact-main,.mg-mobile-nav a,.mg-settings-grid button,.admin-shortcuts a,.admin-shortcuts button,.admin-quick a,.admin-quick button,.backup-actions button,.login-submit,.mg-submit-toggle,.mg-tools button,.cats .cat,.searchbox button,.morefilters button,.property-foot a,.property-foot button,.admin-settings>summary,.primary,.approve,.reject):not(:disabled):hover{
+  transform:translateY(-2px);filter:brightness(1.04) saturate(1.04);
+  box-shadow:0 6px 0 #8b713b,0 11px 18px rgba(0,0,0,.23),inset 0 2px 3px rgba(255,255,255,.95)!important;
+}}
+:where(button,input[type="button"],input[type="submit"],input[type="reset"],a[role="button"],.btn,.outline,.wa-btn,.contact-wa,.mg-head-action,.mg-chip,.mg-mapbtn,.mg-compare-shortcut,.mg-contact-trigger,.mg-contact-main,.mg-mobile-nav a,.mg-settings-grid button,.admin-shortcuts a,.admin-shortcuts button,.admin-quick a,.admin-quick button,.backup-actions button,.login-submit,.mg-submit-toggle,.mg-tools button,.cats .cat,.searchbox button,.morefilters button,.property-foot a,.property-foot button,.admin-settings>summary,.primary,.approve,.reject):not(:disabled):active{
+  transform:translateY(3px)!important;filter:brightness(.98);
+  box-shadow:0 1px 0 #8b713b,0 3px 6px rgba(0,0,0,.18),inset 0 2px 4px rgba(0,0,0,.12)!important;
+}
+:where(button,input[type="button"],input[type="submit"],input[type="reset"],a[role="button"],.btn,.outline,.wa-btn,.contact-wa,.mg-head-action,.mg-chip,.mg-mapbtn,.mg-compare-shortcut,.mg-contact-trigger,.mg-contact-main,.mg-mobile-nav a,.mg-settings-grid button,.admin-shortcuts a,.admin-shortcuts button,.admin-quick a,.admin-quick button,.backup-actions button,.login-submit,.mg-submit-toggle,.mg-tools button,.cats .cat,.searchbox button,.morefilters button,.property-foot a,.property-foot button,.admin-settings>summary,.primary,.approve,.reject):focus-visible{outline:3px solid rgba(218,180,83,.7)!important;outline-offset:3px!important}
+</style>
 </body></html>`);w.document.close();}
 async function review(id,action,button){
 const selectedProperty=allListings.find(x=>x.id===id);if(!selectedProperty)return;
