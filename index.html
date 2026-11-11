@@ -2397,4 +2397,31 @@ window.MG_I18N_DICTIONARY={
 })();
 </script>
 
+
+<style id="mg-premium-3d-buttons-v1">
+/* MARU GHAR: unified premium 3D button finish. Keeps existing colors, labels, sizes and actions. */
+:where(button, input[type="button"], input[type="submit"], input[type="reset"], a[role="button"], .btn, .outline, .wa-btn, .contact-wa, .mg-head-action, .mg-chip, .mg-mapbtn, .mg-compare-shortcut, .mg-contact-trigger, .mg-contact-main, .mg-mobile-nav a, .mg-settings-grid button, .admin-shortcuts a, .admin-shortcuts button, .admin-quick a, .admin-quick button, .backup-actions button, .login-submit, .mg-submit-toggle, .mg-tools button, .cats .cat, .searchbox button, .morefilters button, .property-foot a, .property-foot button, .admin-settings > summary) {
+  position:relative;
+  border-style:solid!important;
+  border-width:1px!important;
+  box-shadow:0 4px 0 rgba(27,38,31,.38),0 8px 15px rgba(0,0,0,.20),inset 0 1.5px 0 rgba(255,255,255,.72),inset 0 -1px 0 rgba(0,0,0,.12)!important;
+  text-shadow:0 1px 1px rgba(255,255,255,.28);
+  transition:transform .16s ease,box-shadow .16s ease,filter .16s ease!important;
+  -webkit-tap-highlight-color:transparent;
+}
+@media(hover:hover){
+:where(button, input[type="button"], input[type="submit"], a[role="button"], .btn, .outline, .wa-btn, .contact-wa, .mg-head-action, .mg-chip, .mg-mapbtn, .mg-compare-shortcut, .mg-contact-trigger, .mg-contact-main, .mg-mobile-nav a, .mg-settings-grid button, .admin-shortcuts a, .admin-shortcuts button, .admin-quick a, .admin-quick button, .backup-actions button, .login-submit, .mg-submit-toggle, .mg-tools button, .cats .cat, .searchbox button, .morefilters button, .property-foot a, .property-foot button, .admin-settings > summary):not(:disabled):hover{
+  transform:translateY(-2px);
+  filter:brightness(1.035) saturate(1.04);
+  box-shadow:0 6px 0 rgba(27,38,31,.34),0 12px 19px rgba(0,0,0,.23),inset 0 1.5px 0 rgba(255,255,255,.78),inset 0 -1px 0 rgba(0,0,0,.10)!important;
+}}
+:where(button, input[type="button"], input[type="submit"], a[role="button"], .btn, .outline, .wa-btn, .contact-wa, .mg-head-action, .mg-chip, .mg-mapbtn, .mg-compare-shortcut, .mg-contact-trigger, .mg-contact-main, .mg-mobile-nav a, .mg-settings-grid button, .admin-shortcuts a, .admin-shortcuts button, .admin-quick a, .admin-quick button, .backup-actions button, .login-submit, .mg-submit-toggle, .mg-tools button, .cats .cat, .searchbox button, .morefilters button, .property-foot a, .property-foot button, .admin-settings > summary):not(:disabled):active{
+  transform:translateY(3px)!important;
+  filter:brightness(.98);
+  box-shadow:0 1px 0 rgba(27,38,31,.42),0 3px 7px rgba(0,0,0,.18),inset 0 2px 4px rgba(0,0,0,.13)!important;
+}
+:where(button, input[type="button"], input[type="submit"], a[role="button"], .btn, .outline, .wa-btn, .contact-wa, .mg-head-action, .mg-chip, .mg-mapbtn, .mg-compare-shortcut, .mg-contact-trigger, .mg-contact-main, .mg-mobile-nav a, .mg-settings-grid button, .admin-shortcuts a, .admin-shortcuts button, .admin-quick a, .admin-quick button, .backup-actions button, .login-submit, .mg-submit-toggle, .mg-tools button, .cats .cat, .searchbox button, .morefilters button, .property-foot a, .property-foot button):focus-visible{outline:3px solid rgba(218,180,83,.65)!important;outline-offset:3px!important}
+:where(button,input[type="button"],input[type="submit"],.btn):disabled{filter:grayscale(.25);opacity:.62;cursor:not-allowed}
+@media(prefers-reduced-motion:reduce){#mg-premium-3d-buttons-v1 :where(*){transition:none!important}}
+</style>
 </body></html>
