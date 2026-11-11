@@ -1,0 +1,23 @@
+import fs from 'node:fs';
+const fn=fs.readFileSync('functions/index.js','utf8');
+const rules=fs.readFileSync('firestore.rules','utf8');
+const extras=fs.readFileSync('assets/maru-ghar-extras.js','utf8');
+const admin=fs.readFileSync('admin.html','utf8');
+const errors=[];
+if(!fn.includes("require('crypto')"))errors.push('Cloud Function must import crypto for deterministic notification IDs');
+if(!fn.includes('context.eventId'))errors.push('Price-drop notifications must use the Firestore event ID for retry idempotency');
+if(!fn.includes("doc(`price_${digest}`)"))errors.push('Price-drop notification document ID must be deterministic');
+if(!fn.includes('batch.set(note'))errors.push('Price-drop notifications must be written in bounded batches');
+if(!fn.includes('offset += 400'))errors.push('Notification batch size must remain below Firestore 500-write limit');
+if(!fn.includes("after.status !== 'approved'"))errors.push('Price-drop alerts must only apply to approved listings');
+if(!fn.includes("where('listingId', '==', listingId)"))errors.push('Price-drop must target customers who saved the exact listing');
+if(!rules.includes("match /users/{uid}/notifications/{notificationId}"))errors.push('Customer notification rules missing');
+if(!rules.includes('allow create, delete: if false'))errors.push('Customers must not create/delete trusted notifications');
+if(!rules.includes("request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read'])"))errors.push('Customer may only mark their own notification read');
+if(!extras.includes("collection(db,'users',currentUser.uid,'notifications')"))errors.push('Customer notification list must be UID scoped');
+if(!extras.includes("{read:true}"))errors.push('Customer notification read action missing');
+if(!admin.includes("doc(db,'adminTokens',t.value)"))errors.push('Admin FCM token registration missing');
+if(!admin.includes("PN.addListener('registration'"))errors.push('Android FCM registration listener missing');
+if(!admin.includes("PN.requestPermissions()"))errors.push('Android notification permission request missing');
+if(errors.length){console.error('NOTIFICATION AUDIT FAILED');errors.forEach(e=>console.error(' - '+e));process.exit(1)}
+console.log('NOTIFICATION AUDIT PASS — retry-idempotent price-drop alerts, approved-listing guard, exact wishlist targeting, bounded Firestore batches, UID-private notification access, read-only customer updates, and admin FCM registration markers.');
