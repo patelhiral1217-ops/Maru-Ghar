@@ -26,7 +26,7 @@ jobs:
       - name: Build website folder
         run: |
           npm run copy-web
-          npm test
+          node scripts/hosting-preflight.mjs
       - name: Install Firebase CLI
         run: npm install --global firebase-tools@13
       - name: Deploy Hosting
