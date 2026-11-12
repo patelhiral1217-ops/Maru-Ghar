@@ -9,7 +9,7 @@ on:
         type: choice
         options: [hosting, functions, rules]
       owner_phone_migration_done:
-        description: "Confirm Admin migration 'જૂના મોબાઇલ નંબર સુરક્ષિત કરો' has completed before deploying Rules"
+        description: "No existing property listings were reported. Keep true only while the database has no legacy listings; otherwise run the Admin contact migration first."
         required: true
         default: false
         type: boolean
