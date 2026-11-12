@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const root=path.dirname(fileURLToPath(import.meta.url));
 const read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const errors=[];
 let project;
