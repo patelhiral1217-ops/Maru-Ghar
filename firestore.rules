@@ -1,0 +1,356 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------------------------------------------------------
+    // 1. AUTHENTICATION / ADMIN
+    // ---------------------------------------------------------
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.uid == 'yJYiuaUE3KXVLVuWqLyLRH5owQJ3';
+    }
+
+    function isRegisteredCustomer() {
+      return request.auth != null
+        && request.auth.token.firebase.sign_in_provider != 'anonymous';
+    }
+
+    function isOwner(data) {
+      return request.auth != null
+        && data.submitterUid == request.auth.uid;
+    }
+
+    // ---------------------------------------------------------
+    // 2. LISTING VALIDATION
+    // ownerPhone is deliberately NOT allowed in public listings.
+    // It belongs only in listingContacts/{listingId}.
+    // ---------------------------------------------------------
+    function validCommon(data) {
+      return data.keys().hasAll([
+          'ownerName', 'type', 'purpose', 'location', 'price',
+          'description', 'ownerConsent', 'photos', 'status',
+          'createdAt', 'submitterUid'
+        ])
+        && data.keys().hasOnly([
+          'ownerName', 'type', 'purpose', 'location', 'price',
+          'description', 'ownerConsent', 'photos', 'status',
+          'createdAt', 'submitterUid', 'reviewedAt', 'reviewedBy',
+          'reviewNote', 'videos', 'city', 'mapLink', 'bhk',
+          'areaSqft', 'floor', 'furnishing', 'parking', 'deposit',
+          'priceNum', 'offerTitle', 'offerText', 'offerUntil',
+          'verified', 'featured', 'closed'
+        ])
+        && data.ownerName is string
+        && data.ownerName.size() >= 2
+        && data.ownerName.size() <= 80
+        && data.type in [
+          'ઘર', 'ફ્લેટ', 'દુકાન', 'રેસિડેન્શિયલ પ્લોટ',
+          'કોમર્શિયલ પ્લોટ', 'ઓફિસ', 'વેરહાઉસ', 'પી.જી. (PG)'
+        ]
+        && data.purpose in ['ભાડે', 'વેચાણ']
+        && data.location is string
+        && data.location.size() >= 2
+        && data.location.size() <= 120
+        && data.price is string
+        && data.price.size() <= 60
+        && data.description is string
+        && data.description.size() <= 1200
+        && data.ownerConsent == true
+        && data.photos is list
+        && (!('videos' in data) || data.videos is list)
+        && (!('city' in data) || (
+          data.city is string
+          && data.city.size() >= 2
+          && data.city.size() <= 60
+        ))
+        && (!('mapLink' in data) || (
+          data.mapLink is string
+          && data.mapLink.size() <= 500
+          && (
+            data.mapLink == ''
+            || data.mapLink.matches('^https://(www\\.)?google\\.com/maps/.*$|^https://maps\\.google\\.com/.*$|^https://maps\\.app\\.goo\\.gl/.*$|^https://goo\\.gl/maps/.*$')
+          )
+        ))
+        && (!('bhk' in data) || (data.bhk is string && data.bhk.size() <= 20))
+        && (!('areaSqft' in data) || (data.areaSqft is string && data.areaSqft.size() <= 20))
+        && (!('floor' in data) || (data.floor is string && data.floor.size() <= 30))
+        && (!('furnishing' in data) || (data.furnishing is string && data.furnishing.size() <= 30))
+        && (!('parking' in data) || (data.parking is string && data.parking.size() <= 30))
+        && (!('deposit' in data) || (data.deposit is string && data.deposit.size() <= 60))
+        && (!('priceNum' in data) || (
+          data.priceNum is number
+          && data.priceNum >= 0
+          && data.priceNum <= 100000000000
+        ))
+        && (!('offerTitle' in data) || (data.offerTitle is string && data.offerTitle.size() <= 60))
+        && (!('offerText' in data) || (data.offerText is string && data.offerText.size() <= 200))
+        && (!('offerUntil' in data) || (data.offerUntil is string && data.offerUntil.size() <= 20))
+        && (!('reviewNote' in data) || (data.reviewNote is string && data.reviewNote.size() <= 300))
+        && (!('verified' in data) || data.verified is bool)
+        && (!('featured' in data) || data.featured is bool)
+        && (!('closed' in data) || data.closed is bool);
+    }
+
+    // ---------------------------------------------------------
+    // 3. PROPERTY LISTINGS
+    // NOTE: Before publishing these final rules, run the Admin
+    // "જૂના મોબાઇલ નંબર સુરક્ષિત કરો" migration once. Firestore
+    // query rules are not filters; excluding ownerPhone in a read
+    // condition blocks normal public listing queries. After migration,
+    // ownerPhone is prohibited by validCommon and all write branches.
+    // ---------------------------------------------------------
+    match /listings/{listingId} {
+      allow read: if isAdmin()
+        || resource.data.status == 'approved'
+        || isOwner(resource.data);
+
+      // Customer submissions are always pending and cannot set review/admin flags.
+      allow create: if request.auth != null
+        && !isAdmin()
+        && validCommon(request.resource.data)
+        && request.resource.data.status == 'pending'
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.submitterUid == request.auth.uid
+        && !('reviewedAt' in request.resource.data)
+        && !('reviewedBy' in request.resource.data)
+        && !('reviewNote' in request.resource.data)
+        && !('verified' in request.resource.data)
+        && !('featured' in request.resource.data)
+        && !('closed' in request.resource.data);
+
+      // Admin-created / restored listings.
+      allow create: if isAdmin()
+        && validCommon(request.resource.data)
+        && request.resource.data.status in ['pending', 'approved']
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.submitterUid == request.auth.uid;
+
+      allow update: if isAdmin() && (
+        // Approve / reject / review note.
+        (
+          request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['status', 'reviewedAt', 'reviewedBy', 'reviewNote'])
+          && request.resource.data.status in ['pending', 'approved', 'rejected']
+          && request.resource.data.reviewedBy == request.auth.uid
+          && request.resource.data.reviewedAt == request.time
+          && (!('reviewNote' in request.resource.data) || (
+            request.resource.data.reviewNote is string
+            && request.resource.data.reviewNote.size() <= 300
+          ))
+        )
+        // One-time move of legacy owner phone into listingContacts.
+        || (
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['ownerPhone'])
+          && !('ownerPhone' in request.resource.data)
+        )
+        // Admin removes individual photos / videos.
+        || (
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['photos', 'videos'])
+          && request.resource.data.photos is list
+          && (!('videos' in request.resource.data) || request.resource.data.videos is list)
+        )
+        // Admin city / map maintenance.
+        || (
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['city', 'mapLink'])
+          && (!('city' in request.resource.data) || (
+            request.resource.data.city is string
+            && request.resource.data.city.size() >= 2
+            && request.resource.data.city.size() <= 60
+          ))
+          && (!('mapLink' in request.resource.data) || (
+            request.resource.data.mapLink is string
+            && request.resource.data.mapLink.size() <= 500
+            && (
+              request.resource.data.mapLink == ''
+              || request.resource.data.mapLink.matches('^https://(www\\.)?google\\.com/maps/.*$|^https://maps\\.google\\.com/.*$|^https://maps\\.app\\.goo\\.gl/.*$|^https://goo\\.gl/maps/.*$')
+            )
+          ))
+        )
+        // Admin-only verification / featured / closed flags.
+        || (
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['verified', 'featured', 'closed'])
+          && (!('verified' in request.resource.data) || request.resource.data.verified is bool)
+          && (!('featured' in request.resource.data) || request.resource.data.featured is bool)
+          && (!('closed' in request.resource.data) || request.resource.data.closed is bool)
+        )
+        // Admin price update; price-drop Cloud Function reacts to priceNum decrease.
+        || (
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['price', 'priceNum', 'priceUpdatedAt'])
+          && request.resource.data.price is string
+          && request.resource.data.price.size() <= 60
+          && request.resource.data.priceNum is number
+          && request.resource.data.priceNum >= 0
+          && request.resource.data.priceNum <= 100000000000
+          && request.resource.data.priceUpdatedAt == request.time
+        )
+        // Admin offer / scheme update.
+        || (
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['offerTitle', 'offerText', 'offerUntil'])
+          && (!('offerTitle' in request.resource.data) || (request.resource.data.offerTitle is string && request.resource.data.offerTitle.size() <= 60))
+          && (!('offerText' in request.resource.data) || (request.resource.data.offerText is string && request.resource.data.offerText.size() <= 200))
+          && (!('offerUntil' in request.resource.data) || (request.resource.data.offerUntil is string && request.resource.data.offerUntil.size() <= 20))
+        )
+      );
+
+      allow delete: if isAdmin();
+    }
+
+    // ---------------------------------------------------------
+    // 4. PRIVATE OWNER CONTACTS
+    // ---------------------------------------------------------
+    match /listingContacts/{listingId} {
+      allow get: if isAdmin()
+        || (isRegisteredCustomer()
+          && get(/databases/$(database)/documents/listings/$(listingId)).data.status == 'approved');
+      allow list: if isAdmin();
+
+      allow create: if isAdmin() || (
+        request.auth != null
+        && request.resource.data.keys().hasOnly(['ownerName', 'ownerPhone', 'ownerUid', 'listingId', 'createdAt'])
+        && request.resource.data.ownerName is string
+        && request.resource.data.ownerName.size() >= 2
+        && request.resource.data.ownerName.size() <= 80
+        && request.resource.data.ownerPhone is string
+        && request.resource.data.ownerPhone.matches('^[0-9+() -]{10,16}$')
+        && request.resource.data.ownerUid == request.auth.uid
+        && request.resource.data.listingId == listingId
+        && request.resource.data.createdAt == request.time
+        && get(/databases/$(database)/documents/listings/$(listingId)).data.submitterUid == request.auth.uid
+      );
+      allow update, delete: if isAdmin();
+    }
+
+    // ---------------------------------------------------------
+    // 5. CITY MANAGEMENT
+    // ---------------------------------------------------------
+    match /cities/{cityId} {
+      allow read: if true;
+      allow create, update: if isAdmin()
+        && request.resource.data.keys().hasOnly(['name', 'nameEn', 'createdAt'])
+        && request.resource.data.name is string
+        && request.resource.data.name.size() >= 2
+        && request.resource.data.name.size() <= 60
+        && (!('nameEn' in request.resource.data) || (
+          request.resource.data.nameEn is string
+          && request.resource.data.nameEn.size() <= 60
+        ));
+      allow delete: if isAdmin();
+    }
+
+    // ---------------------------------------------------------
+    // 6. REPORTS / COMPLAINTS
+    // ---------------------------------------------------------
+    match /reports/{reportId} {
+      allow create: if request.auth != null
+        && request.resource.data.keys().hasOnly(['listingId', 'reason', 'createdAt', 'uid'])
+        && request.resource.data.listingId is string
+        && request.resource.data.listingId.size() <= 40
+        && request.resource.data.reason is string
+        && request.resource.data.reason.size() >= 2
+        && request.resource.data.reason.size() <= 300
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.uid == request.auth.uid;
+      allow read, delete: if isAdmin();
+    }
+
+    // ---------------------------------------------------------
+    // 7. PUBLIC SETTINGS
+    // ---------------------------------------------------------
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ---------------------------------------------------------
+    // 8. CUSTOMER FAVOURITES
+    // Normal sync writes createdAt; backup restore writes restoredAt.
+    // ---------------------------------------------------------
+    match /users/{uid}/favorites/{listingId} {
+      allow read, delete: if request.auth != null && request.auth.uid == uid;
+      allow create, update: if request.auth != null
+        && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['listingId', 'createdAt', 'restoredAt'])
+        && request.resource.data.listingId == listingId
+        && (
+          (('createdAt' in request.resource.data) && request.resource.data.createdAt is timestamp)
+          || (('restoredAt' in request.resource.data) && request.resource.data.restoredAt is timestamp)
+        );
+    }
+
+    // ---------------------------------------------------------
+    // 9. CUSTOMER NOTIFICATIONS
+    // Created only by trusted Cloud Functions Admin SDK.
+    // ---------------------------------------------------------
+    match /users/{uid}/notifications/{notificationId} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow create, delete: if false;
+      allow update: if request.auth != null
+        && request.auth.uid == uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read'])
+        && request.resource.data.read is bool;
+    }
+
+    // ---------------------------------------------------------
+    // 10. CUSTOMER ENQUIRIES
+    // ---------------------------------------------------------
+    match /enquiries/{enquiryId} {
+      allow create: if isRegisteredCustomer()
+        && request.resource.data.keys().hasOnly([
+          'uid', 'listingId', 'listingTitle', 'customerName',
+          'customerPhone', 'message', 'status', 'createdAt'
+        ])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.listingId is string
+        && request.resource.data.listingId.size() <= 100
+        && request.resource.data.listingTitle is string
+        && request.resource.data.listingTitle.size() <= 120
+        && request.resource.data.customerName is string
+        && request.resource.data.customerName.size() >= 2
+        && request.resource.data.customerName.size() <= 80
+        && request.resource.data.customerPhone is string
+        && request.resource.data.customerPhone.matches('^[0-9+() -]{10,16}$')
+        && request.resource.data.message is string
+        && request.resource.data.message.size() <= 500
+        && request.resource.data.status == 'pending'
+        && request.resource.data.createdAt == request.time;
+      allow read: if isAdmin()
+        || (request.auth != null && resource.data.uid == request.auth.uid);
+      allow update, delete: if isAdmin();
+    }
+
+    // ---------------------------------------------------------
+    // 11. ADMIN DIAGNOSTIC LOGS
+    // ---------------------------------------------------------
+    match /adminLogs/{logId} {
+      allow read, create, update, delete: if isAdmin();
+    }
+
+    // ---------------------------------------------------------
+    // 12. IMMUTABLE PROPERTY VERIFICATION AUDIT
+    // Admin confirms documents manually; records cannot be changed/deleted.
+    // ---------------------------------------------------------
+    match /listingVerifications/{verificationId} {
+      allow read: if isAdmin();
+      allow create: if isAdmin()
+        && request.resource.data.keys().hasOnly(['listingId', 'action', 'note', 'checkedBy', 'checkedAt'])
+        && request.resource.data.keys().hasAll(['listingId', 'action', 'note', 'checkedBy', 'checkedAt'])
+        && request.resource.data.listingId is string
+        && request.resource.data.listingId.size() >= 1
+        && request.resource.data.listingId.size() <= 128
+        && request.resource.data.action in ['verified', 'unverified']
+        && request.resource.data.note is string
+        && request.resource.data.note.size() <= 500
+        && (request.resource.data.action != 'verified' || request.resource.data.note.size() >= 8)
+        && request.resource.data.checkedBy == request.auth.uid
+        && request.resource.data.checkedAt == request.time;
+      allow update, delete: if false;
+    }
+
+    // ---------------------------------------------------------
+    // 13. ADMIN PUSH TOKENS
+    // ---------------------------------------------------------
+    match /adminTokens/{token} {
+      allow read, write: if isAdmin();
+    }
+  }
+}
