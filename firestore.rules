@@ -93,11 +93,12 @@ service cloud.firestore {
 
     // ---------------------------------------------------------
     // 3. PROPERTY LISTINGS
-    // NOTE: Before publishing these final rules, run the Admin
-    // "જૂના મોબાઇલ નંબર સુરક્ષિત કરો" migration once. Firestore
-    // query rules are not filters; excluding ownerPhone in a read
-    // condition blocks normal public listing queries. After migration,
-    // ownerPhone is prohibited by validCommon and all write branches.
+    // NOTE: Run the Admin "જૂના મોબાઇલ નંબર સુરક્ષિત કરો" migration
+    // only if legacy listing documents already exist with ownerPhone.
+    // The owner confirmed there are currently no property listings, so
+    // no migration is needed for the empty database. Firestore query
+    // rules are not filters; ownerPhone stays private in listingContacts.
+    // New public listing documents prohibit ownerPhone via validCommon.
     // ---------------------------------------------------------
     match /listings/{listingId} {
       allow read: if isAdmin()
