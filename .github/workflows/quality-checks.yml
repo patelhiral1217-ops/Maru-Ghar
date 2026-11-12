@@ -18,7 +18,9 @@ jobs:
         run: npm test
       - name: Package complete project source
         if: success() && github.event_name == 'push'
-        run: zip -r MARU-GHAR-FINAL-SOURCE.zip . -x ".git/*" "node_modules/*" ".firebase/*" "MARU-GHAR-FINAL-SOURCE.zip"
+        run: |
+          zip -r /tmp/MARU-GHAR-FINAL-SOURCE.zip . -x ".git/*" "node_modules/*" ".firebase/*" "MARU-GHAR-FINAL-SOURCE.zip"
+          cp /tmp/MARU-GHAR-FINAL-SOURCE.zip ./MARU-GHAR-FINAL-SOURCE.zip
       - name: Upload final project ZIP
         if: success() && github.event_name == 'push'
         uses: actions/upload-artifact@v4
