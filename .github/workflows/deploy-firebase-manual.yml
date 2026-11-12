@@ -11,7 +11,7 @@ on:
       owner_phone_migration_done:
         description: "No existing property listings were reported. Keep true only while the database has no legacy listings; otherwise run the Admin contact migration first."
         required: true
-        default: false
+        default: true
         type: boolean
 jobs:
   deploy:
