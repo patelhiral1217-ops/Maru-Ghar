@@ -1,0 +1,55 @@
+name: Manual Firebase Deployment
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Choose the Firebase component to deploy"
+        required: true
+        default: hosting
+        type: choice
+        options: [hosting, functions, rules]
+      owner_phone_migration_done:
+        description: "Confirm Admin migration 'જૂના મોબાઇલ નંબર સુરક્ષિત કરો' has completed before deploying Rules"
+        required: true
+        default: false
+        type: boolean
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check deployment prerequisites
+        run: |
+          node firebase-deploy-preflight.mjs
+          if [ "${{ inputs.target }}" = "rules" ] && [ "${{ inputs.owner_phone_migration_done }}" != "true" ]; then
+            echo "STOP: Run the Admin owner-contact migration first, then rerun with confirmation."
+            exit 1
+          fi
+      - name: Install Functions dependencies and prepare hosting files
+        run: |
+          npm install
+          npm run copy-web
+          npm install --prefix functions
+      - name: Deploy selected Firebase component
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+          TARGET: ${{ inputs.target }}
+        run: |
+          test -n "$FIREBASE_SERVICE_ACCOUNT" || (echo "Missing FIREBASE_SERVICE_ACCOUNT repository secret" && exit 1)
+          printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/firebase-service-account.json"
+          if [ -n "$CLOUDINARY_API_KEY" ] && [ -n "$CLOUDINARY_API_SECRET" ]; then
+            printf "CLOUDINARY_API_KEY=%s\nCLOUDINARY_API_SECRET=%s\n" "$CLOUDINARY_API_KEY" "$CLOUDINARY_API_SECRET" > functions/.env
+          fi
+          export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-service-account.json"
+          case "$TARGET" in
+            hosting) ONLY="hosting" ;;
+            functions) ONLY="functions" ;;
+            rules) ONLY="firestore:rules,firestore:indexes" ;;
+            *) echo "Unknown deployment target"; exit 1 ;;
+          esac
+          npx -y firebase-tools@13 deploy --only "$ONLY" --project maru-ghar-gandhinagar-8dbe4 --non-interactive
