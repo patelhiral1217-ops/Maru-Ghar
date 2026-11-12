@@ -97,7 +97,7 @@ service cloud.firestore {
     // Legacy-contact migration prerequisite: only if legacy listing documents already exist with ownerPhone.
     // The owner confirmed there are currently no property listings, so
     // no migration is needed for the empty database. Firestore query
-    // rules are not filters; ownerPhone stays private in listingContacts.
+    // Firestore query rules are not filters; ownerPhone stays private in listingContacts.
     // New public listing documents prohibit ownerPhone via validCommon.
     // ---------------------------------------------------------
     match /listings/{listingId} {
