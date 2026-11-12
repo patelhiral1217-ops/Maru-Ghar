@@ -16,3 +16,14 @@ jobs:
         run: npm run copy-web
       - name: Run static and regression checks
         run: npm test
+      - name: Package complete project source
+        if: success() && github.event_name == 'push'
+        run: zip -r MARU-GHAR-FINAL-SOURCE.zip . -x ".git/*" "node_modules/*" ".firebase/*" "MARU-GHAR-FINAL-SOURCE.zip"
+      - name: Upload final project ZIP
+        if: success() && github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: MARU-GHAR-FINAL-SOURCE
+          path: MARU-GHAR-FINAL-SOURCE.zip
+          if-no-files-found: error
+          retention-days: 14
