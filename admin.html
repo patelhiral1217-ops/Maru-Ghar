@@ -162,6 +162,25 @@ function printPropertyPDF(p){const lang=mgCurrentLanguage(),locale=lang==='hi'?'
 }
 :where(button,input[type="button"],input[type="submit"],input[type="reset"],a[role="button"],.btn,.outline,.wa-btn,.contact-wa,.mg-head-action,.mg-chip,.mg-mapbtn,.mg-compare-shortcut,.mg-contact-trigger,.mg-contact-main,.mg-mobile-nav a,.mg-settings-grid button,.admin-shortcuts a,.admin-shortcuts button,.admin-quick a,.admin-quick button,.backup-actions button,.login-submit,.mg-submit-toggle,.mg-tools button,.cats .cat,.searchbox button,.morefilters button,.property-foot a,.property-foot button,.admin-settings>summary,.primary,.approve,.reject):focus-visible{outline:3px solid rgba(218,180,83,.7)!important;outline-offset:3px!important}
 </style>
+<style id="mg-admin-final-typography-palette-20261114">
+:root{--mg-font-gu:"Noto Sans Gujarati","Nirmala UI","Shruti",sans-serif}
+html,body,body *{font-family:var(--mg-font-gu)!important;letter-spacing:0!important;font-kerning:normal}
+body{font-size:15px!important;line-height:1.8!important;color:#edf5ef!important;background:linear-gradient(145deg,#f0f5f1,#e7efea 60%,#f5f6f2)!important}
+h1,h2,h3,h4,h5,h6,label,p,small,button,input,select,textarea{font-family:var(--mg-font-gu)!important;letter-spacing:0!important;line-height:1.7!important}
+.head h1,.panel h2,.card h3,.login-card h2{color:#f2e3b8!important;font-weight:700!important}
+.panel,.card,.login-card,.backup-panel{background:linear-gradient(145deg,#fff,#f4f8f5)!important;color:#294238!important;border:1px solid #cbdcd1!important;box-shadow:0 8px 22px rgba(19,66,48,.10)!important}
+.panel p,.card p,.panel label,.card label,.muted{color:#52685d!important}
+input,select,textarea{background:#fff!important;color:#294238!important;border:1px solid #cbd9d0!important;border-radius:10px!important;font-size:15px!important}
+input::placeholder,textarea::placeholder{color:#819087!important}
+button,.primary,.approve,.reject,.actions button,.admin-shortcuts a,.backup-actions button{
+ font-family:var(--mg-font-gu)!important;font-weight:700!important;letter-spacing:0!important;line-height:1.55!important;border-radius:11px!important
+}
+.primary,.login-submit,.backup-main{background:linear-gradient(145deg,#287657,#15543e)!important;color:#fff!important;border:1px solid #0f4b36!important;box-shadow:0 3px 0 #0d3d2d,0 6px 12px #174c3830!important}
+.approve{background:#287657!important;color:#fff!important}.reject{background:#a94e55!important;color:#fff!important}
+.actions button:not(.approve):not(.reject),.backup-restore{background:linear-gradient(145deg,#f2f6f3,#dfe9e3)!important;color:#285542!important;border:1px solid #c4d7cc!important}
+a{color:#287657!important}
+@media(max-width:600px){body{font-size:14px!important}.panel h2{font-size:19px!important}}
+</style>
 </body></html>`);w.document.close();}
 async function review(id,action,button){
 const selectedProperty=allListings.find(x=>x.id===id);if(!selectedProperty)return;
