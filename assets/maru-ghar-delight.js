@@ -49,6 +49,14 @@
     /* Trust strip under hero / near search */
     '.mg-trust{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:14px 0 6px}',
     '.mg-trust span{display:inline-flex;align-items:center;gap:6px;background:rgba(255,253,248,.92);border:1px solid #e2d3b0;color:#3a4553;border-radius:999px;padding:7px 12px;font-size:12px;font-weight:700;box-shadow:0 2px 8px rgba(16,23,34,.06)}',
+    '.mg-trust-action{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:40px;padding:8px 13px;border:1px solid #cbd8d1;border-radius:12px;background:linear-gradient(145deg,#fffefa,#e9f0ec);color:#294b40;font:800 13px inherit;box-shadow:0 3px 0 #b9c9bf,0 6px 12px rgba(20,45,35,.10);cursor:pointer}',
+    '.mg-trust-action:nth-child(2){background:linear-gradient(145deg,#eef3f7,#dce6ee);color:#365b75;border-color:#c2d0dc;box-shadow:0 3px 0 #a8bac8,0 6px 12px rgba(20,45,35,.08)}',
+    '.mg-trust-action:active{transform:translateY(2px);box-shadow:0 1px 0 #aebdb5}',
+    '.mg-info-overlay{position:fixed;inset:0;z-index:100050;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(8,25,23,.72);backdrop-filter:blur(5px)}',
+    '.mg-info-overlay.open{display:flex}.mg-info-dialog{width:min(480px,100%);padding:24px;border:1px solid #c8b06a;border-radius:20px;background:linear-gradient(145deg,#fffefa,#edf2ed);color:#263d35;box-shadow:0 22px 60px #0006}',
+    '.mg-info-dialog h3{margin:0 42px 12px 0;color:#315d4b;font-size:21px}.mg-info-dialog p{line-height:1.8;color:#52635b;margin:0 0 18px}.mg-info-dialog button{min-height:42px;padding:9px 18px;border:1px solid #456b89;border-radius:11px;background:linear-gradient(145deg,#456b89,#35566f);color:#fff;font-weight:800}',
+    '#mgGujaratiHelp{margin-left:5px;padding:7px 10px;border:1px solid #b8c9c0;border-radius:10px;background:linear-gradient(145deg,#f3f6f4,#dbe5df);color:#315846;font-weight:800;font-size:11px;cursor:pointer}',
+    '@media(max-width:640px){.mg-trust{gap:7px}.mg-trust-action{font-size:11px;padding:7px 9px;min-height:36px}#mgGujaratiHelp{font-size:10px}}',
 
     /* Category chips scroll snap */
     '.cats{scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}',
@@ -107,14 +115,76 @@
     var row = document.createElement('div');
     row.id = 'mgTrust';
     row.className = 'mg-trust';
-    row.innerHTML =
-      '<span>✅ ' + tr('વેરિફાઇડ લિસ્ટિંગ') + '</span>' +
-      '<span>🔒 ' + tr('માલિકનો નંબર સુરક્ષિત') + '</span>' +
-      '<span>🌐 ' + tr('આખું ગુજરાત') + '</span>' +
-      '<span>🆓 ' + tr('મફત શોધ') + '</span>';
+    [
+      ['verified','✅ ','વેરિફાઇડ લિસ્ટિંગ'],
+      ['owner','🔒 ','માલિકનો નંબર સુરક્ષિત'],
+      ['gujarat','🌐 ','આખું ગુજરાત'],
+      ['free','🆓 ','મફત શોધ']
+    ].forEach(function(item){
+      var b=document.createElement('button');
+      b.type='button';b.className='mg-trust-action';b.dataset.mgAction=item[0];
+      b.textContent=item[1]+tr(item[2]);
+      row.appendChild(b);
+    });
     search.parentNode.insertBefore(row, search.nextSibling);
   }
 
+  function showInfo(title, message) {
+    var overlay=document.getElementById('mgInfoOverlay');
+    if(!overlay){
+      overlay=document.createElement('div');overlay.id='mgInfoOverlay';overlay.className='mg-info-overlay';
+      overlay.innerHTML='<section class="mg-info-dialog" role="dialog" aria-modal="true" aria-labelledby="mgInfoTitle"><h3 id="mgInfoTitle"></h3><p id="mgInfoMessage"></p><button type="button" id="mgInfoClose">સમજાયું</button></section>';
+      document.body.appendChild(overlay);
+      overlay.addEventListener('click',function(e){if(e.target===overlay)overlay.classList.remove('open')});
+      overlay.querySelector('#mgInfoClose').addEventListener('click',function(){overlay.classList.remove('open')});
+      document.addEventListener('keydown',function(e){if(e.key==='Escape')overlay.classList.remove('open')});
+    }
+    overlay.querySelector('#mgInfoTitle').textContent=tr(title);
+    overlay.querySelector('#mgInfoMessage').textContent=tr(message);
+    overlay.querySelector('#mgInfoClose').textContent=tr('સમજાયું');
+    overlay.classList.add('open');
+  }
+
+  function resetPropertySearch() {
+    ['purpose','type','cityFilter','fBhk','fVerified','fFurn','fSort'].forEach(function(id){
+      var el=document.getElementById(id);if(el){el.value=id==='fSort'?'new':'all';el.dispatchEvent(new Event('change',{bubbles:true}))}
+    });
+    ['fMin','fMax','query'].forEach(function(id){var el=document.getElementById(id);if(el)el.value=''});
+    window.__favOnly=false;
+    var fav=document.getElementById('favOnly');if(fav)fav.setAttribute('aria-pressed','false');
+    var all=document.querySelector('.cat[data-cat="all"]');if(all)all.click();
+    if(typeof window.filterProps==='function')window.filterProps();
+    var list=document.getElementById('listings');if(list)list.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+
+  function wireTrustActions() {
+    document.addEventListener('click',function(e){
+      var b=e.target.closest&&e.target.closest('[data-mg-action]');
+      if(!b)return;
+      var action=b.dataset.mgAction;
+      if(action==='verified'){
+        var v=document.getElementById('fVerified');if(v){v.value='yes';v.dispatchEvent(new Event('change',{bubbles:true}))}
+        if(typeof window.filterProps==='function')window.filterProps();
+        var list=document.getElementById('listings');if(list)list.scrollIntoView({behavior:'smooth',block:'start'});
+      }else if(action==='owner'){
+        showInfo('માલિકનો નંબર સુરક્ષિત','માલિકનો નંબર સામાન્ય મુલાકાતીઓને જાહેર દેખાતો નથી. પસંદ કરેલી પ્રોપર્ટીના સંપર્ક બટનથી જ માલિકનો સંપર્ક કરો.');
+      }else if(action==='gujarat'){
+        var city=document.getElementById('cityFilter');if(city){city.value='all';city.dispatchEvent(new Event('change',{bubbles:true}))}
+        if(typeof window.filterProps==='function')window.filterProps();
+        var list=document.getElementById('listings');if(list)list.scrollIntoView({behavior:'smooth',block:'start'});
+      }else if(action==='free'){resetPropertySearch()}
+    });
+  }
+
+  function addGujaratiTypingHelp() {
+    var host=document.querySelector('.language-control');
+    if(!host||document.getElementById('mgGujaratiHelp'))return;
+    var b=document.createElement('button');b.type='button';b.id='mgGujaratiHelp';b.textContent='ગુજરાતી ટાઇપિંગ મદદ';
+    b.addEventListener('click',function(){
+      showInfo('ગુજરાતી ટાઇપિંગ મદદ','Windows લેપટોપમાં Settings → Time & language → Language & region માં Gujarati ભાષા અને કીબોર્ડ ઉમેરો. પછી Win + Space દબાવી Gujarati કીબોર્ડ પસંદ કરો. ફરી English માટે Win + Space દબાવી English પસંદ કરો.');
+    });
+    host.appendChild(b);
+  }
   /* ---------- Skeleton while first load ---------- */
   function showSkeleton() {
     var grid = document.getElementById('properties');
@@ -306,6 +376,8 @@
 
   function init() {
     addTrust();
+    wireTrustActions();
+    addGujaratiTypingHelp();
     showSkeleton();
     wireClicks();
     patchFilter();
