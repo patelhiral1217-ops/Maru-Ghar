@@ -177,13 +177,19 @@
   }
 
   function addGujaratiTypingHelp() {
+    function setInputLanguage(){
+      var language=document.documentElement.lang||'gu';
+      document.querySelectorAll('input,textarea').forEach(function(el){el.lang=language;el.spellcheck=false;});
+    }
+    setInputLanguage();
+    window.addEventListener('mg-language-changed',setInputLanguage);
     var host=document.querySelector('.language-control');
     if(!host||document.getElementById('mgGujaratiHelp'))return;
-    var b=document.createElement('button');b.type='button';b.id='mgGujaratiHelp';b.textContent='ગુજરાતી ટાઇપિંગ મદદ';
+    var b=document.createElement('button');b.type='button';b.id='mgGujaratiHelp';b.textContent=tr('ગુજરાતી ટાઇપિંગ મદદ');
     b.addEventListener('click',function(){
       showInfo('ગુજરાતી ટાઇપિંગ મદદ','Windows લેપટોપમાં Settings → Time & language → Language & region માં Gujarati ભાષા અને કીબોર્ડ ઉમેરો. પછી Win + Space દબાવી Gujarati કીબોર્ડ પસંદ કરો. ફરી English માટે Win + Space દબાવી English પસંદ કરો.');
     });
-    host.appendChild(b);
+    host.parentNode.insertBefore(b,host.nextSibling);
   }
   /* ---------- Skeleton while first load ---------- */
   function showSkeleton() {
