@@ -1,90 +1,81 @@
-/* Maru Ghar: quick filter chips, lighter rendering, calmer slideshow. Additive; safe if anything is missing. */
+/* Maru Ghar — consolidated search tools, EMI panel and map shortcut. */
 (function(){
   'use strict';
   var $=function(id){return document.getElementById(id)};
-  function fire(el){el.dispatchEvent(new Event('change',{bubbles:true}))}
-  function apply(){if(typeof window.filterProps==='function'){try{window.filterProps()}catch(e){}}var l=$('listings');if(l&&l.scrollIntoView)l.scrollIntoView({behavior:'smooth',block:'start'})}
-  function makeRow(sel,label,skipAll,onPick){
+  var tr=function(s){try{return window.mgI18nText?window.mgI18nText(s):s}catch(_){return s}};
+  function fire(el){if(el)el.dispatchEvent(new Event('change',{bubbles:true}))}
+  function scrollResults(){var l=$('listings');if(l)l.scrollIntoView({behavior:'smooth',block:'start'})}
+  function apply(){if(typeof window.filterProps==='function'){try{window.filterProps()}catch(e){}}scrollResults()}
+  function makeRow(sel,label,skipAll){
     var el=$(sel);if(!el)return null;
     var row=document.createElement('div');row.className='mg-chips';row.setAttribute('role','group');row.setAttribute('aria-label',label);
     Array.prototype.forEach.call(el.options,function(o){
-      if(skipAll&&(o.value==='all'))return;
+      if(skipAll&&o.value==='all')return;
       var b=document.createElement('button');b.type='button';b.className='mg-chip';b.textContent=o.textContent;b.dataset.v=o.value;
-      b.addEventListener('click',function(){var on=b.classList.contains('on');Array.prototype.forEach.call(row.children,function(c){c.classList.remove('on')});
-        if(on){el.value='all'}else{b.classList.add('on');el.value=o.value}
-        fire(el);onPick()});
-      row.appendChild(b)});
+      b.addEventListener('click',function(){
+        var was=b.classList.contains('on');
+        Array.prototype.forEach.call(row.children,function(c){c.classList.remove('on')});
+        if(was){el.value='all'}else{b.classList.add('on');el.value=o.value}
+        fire(el);apply();
+      });
+      row.appendChild(b);
+    });
     return row;
   }
-  function init(){
-    var list=$('listings');if(!list||$('mgQuick'))return;
-    var wrap=document.createElement('div');wrap.id='mgQuick';wrap.className='mg-quick';
-    var a=makeRow('purpose','ભાડે અથવા વેચાણ',true,apply),b=makeRow('type','પ્રોપર્ટીનો પ્રકાર',true,apply);
-    if(a)wrap.appendChild(a);if(b)wrap.appendChild(b);
-    if(wrap.children.length)list.insertBefore(wrap,list.firstChild);
+  function formatINR(n){try{return '₹ '+Math.round(n).toLocaleString('en-IN')}catch(_){return '₹ '+Math.round(n)}}
+  function createEMI(list){
+    if($('mgEmi'))return $('mgEmi');
+    var panel=document.createElement('section');panel.id='mgEmi';panel.className='mg-emi';panel.hidden=true;
+    panel.innerHTML=
+      '<div class="mg-emi-head"><div><span class="mg-emi-kicker">MARU GHAR · HOME FINANCE</span><h2>🧮 EMI કેલ્ક્યુલેટર</h2><p class="sub">ઘર ખરીદવા માટે લોનનો માસિક હપ્તો જાણો</p></div><button type="button" class="mg-emi-close" id="emiClose" aria-label="બંધ કરો">✕ બંધ કરો</button></div>'+
+      '<div class="mg-emi-g"><label>લોનની રકમ (₹)<input id="emiP" type="number" inputmode="numeric" min="1" value="2500000"></label>'+
+      '<label>વ્યાજ દર (% વાર્ષિક)<input id="emiR" type="number" inputmode="decimal" min="0" max="40" step="0.1" value="8.5"></label>'+
+      '<label>સમયગાળો (વર્ષ)<input id="emiN" type="number" inputmode="numeric" min="1" max="40" value="20"></label></div>'+
+      '<button type="button" class="mg-emi-calc" id="emiGo">ગણતરી કરો</button><div id="emiOut" class="mg-emi-out" aria-live="polite"><div><small>માસિક EMI</small><b>—</b></div><div><small>કુલ વ્યાજ</small><b>—</b></div><div><small>કુલ ચુકવણી</small><b>—</b></div></div>'+
+      '<p class="mg-emi-note">ગણતરી અંદાજિત છે; બેંકની શરતો મુજબ બદલાઈ શકે.</p>';
+    list.parentNode.insertBefore(panel,list.nextSibling);
+    function calculate(){
+      var P=Number($('emiP').value),R=Number($('emiR').value),Y=Number($('emiN').value);
+      var out=$('emiOut');
+      if(!(P>0)||!(R>=0)||R>40||!(Y>0)||Y>40){out.innerHTML='<p class="mg-emi-error">યોગ્ય રકમ, વ્યાજ અને વર્ષ લખો.</p>';return}
+      var months=Y*12,rate=R/1200,monthly=rate===0?P/months:P*rate*Math.pow(1+rate,months)/(Math.pow(1+rate,months)-1),total=monthly*months;
+      out.innerHTML='<div><small>માસિક EMI</small><b>'+formatINR(monthly)+'</b></div><div><small>કુલ વ્યાજ</small><b>'+formatINR(total-P)+'</b></div><div><small>કુલ ચુકવણી</small><b>'+formatINR(total)+'</b></div>';
+    }
+    $('emiGo').addEventListener('click',calculate);
+    ['emiP','emiR','emiN'].forEach(function(id){$(id).addEventListener('input',calculate)});
+    $('emiClose').addEventListener('click',function(){setEMIOpen(false)});
+    return panel;
   }
-  // Slideshow: stop timers work when the tab/app is hidden (saves battery, avoids jank).
-  var _si=window.setInterval;window.setInterval=function(fn,ms){var id=_si(function(){if(document.hidden)return;fn()},ms);return id};
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
-  // EMI calculator + "search on map" shortcut
-  function inr(n){try{return '₹'+Math.round(n).toLocaleString('en-IN')}catch(e){return '₹'+Math.round(n)}}
-  function emiBox(){
-    if($('mgEmi'))return;var list=$('listings');if(!list||!list.parentNode)return;
-    var s=document.createElement('section');s.id='mgEmi';s.className='mg-emi';
-    s.innerHTML='<h3>🧮 EMI ગણતરી</h3><p>ઘર ખરીદવા માટે લોનનો માસિક હપ્તો ગણો</p>'+
-    '<div class="mg-emi-g"><label>લોનની રકમ (₹)<input id="emiP" type="number" inputmode="numeric" min="1" value="2500000"></label>'+
-    '<label>વ્યાજ દર (% વાર્ષિક)<input id="emiR" type="number" inputmode="decimal" min="0" step="0.1" value="8.5"></label>'+
-    '<label>સમયગાળો (વર્ષ)<input id="emiN" type="number" inputmode="numeric" min="1" max="40" value="20"></label></div>'+
-    '<button type="button" class="btn" id="emiGo">ગણતરી કરો</button><div id="emiOut" class="mg-emi-out" aria-live="polite"></div>';
-    list.parentNode.insertBefore(s,list.nextSibling);
-    $('emiGo').addEventListener('click',function(){
-      var P=+$('emiP').value,R=+$('emiR').value,N=+$('emiN').value,out=$('emiOut');
-      if(!(P>0)||!(R>=0)||!(N>0)||N>40||R>40){out.textContent='યોગ્ય આંકડા લખો.';return}
-      var r=R/1200,n=N*12,e=r===0?P/n:P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1),t=e*n;
-      out.innerHTML='<div><small>માસિક EMI</small><b>'+inr(e)+'</b></div><div><small>કુલ વ્યાજ</small><b>'+inr(t-P)+'</b></div><div><small>કુલ ચુકવણી</small><b>'+inr(t)+'</b></div>';
-    });
+  function setEMIOpen(open){
+    var panel=$('mgEmi'),button=$('mgEmiToggle');if(!panel||!button)return;
+    panel.hidden=!open;button.setAttribute('aria-expanded',String(!!open));
+    button.textContent=(open?'− ':'🧮 ')+(open?tr('EMI બંધ કરો'):tr('EMI ગણતરી'));
+    if(open){requestAnimationFrame(function(){panel.scrollIntoView({behavior:'smooth',block:'center'});$('emiP')?.focus({preventScroll:true})})}
   }
-  function extraChips(){
+  function addTools(list){
     var q=$('mgQuick');if(!q||q.querySelector('.mg-tools'))return;
     var row=document.createElement('div');row.className='mg-chips mg-tools';
-    var m=document.createElement('button');m.type='button';m.className='mg-chip';m.textContent='🗺 નકશા પર શોધો';
-    m.addEventListener('click',function(){var city=$('cityFilter'),c=city&&city.value&&city.value!=='all'?city.value:'';var qv=($('query')&&$('query').value||'').trim();
-      var text=[qv,c,'Gujarat'].filter(Boolean).join(' ');window.open('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(text),'_blank','noopener')});
-    var e=document.createElement('button');e.type='button';e.className='mg-chip';e.textContent='🧮 EMI ગણતરી';
-    e.addEventListener('click',function(){var b=$('mgEmi');if(b)b.scrollIntoView({behavior:'smooth',block:'center'})});
-    row.appendChild(m);row.appendChild(e);q.appendChild(row);
+    var map=document.createElement('button');map.type='button';map.className='mg-chip mg-map-search';map.textContent='🗺 નકશા પર શોધો';
+    map.addEventListener('click',function(){
+      var city=$('cityFilter'),selected=city&&city.value&&city.value!=='all'?city.options[city.selectedIndex].text:'ગુજરાત';
+      var query=($('query')?.value||'').trim();
+      var address=[query,selected,'Gujarat'].filter(Boolean).join(' ');
+      window.open('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(address),'_blank','noopener,noreferrer');
+    });
+    var emi=document.createElement('button');emi.type='button';emi.id='mgEmiToggle';emi.className='mg-chip mg-emi-toggle';emi.setAttribute('aria-expanded','false');emi.textContent='🧮 EMI ગણતરી';
+    emi.addEventListener('click',function(){setEMIOpen($('mgEmi')?.hidden!==false)});
+    row.appendChild(map);row.appendChild(emi);q.appendChild(row);
+    createEMI(list);
   }
-  function more(){emiBox();extraChips()}
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',more);else more();
-
-
-  /* EMI calculator + map search button */
-  function inr(n){return '₹ '+Math.round(n).toLocaleString('en-IN')}
-  function initExtras(){
-    var sub=$('submit');
-    if(sub&&!$('mgEmi')){
-      var sec=document.createElement('section');sec.id='mgEmi';sec.className='mg-emi';
-      sec.innerHTML='<h2>EMI કેલ્ક્યુલેટર</h2><p class="sub">ઘર ખરીદવા માટે લોનનો માસિક હપ્તો જાણો</p>'+
-        '<div class="g"><label>લોનની રકમ (₹)<input id="emiP" type="number" inputmode="numeric" min="0" value="2500000"></label>'+
-        '<label>વ્યાજ દર (% વાર્ષિક)<input id="emiR" type="number" inputmode="decimal" min="0" step="0.1" value="8.5"></label>'+
-        '<label>સમય (વર્ષ)<input id="emiN" type="number" inputmode="numeric" min="1" max="40" value="20"></label></div>'+
-        '<div class="out"><div>માસિક EMI<b id="emiOut">—</b></div><div>કુલ વ્યાજ<b id="emiInt">—</b></div><div>કુલ ચુકવણી<b id="emiTot">—</b></div></div>'+
-        '<p class="note">ગણતરી અંદાજિત છે; બેંકની શરતો મુજબ બદલાઈ શકે.</p>';
-      sub.parentNode.insertBefore(sec,sub);
-      var t=null;function calc(){var P=+$('emiP').value,R=+$('emiR').value,N=+$('emiN').value;
-        if(!(P>0)||!(R>=0)||!(N>0)||N>40||R>40){$('emiOut').textContent=$('emiInt').textContent=$('emiTot').textContent='—';return}
-        var n=N*12,r=R/1200,e=r===0?P/n:P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
-        $('emiOut').textContent=inr(e);$('emiInt').textContent=inr(e*n-P);$('emiTot').textContent=inr(e*n)}
-      ['emiP','emiR','emiN'].forEach(function(id){$(id).addEventListener('input',function(){clearTimeout(t);t=setTimeout(calc,150)})});calc();
+  function init(){
+    var list=$('listings');if(!list)return;
+    if(!$('mgQuick')){
+      var wrap=document.createElement('div');wrap.id='mgQuick';wrap.className='mg-quick';
+      var purpose=makeRow('purpose','ભાડે અથવા વેચાણ',true),type=makeRow('type','પ્રોપર્ટીનો પ્રકાર',true);
+      if(purpose)wrap.appendChild(purpose);if(type)wrap.appendChild(type);
+      if(wrap.children.length)list.insertBefore(wrap,list.firstChild);
     }
-    var q=$('mgQuick');
-    if(q&&!$('mgMapBtn')){
-      var a=document.createElement('a');a.id='mgMapBtn';a.className='mg-mapbtn';a.target='_blank';a.rel='noopener noreferrer';a.textContent='📍 નકશા પર જુઓ';
-      a.addEventListener('click',function(){var c=$('cityFilter'),city=(c&&c.value!=='all')?c.options[c.selectedIndex].text:'Gujarat',qq=($('query')&&$('query').value||'').trim();
-        a.href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent((qq+' '+city).trim())});
-      a.href='https://www.google.com/maps/search/?api=1&query=Gujarat';
-      q.appendChild(a);
-    }
+    addTools(list);
   }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initExtras);else initExtras();
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
