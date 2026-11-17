@@ -34,17 +34,23 @@
     c.read=()=>({min:Number(lo.value),max:Number(hi.value)});
     c.restore=v=>{lo.value=String(toSlider(v?.min??c.min));hi.value=String(toSlider(v?.max??c.max));c.last='max';update('both',false)};
     update('both',false);
+    return ()=>update('both',false);
   }
   const ranges=[
     {kind:'price',lo:'fMin',hi:'fMax',loInput:'fMinValue',hiInput:'fMaxValue',fill:'mgPriceFill',label:'mgPriceRangeLabel',min:PRICE_MIN,max:PRICE_MAX,log:true},
     {kind:'area',lo:'fAreaMin',hi:'fAreaMax',loInput:'fAreaMinValue',hiInput:'fAreaMaxValue',fill:'mgAreaFill',label:'mgAreaRangeLabel',min:AREA_MIN,max:AREA_MAX}
   ];
-  ranges.forEach(setupRange);
+  const rangeRefreshers=ranges.map(setupRange).filter(Boolean);
+  function refreshRangeGeometry(){rangeRefreshers.forEach(refresh=>{try{refresh()}catch(_){}})}
+  window.addEventListener('pageshow',()=>requestAnimationFrame(refreshRangeGeometry));
+  window.addEventListener('resize',()=>requestAnimationFrame(refreshRangeGeometry),{passive:true});
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)requestAnimationFrame(refreshRangeGeometry)});
   document.querySelectorAll('.mg-range-toggle').forEach(button=>{
     button.addEventListener('click',()=>{
       const panel=$(button.getAttribute('aria-controls'));if(!panel)return;
       const opening=panel.hidden;panel.hidden=!opening;button.setAttribute('aria-expanded',String(opening));
       const mark=button.querySelector('span');if(mark)mark.textContent=opening?'−':'＋';
+      if(opening){requestAnimationFrame(()=>{refreshRangeGeometry();requestAnimationFrame(refreshRangeGeometry);});setTimeout(refreshRangeGeometry,90)}
     });
   });
   const filterIds=['fBhk','fVerified','fFurn','fMedia','fSort'];

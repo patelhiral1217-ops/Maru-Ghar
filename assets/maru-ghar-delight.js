@@ -145,12 +145,22 @@
   }
 
   function resetPropertySearch() {
-    ['purpose','type','cityFilter','fBhk','fVerified','fFurn','fSort'].forEach(function(id){
-      var el=document.getElementById(id);if(el){el.value=id==='fSort'?'new':'all';el.dispatchEvent(new Event('change',{bubbles:true}))}
+    ['purpose','type','cityFilter'].forEach(function(id){
+      var el=document.getElementById(id);if(el){el.value='all';el.dispatchEvent(new Event('change',{bubbles:true}))}
     });
-    ['fMin','fMax','query'].forEach(function(id){var el=document.getElementById(id);if(el)el.value=''});
-    window.__favOnly=false;
-    var fav=document.getElementById('favOnly');if(fav)fav.setAttribute('aria-pressed','false');
+    var query=document.getElementById('query');if(query)query.value='';
+    var reset=document.getElementById('mgResetFilters');
+    if(reset){reset.click();}
+    else{
+      ['fBhk','fVerified','fFurn','fMedia','fSort'].forEach(function(id){var el=document.getElementById(id);if(el)el.value=id==='fSort'?'new':'all'});
+      ['fMin','fMinValue','fAreaMin','fAreaMinValue'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='0'});
+      ['fMax','fMaxValue'].forEach(function(id){var el=document.getElementById(id);if(el)el.value=id==='fMax'?'1000':'500000000'});
+      var areaMax=document.getElementById('fAreaMax');if(areaMax)areaMax.value='5000';
+      var areaMaxValue=document.getElementById('fAreaMaxValue');if(areaMaxValue)areaMaxValue.value='5000';
+      window.__favOnly=false;
+      if(typeof window.filterProps==='function')window.filterProps();
+    }
+    var fav=document.getElementById('favOnly');if(fav){fav.classList.remove('active');fav.setAttribute('aria-pressed','false')}
     var all=document.querySelector('.cat[data-cat="all"]');if(all)all.click();
     if(typeof window.filterProps==='function')window.filterProps();
     var list=document.getElementById('listings');if(list)list.scrollIntoView({behavior:'smooth',block:'start'});
