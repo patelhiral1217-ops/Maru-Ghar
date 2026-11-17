@@ -42,3 +42,6 @@
 @media(max-width:620px){.mg-discovery-panel{padding:13px;border-radius:17px}.mg-discovery-head{align-items:flex-start;flex-direction:column}.mg-discovery-head-actions{width:100%}.mg-discovery-head-actions button{flex:1}.mg-discovery-panel .morefilters{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.mg-range-grid{grid-template-columns:1fr}.mg-range-card{padding:12px}.mg-compare-overlay{padding:7px}.mg-compare-dialog{padding:13px;border-radius:16px;max-height:96vh}.mg-compare-head h2{font-size:18px}}
 
 @media(max-width:620px){.mg-tools{flex-wrap:wrap!important}.mg-tools button{flex:1 1 27%!important;min-height:38px}.mg-tools .mg-compare-card{flex:1 1 42%!important}}
+
+/* Ad areas remain hidden until an approved AdSense publisher and slot IDs are configured. */
+.mg-ad-slot:not([hidden]){display:block;max-width:1220px;min-height:90px;margin:18px auto;padding:8px;border:1px dashed rgba(230,189,98,.35);border-radius:14px;background:rgba(9,42,34,.55);overflow:hidden}
