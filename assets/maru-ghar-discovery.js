@@ -25,8 +25,8 @@
     }
     lo.addEventListener('input',()=>{c.last='min';update('min')});
     hi.addEventListener('input',()=>{c.last='max';update('max')});
-    loInput.addEventListener('change',()=>{c.last='min';update('min')});
-    hiInput.addEventListener('change',()=>{c.last='max';update('max')});
+    loInput.addEventListener('change',()=>{c.last='min';lo.value=loInput.value;update('min')});
+    hiInput.addEventListener('change',()=>{c.last='max';hi.value=hiInput.value;update('max')});
     c.reset=()=>{lo.value='0';hi.value=String(c.max);update('both',false)};
     c.read=()=>({min:Number(lo.value),max:Number(hi.value)});
     c.restore=v=>{lo.value=String(clamp(v?.min??0,0,c.max));hi.value=String(clamp(v?.max??c.max,0,c.max));c.last='max';update('both',false)};
@@ -53,6 +53,7 @@
     const saved=readSaved();if(!saved)return;
     searchIds.forEach(id=>{const el=$(id);if(el&&saved.values[id]!=null)el.value=saved.values[id]});
     ranges.forEach((r,i)=>r.restore(saved.values[i?'areaRange':'priceRange']));
+    const city=$('cityFilter');if(city&&saved.values.cityFilter!=null)city.dispatchEvent(new Event('change',{bubbles:true}));
     if(typeof window.filterProps==='function')window.filterProps();
     status('તમારી છેલ્લી સાચવેલી શોધ ફરી લાગુ થઈ.');
   });
