@@ -730,6 +730,7 @@ h1,h2,h3,h4,.section-head h2,.searchbox h3,.mg-dialog-head h2,.mg-info-dialog h3
       </div>
     </section>
   </div>
+  <div class="mg-range-apply-wrap"><button type="button" id="mgApplyRangeFilters">🔎 આ ભાવ અને ક્ષેત્રફળ પ્રમાણે શોધો</button></div>
   <div class="mg-discovery-status" id="mgDiscoveryStatus" role="status" aria-live="polite"></div>
 </section><div class="grid" id="properties">
 <div class="empty">લિસ્ટિંગ લોડ થઈ રહી છે…</div>
@@ -755,7 +756,7 @@ function filterProps(){
   const cf=document.getElementById('cityFilter');
   if(cf&&q){const m=[...cf.options].find(o=>o.value!=='all'&&(o.value.toLowerCase()===q||(o.dataset.en||'').toLowerCase()===q));if(m&&cf.value!==m.value){cf.value=m.value;qEl.value='';cf.dispatchEvent(new Event('change'));return}}
   const v=id=>{const e=document.getElementById(id);return e?e.value:'all'};
-  const bhk=v('fBhk'),furn=v('fFurn'),verified=v('fVerified'),sort=v('fSort'),min=Number(v('fMin'))||0,max=Number(v('fMax')||500000000),areaMin=Number(v('fAreaMin'))||0,areaMax=Number(v('fAreaMax')||5000),media=v('fMedia'),favs=mgFavs();
+  const bhk=v('fBhk'),furn=v('fFurn'),verified=v('fVerified'),sort=v('fSort'),min=Number(v('fMinValue'))||1000,max=Number(v('fMaxValue'))||500000000,areaMin=Number(v('fAreaMinValue'))||0,areaMax=Number(v('fAreaMaxValue'))||5000,media=v('fMedia'),favs=mgFavs();
   let shown=0;const grid=document.getElementById('properties');
   const cards=[...document.querySelectorAll('.property')];
   cards.forEach(p=>{
@@ -3067,4 +3068,41 @@ window.MG_I18N_DICTIONARY={
 
 </style>
 
-<script src="assets/maru-ghar-demo-showcase.js?v=20261117c"></script>\n</body></html>
+<script src="assets/maru-ghar-demo-showcase.js?v=20261117c"></script>\n
+<style id="mg-final-search-metal-and-range-apply-20261117">
+/* Exact same champagne-gold/silver 3D finish for the home dropdowns and every category chip. */
+#home .searchbox .row>select#purpose,
+#home .searchbox .row>select#type,
+#home .searchbox .row>select#cityFilter,
+.searchbox .row>select#purpose,
+.searchbox .row>select#type,
+.searchbox .row>select#cityFilter,
+#listings .cats>button.cat,
+#listings .cats>button.cat.active,
+#listings .cats>button.cat:hover{
+  background:linear-gradient(145deg,#fff4c9 0%,#e5e9ec 42%,#c5ced5 66%,#f0d58d 100%)!important;
+  background-color:#e5e9ec!important;
+  color:#173b30!important;
+  border:1px solid #d7b65f!important;
+  border-radius:13px!important;
+  font-weight:900!important;
+  text-shadow:0 1px 0 rgba(255,255,255,.85)!important;
+  box-shadow:0 4px 0 #806024,0 8px 14px rgba(0,0,0,.20),inset 0 2px 3px rgba(255,255,255,.95)!important;
+}
+#listings .cats>button.cat{min-height:46px!important}
+#listings .cats>button.cat:active,
+.searchbox .row>select:active{transform:translateY(3px)!important;box-shadow:0 1px 0 #806024,0 3px 6px rgba(0,0,0,.18)!important}
+.mg-range-apply-wrap{display:flex;justify-content:center;margin:12px 0 4px}
+#mgApplyRangeFilters{
+  width:min(100%,360px);min-height:48px;padding:11px 18px;
+  border:1px solid #d7b65f!important;border-radius:13px!important;
+  background:linear-gradient(145deg,#fff4c9 0%,#e5e9ec 42%,#c5ced5 66%,#f0d58d 100%)!important;
+  color:#173b30!important;font-weight:900!important;
+  box-shadow:0 4px 0 #806024,0 8px 14px rgba(0,0,0,.20),inset 0 2px 3px rgba(255,255,255,.95)!important;
+}
+#mgApplyRangeFilters:active{transform:translateY(3px)!important;box-shadow:0 1px 0 #806024,0 3px 6px rgba(0,0,0,.18)!important}
+</style>
+<script>
+(()=>{const b=document.getElementById('mgApplyRangeFilters');if(!b)return;b.addEventListener('click',()=>{if(typeof window.filterProps==='function')window.filterProps();const list=document.getElementById('listings');if(list)list.scrollIntoView({behavior:'smooth',block:'start'});const s=document.getElementById('mgDiscoveryStatus');if(s)s.textContent='પસંદ કરેલી ભાવ અને ક્ષેત્રફળની મર્યાદા પ્રમાણે પ્રોપર્ટી શોધાઈ ગઈ છે.';});})();
+</script>
+</body></html>
