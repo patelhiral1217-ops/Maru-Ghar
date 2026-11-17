@@ -118,8 +118,7 @@
     [
       ['verified','✅ ','વેરિફાઇડ લિસ્ટિંગ'],
       ['owner','🔒 ','માલિકનો નંબર સુરક્ષિત'],
-      ['gujarat','🌐 ','આખું ગુજરાત'],
-      ['free','🆓 ','મફત શોધ']
+      ['gujarat-free','🌐 ','આખું ગુજરાત મફત શોધો']
     ].forEach(function(item){
       var b=document.createElement('button');
       b.type='button';b.className='mg-trust-action';b.dataset.mgAction=item[0];
@@ -168,11 +167,7 @@
         var list=document.getElementById('listings');if(list)list.scrollIntoView({behavior:'smooth',block:'start'});
       }else if(action==='owner'){
         showInfo('માલિકનો નંબર સુરક્ષિત','માલિકનો નંબર સામાન્ય મુલાકાતીઓને જાહેર દેખાતો નથી. પસંદ કરેલી પ્રોપર્ટીના સંપર્ક બટનથી જ માલિકનો સંપર્ક કરો.');
-      }else if(action==='gujarat'){
-        var city=document.getElementById('cityFilter');if(city){city.value='all';city.dispatchEvent(new Event('change',{bubbles:true}))}
-        if(typeof window.filterProps==='function')window.filterProps();
-        var list=document.getElementById('listings');if(list)list.scrollIntoView({behavior:'smooth',block:'start'});
-      }else if(action==='free'){resetPropertySearch()}
+      }else if(action==='gujarat-free'){resetPropertySearch()}
     });
   }
 
@@ -183,13 +178,10 @@
     }
     setInputLanguage();
     window.addEventListener('mg-language-changed',setInputLanguage);
-    var host=document.querySelector('.language-control');
-    if(!host||document.getElementById('mgGujaratiHelp'))return;
-    var b=document.createElement('button');b.type='button';b.id='mgGujaratiHelp';b.textContent=tr('ગુજરાતી ટાઇપિંગ મદદ');
-    b.addEventListener('click',function(){
+    // Gujarati typing help is opened from Settings only; no extra button is shown in the header.
+    window.mgShowGujaratiTypingHelp=function(){
       showInfo('ગુજરાતી ટાઇપિંગ મદદ','Windows લેપટોપમાં Settings → Time & language → Language & region માં Gujarati ભાષા અને કીબોર્ડ ઉમેરો. પછી Win + Space દબાવી Gujarati કીબોર્ડ પસંદ કરો. ફરી English માટે Win + Space દબાવી English પસંદ કરો.');
-    });
-    host.parentNode.insertBefore(b,host.nextSibling);
+    };
   }
   /* ---------- Skeleton while first load ---------- */
   function showSkeleton() {
