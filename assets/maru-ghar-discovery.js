@@ -28,10 +28,10 @@
     }
     lo.addEventListener('input',()=>{c.last='min';update('min')});
     hi.addEventListener('input',()=>{c.last='max';update('max')});
-    loInput.addEventListener('change',()=>{c.last='min';lo.value=loInput.value;update('min')});
-    hiInput.addEventListener('change',()=>{c.last='max';hi.value=hiInput.value;update('max')});
+    loInput.addEventListener('change',()=>{c.last='min';lo.value=String(toSlider(clamp(loInput.value,c.min,c.max)));update('min')});
+    hiInput.addEventListener('change',()=>{c.last='max';hi.value=String(toSlider(clamp(hiInput.value,c.min,c.max)));update('max')});
     c.reset=()=>{lo.value=String(c.log?0:c.min);hi.value=String(c.log?1000:c.max);update('both',false)};
-    c.read=()=>({min:Number(lo.value),max:Number(hi.value)});
+    c.read=()=>({min:Number(loInput.value),max:Number(hiInput.value)});
     c.restore=v=>{lo.value=String(toSlider(v?.min??c.min));hi.value=String(toSlider(v?.max??c.max));c.last='max';update('both',false)};
     update('both',false);
     return ()=>update('both',false);
