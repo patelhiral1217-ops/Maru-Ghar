@@ -3,7 +3,7 @@
   'use strict';
   const $=id=>document.getElementById(id);
   const tr=s=>typeof window.mgI18nText==='function'?window.mgI18nText(s):s;
-  const PRICE_MAX=500000000, AREA_MAX=5000;
+  const PRICE_MIN=1000, PRICE_MAX=500000000, AREA_MIN=0, AREA_MAX=5000;
   const status=message=>{const el=$('mgDiscoveryStatus');if(el)el.textContent=message||''};
   const clamp=(n,min,max)=>Math.max(min,Math.min(max,Number.isFinite(Number(n))?Number(n):min));
   const money=n=>{n=Number(n)||0;if(n>=10000000)return '₹'+(n/10000000).toLocaleString('en-IN',{maximumFractionDigits:2})+' '+tr('કરોડ');if(n>=100000)return '₹'+(n/100000).toLocaleString('en-IN',{maximumFractionDigits:2})+' '+tr('લાખ');return '₹'+Math.round(n).toLocaleString('en-IN')};
@@ -12,14 +12,16 @@
     const lo=$(c.lo),hi=$(c.hi),loInput=$(c.loInput),hiInput=$(c.hiInput),fill=$(c.fill),label=$(c.label);
     if(!lo||!hi||!loInput||!hiInput)return;
     const fmt=c.kind==='price'?money:areaText;
+    const fromSlider=value=>c.log?Math.round((c.min*Math.pow(c.max/c.min,clamp(Number(value),0,1000)/1000))/1000)*1000:clamp(Number(value),c.min,c.max);
+    const toSlider=value=>c.log?Math.round(Math.log(clamp(Number(value),c.min,c.max)/c.min)/Math.log(c.max/c.min)*1000):clamp(Number(value),c.min,c.max);
     function update(side,runFilter=true){
-      let a=clamp(side==='min'?lo.value:loInput.value,0,c.max);
-      let b=clamp(side==='max'?hi.value:hiInput.value,0,c.max);
+      let a=side==='min'?fromSlider(lo.value):clamp(loInput.value,c.min,c.max);
+      let b=side==='max'?fromSlider(hi.value):clamp(hiInput.value,c.min,c.max);
+      if(side==='both'){a=fromSlider(lo.value);b=fromSlider(hi.value);}
       if(side==='min'&&a>b)a=b;
       if(side==='max'&&b<a)b=a;
-      if(side==='both'){a=clamp(lo.value,0,c.max);b=clamp(hi.value,0,c.max);if(a>b){if(c.last==='min')a=b;else b=a;}}
-      lo.value=String(a);hi.value=String(b);loInput.value=String(a);hiInput.value=String(b);
-      const left=(a/c.max)*100,right=(b/c.max)*100;
+      lo.value=String(toSlider(a));hi.value=String(toSlider(b));loInput.value=String(a);hiInput.value=String(b);
+      const left=c.log?toSlider(a)/10:(a/c.max)*100,right=c.log?toSlider(b)/10:(b/c.max)*100;
       if(fill){fill.style.left=left+'%';fill.style.width=Math.max(0,right-left)+'%';}
       if(label)label.textContent=fmt(a)+' – '+fmt(b);
       if(runFilter&&typeof window.filterProps==='function')window.filterProps();
@@ -28,16 +30,23 @@
     hi.addEventListener('input',()=>{c.last='max';update('max')});
     loInput.addEventListener('change',()=>{c.last='min';lo.value=loInput.value;update('min')});
     hiInput.addEventListener('change',()=>{c.last='max';hi.value=hiInput.value;update('max')});
-    c.reset=()=>{lo.value='0';hi.value=String(c.max);update('both',false)};
+    c.reset=()=>{lo.value=String(c.log?0:c.min);hi.value=String(c.log?1000:c.max);update('both',false)};
     c.read=()=>({min:Number(lo.value),max:Number(hi.value)});
-    c.restore=v=>{lo.value=String(clamp(v?.min??0,0,c.max));hi.value=String(clamp(v?.max??c.max,0,c.max));c.last='max';update('both',false)};
+    c.restore=v=>{lo.value=String(toSlider(v?.min??c.min));hi.value=String(toSlider(v?.max??c.max));c.last='max';update('both',false)};
     update('both',false);
   }
   const ranges=[
-    {kind:'price',lo:'fMin',hi:'fMax',loInput:'fMinValue',hiInput:'fMaxValue',fill:'mgPriceFill',label:'mgPriceRangeLabel',max:PRICE_MAX},
-    {kind:'area',lo:'fAreaMin',hi:'fAreaMax',loInput:'fAreaMinValue',hiInput:'fAreaMaxValue',fill:'mgAreaFill',label:'mgAreaRangeLabel',max:AREA_MAX}
+    {kind:'price',lo:'fMin',hi:'fMax',loInput:'fMinValue',hiInput:'fMaxValue',fill:'mgPriceFill',label:'mgPriceRangeLabel',min:PRICE_MIN,max:PRICE_MAX,log:true},
+    {kind:'area',lo:'fAreaMin',hi:'fAreaMax',loInput:'fAreaMinValue',hiInput:'fAreaMaxValue',fill:'mgAreaFill',label:'mgAreaRangeLabel',min:AREA_MIN,max:AREA_MAX}
   ];
   ranges.forEach(setupRange);
+  document.querySelectorAll('.mg-range-toggle').forEach(button=>{
+    button.addEventListener('click',()=>{
+      const panel=$(button.getAttribute('aria-controls'));if(!panel)return;
+      const opening=panel.hidden;panel.hidden=!opening;button.setAttribute('aria-expanded',String(opening));
+      const mark=button.querySelector('span');if(mark)mark.textContent=opening?'−':'＋';
+    });
+  });
   const filterIds=['fBhk','fVerified','fFurn','fMedia','fSort'];
   const searchIds=['purpose','type','query','cityFilter',...filterIds];
   const savedKey='mg_saved_search_v1';

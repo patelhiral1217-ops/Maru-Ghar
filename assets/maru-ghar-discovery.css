@@ -45,3 +45,17 @@
 
 /* Ad areas remain hidden until an approved AdSense publisher and slot IDs are configured. */
 .mg-ad-slot:not([hidden]){display:block;max-width:1220px;min-height:90px;margin:18px auto;padding:8px;border:1px dashed rgba(230,189,98,.35);border-radius:14px;background:rgba(9,42,34,.55);overflow:hidden}
+
+
+/* Compact, accessible expandable price and area controls; preserve the existing dual-range behavior. */
+.mg-range-toggle{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:48px;padding:12px 14px;border:1px solid #e6bd62;border-radius:13px;background:linear-gradient(145deg,#fff0b5 0%,#dce3e9 48%,#e7bd63 100%);color:#123a30;font-family:inherit;font-size:14px;font-weight:900;line-height:1.3;box-shadow:0 4px 0 #876525,0 7px 14px #0003;cursor:pointer;text-align:left}
+.mg-range-toggle span{font-size:20px;color:#164b3c}
+.mg-range-toggle:active{transform:translateY(2px);box-shadow:0 2px 0 #876525,0 4px 9px #0003}
+.mg-range-content{padding-top:13px}
+.mg-range-content[hidden]{display:none!important}
+.mg-range-grid{align-items:start}
+.mg-range-card{align-self:start}
+.mg-discovery-panel .morefilters select,.mg-discovery-head-actions button,.mg-compare-shortcut,.mg-tools button,.gridsw button,.cats .cat,.property-foot button,.property-foot a,.submit button,.mg-submit-toggle,.nav-bottom a,.nav-bottom button{border:1px solid #d7b65f!important;border-radius:11px!important;background:linear-gradient(145deg,#fff0b5 0%,#dce3e9 48%,#e7bd63 100%)!important;color:#123a30!important;font-weight:900!important;box-shadow:0 4px 0 #806024,0 7px 13px #0002!important;text-shadow:none!important}
+.mg-discovery-panel .morefilters select{background:linear-gradient(145deg,#174c3e,#0a3028)!important;color:#fff0bd!important;border-color:#d7b65f!important;box-shadow:0 3px 0 #031b17,0 5px 10px #0003!important}
+.mg-discovery-panel button:active,.mg-compare-shortcut:active,.mg-tools button:active,.gridsw button:active,.cats .cat:active,.property-foot button:active,.property-foot a:active,.submit button:active{transform:translateY(2px);box-shadow:0 2px 0 #806024,0 4px 8px #0002!important}
+@media(max-width:620px){.mg-range-toggle{min-height:46px;font-size:13px}.mg-range-content .mg-dual-range{margin-top:10px}}
