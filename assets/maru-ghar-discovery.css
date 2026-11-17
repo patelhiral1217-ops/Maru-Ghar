@@ -48,7 +48,7 @@
 
 
 /* Compact, accessible expandable price and area controls; preserve the existing dual-range behavior. */
-.mg-range-toggle{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:48px;padding:12px 14px;border:1px solid #e6bd62;border-radius:13px;background:linear-gradient(145deg,#fff0b5 0%,#dce3e9 48%,#e7bd63 100%);color:#123a30;font:900 14px/1.3 inherit;box-shadow:0 4px 0 #876525,0 7px 14px #0003;cursor:pointer;text-align:left}
+.mg-range-toggle{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:48px;padding:12px 14px;border:1px solid #e6bd62;border-radius:13px;background:linear-gradient(145deg,#fff0b5 0%,#dce3e9 48%,#e7bd63 100%);color:#123a30;font-family:inherit;font-size:14px;font-weight:900;line-height:1.3;box-shadow:0 4px 0 #876525,0 7px 14px #0003;cursor:pointer;text-align:left}
 .mg-range-toggle span{font-size:20px;color:#164b3c}
 .mg-range-toggle:active{transform:translateY(2px);box-shadow:0 2px 0 #876525,0 4px 9px #0003}
 .mg-range-content{padding-top:13px}
