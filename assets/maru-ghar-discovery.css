@@ -5,7 +5,7 @@
 .mg-discovery-head-actions{display:flex;gap:7px;flex-wrap:wrap}.mg-discovery-head-actions button{border:1px solid #d6b45b;border-radius:10px;padding:8px 11px;background:linear-gradient(145deg,#fff1c2,#dce2e8 48%,#f2d27d);color:#17382f;font-weight:800;font-size:12px;box-shadow:0 3px 0 #785c24,0 5px 10px #0003}
 .mg-discovery-head-actions button:active{transform:translateY(2px);box-shadow:0 1px 0 #785c24}
 .mg-discovery-panel .morefilters{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px;margin:0 0 14px}
-.mg-discovery-panel .morefilters select{min-width:0;width:100%;padding:11px 12px;border:1px solid #52786c;border-radius:11px;background:#0d302a;color:#f5f7ef;font:700 13px inherit;font-family:inherit}
+.mg-discovery-panel .morefilters select{min-width:0;width:100%;padding:11px 12px;border:1px solid #52786c;border-radius:11px;background:#0d302a;color:#f5f7ef;font:700 13px/1.3 Arial,sans-serif;font-family:inherit}
 .mg-range-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .mg-range-card{min-width:0;padding:14px 15px 12px;border:1px solid rgba(230,189,98,.34);border-radius:16px;background:linear-gradient(145deg,rgba(24,75,60,.88),rgba(8,38,33,.94));box-shadow:inset 0 1px rgba(255,255,255,.06)}
 .mg-range-title{display:flex;justify-content:space-between;align-items:center;gap:8px;color:#ffe5a0;font-size:14px;font-weight:900}
@@ -40,3 +40,5 @@
 .mg-compare-table tr:last-child th,.mg-compare-table tr:last-child td{border-bottom:0}
 @media(max-width:900px){.mg-discovery-panel .morefilters{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:620px){.mg-discovery-panel{padding:13px;border-radius:17px}.mg-discovery-head{align-items:flex-start;flex-direction:column}.mg-discovery-head-actions{width:100%}.mg-discovery-head-actions button{flex:1}.mg-discovery-panel .morefilters{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.mg-range-grid{grid-template-columns:1fr}.mg-range-card{padding:12px}.mg-compare-overlay{padding:7px}.mg-compare-dialog{padding:13px;border-radius:16px;max-height:96vh}.mg-compare-head h2{font-size:18px}}
+
+@media(max-width:620px){.mg-tools{flex-wrap:wrap!important}.mg-tools button{flex:1 1 27%!important;min-height:38px}.mg-tools .mg-compare-card{flex:1 1 42%!important}}
