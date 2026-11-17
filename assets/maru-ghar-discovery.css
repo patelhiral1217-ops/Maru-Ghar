@@ -1,0 +1,47 @@
+/* Maru Ghar discovery upgrade — premium filters, range controls and compare view. */
+.mg-discovery-panel{margin:14px 0 20px;padding:18px;border:1px solid rgba(230,189,98,.48);border-radius:22px;background:linear-gradient(145deg,rgba(17,58,48,.98),rgba(5,30,26,.98));box-shadow:0 12px 28px rgba(0,0,0,.22),inset 0 1px rgba(255,255,255,.08);color:#f5f7ef}
+.mg-discovery-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.mg-discovery-head>div:first-child{display:grid;gap:4px}.mg-discovery-head strong{font-size:18px;color:#ffe5a0}.mg-discovery-head small,.mg-range-card small{color:#b6c9c0;font-size:11px;line-height:1.5}
+.mg-discovery-head-actions{display:flex;gap:7px;flex-wrap:wrap}.mg-discovery-head-actions button{border:1px solid #d6b45b;border-radius:10px;padding:8px 11px;background:linear-gradient(145deg,#fff1c2,#dce2e8 48%,#f2d27d);color:#17382f;font-weight:800;font-size:12px;box-shadow:0 3px 0 #785c24,0 5px 10px #0003}
+.mg-discovery-head-actions button:active{transform:translateY(2px);box-shadow:0 1px 0 #785c24}
+.mg-discovery-panel .morefilters{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px;margin:0 0 14px}
+.mg-discovery-panel .morefilters select{min-width:0;width:100%;padding:11px 12px;border:1px solid #52786c;border-radius:11px;background:#0d302a;color:#f5f7ef;font:700 13px/1.3 Arial,sans-serif;font-family:inherit}
+.mg-range-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.mg-range-card{min-width:0;padding:14px 15px 12px;border:1px solid rgba(230,189,98,.34);border-radius:16px;background:linear-gradient(145deg,rgba(24,75,60,.88),rgba(8,38,33,.94));box-shadow:inset 0 1px rgba(255,255,255,.06)}
+.mg-range-title{display:flex;justify-content:space-between;align-items:center;gap:8px;color:#ffe5a0;font-size:14px;font-weight:900}
+.mg-range-title output{color:#fff4d1;font-size:13px;font-weight:800;text-align:right}
+.mg-dual-range{position:relative;height:34px;margin:12px 3px 8px}
+.mg-range-rail{position:absolute;left:0;right:0;top:14px;height:6px;border-radius:99px;background:#49665d;box-shadow:inset 0 1px 2px #0008}
+.mg-range-fill{position:absolute;left:0;width:100%;height:6px;border-radius:99px;background:linear-gradient(90deg,#b7c3cf,#ffdf72,#e7bd63);box-shadow:0 0 10px rgba(231,189,99,.28)}
+.mg-dual-range input[type=range]{position:absolute;left:0;top:0;width:100%;height:34px;margin:0;padding:0;appearance:none;-webkit-appearance:none;background:transparent;pointer-events:none;outline:0}
+.mg-dual-range input[type=range]::-webkit-slider-runnable-track{height:6px;background:transparent}
+.mg-dual-range input[type=range]::-moz-range-track{height:6px;background:transparent}
+.mg-dual-range input[type=range]::-webkit-slider-thumb{width:22px;height:22px;margin-top:-8px;border:2px solid #fff1bd;border-radius:50%;background:linear-gradient(145deg,#fff4c9,#d2dce5 50%,#d8ad50);box-shadow:0 3px 8px #0008;appearance:none;-webkit-appearance:none;pointer-events:auto;cursor:grab}
+.mg-dual-range input[type=range]::-moz-range-thumb{width:18px;height:18px;border:2px solid #fff1bd;border-radius:50%;background:linear-gradient(145deg,#fff4c9,#d2dce5 50%,#d8ad50);box-shadow:0 3px 8px #0008;pointer-events:auto;cursor:grab}
+.mg-dual-range input:first-of-type{z-index:4}.mg-dual-range input:last-of-type{z-index:3}
+.mg-range-values{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-bottom:6px}
+.mg-range-values label{display:grid;gap:4px;color:#c9d9d0;font-size:10px;font-weight:800}
+.mg-range-values input{width:100%;min-width:0;padding:8px 9px;border:1px solid #54776b;border-radius:9px;background:#082720;color:#fff7df;font-size:12px;font-weight:800}
+.mg-discovery-status{min-height:16px;margin-top:7px;color:#ffe7a0;font-size:11px}
+.mg-compare-shortcut-wrap{display:flex;justify-content:flex-end;margin:6px 0 12px}
+.mg-compare-shortcut{cursor:pointer}
+.mg-tools .mg-compare-card{border-color:#d7b65f;background:linear-gradient(145deg,#fff0b5,#c7d0d8 52%,#e9c86f);color:#15372e}
+.mg-tools .mg-compare-card.is-selected{background:linear-gradient(145deg,#1b7552,#0a3b2c);color:#fff1bc;border-color:#f2d17c}
+.mg-compare-overlay{position:fixed;inset:0;z-index:10020;display:flex;align-items:center;justify-content:center;padding:14px;background:rgba(0,10,9,.78);backdrop-filter:blur(7px)}
+.mg-compare-dialog{width:min(100%,1050px);max-height:92vh;overflow:auto;padding:18px;border:1px solid #d9b95e;border-radius:22px;background:linear-gradient(145deg,#123c32,#061d1a);color:#f5f7ef;box-shadow:0 24px 70px #0009}
+.mg-compare-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}.mg-compare-head h2{margin:0;color:#ffe5a0;font-size:21px}
+.mg-compare-head button,.mg-compare-remove{border:1px solid #d6b45b;border-radius:9px;padding:8px 11px;background:linear-gradient(145deg,#fff1c2,#dce2e8 48%,#f2d27d);color:#17382f;font-weight:900}
+.mg-compare-table-wrap{overflow-x:auto;border:1px solid #52786c;border-radius:13px}
+.mg-compare-table{width:100%;min-width:620px;border-collapse:collapse;font-size:13px}
+.mg-compare-table th,.mg-compare-table td{padding:12px;border-bottom:1px solid #52786c;text-align:left;vertical-align:top}
+.mg-compare-table thead th{background:#174a3d;color:#ffe7a4;font-size:14px}
+.mg-compare-table tbody th{width:145px;color:#c7d8cf;background:#0c3028}
+.mg-compare-table tbody td{color:#f7f3e5;background:#0a2823}
+.mg-compare-table tr:last-child th,.mg-compare-table tr:last-child td{border-bottom:0}
+@media(max-width:900px){.mg-discovery-panel .morefilters{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:620px){.mg-discovery-panel{padding:13px;border-radius:17px}.mg-discovery-head{align-items:flex-start;flex-direction:column}.mg-discovery-head-actions{width:100%}.mg-discovery-head-actions button{flex:1}.mg-discovery-panel .morefilters{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.mg-range-grid{grid-template-columns:1fr}.mg-range-card{padding:12px}.mg-compare-overlay{padding:7px}.mg-compare-dialog{padding:13px;border-radius:16px;max-height:96vh}.mg-compare-head h2{font-size:18px}}
+
+@media(max-width:620px){.mg-tools{flex-wrap:wrap!important}.mg-tools button{flex:1 1 27%!important;min-height:38px}.mg-tools .mg-compare-card{flex:1 1 42%!important}}
+
+/* Ad areas remain hidden until an approved AdSense publisher and slot IDs are configured. */
+.mg-ad-slot:not([hidden]){display:block;max-width:1220px;min-height:90px;margin:18px auto;padding:8px;border:1px dashed rgba(230,189,98,.35);border-radius:14px;background:rgba(9,42,34,.55);overflow:hidden}

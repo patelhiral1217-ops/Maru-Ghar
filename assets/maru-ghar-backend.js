@@ -147,10 +147,10 @@ function renderLiveProperties(items) {
   for (const p of items) {
     const article=document.createElement('article'); article.className='property';
     article.dataset.type=p.type||''; article.dataset.purpose=p.purpose==='ભાડે'?'rent':'sale';
-    article.dataset.city=p.city||'ગાંધીનગર'; article.dataset.id=p.id||''; article.dataset.verified=p.verified?'1':'0'; article.dataset.bhk=p.bhk||''; article.dataset.furn=p.furnishing||''; article.dataset.pricenum=p.priceNum||''; article.dataset.ts=p.createdMs||0; article.dataset.featured=p.featured?'1':''; if(p.closed) article.classList.add('closed'); itemsById.set(p.id,p); article.dataset.search=[p.location,p.city,(DEFAULT_CITIES.find(c=>c[0]===p.city)||[])[1],p.type,p.title,p.description].join(' ').toLowerCase();
+    article.dataset.city=p.city||'ગાંધીનગર'; article.dataset.id=p.id||''; article.dataset.verified=p.verified?'1':'0'; article.dataset.bhk=p.bhk||''; article.dataset.furn=p.furnishing||''; article.dataset.pricenum=p.priceNum||''; const sqft=Number(String(p.areaSqft||'').replace(/,/g,'')); article.dataset.areasqm=Number.isFinite(sqft)&&sqft>0?String(Math.round(sqft*0.092903)):''; article.dataset.hasphotos=Array.isArray(p.photos)&&p.photos.length?'1':'0'; article.dataset.hasvideos=Array.isArray(p.videos)&&p.videos.length?'1':'0'; article.dataset.ts=p.createdMs||0; article.dataset.featured=p.featured?'1':''; if(p.closed) article.classList.add('closed'); itemsById.set(p.id,p); article.dataset.search=[p.location,p.city,(DEFAULT_CITIES.find(c=>c[0]===p.city)||[])[1],p.type,p.title,p.description].join(' ').toLowerCase();
     const media=buildMedia(p);
     const waText=encodeURIComponent(`નમસ્તે, મને ${p.type||'પ્રોપર્ટી'} (${p.purpose||''}) વિશે માહિતી જોઈએ. શહેર: ${p.city||'ગાંધીનગર'}. વિસ્તાર: ${p.location||''}. મારું ઘર પરથી લિસ્ટિંગ જોયું છે.`);
-    article.innerHTML=`${sliderHtml(p,media)}<div class="property-body">${badgesHtml(p)}<h3 data-act="details">${esc(p.title||p.type||'પ્રોપર્ટી')}</h3><div class="loc">📍 ${esc(p.city||'ગાંધીનગર')} · ${esc(p.location||'વિગતો માટે સંપર્ક')} · <a class="mapa" href="${esc(mapHref(p))}" target="_blank" rel="noopener noreferrer">🗺️ નકશો</a></div><div class="price">${esc(p.price||'કિંમત માટે સંપર્ક')}</div><div class="details">${specsHtml(p)}</div>${p.offerTitle?`<div class="mg-offer" data-act="poster">🎉 ${esc(p.offerTitle)}${p.offerText?' — '+esc(p.offerText):''} · <u>પોસ્ટર જુઓ</u></div>`:''}</div><div class="property-foot"><button class="btn" type="button" data-contact="${esc(p.id)}" data-act="contact">📞 સંપર્ક નંબર જુઓ</button></div><div class="mg-tools"><button type="button" data-act="details">ℹ️ વિગત</button><button type="button" data-act="share">↗ શેર</button><button type="button" data-act="poster">🖼️ પોસ્ટર</button><button type="button" class="mg-fav${isFav(p.id)?' on':''}" data-act="fav" aria-label="મનપસંદ">${isFav(p.id)?'❤️':'🤍'}</button><button type="button" data-act="report" aria-label="ફરિયાદ">🚩</button></div>`;
+    article.innerHTML=`${sliderHtml(p,media)}<div class="property-body">${badgesHtml(p)}<h3 data-act="details">${esc(p.title||p.type||'પ્રોપર્ટી')}</h3><div class="loc">📍 ${esc(p.city||'ગાંધીનગર')} · ${esc(p.location||'વિગતો માટે સંપર્ક')} · <a class="mapa" href="${esc(mapHref(p))}" target="_blank" rel="noopener noreferrer">🗺️ નકશો</a></div><div class="price">${esc(p.price||'કિંમત માટે સંપર્ક')}</div><div class="details">${specsHtml(p)}</div>${p.offerTitle?`<div class="mg-offer" data-act="poster">🎉 ${esc(p.offerTitle)}${p.offerText?' — '+esc(p.offerText):''} · <u>પોસ્ટર જુઓ</u></div>`:''}</div><div class="property-foot"><button class="btn" type="button" data-contact="${esc(p.id)}" data-act="contact">📞 સંપર્ક નંબર જુઓ</button></div><div class="mg-tools"><button type="button" data-act="details">ℹ️ વિગત</button><button type="button" data-act="share">↗ શેર</button><button type="button" data-act="poster">🖼️ પોસ્ટર</button><button type="button" class="mg-fav${isFav(p.id)?' on':''}" data-act="fav" aria-label="મનપસંદ">${isFav(p.id)?'❤️':'🤍'}</button><button type="button" data-act="report" aria-label="ફરિયાદ">🚩</button><button type="button" data-act="compare" class="mg-compare-card" aria-label="તુલના માટે ઉમેરો">⇄ તુલના</button></div>`;
     grid.appendChild(article);
     const slEl=article.querySelector('.mg-slider'); if(slEl) sliderData.set(slEl,media);
   }
@@ -190,6 +190,7 @@ async function loadApproved(reset=false) {
 
 // ======== Scheme poster, details sheet, share, favourites, reports ========
 const itemsById=new Map();
+window.mgGetPropertyById=id=>itemsById.get(String(id))||null;
 let siteUrlSetting='';
 async function loadSettings(){try{const s=await getDoc(doc(db,'settings','site'));if(s.exists())siteUrlSetting=String(s.data().url||'')}catch(e){console.warn('settings load failed:',e)}}
 function siteUrl(){if(/^https:\/\//i.test(siteUrlSetting))return siteUrlSetting;
@@ -270,7 +271,7 @@ async function openPoster(p){
 // one click handler for all card buttons
 grid&&grid.addEventListener('click',e=>{const el=e.target.closest('[data-act]');if(!el)return;const card=el.closest('.property');const p=card&&itemsById.get(card.dataset.id);if(!p)return;
   const a=el.dataset.act;
-  if(a==='details')openDetails(p);else if(a==='poster')openPoster(p);else if(a==='share')shareListing(p);else if(a==='report')reportListing(p);
+  if(a==='details')openDetails(p);else if(a==='poster')openPoster(p);else if(a==='share')shareListing(p);else if(a==='report')reportListing(p);else if(a==='compare')window.dispatchEvent(new CustomEvent('mg-compare-select',{detail:{id:p.id}}));
   else if(a==='contact')revealOwnerContact(p);
   else if(a==='fav'){const on=toggleFav(p.id);el.classList.toggle('on',on);el.textContent=on?'❤️':'🤍';if(typeof window.filterProps==='function'&&window.__favOnly)window.filterProps();}});
 

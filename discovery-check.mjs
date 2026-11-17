@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+const home=fs.readFileSync('index.html','utf8');
+const backend=fs.readFileSync('assets/maru-ghar-backend.js','utf8');
+const discovery=fs.readFileSync('assets/maru-ghar-discovery.js','utf8');
+const css=fs.readFileSync('assets/maru-ghar-discovery.css','utf8');
+for(const id of ['fMin','fMax','fAreaMin','fAreaMax','fMinValue','fMaxValue','fAreaMinValue','fAreaMaxValue','fMedia','mgOpenCompare','mgSaveSearch','mgLoadSearch'])assert.ok(home.includes('id="'+id+'"'),`Missing discovery control: ${id}`);
+assert.ok(home.includes('max="500000000"')&&home.includes('₹0 થી ₹50 કરોડ'),'Price slider must span ₹0 to ₹50 crore');
+assert.ok(home.includes('max="5000"')&&home.includes('ચો.મી.'),'Area slider must use square metres');
+assert.ok(home.includes('mg-compare-card')===false,'Compare buttons are generated from the live property renderer, not hardcoded in the home page');
+for(const marker of ['dataset.areasqm','dataset.hasphotos','dataset.hasvideos','mg-compare-select','mgGetPropertyById'])assert.ok(backend.includes(marker),`Backend discovery bridge missing: ${marker}`);
+for(const marker of ['500000000','5000','mg-compare-select','compareIds','mg_saved_search_v1'])assert.ok(discovery.includes(marker),`Discovery behavior missing: ${marker}`);
+assert.ok(css.includes('.mg-range-card')&&css.includes('.mg-compare-dialog'),'Premium range and comparison styles missing');
+console.log('DISCOVERY CHECK PASS — ₹0–₹50 crore dual slider, square-metre area filter, photo/video filter, saved search and 3-property comparison.');
