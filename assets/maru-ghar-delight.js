@@ -321,7 +321,7 @@
     btn.type = 'button';
     btn.setAttribute('aria-label', 'Top');
     btn.textContent = '↑';
-    btn.style.cssText = 'position:fixed;right:14px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:99990;width:46px;height:46px;border-radius:50%;border:1px solid rgba(230,189,98,.5);background:linear-gradient(145deg,#1b2635,#101722);color:#f2ca68;font-size:20px;font-weight:800;box-shadow:0 8px 20px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .2s;cursor:pointer';
+    btn.style.cssText = 'position:fixed;right:14px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:9997;width:42px;height:42px;border-radius:13px;border:1px solid #d7b65f;background:linear-gradient(145deg,#fff0b5 0%,#dce3e9 48%,#e7bd63 100%);color:#123a30;font-size:20px;font-weight:900;box-shadow:0 4px 0 #806024,0 7px 13px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .2s;cursor:pointer';
     btn.addEventListener('click', function () {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
