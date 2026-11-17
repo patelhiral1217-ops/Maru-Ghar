@@ -42,7 +42,8 @@ for (const required of [
   'assets/maru-ghar-submit-toggle.js',
   'assets/maru-ghar-file-mode.js',
   'assets/maru-ghar-discovery.js',
-  'assets/maru-ghar-discovery.css'
+  'assets/maru-ghar-discovery.css',
+  'assets/maru-ghar-ads.js'
 ]) {
   if (!fs.existsSync(path.join(out, required))) {
     throw new Error(`Hosting build missing required file: ${required}`);
