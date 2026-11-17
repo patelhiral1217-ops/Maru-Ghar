@@ -20,7 +20,15 @@
  #mgDemoShowcase .mg-demo-photo .mg-demo-tag{position:absolute;left:10px;top:10px;padding:5px 9px;border-radius:20px;background:#fff5d7;color:#664b17;font-size:11px;font-weight:900}
  #mgDemoShowcase .mg-demo-photo .mg-demo-counter{position:absolute;right:10px;bottom:10px;padding:4px 8px;border-radius:20px;background:#102a23cc;color:white;font-size:11px}
  #mgDemoShowcase .mg-demo-controls{display:flex;gap:6px;position:absolute;right:9px;top:9px}
- #mgDemoShowcase .mg-demo-controls button{width:30px;height:30px;border:1px solid #e1c77c;border-radius:50%;background:#fffdf0;color:#173d32;font-weight:900}
+ #mgDemoShowcase .mg-demo-controls button{width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #b28b3f;border-radius:50%;background:linear-gradient(145deg,#fff6d5 0%,#e5c76f 58%,#c3cfc5 100%);color:#173d32;font-size:15px;font-weight:950;box-shadow:0 3px 0 #89692c,0 5px 9px #203b2c30,inset 0 1px 2px #fff;cursor:pointer;transition:transform .15s,box-shadow .15s,filter .15s}
+ #mgDemoShowcase .mg-demo-controls button:hover{transform:translateY(-2px);filter:brightness(1.04);box-shadow:0 5px 0 #89692c,0 7px 12px #203b2c30,inset 0 1px 2px #fff}
+ #mgDemoShowcase .mg-demo-controls button:active{transform:translateY(2px);box-shadow:0 1px 0 #89692c,0 2px 5px #203b2c25,inset 0 1px 2px #0001}
+ #mgDemoShowcase .mg-demo-open{cursor:pointer;transition:transform .15s,box-shadow .15s,filter .15s}
+ #mgDemoShowcase .mg-demo-open:hover{transform:translateY(-2px);filter:brightness(1.045);box-shadow:0 5px 0 #89692c,0 8px 14px #203b2c25,inset 0 1px 2px #fff}
+ #mgDemoShowcase .mg-demo-open:active{transform:translateY(2px);box-shadow:0 1px 0 #89692c,0 2px 5px #203b2c25,inset 0 1px 2px #0001}
+ #mgDemoDetail .mg-detail-top a{display:inline-flex;align-items:center;justify-content:center;padding:9px 13px;border:1px solid #d4b45e;border-radius:11px;background:linear-gradient(145deg,#fff4c8,#dfc16b 58%,#bfcac1);color:#173d32;text-decoration:none;font-weight:950;box-shadow:0 3px 0 #89692c,0 5px 10px #0002,inset 0 1px 2px #fff;transition:transform .15s,box-shadow .15s}
+ #mgDemoDetail .mg-detail-top a:hover{transform:translateY(-2px);box-shadow:0 5px 0 #89692c,0 7px 12px #0002,inset 0 1px 2px #fff}
+ #mgDemoDetail .mg-detail-top a:active{transform:translateY(2px);box-shadow:0 1px 0 #89692c,0 2px 5px #0002,inset 0 1px 2px #0001}
  #mgDemoShowcase .mg-demo-body{padding:13px}
  #mgDemoShowcase .mg-demo-body h3{margin:0 0 7px;color:#203b31;font-size:16px;line-height:1.35}
  #mgDemoShowcase .mg-demo-location{color:#68766e;font-size:12px;margin-bottom:8px}
