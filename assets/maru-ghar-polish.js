@@ -71,9 +71,7 @@
     var list=$('listings');if(!list)return;
     if(!$('mgQuick')){
       var wrap=document.createElement('div');wrap.id='mgQuick';wrap.className='mg-quick';
-      var purpose=makeRow('purpose','ભાડે અથવા વેચાણ',true),type=makeRow('type','પ્રોપર્ટીનો પ્રકાર',true);
-      if(purpose)wrap.appendChild(purpose);if(type)wrap.appendChild(type);
-      if(wrap.children.length)list.insertBefore(wrap,list.firstChild);
+      list.insertBefore(wrap,list.firstChild);
     }
     addTools(list);
   }
