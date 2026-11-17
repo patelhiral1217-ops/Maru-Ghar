@@ -513,6 +513,7 @@ h1,h2,h3,h4,.section-head h2,.searchbox h3,.mg-dialog-head h2,.mg-info-dialog h3
 @media(max-width:700px){.mg-emi-g{grid-template-columns:1fr}.mg-emi-out{grid-template-columns:1fr}.mg-emi-head{align-items:flex-start}.mg-emi h2{font-size:20px!important}.mg-emi-close{font-size:11px!important}}
 </style>
 
+<link rel="stylesheet" href="assets/maru-ghar-discovery.css?v=20261117">
 </head>
 <body>
 <div id="mgLocalFileWarning" hidden role="status" style="max-width:1220px;margin:10px auto;padding:12px 16px;border:1px solid #d8b45d;border-radius:10px;background:#fff4cf;color:#49370a;font:600 13px/1.6 Arial,sans-serif">આ index.html ફાઇલ સીધી ફોન/કમ્પ્યુટરમાંથી ખોલેલી છે. ભાષા અને સામાન્ય પેજ દેખાઈ શકે છે, પરંતુ Firebase Login, લાઇવ લિસ્ટિંગ, ફોટો/વિડિયો અપલોડ અને એકાઉન્ટ Sync માટે વેબસાઇટની HTTPS લિંક અથવા ઇન્સ્ટોલ કરેલી APK ખોલો.</div>
@@ -529,7 +530,38 @@ h1,h2,h3,h4,.section-head h2,.searchbox h3,.mg-dialog-head h2,.mg-info-dialog h3
  </div>
 </section>
 <main>
-<section id="listings"><div class="section-head"><div><h2>પ્રોપર્ટી લિસ્ટિંગ</h2><p>તમારી જરૂર મુજબ કેટેગરી પસંદ કરો.</p></div><span id="count" class="loc">લાઇવ લિસ્ટિંગ લોડ થઈ રહ્યું છે...</span></div><div class="cats"><button class="cat active" data-cat="all">બધી પ્રોપર્ટી</button><button class="cat" data-cat="ઘર">ઘર</button><button class="cat" data-cat="ફ્લેટ">ફ્લેટ</button><button class="cat" data-cat="દુકાન">દુકાન</button><button class="cat" data-cat="રેસિડેન્શિયલ પ્લોટ">રેસિડેન્શિયલ પ્લોટ</button><button class="cat" data-cat="કોમર્શિયલ પ્લોટ">કોમર્શિયલ પ્લોટ</button><button class="cat" data-cat="ઓફિસ">ઓફિસ</button><button class="cat" data-cat="વેરહાઉસ">વેરહાઉસ</button><button class="cat" data-cat="પી.જી. (PG)">પી.જી. (PG)</button></div><div class="gridsw" id="gridSwitch" role="group" aria-label="કાર્ડ દૃશ્ય"><span>દૃશ્ય (કોલમ):</span><button type="button" data-cols="1">1</button><button type="button" data-cols="2">2</button><button type="button" data-cols="3">3</button><button type="button" id="favOnly" aria-pressed="false">❤️ મનપસંદ</button></div><div class="mg-compare-shortcut-wrap"><a class="mg-compare-shortcut" href="#properties" aria-label="Compare property listings">⇄ તુલના કરો</a></div><div class="morefilters" id="moreFilters"><select id="fBhk" aria-label="BHK"><option value="all">BHK: બધા</option><option>1 RK</option><option>1 BHK</option><option>2 BHK</option><option>3 BHK</option><option>4+ BHK</option></select><select id="fVerified" aria-label="વેરિફાઇડ પ્રોપર્ટી"><option value="all">વેરિફાઇડ: બધી</option><option value="yes">ફક્ત વેરિફાઇડ</option><option value="no">વેરિફાઇડ નહીં</option></select><select id="fFurn" aria-label="ફર્નિચર"><option value="all">ફર્નિચર: બધા</option><option>ફર્નિશ્ડ</option><option>સેમી ફર્નિશ્ડ</option><option>અનફર્નિશ્ડ</option></select><input id="fMin" type="number" inputmode="numeric" min="0" placeholder="₹ ઓછામાં ઓછું" aria-label="ન્યૂનતમ ભાવ"><input id="fMax" type="number" inputmode="numeric" min="0" placeholder="₹ વધુમાં વધુ" aria-label="મહત્તમ ભાવ"><select id="fSort" aria-label="ક્રમ"><option value="new">નવી પહેલાં</option><option value="low">ભાવ: ઓછો પહેલાં</option><option value="high">ભાવ: વધુ પહેલાં</option></select></div><div class="grid" id="properties">
+<section id="listings"><div class="section-head"><div><h2>પ્રોપર્ટી લિસ્ટિંગ</h2><p>તમારી જરૂર મુજબ કેટેગરી પસંદ કરો.</p></div><span id="count" class="loc">લાઇવ લિસ્ટિંગ લોડ થઈ રહ્યું છે...</span></div><div class="cats"><button class="cat active" data-cat="all">બધી પ્રોપર્ટી</button><button class="cat" data-cat="ઘર">ઘર</button><button class="cat" data-cat="ફ્લેટ">ફ્લેટ</button><button class="cat" data-cat="દુકાન">દુકાન</button><button class="cat" data-cat="રેસિડેન્શિયલ પ્લોટ">રેસિડેન્શિયલ પ્લોટ</button><button class="cat" data-cat="કોમર્શિયલ પ્લોટ">કોમર્શિયલ પ્લોટ</button><button class="cat" data-cat="ઓફિસ">ઓફિસ</button><button class="cat" data-cat="વેરહાઉસ">વેરહાઉસ</button><button class="cat" data-cat="પી.જી. (PG)">પી.જી. (PG)</button></div><div class="gridsw" id="gridSwitch" role="group" aria-label="કાર્ડ દૃશ્ય"><span>દૃશ્ય (કોલમ):</span><button type="button" data-cols="1">1</button><button type="button" data-cols="2">2</button><button type="button" data-cols="3">3</button><button type="button" id="favOnly" aria-pressed="false">❤️ મનપસંદ</button></div><div class="mg-compare-shortcut-wrap"><button type="button" class="mg-compare-shortcut" id="mgOpenCompare" aria-label="પસંદ કરેલી પ્રોપર્ટીની તુલના કરો">⇄ તુલના (0)</button></div><section class="mg-discovery-panel" id="mgDiscoveryPanel" aria-label="એડવાન્સ પ્રોપર્ટી ફિલ્ટર">
+  <div class="mg-discovery-head">
+    <div><strong>સ્માર્ટ પ્રોપર્ટી શોધ</strong><small>તમારા બજેટ, ક્ષેત્રફળ અને જરૂરિયાત પ્રમાણે પસંદ કરો</small></div>
+    <div class="mg-discovery-head-actions">
+      <button type="button" id="mgSaveSearch">♡ શોધ સાચવો</button>
+      <button type="button" id="mgLoadSearch" hidden>↶ છેલ્લી શોધ</button>
+      <button type="button" id="mgResetFilters">ફિલ્ટર સાફ કરો</button>
+    </div>
+  </div>
+  <div class="morefilters" id="moreFilters">
+    <select id="fBhk" aria-label="BHK"><option value="all">BHK: બધા</option><option>1 RK</option><option>1 BHK</option><option>2 BHK</option><option>3 BHK</option><option>4+ BHK</option></select>
+    <select id="fVerified" aria-label="વેરિફાઇડ પ્રોપર્ટી"><option value="all">વેરિફાઇડ: બધી</option><option value="yes">ફક્ત વેરિફાઇડ</option><option value="no">વેરિફાઇડ નહીં</option></select>
+    <select id="fFurn" aria-label="ફર્નિચર"><option value="all">ફર્નિચર: બધા</option><option>ફર્નિશ્ડ</option><option>સેમી ફર્નિશ્ડ</option><option>અનફર્નિશ્ડ</option></select>
+    <select id="fMedia" aria-label="ફોટો અને વીડિયો"><option value="all">ફોટો / વીડિયો: બધા</option><option value="photos">ફોટા ધરાવતી પ્રોપર્ટી</option><option value="videos">વીડિયો ધરાવતી પ્રોપર્ટી</option></select>
+    <select id="fSort" aria-label="ક્રમ"><option value="new">નવી પહેલાં</option><option value="featured">⭐ ફીચર્ડ પહેલાં</option><option value="low">ભાવ: ઓછો પહેલાં</option><option value="high">ભાવ: વધુ પહેલાં</option></select>
+  </div>
+  <div class="mg-range-grid">
+    <section class="mg-range-card" aria-label="ભાવની મર્યાદા">
+      <div class="mg-range-title"><span>💰 બજેટ / ભાવ</span><output id="mgPriceRangeLabel">₹0 – ₹50 કરોડ</output></div>
+      <div class="mg-dual-range"><div class="mg-range-rail"><div class="mg-range-fill" id="mgPriceFill"></div></div><input id="fMin" type="range" min="0" max="500000000" step="500000" value="0" aria-label="ઓછામાં ઓછો ભાવ"><input id="fMax" type="range" min="0" max="500000000" step="500000" value="500000000" aria-label="વધુમાં વધુ ભાવ"></div>
+      <div class="mg-range-values"><label>ઓછામાં ઓછું ₹<input id="fMinValue" type="number" min="0" max="500000000" step="500000" value="0" inputmode="numeric"></label><label>વધુમાં વધુ ₹<input id="fMaxValue" type="number" min="0" max="500000000" step="500000" value="500000000" inputmode="numeric"></label></div>
+      <small>₹0 થી ₹50 કરોડ સુધી</small>
+    </section>
+    <section class="mg-range-card" aria-label="ક્ષેત્રફળની મર્યાદા">
+      <div class="mg-range-title"><span>📐 ક્ષેત્રફળ</span><output id="mgAreaRangeLabel">0 – 5,000 ચો.મી.</output></div>
+      <div class="mg-dual-range"><div class="mg-range-rail"><div class="mg-range-fill" id="mgAreaFill"></div></div><input id="fAreaMin" type="range" min="0" max="5000" step="5" value="0" aria-label="ઓછામાં ઓછું ક્ષેત્રફળ ચોરસ મીટર"><input id="fAreaMax" type="range" min="0" max="5000" step="5" value="5000" aria-label="વધુમાં વધુ ક્ષેત્રફળ ચોરસ મીટર"></div>
+      <div class="mg-range-values"><label>ઓછામાં ઓછું ચો.મી.<input id="fAreaMinValue" type="number" min="0" max="5000" step="5" value="0" inputmode="numeric"></label><label>વધુમાં વધુ ચો.મી.<input id="fAreaMaxValue" type="number" min="0" max="5000" step="5" value="5000" inputmode="numeric"></label></div>
+      <small>ચોરસ ફૂટમાં નોંધાયેલ ક્ષેત્રફળ આપમેળે ચોરસ મીટરમાં રૂપાંતરિત થશે</small>
+    </section>
+  </div>
+  <div class="mg-discovery-status" id="mgDiscoveryStatus" role="status" aria-live="polite"></div>
+</section><div class="grid" id="properties">
 <div class="empty">લિસ્ટિંગ લોડ થઈ રહી છે…</div>
 </div><div style="display:flex;justify-content:center;margin:22px 0"><button id="loadMoreListings" class="btn" type="button" hidden>વધુ પ્રોપર્ટી જુઓ</button></div></section>
 <!-- Removed duplicate middle Search / Compare / Contact cards; primary navigation remains below. -->
@@ -552,15 +584,17 @@ function filterProps(){
   const cf=document.getElementById('cityFilter');
   if(cf&&q){const m=[...cf.options].find(o=>o.value!=='all'&&(o.value.toLowerCase()===q||(o.dataset.en||'').toLowerCase()===q));if(m&&cf.value!==m.value){cf.value=m.value;qEl.value='';cf.dispatchEvent(new Event('change'));return}}
   const v=id=>{const e=document.getElementById(id);return e?e.value:'all'};
-  const bhk=v('fBhk'),furn=v('fFurn'),verified=v('fVerified'),sort=v('fSort'),min=Number(v('fMin'))||0,max=Number(v('fMax'))||0,favs=mgFavs();
+  const bhk=v('fBhk'),furn=v('fFurn'),verified=v('fVerified'),sort=v('fSort'),min=Number(v('fMin'))||0,max=Number(v('fMax'))||500000000,areaMin=Number(v('fAreaMin'))||0,areaMax=Number(v('fAreaMax'))||5000,media=v('fMedia'),favs=mgFavs();
   let shown=0;const grid=document.getElementById('properties');
   const cards=[...document.querySelectorAll('.property')];
   cards.forEach(p=>{
-    const pn=Number(p.dataset.pricenum)||0;
+    const pn=Number(p.dataset.pricenum)||0,area=Number(p.dataset.areasqm)||0;
     const ok=(activeCat==='all'||p.dataset.type===activeCat)&&(type==='all'||p.dataset.type===type)&&(purpose==='all'||p.dataset.purpose===purpose)
       &&(bhk==='all'||p.dataset.bhk===bhk)&&(furn==='all'||p.dataset.furn===furn)
       &&(verified==='all'||(verified==='yes'?p.dataset.verified==='1':p.dataset.verified!=='1'))
-      &&(!min||(pn&&pn>=min))&&(!max||(pn&&pn<=max))
+      &&((min===0&&max===500000000)||(pn>0&&pn>=min&&pn<=max))
+      &&((areaMin===0&&areaMax===5000)||(area>0&&area>=areaMin&&area<=areaMax))
+      &&(media==='all'||(media==='photos'&&p.dataset.hasphotos==='1')||(media==='videos'&&p.dataset.hasvideos==='1'))
       &&(!window.__favOnly||favs.includes(p.dataset.id))
       &&(!q||p.dataset.search.toLowerCase().includes(q)||p.innerText.toLowerCase().includes(q));
     p.classList.toggle('hidden',!ok);if(ok)shown++});
@@ -568,13 +602,14 @@ function filterProps(){
   const key=p=>({closed:p.classList.contains('closed')?1:0,feat:p.dataset.featured?0:1,ts:Number(p.dataset.ts)||0,pn:Number(p.dataset.pricenum)||0});
   cards.sort((a,b)=>{const A=key(a),B=key(b);if(A.closed!==B.closed)return A.closed-B.closed;
     if(sort==='low'){return (A.pn||9e15)-(B.pn||9e15)}if(sort==='high'){return B.pn-A.pn}
+    if(sort==='featured'){if(A.feat!==B.feat)return A.feat-B.feat;return B.ts-A.ts}
     if(A.feat!==B.feat)return A.feat-B.feat;return B.ts-A.ts});
   cards.forEach(c=>grid.appendChild(c));
   const more=document.getElementById('loadMoreListings');
   const tr=window.mgTranslate||((x)=>x);document.getElementById('count').textContent=shown+' '+tr('લિસ્ટિંગ દેખાય છે')+(more&&!more.hidden?' · '+tr('વધુ માટે')+' "'+tr('વધુ પ્રોપર્ટી જુઓ')+'" '+tr('દબાવો'):'');
 }
-['fBhk','fFurn','fVerified','fSort'].forEach(id=>document.getElementById(id)&&document.getElementById(id).addEventListener('change',filterProps));
-['fMin','fMax'].forEach(id=>document.getElementById(id)&&document.getElementById(id).addEventListener('input',filterProps));
+['fBhk','fFurn','fVerified','fMedia','fSort'].forEach(id=>document.getElementById(id)&&document.getElementById(id).addEventListener('change',filterProps));
+['fMin','fMax','fAreaMin','fAreaMax'].forEach(id=>document.getElementById(id)&&document.getElementById(id).addEventListener('input',filterProps));
 (function(){const b=document.getElementById('favOnly');if(b)b.addEventListener('click',()=>{window.__favOnly=!window.__favOnly;b.classList.toggle('active',window.__favOnly);b.setAttribute('aria-pressed',String(window.__favOnly));filterProps()})})();
 // 1 / 2 / 3 column card view (remembered on this phone)
 (function(){const g=document.getElementById('properties'),sw=document.getElementById('gridSwitch');if(!g||!sw)return;
@@ -2567,4 +2602,5 @@ window.MG_I18N_DICTIONARY={
 }
 :where(button,input[type="button"],input[type="submit"],input[type="reset"],a[role="button"],.btn,.outline,.wa-btn,.contact-wa,.mg-head-action,.mg-chip,.mg-mapbtn,.mg-compare-shortcut,.mg-contact-trigger,.mg-contact-main,.mg-mobile-nav a,.mg-settings-grid button,.admin-shortcuts a,.admin-shortcuts button,.admin-quick a,.admin-quick button,.backup-actions button,.login-submit,.mg-submit-toggle,.mg-tools button,.cats .cat,.searchbox button,.morefilters button,.property-foot a,.property-foot button,.admin-settings>summary,.primary,.approve,.reject):focus-visible{outline:3px solid rgba(218,180,83,.7)!important;outline-offset:3px!important}
 </style>
+<script defer src="assets/maru-ghar-discovery.js?v=20261117"></script>
 </body></html>
