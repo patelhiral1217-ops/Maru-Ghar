@@ -2151,15 +2151,6 @@ window.MG_I18N_DICTIONARY={
     'મારી પ્રોપર્ટી ફરી લોડ કરો':'मेरी प्रॉपर्टी फिर से लोड करें|Reload My Properties',
     'પ્રોપર્ટી જોવા માટે લોગિન કરો.':'प्रॉपर्टी देखने के लिए लॉगिन करें।|Log in to view properties.'
   };
-  const cityPairs=[['ગાંધીનગર','गांधीनगर','Gandhinagar'],['અમદાવાદ','अहमदाबाद','Ahmedabad'],['સુરત','सूरत','Surat'],['વડોદરા','वडोदरा','Vadodara'],['રાજકોટ','राजकोट','Rajkot'],['ભાવનગર','भावनगर','Bhavnagar'],['જામનગર','जामनगर','Jamnagar'],['જૂનાગઢ','जूनागढ़','Junagadh'],['આણંદ','आनंद','Anand'],['નડિયાદ','नडियाद','Nadiad'],['મહેસાણા','मेहसाणा','Mehsana'],['કલોલ','कलोल','Kalol'],['મોરબી','मोरबी','Morbi'],['સુરેન્દ્રનગર','सुरेंद्रनगर','Surendranagar'],['ભરૂચ','भरूच','Bharuch'],['વાપી','वापी','Vapi'],['નવસારી','नवसारी','Navsari'],['પાટણ','पाटन','Patan'],['ગોધરા','गोधरा','Godhra'],['પોરબંદર','पोरबंदर','Porbandar'],['ભુજ','भुज','Bhuj'],['અમરેલી','अमरेली','Amreli'],['પાલનપુર','पालनपुर','Palanpur'],['હિંમતનગર','हिम्मतनगर','Himmatnagar'],['દાહોદ','दाहोद','Dahod'],['આહવા','आहवा','Ahwa'],['વલસાડ','वलसाड','Valsad'],['છોટા ઉદેપુર','छोटा उदेपुर','Chhota Udepur'],['મોડાસા','मोडासा','Modasa'],['વિરમગામ','विरमगाम','Viramgam'],['બોટાદ','बोटाद','Botad'],['ધોરાજી','धोराजी','Dhoraji'],['ગોંડલ','गोंडल','Gondal'],['જેતપુર','जेतपुर','Jetpur'],['ઉના','ऊना','Una'],['વેરાવળ','वेरावल','Veraval'],['માંગરોળ','मांगरोल','Mangrol'],['દ્વારકા','द्वारका','Dwarka'],['અંકલેશ્વર','अंकलेश्वर','Ankleshwar'],['ઝઘડિયા','झगड़िया','Jhagadia'],['પાલીતાણા','पालीताना','Palitana'],['ગારીયાધાર','गारियाधार','Gariadhar'],['ધોળકા','धोलका','Dholka'],['સાણંદ','सानंद','Sanand'],['બાવળા','बावला','Bavla'],['દીસા','डीसा','Deesa'],['થરાદ','थराद','Tharad'],['રાધનપુર','राधनपुर','Radhanpur'],['સિદ્ધપુર','सिद्धपुर','Sidhpur'],['વિસનગર','विसनगर','Visnagar'],['ઉંઝા','ऊंझा','Unjha'],['ખેડબ્રહ્મા','खेड़ब्रह्मा','Khedbrahma'],['ઇડર','इडर','Idar'],['પ્રાંતિજ','प्रांतीज','Prantij'],['કડી','कडी','Kadi'],['ચાણસ્મા','चाणस्मा','Chanasma'],['લાખણી','लाखणी','Lakhani']];
-  for(const [gu,hi,en] of cityPairs)dict[gu]=`${hi}|${en}`;
-  dict['ફોર્મ બંધ કરો']='फ़ॉर्म बंद करें|Close Form';dict['પ્રોપર્ટી ઉમેરો']='प्रॉपर्टी जोड़ें|Add Property';
-  /* Merge the central dictionary collected from home, admin, privacy and download pages. */
-  if(window.MG_I18N_DICTIONARY){for(const [gu,v] of Object.entries(window.MG_I18N_DICTIONARY)){dict[gu]=`${v.hi||gu}|${v.en||gu}`;}}
-  /* Backward compatibility if an older page still provides the original home dictionary. */
-  if(window.MG_LANGUAGE_DICTIONARY){for(const [gu,v] of Object.entries(window.MG_LANGUAGE_DICTIONARY)){dict[gu]=`${v.hi||gu}|${v.en||gu}`;}}
-
-  // Admin panel coverage: translate every fixed Gujarati label and select option.
   Object.assign(dict,{
     'ભાષા': 'भाषा|Language',
     'ઈમેલ સરનામું': 'ईमेल|Email',
@@ -2273,8 +2264,15 @@ window.MG_I18N_DICTIONARY={
     'વધુ જૂની લિસ્ટિંગ લોડ કરો': 'और पुरानी लिस्टिंग लोड करें|Load Older Listings',
     'ઈમેલ લખો': 'ईमेल लिखें|Enter email',
     'તમારો પાસવર્ડ': 'अपना पासवर्ड दर्ज करें|Enter your password'
+  
   });
-
+  const cityPairs=[['ગાંધીનગર','गांधीनगर','Gandhinagar'],['અમદાવાદ','अहमदाबाद','Ahmedabad'],['સુરત','सूरत','Surat'],['વડોદરા','वडोदरा','Vadodara'],['રાજકોટ','राजकोट','Rajkot'],['ભાવનગર','भावनगर','Bhavnagar'],['જામનગર','जामनगर','Jamnagar'],['જૂનાગઢ','जूनागढ़','Junagadh'],['આણંદ','आनंद','Anand'],['નડિયાદ','नडियाद','Nadiad'],['મહેસાણા','मेहसाणा','Mehsana'],['કલોલ','कलोल','Kalol'],['મોરબી','मोरबी','Morbi'],['સુરેન્દ્રનગર','सुरेंद्रनगर','Surendranagar'],['ભરૂચ','भरूच','Bharuch'],['વાપી','वापी','Vapi'],['નવસારી','नवसारी','Navsari'],['પાટણ','पाटन','Patan'],['ગોધરા','गोधरा','Godhra'],['પોરબંદર','पोरबंदर','Porbandar'],['ભુજ','भुज','Bhuj'],['અમરેલી','अमरेली','Amreli'],['પાલનપુર','पालनपुर','Palanpur'],['હિંમતનગર','हिम्मतनगर','Himmatnagar'],['દાહોદ','दाहोद','Dahod'],['આહવા','आहवा','Ahwa'],['વલસાડ','वलसाड','Valsad'],['છોટા ઉદેપુર','छोटा उदेपुर','Chhota Udepur'],['મોડાસા','मोडासा','Modasa'],['વિરમગામ','विरमगाम','Viramgam'],['બોટાદ','बोटाद','Botad'],['ધોરાજી','धोराजी','Dhoraji'],['ગોંડલ','गोंडल','Gondal'],['જેતપુર','जेतपुर','Jetpur'],['ઉના','ऊना','Una'],['વેરાવળ','वेरावल','Veraval'],['માંગરોળ','मांगरोल','Mangrol'],['દ્વારકા','द्वारका','Dwarka'],['અંકલેશ્વર','अंकलेश्वर','Ankleshwar'],['ઝઘડિયા','झगड़िया','Jhagadia'],['પાલીતાણા','पालीताना','Palitana'],['ગારીયાધાર','गारियाधार','Gariadhar'],['ધોળકા','धोलका','Dholka'],['સાણંદ','सानंद','Sanand'],['બાવળા','बावला','Bavla'],['દીસા','डीसा','Deesa'],['થરાદ','थराद','Tharad'],['રાધનપુર','राधनपुर','Radhanpur'],['સિદ્ધપુર','सिद्धपुर','Sidhpur'],['વિસનગર','विसनगर','Visnagar'],['ઉંઝા','ऊंझा','Unjha'],['ખેડબ્રહ્મા','खेड़ब्रह्मा','Khedbrahma'],['ઇડર','इडर','Idar'],['પ્રાંતિજ','प्रांतीज','Prantij'],['કડી','कडी','Kadi'],['ચાણસ્મા','चाणस्मा','Chanasma'],['લાખણી','लाखणी','Lakhani']];
+  for(const [gu,hi,en] of cityPairs)dict[gu]=`${hi}|${en}`;
+  dict['ફોર્મ બંધ કરો']='फ़ॉर्म बंद करें|Close Form';dict['પ્રોપર્ટી ઉમેરો']='प्रॉपर्टी जोड़ें|Add Property';
+  /* Merge the central dictionary collected from home, admin, privacy and download pages. */
+  if(window.MG_I18N_DICTIONARY){for(const [gu,v] of Object.entries(window.MG_I18N_DICTIONARY)){dict[gu]=`${v.hi||gu}|${v.en||gu}`;}}
+  /* Backward compatibility if an older page still provides the original home dictionary. */
+  if(window.MG_LANGUAGE_DICTIONARY){for(const [gu,v] of Object.entries(window.MG_LANGUAGE_DICTIONARY)){dict[gu]=`${v.hi||gu}|${v.en||gu}`;}}
   const map={};
   for(const [gu,pair] of Object.entries(dict)){
     const parts=String(pair||'').split('|');
@@ -2434,6 +2432,7 @@ window.MG_I18N_DICTIONARY={
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply,{once:true});else apply();
 })();
+
 </script>
 <!-- MG_I18N_INLINE_BUNDLE_END -->
 <script src="assets/maru-ghar-file-mode.js?v=20261102r5"></script>
