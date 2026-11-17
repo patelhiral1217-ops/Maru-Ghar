@@ -2,7 +2,6 @@
    user-entered property/customer content is intentionally excluded. */
 (()=>{
   const dict={
-    '🔎 આ ભાવ અને ક્ષેત્રફળ પ્રમાણે શોધો':'🔎 इस कीमत और क्षेत्रफल से खोजें|🔎 Search by this price and area',
     'મારું ઘર':'मेरा घर|Maru Ghar','મારું':'मेरा|Maru','ઘર':'घर|Home',
     'સેટિંગ્સ':'सेटिंग्स|Settings','⚙ સેટિંગ્સ':'⚙ सेटिंग्स|⚙ Settings','👤 એકાઉન્ટ':'👤 खाता|👤 Account','બંધ કરો':'बंद करें|Close',
     '🌐 સમગ્ર ગુજરાતનું નેટવર્ક':'🌐 पूरे गुजरात का नेटवर्क|🌐 Gujarat-wide Property Network',
