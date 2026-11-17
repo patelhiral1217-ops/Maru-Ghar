@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+const home=fs.readFileSync('index.html','utf8');
+const config=fs.readFileSync('firebase-config.js','utf8');
+const ads=fs.readFileSync('assets/maru-ghar-ads.js','utf8');
+assert.ok(home.includes('data-mg-ad-slot="homeTop"'),'Top ad placement missing');
+assert.ok(home.includes('data-mg-ad-slot="listingsInline"'),'Listing ad placement missing');
+assert.ok(config.includes('export const adsConfig'),'AdSense configuration export missing');
+assert.ok(config.includes('adsenseClient: ""'),'AdSense publisher must remain unset until the real account is supplied');
+assert.ok(ads.includes('ca-pub-\\d{16}')&&ads.includes('data-ad-slot'),'AdSense integration validation missing');
+assert.ok(ads.includes('if(!/^ca-pub-\\d{16}$/.test(client))return;'),'Ads must remain disabled until a valid publisher ID is configured');
+console.log('ADS CHECK PASS — safe hidden ad slots are ready; no fake publisher ID or unapproved ad is loaded.');
