@@ -9,6 +9,6 @@ assert.ok(home.includes('max="500000000"')&&home.includes('₹0 થી ₹50 ક
 assert.ok(home.includes('max="5000"')&&home.includes('ચો.મી.'),'Area slider must use square metres');
 assert.ok(home.includes('mg-compare-card')===false,'Compare buttons are generated from the live property renderer, not hardcoded in the home page');
 for(const marker of ['dataset.areasqm','dataset.hasphotos','dataset.hasvideos','mg-compare-select','mgGetPropertyById'])assert.ok(backend.includes(marker),`Backend discovery bridge missing: ${marker}`);
-for(const marker of ['500000000','5000','mg-compare-select','mgCompareProperties','mg_saved_search_v1'])assert.ok(discovery.includes(marker),`Discovery behavior missing: ${marker}`);
+for(const marker of ['500000000','5000','mg-compare-select','compareIds','mg_saved_search_v1'])assert.ok(discovery.includes(marker),`Discovery behavior missing: ${marker}`);
 assert.ok(css.includes('.mg-range-card')&&css.includes('.mg-compare-dialog'),'Premium range and comparison styles missing');
 console.log('DISCOVERY CHECK PASS — ₹0–₹50 crore dual slider, square-metre area filter, photo/video filter, saved search and 3-property comparison.');
