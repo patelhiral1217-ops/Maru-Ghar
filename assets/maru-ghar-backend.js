@@ -22,6 +22,20 @@ const PAGE_SIZE=12;
 const ADMIN_UID='yJYiuaUE3KXVLVuWqLyLRH5owQJ3';
 // Default Gujarat cities. The admin can add more cities from the admin panel (stored in Firestore) - no rebuild needed.
 const DEFAULT_CITIES=[["ગાંધીનગર", "Gandhinagar"], ["અમદાવાદ", "Ahmedabad"], ["સુરત", "Surat"], ["વડોદરા", "Vadodara"], ["રાજકોટ", "Rajkot"], ["ભાવનગર", "Bhavnagar"], ["જામનગર", "Jamnagar"], ["જૂનાગઢ", "Junagadh"], ["આણંદ", "Anand"], ["નડિયાદ", "Nadiad"], ["મહેસાણા", "Mehsana"], ["કલોલ", "Kalol"], ["મોરબી", "Morbi"], ["સુરેન્દ્રનગર", "Surendranagar"], ["ભરૂચ", "Bharuch"], ["વાપી", "Vapi"], ["નવસારી", "Navsari"], ["પાટણ", "Patan"], ["ગોધરા", "Godhra"], ["પોરબંદર", "Porbandar"], ["ભુજ", "Bhuj"], ["અમરેલી", "Amreli"], ["પાલનપુર", "Palanpur"], ["હિંમતનગર", "Himatnagar"]];
+const GANDHINAGAR_AREAS=[{gu:"સેક્ટર 1",en:"Sector 1",hi:"सेक्टर 1",match:"સેક્ટર 1|sector 1|sector-1"},{gu:"સેક્ટર 2",en:"Sector 2",hi:"सेक्टर 2",match:"સેક્ટર 2|sector 2|sector-2"},{gu:"સેક્ટર 3",en:"Sector 3",hi:"सेक्टर 3",match:"સેક્ટર 3|sector 3|sector-3"},{gu:"સેક્ટર 4",en:"Sector 4",hi:"सेक्टर 4",match:"સેક્ટર 4|sector 4|sector-4"},{gu:"સેક્ટર 5",en:"Sector 5",hi:"सेक्टर 5",match:"સેક્ટર 5|sector 5|sector-5"},{gu:"સેક્ટર 6",en:"Sector 6",hi:"सेक्टर 6",match:"સેક્ટર 6|sector 6|sector-6"},{gu:"સેક્ટર 7",en:"Sector 7",hi:"सेक्टर 7",match:"સેક્ટર 7|sector 7|sector-7"},{gu:"સેક્ટર 8",en:"Sector 8",hi:"सेक्टर 8",match:"સેક્ટર 8|sector 8|sector-8"},{gu:"સેક્ટર 9",en:"Sector 9",hi:"सेक्टर 9",match:"સેક્ટર 9|sector 9|sector-9"},{gu:"સેક્ટર 10",en:"Sector 10",hi:"सेक्टर 10",match:"સેક્ટર 10|sector 10|sector-10"},{gu:"સેક્ટર 11",en:"Sector 11",hi:"सेक्टर 11",match:"સેક્ટર 11|sector 11|sector-11"},{gu:"સેક્ટર 12",en:"Sector 12",hi:"सेक्टर 12",match:"સેક્ટર 12|sector 12|sector-12"},{gu:"સેક્ટર 13",en:"Sector 13",hi:"सेक्टर 13",match:"સેક્ટર 13|sector 13|sector-13"},{gu:"સેક્ટર 14",en:"Sector 14",hi:"सेक्टर 14",match:"સેક્ટર 14|sector 14|sector-14"},{gu:"સેક્ટર 15",en:"Sector 15",hi:"सेक्टर 15",match:"સેક્ટર 15|sector 15|sector-15"},{gu:"સેક્ટર 16",en:"Sector 16",hi:"सेक्टर 16",match:"સેક્ટર 16|sector 16|sector-16"},{gu:"સેક્ટર 17",en:"Sector 17",hi:"सेक्टर 17",match:"સેક્ટર 17|sector 17|sector-17"},{gu:"સેક્ટર 18",en:"Sector 18",hi:"सेक्टर 18",match:"સેક્ટર 18|sector 18|sector-18"},{gu:"સેક્ટર 19",en:"Sector 19",hi:"सेक्टर 19",match:"સેક્ટર 19|sector 19|sector-19"},{gu:"સેક્ટર 20",en:"Sector 20",hi:"सेक्टर 20",match:"સેક્ટર 20|sector 20|sector-20"},{gu:"સેક્ટર 21",en:"Sector 21",hi:"सेक्टर 21",match:"સેક્ટર 21|sector 21|sector-21"},{gu:"સેક્ટર 22",en:"Sector 22",hi:"सेक्टर 22",match:"સેક્ટર 22|sector 22|sector-22"},{gu:"સેક્ટર 23",en:"Sector 23",hi:"सेक्टर 23",match:"સેક્ટર 23|sector 23|sector-23"},{gu:"સેક્ટર 24",en:"Sector 24",hi:"सेक्टर 24",match:"સેક્ટર 24|sector 24|sector-24"},{gu:"સેક્ટર 25",en:"Sector 25",hi:"सेक्टर 25",match:"સેક્ટર 25|sector 25|sector-25"},{gu:"સેક્ટર 26",en:"Sector 26",hi:"सेक्टर 26",match:"સેક્ટર 26|sector 26|sector-26"},{gu:"સેક્ટર 27",en:"Sector 27",hi:"सेक्टर 27",match:"સેક્ટર 27|sector 27|sector-27"},{gu:"સેક્ટર 28",en:"Sector 28",hi:"सेक्टर 28",match:"સેક્ટર 28|sector 28|sector-28"},{gu:"સેક્ટર 29",en:"Sector 29",hi:"सेक्टर 29",match:"સેક્ટર 29|sector 29|sector-29"},{gu:"સેક્ટર 30",en:"Sector 30",hi:"सेक्टर 30",match:"સેક્ટર 30|sector 30|sector-30"},{gu:"કુડાસણ",en:"Kudasan",hi:"कुडासन",match:"કુડાસણ|kudasan"},{gu:"રાંદેસણ",en:"Randesan",hi:"रांदेसण",match:"રાંદેસણ|રાંદેસ|randesan|randes"},{gu:"રાયસણ",en:"Raysan",hi:"रायसण",match:"રાયસણ|raisan|raysan"},{gu:"સરગાસણ",en:"Sargasan",hi:"सरगासन",match:"સરગાસણ|sargasan"},{gu:"વાવોલ",en:"Vavol",hi:"वावोल",match:"વાવોલ|vavol"},{gu:"પેથાપુર",en:"Pethapur",hi:"पेथापुर",match:"પેથાપુર|pethapur"},{gu:"કોબા",en:"Koba",hi:"कोबा",match:"કોબા|koba"},{gu:"કોલવડા",en:"Kolavada",hi:"कोलवाडा",match:"કોલવડા|kolavada|kolvada"},{gu:"રાંધેજા",en:"Randheja",hi:"रांधेजा",match:"રાંધેજા|randheja"},{gu:"પોર",en:"Por",hi:"पोर",match:"પોર|por"},{gu:"અંબાપુર",en:"Ambapur",hi:"अंबापुर",match:"અંબાપુર|ambapur"},{gu:"વાસણા-હડમતીયા",en:"Vasna-Hadmatia",hi:"वासणा-हडमतिया",match:"વાસણા|હડમતીયા|vasna|hadmatia"},{gu:"ભાટ",en:"Bhat",hi:"भाट",match:"ભાટ|bhat"},{gu:"સુઘડ",en:"Sughad",hi:"सुघड़",match:"સુઘડ|sughad"},{gu:"ઝુંડાલ",en:"Zundal",hi:"झुंडाल",match:"ઝુંડાલ|zundal"},{gu:"ખોરજ",en:"Khoraj",hi:"खोरज",match:"ખોરજ|khoraj"},{gu:"અમિયાપુર",en:"Amiyapur",hi:"अमियापुर",match:"અમિયાપુર|amiyapur"},{gu:"અડાલજ",en:"Adalaj",hi:"अडालज",match:"અડાલજ|adalaj"},{gu:"ઇન્ફોસિટી",en:"Infocity",hi:"इन्फोसिटी",match:"ઇન્ફોસિટી|infocity"}];
+function populateAreaFilter(city){
+  const el=document.getElementById('areaFilter');if(!el)return;
+  const lang=(()=>{try{return localStorage.getItem('mg_language')||'gu'}catch(_){return 'gu'}})();
+  const selected=el.value||'all';el.replaceChildren();
+  const allLabel=lang==='hi'?'सभी क्षेत्र':lang==='en'?'All areas':'બધા વિસ્તાર';
+  el.appendChild(new Option(allLabel,'all'));
+  if(city==='ગાંધીનગર'){
+    GANDHINAGAR_AREAS.forEach(a=>{const o=new Option(a[lang]||a.gu,a.gu);o.dataset.match=a.match;el.appendChild(o)});
+    el.disabled=false;el.value=GANDHINAGAR_AREAS.some(a=>a.gu===selected)?selected:'all';
+  }else{
+    el.disabled=true;el.replaceChildren(new Option(lang==='hi'?'पहले गांधीनगर चुनें':lang==='en'?'Select Gandhinagar for area filters':'વિસ્તાર સર્ચ માટે ગાંધીનગર પસંદ કરો','all'));
+  }
+}
 let currentCity='all';
 function mergeCities(extra){const m=new Map(DEFAULT_CITIES.map(([n,e])=>[n,e]));(extra||[]).forEach(c=>{if(c&&c.name)m.set(c.name,c.nameEn||m.get(c.name)||'')});return [...m.entries()];}
 async function loadCities(){
@@ -147,7 +161,7 @@ function renderLiveProperties(items) {
   for (const p of items) {
     const article=document.createElement('article'); article.className='property';
     article.dataset.type=p.type||''; article.dataset.purpose=p.purpose==='ભાડે'?'rent':'sale';
-    article.dataset.city=p.city||'ગાંધીનગર'; article.dataset.id=p.id||''; article.dataset.verified=p.verified?'1':'0'; article.dataset.bhk=p.bhk||''; article.dataset.furn=p.furnishing||''; article.dataset.pricenum=p.priceNum||''; const sqft=Number(String(p.areaSqft||'').replace(/,/g,'')); article.dataset.areasqm=Number.isFinite(sqft)&&sqft>0?String(Math.round(sqft*0.092903)):''; article.dataset.hasphotos=Array.isArray(p.photos)&&p.photos.length?'1':'0'; article.dataset.hasvideos=Array.isArray(p.videos)&&p.videos.length?'1':'0'; article.dataset.ts=p.createdMs||0; article.dataset.featured=p.featured?'1':''; if(p.closed) article.classList.add('closed'); itemsById.set(p.id,p); article.dataset.search=[p.location,p.city,(DEFAULT_CITIES.find(c=>c[0]===p.city)||[])[1],p.type,p.title,p.description].join(' ').toLowerCase();
+    article.dataset.city=p.city||'ગાંધીનગર'; article.dataset.location=String(p.location||p.area||'').toLowerCase(); article.dataset.id=p.id||''; article.dataset.verified=p.verified?'1':'0'; article.dataset.bhk=p.bhk||''; article.dataset.furn=p.furnishing||''; article.dataset.pricenum=p.priceNum||''; const sqft=Number(String(p.areaSqft||'').replace(/,/g,'')); article.dataset.areasqm=Number.isFinite(sqft)&&sqft>0?String(Math.round(sqft*0.092903)):''; article.dataset.hasphotos=Array.isArray(p.photos)&&p.photos.length?'1':'0'; article.dataset.hasvideos=Array.isArray(p.videos)&&p.videos.length?'1':'0'; article.dataset.ts=p.createdMs||0; article.dataset.featured=p.featured?'1':''; if(p.closed) article.classList.add('closed'); itemsById.set(p.id,p); article.dataset.search=[p.location,p.city,(DEFAULT_CITIES.find(c=>c[0]===p.city)||[])[1],p.type,p.title,p.description].join(' ').toLowerCase();
     const media=buildMedia(p);
     const waText=encodeURIComponent(`નમસ્તે, મને ${p.type||'પ્રોપર્ટી'} (${p.purpose||''}) વિશે માહિતી જોઈએ. શહેર: ${p.city||'ગાંધીનગર'}. વિસ્તાર: ${p.location||''}. મારું ઘર પરથી લિસ્ટિંગ જોયું છે.`);
     article.innerHTML=`${sliderHtml(p,media)}<div class="property-body">${badgesHtml(p)}<h3 data-act="details">${esc(p.title||p.type||'પ્રોપર્ટી')}</h3><div class="loc">📍 ${esc(p.city||'ગાંધીનગર')} · ${esc(p.location||'વિગતો માટે સંપર્ક')} · <a class="mapa" href="${esc(mapHref(p))}" target="_blank" rel="noopener noreferrer">🗺️ નકશો</a></div><div class="price">${esc(p.price||'કિંમત માટે સંપર્ક')}</div><div class="details">${specsHtml(p)}</div>${p.offerTitle?`<div class="mg-offer" data-act="poster">🎉 ${esc(p.offerTitle)}${p.offerText?' — '+esc(p.offerText):''} · <u>પોસ્ટર જુઓ</u></div>`:''}</div><div class="property-foot"><button class="btn" type="button" data-contact="${esc(p.id)}" data-act="contact">📞 સંપર્ક નંબર જુઓ</button></div><div class="mg-tools"><button type="button" data-act="details">ℹ️ વિગત</button><button type="button" data-act="share">↗ શેર</button><button type="button" data-act="poster">🖼️ પોસ્ટર</button><button type="button" class="mg-fav${isFav(p.id)?' on':''}" data-act="fav" aria-label="મનપસંદ">${isFav(p.id)?'❤️':'🤍'}</button><button type="button" data-act="report" aria-label="ફરિયાદ">🚩</button><button type="button" data-act="compare" class="mg-compare-card" aria-label="તુલના માટે ઉમેરો">⇄ તુલના</button></div>`;
@@ -170,12 +184,14 @@ async function loadApproved(reset=false) {
   try {
     if(reset){lastListingDoc=null;lastCursorMs=null;hasMoreListings=true;grid?.replaceChildren();
       const c=currentCity==='all'?readCache():null; if(c){lastCursorMs=c.lastMs||null;hasMoreListings=!!c.hasMore;renderLiveProperties(c.items);return;}}
-    const constraints=[where('status','==','approved'),...(currentCity!=='all'?[where('city','==',currentCity)]:[]),orderBy('createdAt','desc'),limit(PAGE_SIZE)];
+    const areaSelected=(document.getElementById('areaFilter')?.value||'all')!=='all';
+    const pageLimit=areaSelected?200:PAGE_SIZE;
+    const constraints=[where('status','==','approved'),...(currentCity!=='all'?[where('city','==',currentCity)]:[]),orderBy('createdAt','desc'),limit(pageLimit)];
     const isFirst=!lastListingDoc&&!lastCursorMs;
     if(lastListingDoc) constraints.push(startAfter(lastListingDoc)); else if(lastCursorMs) constraints.push(startAfter(Timestamp.fromMillis(lastCursorMs)));
     const snap=await getDocs(query(collection(db,'listings'),...constraints));
     lastListingDoc=snap.docs.at(-1)||lastListingDoc;
-    hasMoreListings=snap.size===PAGE_SIZE;
+    hasMoreListings=snap.size===pageLimit;
     const items=snap.docs.map(d=>{const {createdAt,...r}=d.data();return {id:d.id,...r,createdMs:(createdAt&&createdAt.toMillis)?createdAt.toMillis():0};});
     if(isFirst&&currentCity==='all'){const lm=snap.docs.at(-1)?.data()?.createdAt;writeCache(items,lm&&lm.toMillis?lm.toMillis():null,hasMoreListings);}
     renderLiveProperties(items);
@@ -288,7 +304,11 @@ async function init() {
     await loadCities();
     await loadSettings();
     const cityEl=document.getElementById('cityFilter');
-    if(cityEl) cityEl.addEventListener('change',async()=>{currentCity=cityEl.value||'all';while(loadingMore) await new Promise(r=>setTimeout(r,100));loadApproved(true);});
+    if(cityEl) cityEl.addEventListener('change',async()=>{currentCity=cityEl.value||'all';populateAreaFilter(currentCity);while(loadingMore) await new Promise(r=>setTimeout(r,100));loadApproved(true);});
+    populateAreaFilter(currentCity);
+    const areaEl=document.getElementById('areaFilter');
+    if(areaEl)areaEl.addEventListener('change',async()=>{while(loadingMore)await new Promise(r=>setTimeout(r,100));loadApproved(true);});
+    window.addEventListener('mg-language-changed',()=>populateAreaFilter(currentCity));
     await loadApproved(true);
     setStatus('',false);
   } catch (e) {
@@ -316,7 +336,7 @@ if(form) form.addEventListener('submit', async ev=>{
     }
     const fd=new FormData(form); const payload={
       ownerName:String(fd.get('ownerName')||'').trim(),
-      type:String(fd.get('type')||''), purpose:String(fd.get('purpose')||''), location:String(fd.get('location')||'').trim(),
+      type:String(fd.get('type')||''), purpose:String(fd.get('purpose')||''), location:String(fd.get('location')||'').trim(), area:String(fd.get('location')||'').trim(),
       city:String(fd.get('city')||'ગાંધીનગર').trim(), price:String(fd.get('price')||'').trim(), description:String(fd.get('description')||'').trim(), ownerConsent:fd.get('ownerConsent')==='on', photos:uploaded, videos:uploadedVideos,
       status:'pending', createdAt:serverTimestamp(), submitterUid:auth.currentUser.uid
     };

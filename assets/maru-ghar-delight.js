@@ -145,7 +145,7 @@
   }
 
   function resetPropertySearch() {
-    ['purpose','type','cityFilter'].forEach(function(id){
+    ['purpose','type','cityFilter','areaFilter'].forEach(function(id){
       var el=document.getElementById(id);if(el){el.value='all';el.dispatchEvent(new Event('change',{bubbles:true}))}
     });
     var query=document.getElementById('query');if(query)query.value='';
