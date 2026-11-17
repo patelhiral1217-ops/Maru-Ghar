@@ -584,7 +584,7 @@ function filterProps(){
   const cf=document.getElementById('cityFilter');
   if(cf&&q){const m=[...cf.options].find(o=>o.value!=='all'&&(o.value.toLowerCase()===q||(o.dataset.en||'').toLowerCase()===q));if(m&&cf.value!==m.value){cf.value=m.value;qEl.value='';cf.dispatchEvent(new Event('change'));return}}
   const v=id=>{const e=document.getElementById(id);return e?e.value:'all'};
-  const bhk=v('fBhk'),furn=v('fFurn'),verified=v('fVerified'),sort=v('fSort'),min=Number(v('fMin'))||0,max=Number(v('fMax'))||500000000,areaMin=Number(v('fAreaMin'))||0,areaMax=Number(v('fAreaMax'))||5000,media=v('fMedia'),favs=mgFavs();
+  const bhk=v('fBhk'),furn=v('fFurn'),verified=v('fVerified'),sort=v('fSort'),min=Number(v('fMin'))||0,max=Number(v('fMax')||500000000),areaMin=Number(v('fAreaMin'))||0,areaMax=Number(v('fAreaMax')||5000),media=v('fMedia'),favs=mgFavs();
   let shown=0;const grid=document.getElementById('properties');
   const cards=[...document.querySelectorAll('.property')];
   cards.forEach(p=>{
