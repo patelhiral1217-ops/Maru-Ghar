@@ -3027,6 +3027,44 @@ window.MG_I18N_DICTIONARY={
  #listings .cats>button.cat{min-height:44px!important;padding:8px 11px!important;font-size:12.5px!important}
 }
 @media(prefers-reduced-motion:reduce){#listings .cats>button.cat{transition:none!important}}
+
+/* 2026-11-17: one consistent EMI/map champagne-gold + silver 3D finish for every yellow primary control. */
+:root{--mg-metal-top:#fff4c9;--mg-metal-mid:#e5e9ec;--mg-metal-silver:#c5ced5;--mg-metal-gold:#f0d58d;--mg-metal-edge:#d7b65f;--mg-metal-text:#173b30;--mg-metal-shadow:#806024}
+#listings .cats>button.cat.active,
+#listings .cats>button.cat:hover,
+.cats>button.cat.active,.cats>button.cat:hover,
+#gridSwitch button[aria-pressed="true"],#gridSwitch button.active,
+.gridsw button[aria-pressed="true"],.gridsw button.active,
+.searchbox .row select,
+.searchbox .row .btn,
+.btn:not(.wa-btn):not(.contact-wa):not(.mg-emi-calc),
+.admin-quick,.admin-quick button,.admin-quick a,
+.mg-emi-close,
+.mg-submit-toggle,
+#listings #loadMoreListings{
+ background:linear-gradient(145deg,var(--mg-metal-top) 0%,var(--mg-metal-mid) 42%,var(--mg-metal-silver) 66%,var(--mg-metal-gold) 100%)!important;
+ color:var(--mg-metal-text)!important;
+ border:1px solid var(--mg-metal-edge)!important;
+ border-radius:12px!important;
+ box-shadow:0 4px 0 var(--mg-metal-shadow),0 8px 14px rgba(0,0,0,.20),inset 0 2px 3px rgba(255,255,255,.95)!important;
+ text-shadow:0 1px 0 rgba(255,255,255,.8)!important;
+ font-weight:900!important;
+}
+#listings .cats>button.cat.active,#listings .cats>button.cat:hover,
+.cats>button.cat.active,.cats>button.cat:hover{transform:translateY(-1px)!important}
+.searchbox .row select{min-height:44px!important;cursor:pointer}
+.searchbox .row select option{background:#f1f3ed!important;color:#173b30!important}
+.btn:not(.wa-btn):not(.contact-wa):not(.mg-emi-calc):hover,
+#listings #loadMoreListings:hover,
+.admin-quick button:hover,.admin-quick a:hover{filter:brightness(1.035)!important}
+.btn:not(.wa-btn):not(.contact-wa):not(.mg-emi-calc):active,
+#listings .cats>button.cat:active,
+#gridSwitch button:active,.gridsw button:active,
+.searchbox .row .btn:active,.mg-emi-close:active{
+ transform:translateY(3px)!important;
+ box-shadow:0 1px 0 var(--mg-metal-shadow),0 3px 6px rgba(0,0,0,.18)!important;
+}
+
 </style>
 
-<script src="assets/maru-ghar-demo-showcase.js?v=20261117b"></script>\n</body></html>
+<script src="assets/maru-ghar-demo-showcase.js?v=20261117c"></script>\n</body></html>
