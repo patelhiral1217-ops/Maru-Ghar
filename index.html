@@ -3105,4 +3105,46 @@ window.MG_I18N_DICTIONARY={
 <script>
 (()=>{const b=document.getElementById('mgApplyRangeFilters');if(!b)return;b.addEventListener('click',()=>{if(typeof window.filterProps==='function')window.filterProps();const list=document.getElementById('listings');if(list)list.scrollIntoView({behavior:'smooth',block:'start'});const s=document.getElementById('mgDiscoveryStatus');if(s)s.textContent='પસંદ કરેલી ભાવ અને ક્ષેત્રફળની મર્યાદા પ્રમાણે પ્રોપર્ટી શોધાઈ ગઈ છે.';});})();
 </script>
+
+<style id="mg-admin-login-single-line-aligned-20261117">
+/* Keep the final Admin Login control on one line and aligned with the other header actions. */
+#adminQuick,
+a#adminQuick.admin-quick,
+a#adminQuick.mg-admin-premium{
+  display:inline-flex!important;
+  flex:0 0 auto!important;
+  align-items:center!important;
+  justify-content:center!important;
+  align-self:center!important;
+  box-sizing:border-box!important;
+  width:max-content!important;
+  min-width:136px!important;
+  max-width:none!important;
+  height:42px!important;
+  min-height:42px!important;
+  padding:8px 14px!important;
+  margin:0!important;
+  white-space:nowrap!important;
+  word-break:keep-all!important;
+  overflow-wrap:normal!important;
+  text-align:center!important;
+  line-height:1!important;
+  font-size:12px!important;
+  font-weight:900!important;
+  border-radius:12px!important;
+}
+@media(max-width:600px){
+  #adminQuick,
+  a#adminQuick.admin-quick,
+  a#adminQuick.mg-admin-premium{
+    min-width:132px!important;
+    width:132px!important;
+    max-width:132px!important;
+    height:40px!important;
+    min-height:40px!important;
+    padding:7px 10px!important;
+    font-size:11px!important;
+  }
+}
+</style>
 </body></html>
