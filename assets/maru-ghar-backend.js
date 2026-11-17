@@ -184,8 +184,7 @@ async function loadApproved(reset=false) {
   try {
     if(reset){lastListingDoc=null;lastCursorMs=null;hasMoreListings=true;grid?.replaceChildren();
       const c=currentCity==='all'?readCache():null; if(c){lastCursorMs=c.lastMs||null;hasMoreListings=!!c.hasMore;renderLiveProperties(c.items);return;}}
-    const areaSelected=(document.getElementById('areaFilter')?.value||'all')!=='all';
-    const pageLimit=areaSelected?200:PAGE_SIZE;
+    const pageLimit=currentCity!=='all'?200:PAGE_SIZE;
     const constraints=[where('status','==','approved'),...(currentCity!=='all'?[where('city','==',currentCity)]:[]),orderBy('createdAt','desc'),limit(pageLimit)];
     const isFirst=!lastListingDoc&&!lastCursorMs;
     if(lastListingDoc) constraints.push(startAfter(lastListingDoc)); else if(lastCursorMs) constraints.push(startAfter(Timestamp.fromMillis(lastCursorMs)));
