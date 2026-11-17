@@ -753,6 +753,8 @@ window.__favOnly=false;
 function filterProps(){
   const purpose=document.getElementById('purpose').value,type=document.getElementById('type').value,qEl=document.getElementById('query'),q=qEl.value.trim().toLowerCase();
   const areaEl=document.getElementById('areaFilter'),areaValue=areaEl&&areaEl.value!=='all'?areaEl.value:'',areaOption=areaEl&&areaEl.selectedOptions[0],areaMatches=(areaOption?.dataset.match||areaValue).split('|').filter(Boolean);
+  const locationText=p=>String(p.dataset.location||'').toLowerCase();
+  const areaOkForCard=p=>!areaValue||areaMatches.some(term=>{const loc=locationText(p),t=term.toLowerCase(),i=loc.indexOf(t);return i>=0&&!/[0-9૦-૯]/.test(loc.charAt(i+t.length))});
   // Typing a city name (Gujarati or English) and pressing search switches the city filter and loads that city.
   const cf=document.getElementById('cityFilter');
   if(cf&&q){const m=[...cf.options].find(o=>o.value!=='all'&&(o.value.toLowerCase()===q||(o.dataset.en||'').toLowerCase()===q));if(m&&cf.value!==m.value){cf.value=m.value;qEl.value='';cf.dispatchEvent(new Event('change'));return}}
@@ -763,7 +765,7 @@ function filterProps(){
   cards.forEach(p=>{
     const pn=Number(p.dataset.pricenum)||0,area=Number(p.dataset.areasqm)||0;
     const ok=(activeCat==='all'||p.dataset.type===activeCat)&&(type==='all'||p.dataset.type===type)&&(purpose==='all'||p.dataset.purpose===purpose)
-      &&(!areaValue||areaMatches.some(term=>(p.dataset.location||'').toLowerCase().includes(term.toLowerCase())))
+      &&areaOkForCard(p)
       &&(bhk==='all'||p.dataset.bhk===bhk)&&(furn==='all'||p.dataset.furn===furn)
       &&(verified==='all'||(verified==='yes'?p.dataset.verified==='1':p.dataset.verified!=='1'))
       &&((min===1000&&max===500000000)||(pn>0&&pn>=min&&pn<=max))
