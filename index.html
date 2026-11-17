@@ -514,6 +514,56 @@ h1,h2,h3,h4,.section-head h2,.searchbox h3,.mg-dialog-head h2,.mg-info-dialog h3
 </style>
 
 <link rel="stylesheet" href="assets/maru-ghar-discovery.css?v=20261117">
+
+<style id="mg-search-controls-gold-silver-fix">
+/* Hide the extra category shortcut strip above the main property listing.
+   Keep the actual .cats category buttons under #listings untouched. */
+.mg-discovery{display:none!important}
+/* Premium metallic 3D styling for the three main search dropdowns. */
+.searchbox .row select#purpose,
+.searchbox .row select#type,
+.searchbox .row select#cityFilter{
+  appearance:auto!important;
+  -webkit-appearance:menulist!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:50px!important;
+  padding:12px 34px 12px 13px!important;
+  border:1px solid #d8b45d!important;
+  border-radius:12px!important;
+  background:linear-gradient(145deg,#fff4cf 0%,#e2e7ed 43%,#b7c2cd 62%,#f6dfa0 100%)!important;
+  color:#17382f!important;
+  font-family:inherit!important;
+  font-size:14px!important;
+  font-weight:900!important;
+  line-height:1.35!important;
+  text-align:left!important;
+  box-shadow:0 4px 0 #79602d,0 7px 12px #0004,inset 0 2px 3px #fff!important;
+  text-shadow:0 1px #fff9!important;
+}
+.searchbox .row select#purpose:focus,
+.searchbox .row select#type:focus,
+.searchbox .row select#cityFilter:focus{
+  outline:2px solid #ffe7a0!important;
+  outline-offset:2px!important;
+  border-color:#fff0a6!important;
+}
+.searchbox .row select#purpose option,
+.searchbox .row select#type option,
+.searchbox .row select#cityFilter option{
+  background:#f6f0df!important;
+  color:#17382f!important;
+  font-weight:700!important;
+}
+@media(max-width:600px){
+  .searchbox .row select#purpose,
+  .searchbox .row select#type,
+  .searchbox .row select#cityFilter{
+    min-height:48px!important;
+    font-size:14px!important;
+  }
+}
+</style>
 </head>
 <body>
 <div id="mgLocalFileWarning" hidden role="status" style="max-width:1220px;margin:10px auto;padding:12px 16px;border:1px solid #d8b45d;border-radius:10px;background:#fff4cf;color:#49370a;font:600 13px/1.6 Arial,sans-serif">આ index.html ફાઇલ સીધી ફોન/કમ્પ્યુટરમાંથી ખોલેલી છે. ભાષા અને સામાન્ય પેજ દેખાઈ શકે છે, પરંતુ Firebase Login, લાઇવ લિસ્ટિંગ, ફોટો/વિડિયો અપલોડ અને એકાઉન્ટ Sync માટે વેબસાઇટની HTTPS લિંક અથવા ઇન્સ્ટોલ કરેલી APK ખોલો.</div>
