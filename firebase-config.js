@@ -28,3 +28,12 @@ export const isCloudinaryConfigured = () =>
   !!cloudinaryConfig.uploadPreset && !cloudinaryConfig.uploadPreset.startsWith('PASTE_');
 export const isVideoCloudinaryConfigured = () =>
   isCloudinaryConfigured() && !!cloudinaryConfig.videoUploadPreset && !cloudinaryConfig.videoUploadPreset.startsWith('PASTE_');
+
+// Google AdSense web placements. Keep blank until the site is approved and ad units are created.
+export const adsConfig = {
+  adsenseClient: "",
+  slots: {
+    homeTop: "",
+    listingsInline: ""
+  }
+};
