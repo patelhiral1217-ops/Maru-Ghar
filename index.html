@@ -564,6 +564,53 @@ h1,h2,h3,h4,.section-head h2,.searchbox h3,.mg-dialog-head h2,.mg-info-dialog h3
   }
 }
 </style>
+
+<style id="mg-six-request-ui-fix-20261117">
+/* Six requested home-screen fixes: retain map/EMI, remove duplicate quick chips and unify the EMI metallic finish. */
+#mgQuick{display:block!important;margin:8px 0 16px!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important}
+#mgQuick>.mg-chips:not(.mg-tools){display:none!important}
+#mgQuick .mg-tools{display:flex!important;flex-wrap:wrap!important;gap:10px!important;align-items:center!important;margin:0!important;padding:0!important}
+#mgQuick .mg-tools .mg-chip,
+#mgEmiToggle,.mg-emi-toggle,.mg-map-search,
+.mg-trust .mg-trust-action,
+#gridSwitch button,#gridSwitch [role="button"],
+#listings .mg-discovery-panel .mg-discovery-head-actions button,
+#listings .mg-discovery-panel .mg-range-toggle,
+#listings .mg-discovery-panel .mg-compare-shortcut,
+.mg-footer-actions .mg-head-action,.mg-mobile-nav a{
+  border:1px solid #d7b65f!important;border-radius:13px!important;
+  background:linear-gradient(145deg,#fff4c9 0%,#e5e9ec 42%,#c5ced5 66%,#f0d58d 100%)!important;
+  color:#173b30!important;font-weight:900!important;
+  box-shadow:0 4px 0 #806024,0 8px 14px rgba(0,0,0,.20),inset 0 2px 3px rgba(255,255,255,.95)!important;
+  text-shadow:0 1px 0 rgba(255,255,255,.8)!important;
+}
+#mgQuick .mg-tools .mg-chip{min-height:48px;padding:11px 17px!important}
+#mgQuick .mg-tools .mg-chip:active,#gridSwitch button:active,.mg-trust-action:active{transform:translateY(3px)!important;box-shadow:0 1px 0 #806024,0 3px 6px rgba(0,0,0,.18)!important}
+#mgTrust{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:9px!important;width:100%!important;margin:12px auto 0!important;padding:0 2px!important}
+#mgTrust .mg-trust-action{display:flex!important;align-items:center!important;justify-content:center!important;min-width:0!important;min-height:48px!important;padding:9px 10px!important;text-align:center!important;white-space:normal!important;line-height:1.25!important;font-size:clamp(11px,2.5vw,13px)!important}
+#mgTrust .mg-trust-action[data-mg-action="gujarat-free"]{grid-column:auto!important}
+#listings .mg-discovery-panel .morefilters select{
+  min-height:48px!important;width:100%!important;min-width:0!important;padding:10px 30px 10px 12px!important;
+  border:1px solid #d7b65f!important;border-radius:13px!important;
+  background:linear-gradient(145deg,#fff4c9 0%,#e5e9ec 44%,#c5ced5 70%,#f0d58d 100%)!important;
+  color:#173b30!important;font-weight:850!important;font-size:13px!important;
+  box-shadow:0 3px 0 #806024,0 6px 11px rgba(0,0,0,.16),inset 0 1px 2px #fff!important;
+}
+#listings .mg-discovery-panel .morefilters select option{background:#eef0eb!important;color:#173b30!important}
+#gridSwitch{display:flex!important;flex-wrap:wrap!important;align-items:center!important;gap:8px!important}
+#gridSwitch button{min-height:42px!important;padding:8px 13px!important}
+.mg-footer-actions{gap:12px!important}
+.mg-footer-actions .mg-head-action{min-height:48px!important;padding:11px 18px!important}
+.mg-mobile-nav a{min-height:54px!important}
+.mg-settings-grid button{min-height:50px!important}
+@media(max-width:600px){
+ #mgTrust{grid-template-columns:1fr 1fr!important;gap:7px!important}
+ #mgTrust .mg-trust-action{min-height:46px!important;padding:8px 7px!important;font-size:11.5px!important}
+ #mgTrust .mg-trust-action[data-mg-action="gujarat-free"]{grid-column:1/-1!important}
+ #mgQuick .mg-tools .mg-chip{flex:1 1 140px!important;min-width:0!important}
+ .mg-footer-actions .mg-head-action{flex:1 1 28%!important;min-width:0!important;padding:10px 8px!important;font-size:13px!important}
+}
+</style>
 </head>
 <body>
 <div id="mgLocalFileWarning" hidden role="status" style="max-width:1220px;margin:10px auto;padding:12px 16px;border:1px solid #d8b45d;border-radius:10px;background:#fff4cf;color:#49370a;font:600 13px/1.6 Arial,sans-serif">આ index.html ફાઇલ સીધી ફોન/કમ્પ્યુટરમાંથી ખોલેલી છે. ભાષા અને સામાન્ય પેજ દેખાઈ શકે છે, પરંતુ Firebase Login, લાઇવ લિસ્ટિંગ, ફોટો/વિડિયો અપલોડ અને એકાઉન્ટ Sync માટે વેબસાઇટની HTTPS લિંક અથવા ઇન્સ્ટોલ કરેલી APK ખોલો.</div>
@@ -685,8 +732,8 @@ function filterProps(){
 (()=>{const root=document.getElementById('mgShowcase');if(!root)return;const slides=[...root.querySelectorAll('.mg-showcase-slide')],dots=[...document.querySelectorAll('#mgShowcaseDots button')],title=document.getElementById('mgShowcaseTitle'),sub=document.getElementById('mgShowcaseSub');let index=0,timer=null;const tr=window.mgTranslate||((x)=>x);function show(n){index=(n+slides.length)%slides.length;slides.forEach((el,i)=>el.classList.toggle('active',i===index));dots.forEach((el,i)=>el.classList.toggle('active',i===index));title.textContent=tr(slides[index].dataset.title);sub.textContent=tr(slides[index].dataset.sub)}function restart(){if(timer)clearInterval(timer);timer=setInterval(()=>show(index+1),5000)}document.getElementById('mgShowcasePrev').addEventListener('click',()=>{show(index-1);restart()});document.getElementById('mgShowcaseNext').addEventListener('click',()=>{show(index+1);restart()});dots.forEach((d,i)=>d.addEventListener('click',()=>{show(i);restart()}));root.addEventListener('mouseenter',()=>timer&&clearInterval(timer));root.addEventListener('mouseleave',restart);document.addEventListener('visibilitychange',()=>document.hidden?clearInterval(timer):restart());window.addEventListener('mg-language-changed',()=>show(index));show(0);restart()})();
 </script>
 <script src="assets/maru-ghar-form-steps.js"></script>
-<script defer src="assets/maru-ghar-polish.js?v=20261114"></script>
-<script defer src="assets/maru-ghar-delight.js?v=20261114"></script>
+<script defer src="assets/maru-ghar-polish.js?v=20261117b"></script>
+<script defer src="assets/maru-ghar-delight.js?v=20261117b"></script>
 <script src="assets/maru-ghar-submit-toggle.js?v=20261102r3"></script>
 
 <!-- MG_I18N_INLINE_BUNDLE_START: standalone index.html / Chrome file:// support -->
@@ -2634,6 +2681,7 @@ window.MG_I18N_DICTIONARY={
     notifyBtn.textContent=notifyText();
     addAction(tr('👤 એકાઉન્ટ અને મનપસંદ','👤 खाता और पसंदीदा','👤 Account & Favorites'),()=>open('login'));
     addAction(tr('☎ મદદ અને સંપર્ક','☎ सहायता और संपर्क','☎ Help & Contact'),()=>{close(settings);document.getElementById('contact')?.scrollIntoView({behavior:'smooth'})});
+    addAction(tr('⌨ ગુજરાતી ટાઇપિંગ મદદ','⌨ गुजराती टाइपिंग सहायता','⌨ Gujarati typing help'),()=>{if(typeof window.mgShowGujaratiTypingHelp==='function')window.mgShowGujaratiTypingHelp();});
     addAction(tr('🔒 ગોપનીયતા નીતિ','🔒 गोपनीयता नीति','🔒 Privacy Policy'),()=>{window.location.href='privacy.html'});
     addAction(tr('ℹ મારું ઘર વિશે','ℹ मेरे घर के बारे में','ℹ About Maru Ghar'),()=>window.alert(tr('મારું ઘર — ગાંધીનગર. પ્રોપર્ટી શોધવા અને લિસ્ટ કરવા માટેનું સ્થાનિક પ્લેટફોર્મ.','मेरा घर — गांधीनगर। प्रॉपर्टी खोजने और सूचीबद्ध करने का स्थानीय प्लेटफ़ॉर्म।','Maru Ghar — Gandhinagar. A local platform to find and list properties.')));
     if(exportBtn) actionGrid.appendChild(exportBtn);
