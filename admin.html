@@ -112,6 +112,24 @@ button:active,.primary:active,.approve:active,.reject:active{transform:translate
 <nav class="admin-shortcuts" aria-label="એડમિન વિભાગો"><a href="#adminMain">મુખ્ય કામ</a><a href="#adminSettings">⚙️ સેટિંગ્સ અને બેકઅપ</a></nav>
 <section id="adminMain">
 <section class="panel"><h2>નવી પ્રોપર્ટી ઉમેરો</h2><p class="muted">અહીંથી ઉમેરેલી પ્રોપર્ટી સીધી જાહેર કરવી કે પહેલા પેન્ડિંગ રાખવી તે પસંદ કરો.</p><form id="adminAddForm"><div class="formgrid"><label>માલિકનું નામ<input name="ownerName" required minlength="2" maxlength="80"></label><label>મોબાઇલ નંબર<input name="ownerPhone" required pattern="[0-9+ ()-]{10,16}" maxlength="16" inputmode="tel"></label><label>પ્રોપર્ટીનો પ્રકાર<select name="type" required><option value="">પસંદ કરો</option><option>ઘર</option><option>ફ્લેટ</option><option>દુકાન</option><option>રેસિડેન્શિયલ પ્લોટ</option><option>કોમર્શિયલ પ્લોટ</option><option>ઓફિસ</option><option>વેરહાઉસ</option><option>પી.જી. (PG)</option></select></label><label>ભાડે કે વેચાણ<select name="purpose" required><option value="">પસંદ કરો</option><option>ભાડે</option><option>વેચાણ</option></select></label><label>શહેર<select name="city" id="adminCityField" required><option value="ગાંધીનગર">ગાંધીનગર</option></select></label><label>વિસ્તાર / સેક્ટર<input name="location" required minlength="2" maxlength="120"></label><label>કિંમત / ભાડું<input name="price" maxlength="60" placeholder="જેમ કે ₹15,000 / મહિનો"></label><label>નકશાની લિંક (Google Maps, વૈકલ્પિક)<input name="mapLink" type="url" maxlength="500" pattern="https://.*" placeholder="https://maps.app.goo.gl/..."></label><label>BHK<select name="bhk"><option value="">—</option><option>1 RK</option><option>1 BHK</option><option>2 BHK</option><option>3 BHK</option><option>4+ BHK</option></select></label><label>ક્ષેત્રફળ (ચો. ફૂટ)<input name="areaSqft" maxlength="20"></label><label>માળ<input name="floor" maxlength="30"></label><label>ફર્નિચર<select name="furnishing"><option value="">—</option><option>ફર્નિશ્ડ</option><option>સેમી ફર્નિશ્ડ</option><option>અનફર્નિશ્ડ</option></select></label><label>પાર્કિંગ<select name="parking"><option value="">—</option><option>પાર્કિંગ છે</option><option>પાર્કિંગ નથી</option></select></label><label>ડિપોઝિટ<input name="deposit" maxlength="60"></label><label>ભાવ ફક્ત આંકડામાં ₹ (ફિલ્ટર માટે)<input name="priceNum" type="number" inputmode="numeric" min="0"></label><label>સ્કીમનું નામ (દિવાળી ધમાકો)<input name="offerTitle" maxlength="60"></label><label>સ્કીમ ક્યાં સુધી<input name="offerUntil" type="date"></label><label class="wide">સ્કીમની વિગત<textarea name="offerText" maxlength="200"></textarea></label><label class="wide">વધુ માહિતી<textarea name="description" maxlength="1200"></textarea></label><label class="wide">ફોટા (JPG/PNG/WEBP, દરેક 8 MB સુધી; ફોટાની સંખ્યા પર કોઈ નક્કી મર્યાદા નથી)<input id="adminPhotos" type="file" accept="image/jpeg,image/png,image/webp" multiple></label><label class="wide">વિડિયો (વૈકલ્પિક; MP4/WEBM/MOV, દરેક 25 MB સુધી)<input id="adminVideos" type="file" accept="video/mp4,video/webm,video/quicktime" multiple></label><div id="adminMediaPreview" class="wide" style="display:flex;flex-wrap:wrap;gap:8px"></div><label class="wide">પ્રકાશન<select name="publishStatus"><option value="approved">ઉમેરતાં જ જાહેર કરો</option><option value="pending">પહેલા પેન્ડિંગ રાખો</option></select></label><label class="wide"><input name="ownerConsent" type="checkbox" required style="width:auto"> આ પ્રોપર્ટી પ્રકાશિત કરવાની અને સંપર્ક નંબર ખાનગી રીતે સાચવવાની પરવાનગી છે.</label><button class="primary wide" id="adminAddBtn" type="submit">પ્રોપર્ટી ઉમેરો</button></div></form><div id="addStatus" class="status" role="status"></div></section>
+<section class="panel" id="mgCloudinaryTest">
+  <h2>🧪 ફોટો/વિડિયો અપલોડ ટેસ્ટ</h2>
+  <p class="muted">આ વિભાગથી ફોટો/વિડિયો Cloudinaryમાં ટેસ્ટ થશે; કોઈ પ્રોપર્ટી અથવા Firestore રેકોર્ડ ઉમેરાશે નહીં. ટેસ્ટ ફાઇલ Cloudinaryમાં રહેશે, જરૂર પડે તો નીચે Delete કરો.</p>
+  <div class="formgrid">
+    <label class="wide">ટેસ્ટ ફોટો (JPG/PNG/WEBP, મહત્તમ 8 MB)
+      <input id="mgTestPhoto" type="file" accept="image/jpeg,image/png,image/webp">
+    </label>
+    <label class="wide">ટેસ્ટ વીડિયો (MP4/WEBM/MOV, મહત્તમ 25 MB)
+      <input id="mgTestVideo" type="file" accept="video/mp4,video/webm,video/quicktime">
+    </label>
+  </div>
+  <div class="actions">
+    <button class="primary" id="mgRunUploadTest" type="button">અપલોડ ટેસ્ટ કરો</button>
+    <button class="primary hidden" id="mgDeleteUploadTest" type="button">ટેસ્ટ ફાઇલ Delete કરો</button>
+  </div>
+  <div id="mgTestPreview" class="formgrid" style="margin-top:12px"></div>
+  <div id="mgTestStatus" class="status" role="status" aria-live="polite"></div>
+</section>
 <section class="panel"><h2>📊 રિપોર્ટ અને આંકડા</h2><div id="mgStats" class="formgrid"><div>લિસ્ટિંગ આંકડા લોડ થઈ રહ્યા છે…</div></div><button id="loadFullReport" class="primary" type="button">બધા રેકોર્ડથી રિપોર્ટ બનાવો</button> <button id="exportListings" class="primary" type="button">લિસ્ટિંગ CSV એક્સપોર્ટ</button> <button id="exportXlsx" class="primary" type="button">Excel XLSX એક્સપોર્ટ</button> <button id="printReport" class="primary" type="button">PDF / પ્રિન્ટ રિપોર્ટ</button><div id="mgBreakdown" class="muted" style="margin-top:12px;overflow-wrap:anywhere"></div><hr style="border-color:#ffffff25;margin:18px 0"><h3>વિગતવાર ફિલ્ટર રિપોર્ટ</h3><div class="formgrid"><label>શહેર<select id="mgReportCity"><option value="">બધા શહેર</option></select></label><label>હેતુ<select id="mgReportPurpose"><option value="">ભાડે અને વેચાણ બંને</option><option value="ભાડે">ભાડે</option><option value="વેચાણ">વેચાણ</option></select></label><label>વર્ષ<select id="mgReportYear"><option value="">બધા વર્ષ</option></select></label><label>મહિનો<select id="mgReportMonth"><option value="">બધા મહિના</option></select></label></div><div class="actions"><button id="mgReportApply" class="primary" type="button">રિપોર્ટ જુઓ</button><button id="mgReportCSV" class="primary" type="button">ફિલ્ટર રિપોર્ટ CSV</button><button id="mgReportXLSX" class="primary" type="button">ફિલ્ટર રિપોર્ટ Excel</button><button id="mgReportPrint" class="primary" type="button">આ રિપોર્ટ પ્રિન્ટ / PDF</button></div><div id="mgReportSummary" class="muted" style="margin-top:12px;overflow-wrap:anywhere">ફિલ્ટર પસંદ કરીને રિપોર્ટ જુઓ.</div></section>
 </section>
 </section>
@@ -311,6 +329,67 @@ async function uploadVideo(file,onProgress){
   throw lastErr;
 }
 async function uploadPhoto(file){if(!isCloudinaryConfigured())throw new Error('ફોટા માટે Cloudinary config ઉપલબ્ધ નથી.');if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>8*1024*1024)throw new Error('ફોટો JPG/PNG/WEBP અને 8 MBથી નાનો હોવો જોઈએ.');const body=new FormData();body.append('file',file);body.append('upload_preset',cloudinaryConfig.uploadPreset);const r=await fetch(`https://api.cloudinary.com/v1_1/${encodeURIComponent(cloudinaryConfig.cloudName)}/image/upload`,{method:'POST',body});const data=await r.json().catch(()=>({}));if(!r.ok||!data.secure_url)throw new Error(data.error?.message||'ફોટો અપલોડ નિષ્ફળ.');return {url:data.secure_url,publicId:data.public_id}}
+/* Admin-only standalone Cloudinary test: never writes a property or Firestore document. */
+(()=>{
+  const photoInput=$('mgTestPhoto'), videoInput=$('mgTestVideo'), runButton=$('mgRunUploadTest'), deleteButton=$('mgDeleteUploadTest');
+  const status=$('mgTestStatus'), preview=$('mgTestPreview');
+  if(!photoInput||!videoInput||!runButton||!deleteButton||!status||!preview)return;
+  let uploaded=[], objectUrls=[];
+  const say=key=>{status.textContent=window.mgI18nText?window.mgI18nText(key):key;};
+  const clearObjectUrls=()=>{objectUrls.forEach(url=>URL.revokeObjectURL(url));objectUrls=[];};
+  const showLocalPreview=()=>{
+    clearObjectUrls();preview.replaceChildren();
+    const photo=photoInput.files?.[0], video=videoInput.files?.[0];
+    for(const file of [photo,video]){
+      if(!file)continue;
+      const url=URL.createObjectURL(file);objectUrls.push(url);
+      const holder=document.createElement('div');holder.className='card';
+      if(file.type.startsWith('image/')){const img=document.createElement('img');img.src=url;img.alt=file.name;img.className='photo';holder.append(img);}
+      else{const player=document.createElement('video');player.src=url;player.controls=true;player.playsInline=true;player.className='photo';holder.append(player);}
+      const caption=document.createElement('div');caption.className='muted';caption.textContent=file.name;holder.append(caption);preview.append(holder);
+    }
+  };
+  photoInput.addEventListener('change',showLocalPreview);videoInput.addEventListener('change',showLocalPreview);
+  const lockInputs=locked=>{photoInput.disabled=locked;videoInput.disabled=locked;runButton.disabled=locked;};
+  runButton.addEventListener('click',async()=>{
+    if(auth.currentUser?.uid!==ADMIN_UID){say('એડમિન સેશન માન્ય નથી. ફરી લોગિન કરો.');return;}
+    const photo=photoInput.files?.[0],video=videoInput.files?.[0];
+    if(!photo&&!video){say('ટેસ્ટ માટે પહેલાં એક ફોટો અથવા વીડિયો પસંદ કરો.');return;}
+    runButton.disabled=true;status.textContent='અપલોડ ટેસ્ટ ચાલુ છે…';
+    try{
+      if(photo){const item=await uploadPhoto(photo);uploaded.push({...item,type:'image'});}
+      if(video){const item=await uploadVideo(video,pct=>{if(pct>=0)status.textContent='વીડિયો અપલોડ: '+pct+'%';});uploaded.push({...item,type:'video'});}
+      deleteButton.classList.toggle('hidden',uploaded.length===0);lockInputs(uploaded.length>0);
+      preview.replaceChildren();
+      for(const item of uploaded){
+        const holder=document.createElement('div');holder.className='card';
+        if(item.type==='image'){const img=document.createElement('img');img.src=item.url;img.alt='Uploaded test image';img.className='photo';holder.append(img);}
+        else{const player=document.createElement('video');player.src=item.url;player.controls=true;player.playsInline=true;player.className='photo';holder.append(player);}
+        const link=document.createElement('a');link.href=item.url;link.target='_blank';link.rel='noopener noreferrer';link.textContent='Cloudinary file open કરો';holder.append(link);preview.append(holder);
+      }
+      say('અપલોડ સફળ થયું. કોઈ પ્રોપર્ટી ઉમેરાઈ નથી. ટેસ્ટ ફાઇલ Cloudinaryમાં છે; જરૂર ન હોય તો Delete દબાવો.');
+    }catch(error){
+      deleteButton.classList.toggle('hidden',uploaded.length===0);lockInputs(uploaded.length>0);
+      status.textContent='અપલોડ નિષ્ફળ: '+(error?.message||'અજ્ઞાત ભૂલ');
+      console.error('Cloudinary upload test failed',error);
+    }finally{if(!uploaded.length)runButton.disabled=false;}
+  });
+  deleteButton.addEventListener('click',async()=>{
+    if(auth.currentUser?.uid!==ADMIN_UID){say('એડમિન સેશન માન્ય નથી. ફરી લોગિન કરો.');return;}
+    if(!uploaded.length)return;
+    deleteButton.disabled=true;status.textContent='ટેસ્ટ ફાઇલ Delete થઈ રહી છે…';
+    try{
+      const response=await httpsCallable(getFunctions(app),'deleteListingMedia')({items:uploaded.map(({publicId,type})=>({publicId,type}))});
+      const result=response.data||{};
+      if(result.skipped){say('Auto-delete ગોઠવાયેલું નથી. Cloudinary Media Libraryમાંથી ટેસ્ટ ફાઇલ જાતે Delete કરો.');return;}
+      if(result.failed){say('કેટલીક ફાઇલો Delete ન થઈ. Cloudinary Media Libraryમાં તપાસો.');return;}
+      uploaded=[];clearObjectUrls();preview.replaceChildren();photoInput.value='';videoInput.value='';lockInputs(false);deleteButton.classList.add('hidden');
+      say('ટેસ્ટ ફાઇલ Delete થઈ ગઈ.');
+    }catch(error){status.textContent='Delete નિષ્ફળ: '+(error?.message||'અજ્ઞાત ભૂલ');}
+    finally{deleteButton.disabled=false;}
+  });
+  window.addEventListener('beforeunload',clearObjectUrls);
+})();
 $('adminAddForm').addEventListener('submit',async e=>{e.preventDefault();const form=e.currentTarget;const btn=$('adminAddBtn');btn.disabled=true;$('addStatus').textContent='પ્રોપર્ટી ઉમેરાઈ રહી છે…';try{if(auth.currentUser?.uid!==ADMIN_UID)throw new Error('Admin સેશન માન્ય નથી. ફરી લોગિન કરો.');const f=new FormData(form),files=[...$('adminPhotos').files];const photos=[];for(const file of files)photos.push(await uploadPhoto(file));const videos=[];const vfs=[...$('adminVideos').files];for(let i=0;i<vfs.length;i++){const v=await uploadVideo(vfs[i],pct=>{$('addStatus').textContent=pct>=0?`વિડિયો ${i+1}/${vfs.length} અપલોડ: ${pct}%`:`નેટવર્ક સમસ્યા. ફરી પ્રયાસ ${-pct+1}/3…`});videos.push({url:v.url,publicId:v.publicId,format:v.format,bytes:v.bytes})}const status=f.get('publishStatus');const ownerPhone=String(f.get('ownerPhone')).trim();const payload={ownerName:String(f.get('ownerName')).trim(),type:String(f.get('type')),purpose:String(f.get('purpose')),location:String(f.get('location')).trim(),city:String(f.get('city')||'ગાંધીનગર').trim(),price:String(f.get('price')||'').trim(),description:String(f.get('description')||'').trim(),ownerConsent:f.get('ownerConsent')==='on',photos,videos,status,createdAt:serverTimestamp(),submitterUid:auth.currentUser.uid};['bhk','areaSqft','floor','furnishing','parking','deposit','offerTitle','offerText','offerUntil'].forEach(k=>{const v=String(f.get(k)||'').trim();if(v)payload[k]=v});{const pn=Number(String(f.get('priceNum')||'').replace(/,/g,''));if(isFinite(pn)&&pn>0)payload.priceNum=Math.round(pn)}{const ml=String(f.get('mapLink')||'').trim();if(ml){if(!/^https:\/\//i.test(ml))throw new Error('નકશાની લિંક https:// થી શરૂ થવી જોઈએ.');payload.mapLink=ml}}const listingRef=await addDoc(collection(db,'listings'),payload);try{await setDoc(doc(db,'listingContacts',listingRef.id),{ownerName:payload.ownerName,ownerPhone,ownerUid:auth.currentUser.uid,listingId:listingRef.id,createdAt:serverTimestamp()})}catch(contactError){await deleteDoc(listingRef).catch(()=>{});throw contactError}form.reset();$('addStatus').textContent=status==='approved'?'પ્રોપર્ટી ઉમેરાઈ અને જાહેર થઈ.':'પ્રોપર્ટી ઉમેરાઈ; પેન્ડિંગ રાખવામાં આવી.';await loadListings()}catch(err){$('addStatus').textContent='પ્રોપર્ટી ઉમેરાઈ નથી: '+(err.code?err.code+' — ':'')+(err.message||'કન્ફિગરેશન તપાસો.');console.error(err)}finally{btn.disabled=false}});
 $('refresh').addEventListener('click',()=>loadListings(true));$('loadOlder').addEventListener('click',()=>loadListings(false));$('statusFilter').addEventListener('change',renderListings);$('logout').addEventListener('click',()=>signOut(auth));
 
@@ -2846,6 +2925,12 @@ window.MG_I18N_DICTIONARY={
    user-entered property/customer content is intentionally excluded. */
 (()=>{
   const dict={
+    '🧪 ફોટો/વિડિયો અપલોડ ટેસ્ટ':'🧪 फोटो/वीडियो अपलोड टेस्ट|🧪 Photo/Video Upload Test',
+    'આ વિભાગથી ફોટો/વિડિયો Cloudinaryમાં ટેસ્ટ થશે; કોઈ પ્રોપર્ટી અથવા Firestore રેકોર્ડ ઉમેરાશે નહીં. ટેસ્ટ ફાઇલ Cloudinaryમાં રહેશે, જરૂર પડે તો નીચે Delete કરો.':'इससे फोटो/वीडियो Cloudinary में टेस्ट होंगे; कोई प्रॉपर्टी या Firestore रिकॉर्ड नहीं जुड़ेगा। टेस्ट फ़ाइल Cloudinary में रहेगी; ज़रूरत न हो तो नीचे Delete करें।|This tests photo/video uploads to Cloudinary; no property or Firestore record is created. Test files remain in Cloudinary; delete them below if no longer needed.',
+    'ટેસ્ટ ફોટો (JPG/PNG/WEBP, મહત્તમ 8 MB)':'टेस्ट फोटो (JPG/PNG/WEBP, अधिकतम 8 MB)|Test Photo (JPG/PNG/WEBP, max 8 MB)',
+    'ટેસ્ટ વીડિયો (MP4/WEBM/MOV, મહત્તમ 25 MB)':'टेस्ट वीडियो (MP4/WEBM/MOV, अधिकतम 25 MB)|Test Video (MP4/WEBM/MOV, max 25 MB)',
+    'અપલોડ ટેસ્ટ કરો':'अपलोड टेस्ट करें|Run Upload Test',
+    'ટેસ્ટ ફાઇલ Delete કરો':'टेस्ट फ़ाइल Delete करें|Delete Test File',
     'મારું ઘર':'मेरा घर|Maru Ghar','મારું':'मेरा|Maru','ઘર':'घर|Home',
     'સેટિંગ્સ':'सेटिंग्स|Settings','⚙ સેટિંગ્સ':'⚙ सेटिंग्स|⚙ Settings','👤 એકાઉન્ટ':'👤 खाता|👤 Account','બંધ કરો':'बंद करें|Close',
     '🌐 સમગ્ર ગુજરાતનું નેટવર્ક':'🌐 पूरे गुजरात का नेटवर्क|🌐 Gujarat-wide Property Network',
