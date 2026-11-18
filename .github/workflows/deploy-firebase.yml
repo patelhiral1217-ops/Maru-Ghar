@@ -25,7 +25,7 @@ jobs:
         with:
           node-version: 22
       - name: Install project dependencies
-        run: npm ci
+        run: npm install --no-audit --no-fund
       - name: Build website folder
         run: npm run copy-web
       - name: Run full project validation
