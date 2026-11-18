@@ -73,8 +73,22 @@ if(!home.includes('event.target.closest(\'#gridSwitch button[data-cols]\')')||!h
 if(!demo.includes('કુલ 10 ડેમો નમૂનાઓ')||!demo.includes('rootObserver.observe'))throw new Error('Demo showcase must expose all ten samples and initialize when listing root is delayed');
 console.log('MARU GHAR DEMO / GRID / SETTINGS REGRESSION PASS — ten unique demo samples, delegated 1–4 column controls, trust buttons restricted to Settings.');
 const gridController=fs.readFileSync('assets/maru-ghar-grid-controller.js','utf8');
-if(!home.includes('assets/maru-ghar-grid-controller.js?v=20261118a'))throw new Error('Independent property column controller is not loaded by the home page');
+if(!home.includes('assets/maru-ghar-grid-controller.js?v=20261118b'))throw new Error('Independent property column controller is not loaded by the home page');
+for(const n of ['1','2','3','4'])if(!home.includes('data-cols="'+n+'" onclick="window.mgSetPropertyColumns&&window.mgSetPropertyColumns(\\''+n+'\\')'))throw new Error('Column '+n+' button is not directly connected to the controller');
 for(const term of ["repeat(' + cols + ', minmax(0, 1fr))","grid.style.setProperty('display', 'grid', 'important')","gridObserver.observe(grid, { childList: true })","window.mgSetPropertyColumns = applyColumns"])if(!gridController.includes(term))throw new Error('Independent column controller missing behavior: '+term);
-if(!gridController.includes("closest('#gridSwitch button[data-cols]')"))throw new Error('Independent column controller does not delegate all four buttons');
-console.log('INDEPENDENT PROPERTY COLUMN CONTROLLER PASS — external late-loaded controller applies 1–4 columns and preserves the selected layout after listing refresh.');
+if(gridController.includes("document.addEventListener('click'"))throw new Error('Competing delegated capture handler must not intercept direct column button actions');
+// Execute the actual controller against a small DOM-compatible harness and verify all four choices.
+const makeStyle=()=>({values:{},setProperty(k,v){this.values[k]=v}});
+const buttons=['1','2','3','4'].map(n=>({dataset:{cols:n},classList:{toggle(){}},setAttribute(k,v){this[k]=v}}));
+const cards=[1,2,3].map(()=>({classList:{contains:x=>x==='property'},style:makeStyle()}));
+const grid={dataset:{},style:makeStyle(),children:cards};
+const switcher={querySelectorAll:()=>buttons};
+const fakeDoc={readyState:'complete',getElementById:id=>id==='properties'?grid:id==='gridSwitch'?switcher:null,addEventListener(){}};
+const fakeWindow={addEventListener(){}};
+const fakeLocal={setItem(k,v){this[k]=v},getItem(k){return this[k]||null}};
+vm.runInNewContext(gridController,{window:fakeWindow,document:fakeDoc,localStorage:fakeLocal,MutationObserver:class{observe(){}},requestAnimationFrame:fn=>fn(),Array,Set,String});
+for(const n of ['1','2','3','4']){
+ if(fakeWindow.mgSetPropertyColumns(n)!==true||grid.dataset.cols!==n||grid.style.values['grid-template-columns']!=='repeat('+n+', minmax(0, 1fr))'||fakeLocal.mg_cols!==n)throw new Error('Column controller failed runtime application for '+n);
+}
+console.log('INDEPENDENT PROPERTY COLUMN CONTROLLER PASS — direct button calls and runtime checks apply 1–4 columns and persist selection.');
 
