@@ -310,7 +310,15 @@ async function init() {
     await loadCities();
     await loadSettings();
     const cityEl=document.getElementById('cityFilter');
-    if(cityEl) cityEl.addEventListener('change',async()=>{currentCity=cityEl.value||'all';populateAreaFilter(currentCity);while(loadingMore) await new Promise(r=>setTimeout(r,100));loadApproved(true);});
+    window.mgSelectCity=async(nextCity)=>{
+      currentCity=String(nextCity||'all');
+      if(cityEl)cityEl.value=currentCity;
+      populateAreaFilter(currentCity);
+      while(loadingMore)await new Promise(r=>setTimeout(r,80));
+      await loadApproved(true);
+      return true;
+    };
+    if(cityEl)cityEl.addEventListener('change',()=>{window.mgSelectCity(cityEl.value||'all');});
     populateAreaFilter(currentCity);
     const areaEl=document.getElementById('areaFilter');
     if(areaEl)areaEl.addEventListener('change',async()=>{while(loadingMore)await new Promise(r=>setTimeout(r,100));if(typeof window.filterProps==='function')window.filterProps();});
