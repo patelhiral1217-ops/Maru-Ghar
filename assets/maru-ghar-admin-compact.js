@@ -1,17 +1,11 @@
 (()=>{'use strict';
 const $=s=>document.querySelector(s);
-function fold(panel,open=false){
- if(!panel||panel.dataset.mgFolded==='1')return;
- const title=panel.querySelector(':scope > h2')||panel.querySelector(':scope h2')||panel.querySelector(':scope h3');
- const details=document.createElement('details');details.className='mg-admin-fold';details.open=open;
- const summary=document.createElement('summary');summary.textContent=(title?.textContent||'Admin વિભાગ').trim();
- panel.before(details);details.append(summary,panel);panel.dataset.mgFolded='1';
-}
 function init(){
  const dashboard=$('#dashboard'),main=$('#adminMain'),settings=$('#adminSettings'),nav=document.querySelector('.admin-shortcuts');
- if(!dashboard||!main||!settings)return;
+ if(!dashboard||!main||!settings||settings.dataset.mgSectionButtons==='1')return;
+ settings.dataset.mgSectionButtons='1';
 
- /* Keep only the three everyday destinations in the compact top bar. */
+ /* Preserve the three primary destinations in the compact top bar. */
  if(nav){
   nav.replaceChildren();
   [['#listings','🏠 લિસ્ટિંગ'],['#enquiryList','✉️ પૂછપરછ'],['#adminSettings','⚙️ સેટિંગ્સ']].forEach(([href,label])=>{
@@ -19,38 +13,43 @@ function init(){
   });
  }
 
- /* Put add-property, upload-test and reports inside Settings, not on the main screen. */
- if(!settings.querySelector('#mgAdminToolsFold')){
-  const tools=document.createElement('details');tools.id='mgAdminToolsFold';tools.className='mg-admin-fold';
-  const summary=document.createElement('summary');summary.textContent='🧰 પ્રોપર્ટી ઉમેરો, અપલોડ ટેસ્ટ અને રિપોર્ટ';
-  tools.append(summary,main);settings.insertBefore(tools,settings.firstChild);
+ /* Every admin tool becomes its own gold/silver 3D button inside Settings. */
+ const sections=[...main.children,...settings.children].filter(node=>node.matches&&node.matches('section.panel'));
+ const menu=document.createElement('div');menu.className='mg-admin-section-menu';menu.setAttribute('aria-label','Admin વિભાગો');
+ const menuTitle=document.createElement('h3');menuTitle.className='mg-admin-menu-title';menuTitle.textContent='⚙️ જરૂરી વિભાગ પસંદ કરો';
+ menu.append(menuTitle);
+ const notification=$('#enableNotif');
+ if(notification){
+  const tile=document.createElement('div');tile.className='mg-admin-menu-tile mg-admin-notification-tile';
+  notification.classList.add('mg-admin-section-btn');tile.append(notification);menu.append(tile);
  }
- [...main.children].forEach(node=>{if(node.matches('section.panel'))fold(node,false);});
- [...settings.children].forEach(node=>{if(node.matches('section.panel'))fold(node,false);});
-
- const manager=$('#mgSiteContentManager');
- if(manager){
-  const grid=manager.querySelector(':scope > .formgrid');
-  const actions=manager.querySelector(':scope > .actions');
-  const preview=$('#mgCmsPreview'),status=$('#mgCmsStatus');
-  if(grid&&actions&&!manager.querySelector('.mg-cms-editor')){
-   const details=document.createElement('details');details.className='mg-cms-editor';
-   const summary=document.createElement('summary');summary.textContent='＋ નવું લખાણ / ફોટો / વીડિયો ઉમેરો';
-   const body=document.createElement('div');body.className='mg-cms-editor-body';
-   manager.insertBefore(details,grid);details.append(summary,body);body.append(grid,actions);
-   if(preview)body.append(preview);if(status)body.append(status);
-  }
-  const list=$('#mgCmsList'),heading=list?.previousElementSibling;
-  if(list&&heading?.tagName==='H3'&&!manager.querySelector('.mg-cms-items-fold')){
-   const details=document.createElement('details');details.className='mg-cms-items-fold';
-   const summary=document.createElement('summary');summary.textContent='📚 બનાવેલા વિભાગો જુઓ / Edit કરો';
-   manager.insertBefore(details,heading);details.append(summary,heading,list);
-  }
- }
- document.querySelectorAll('.admin-shortcuts a[href^="#"]').forEach(a=>a.addEventListener('click',()=>{
-  const target=$(a.getAttribute('href'));if(!target)return;
-  if(target.tagName==='DETAILS')target.open=true;let p=target.parentElement;while(p){if(p.tagName==='DETAILS')p.open=true;p=p.parentElement;}
- }));
+ sections.forEach((panel,index)=>{
+  const heading=panel.querySelector(':scope > h2,:scope > h3')||panel.querySelector('h2,h3');
+  const label=(heading?.textContent||'વધુ સેટિંગ્સ').trim();
+  if(!panel.id)panel.id='mgAdminSection'+(index+1);
+  panel.classList.add('mg-admin-section-content');
+  panel.hidden=true;
+  settings.append(panel);
+  const tile=document.createElement('div');tile.className='mg-admin-menu-tile';
+  const button=document.createElement('button');button.type='button';button.className='mg-admin-section-btn';
+  button.textContent=label;button.setAttribute('aria-controls',panel.id);button.setAttribute('aria-expanded','false');
+  button.addEventListener('click',()=>{
+   const willOpen=panel.hidden;
+   sections.forEach(other=>{
+    other.hidden=true;
+    const b=menu.querySelector('[aria-controls="'+other.id+'"]');
+    if(b)b.setAttribute('aria-expanded','false');
+   });
+   if(willOpen){panel.hidden=false;button.setAttribute('aria-expanded','true');}
+   else{panel.hidden=true;button.setAttribute('aria-expanded','false');}
+  });
+  tile.append(button);menu.append(tile);
+ });
+ settings.insertBefore(menu,settings.firstChild);
+ /* Remove the old Add Property / Reports container from the visible page. */
+ main.replaceChildren();
+ /* Clicking Settings in the top bar opens the Settings drawer. */
+ document.querySelectorAll('.admin-shortcuts a[href="#adminSettings"]').forEach(a=>a.addEventListener('click',()=>{settings.open=true;}));
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
