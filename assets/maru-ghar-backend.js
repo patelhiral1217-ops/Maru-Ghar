@@ -44,11 +44,38 @@ function populateAreaFilter(city){
 }
 let currentCity='ગાંધીનગર';
 function mergeCities(extra){const m=new Map(DEFAULT_CITIES.map(([n,e])=>[n,e]));(extra||[]).forEach(c=>{if(c&&c.name)m.set(c.name,c.nameEn||m.get(c.name)||'')});return [...m.entries()];}
-async function loadCities(){
-  let extra=[];try{const s=await getDocs(collection(db,'cities'));extra=s.docs.map(d=>d.data());}catch(e){console.warn('cities load failed (defaults used):',e);}
+function applyCityOptions(extra){
   const list=mergeCities(extra);
-  const cf=document.getElementById('cityFilter'); if(cf){cf.replaceChildren(new Option('આખું ગુજરાત','all'));list.forEach(([n,en])=>{const o=new Option(n,n);o.dataset.en=en||'';cf.appendChild(o)});cf.value=list.some(([n])=>n===currentCity)?currentCity:'ગાંધીનગર';currentCity=cf.value;}
-  const ff=document.getElementById('cityField'); if(ff){const cur=ff.value||'ગાંધીનગર';ff.replaceChildren();list.forEach(([n])=>ff.appendChild(new Option(n,n)));ff.value=list.some(([n])=>n===cur)?cur:list[0][0];}
+  const cf=document.getElementById('cityFilter');
+  if(cf){
+    const selected=cf.value||currentCity;
+    cf.replaceChildren(new Option('આખું ગુજરાત','all'));
+    list.forEach(([n,en])=>{const o=new Option(n,n);o.dataset.en=en||'';cf.appendChild(o)});
+    cf.value=list.some(([n])=>n===selected)?selected:(list.some(([n])=>n===currentCity)?currentCity:'ગાંધીનગર');
+    currentCity=cf.value;
+  }
+  const ff=document.getElementById('cityField');
+  if(ff){
+    const cur=ff.value||'ગાંધીનગર';
+    ff.replaceChildren();
+    list.forEach(([n])=>ff.appendChild(new Option(n,n)));
+    ff.value=list.some(([n])=>n===cur)?cur:(list[0]?.[0]||'ગાંધીનગર');
+  }
+}
+// Render the built-in city list immediately; refresh admin-added cities in the background.
+function loadCities(){
+  const cacheKey='mg_city_options_v1';
+  let cached=[];
+  try{
+    const c=JSON.parse(localStorage.getItem(cacheKey)||'null');
+    if(c&&Date.now()-c.t<6*60*60*1000&&Array.isArray(c.items))cached=c.items;
+  }catch(_){}
+  applyCityOptions(cached);
+  return getDocs(collection(db,'cities')).then(s=>{
+    const extra=s.docs.map(d=>d.data());
+    applyCityOptions(extra);
+    try{localStorage.setItem(cacheKey,JSON.stringify({t:Date.now(),items:extra}));}catch(_){}
+  }).catch(e=>console.warn('cities load failed (cached/default city list used):',e));
 }
 function isTrustedMapsUrl(value){try{const u=new URL(String(value||''));return u.protocol==='https:'&&(['google.com','www.google.com','maps.google.com','maps.app.goo.gl','goo.gl'].includes(u.hostname.toLowerCase()))&&((u.hostname==='google.com'||u.hostname==='www.google.com')?u.pathname.startsWith('/maps'):u.hostname==='goo.gl'?u.pathname.startsWith('/maps'):true)}catch(_){return false}}
 function mapHref(p){const l=String(p.mapLink||'').trim();if(isTrustedMapsUrl(l))return l;return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent([p.location,p.city||'ગાંધીનગર','ગુજરાત'].filter(Boolean).join(', '));}
@@ -179,18 +206,19 @@ function renderLiveProperties(items) {
   if(typeof window.filterProps==='function') window.filterProps();
 }
 
-const CACHE_KEY='mg_first_page_v4', CACHE_MS=3*60*1000;
+const CACHE_KEY='mg_first_page_v5', CACHE_MS=5*60*1000;
 let lastCursorMs=null;
-function readCache(){try{const c=JSON.parse(localStorage.getItem(CACHE_KEY)||'null');if(c&&Date.now()-c.t<CACHE_MS&&Array.isArray(c.items))return c;}catch(_){}return null;}
-function writeCache(items,lastMs,hasMore){try{localStorage.setItem(CACHE_KEY,JSON.stringify({t:Date.now(),items,lastMs,hasMore}));}catch(_){}}
+function cityCacheKey(){return CACHE_KEY+'_'+(currentCity==='all'?'all':encodeURIComponent(currentCity));}
+function readCache(){try{const c=JSON.parse(localStorage.getItem(cityCacheKey())||'null');if(c&&Date.now()-c.t<CACHE_MS&&Array.isArray(c.items))return c;}catch(_){}return null;}
+function writeCache(items,lastMs,hasMore){try{localStorage.setItem(cityCacheKey(),JSON.stringify({t:Date.now(),items,lastMs,hasMore}));}catch(_){}}
 async function loadApproved(reset=false) {
   if(loadingMore || (!hasMoreListings && !reset)) return;
   loadingMore=true;
   const more=document.getElementById('loadMoreListings'); if(more){more.disabled=true;more.textContent='લોડ થઈ રહ્યું છે…';}
   try {
     if(reset){lastListingDoc=null;lastCursorMs=null;hasMoreListings=true;grid?.replaceChildren();
-      const c=currentCity==='all'?readCache():null; if(c){lastCursorMs=c.lastMs||null;hasMoreListings=!!c.hasMore;renderLiveProperties(c.items);return;}}
-    const pageLimit=currentCity!=='all'?200:PAGE_SIZE;
+      const c=readCache(); if(c){lastCursorMs=c.lastMs||null;hasMoreListings=!!c.hasMore;renderLiveProperties(c.items);return;}}
+    const pageLimit=PAGE_SIZE;
     const constraints=[where('status','==','approved'),...(currentCity!=='all'?[where('city','==',currentCity)]:[]),orderBy('createdAt','desc'),limit(pageLimit)];
     const isFirst=!lastListingDoc&&!lastCursorMs;
     if(lastListingDoc) constraints.push(startAfter(lastListingDoc)); else if(lastCursorMs) constraints.push(startAfter(Timestamp.fromMillis(lastCursorMs)));
@@ -198,7 +226,7 @@ async function loadApproved(reset=false) {
     lastListingDoc=snap.docs.at(-1)||lastListingDoc;
     hasMoreListings=snap.size===pageLimit;
     const items=snap.docs.map(d=>{const {createdAt,...r}=d.data();return {id:d.id,...r,createdMs:(createdAt&&createdAt.toMillis)?createdAt.toMillis():0};});
-    if(isFirst&&currentCity==='all'){const lm=snap.docs.at(-1)?.data()?.createdAt;writeCache(items,lm&&lm.toMillis?lm.toMillis():null,hasMoreListings);}
+    if(isFirst){const lm=snap.docs.at(-1)?.data()?.createdAt;writeCache(items,lm&&lm.toMillis?lm.toMillis():null,hasMoreListings);}
     renderLiveProperties(items);
   } catch(e) {
     console.error('Maru Ghar listing page load failed:',e);
@@ -307,8 +335,9 @@ async function init() {
     const app=initializeApp(firebaseConfig); db=getFirestore(app); auth=getAuth(app); liveMode=true;
     // Admin shortcut buttons exist in the page but stay hidden for everyone except the signed-in admin.
     onAuthStateChanged(auth,u=>{const ok=!!u&&!u.isAnonymous&&u.uid===ADMIN_UID;['adminNavLink','adminQuick'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('hidden',!ok)})});
-    await loadCities();
-    await loadSettings();
+    // Do not block the first property render on secondary settings/city metadata reads.
+    const cityOptionsLoad=loadCities();
+    const siteSettingsLoad=loadSettings();
     const cityEl=document.getElementById('cityFilter');
     window.mgSelectCity=async(nextCity)=>{
       currentCity=String(nextCity||'all');
