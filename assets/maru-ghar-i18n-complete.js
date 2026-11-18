@@ -2,6 +2,12 @@
    user-entered property/customer content is intentionally excluded. */
 (()=>{
   const dict={
+    '🧪 ફોટો/વિડિયો અપલોડ ટેસ્ટ':'🧪 फोटो/वीडियो अपलोड टेस्ट|🧪 Photo/Video Upload Test',
+    'આ વિભાગથી ફોટો/વિડિયો Cloudinaryમાં ટેસ્ટ થશે; કોઈ પ્રોપર્ટી અથવા Firestore રેકોર્ડ ઉમેરાશે નહીં. ટેસ્ટ ફાઇલ Cloudinaryમાં રહેશે, જરૂર પડે તો નીચે Delete કરો.':'इससे फोटो/वीडियो Cloudinary में टेस्ट होंगे; कोई प्रॉपर्टी या Firestore रिकॉर्ड नहीं जुड़ेगा। टेस्ट फ़ाइल Cloudinary में रहेगी; ज़रूरत न हो तो नीचे Delete करें।|This tests photo/video uploads to Cloudinary; no property or Firestore record is created. Test files remain in Cloudinary; delete them below if no longer needed.',
+    'ટેસ્ટ ફોટો (JPG/PNG/WEBP, મહત્તમ 8 MB)':'टेस्ट फोटो (JPG/PNG/WEBP, अधिकतम 8 MB)|Test Photo (JPG/PNG/WEBP, max 8 MB)',
+    'ટેસ્ટ વીડિયો (MP4/WEBM/MOV, મહત્તમ 25 MB)':'टेस्ट वीडियो (MP4/WEBM/MOV, अधिकतम 25 MB)|Test Video (MP4/WEBM/MOV, max 25 MB)',
+    'અપલોડ ટેસ્ટ કરો':'अपलोड टेस्ट करें|Run Upload Test',
+    'ટેસ્ટ ફાઇલ Delete કરો':'टेस्ट फ़ाइल Delete करें|Delete Test File',
     'મારું ઘર':'मेरा घर|Maru Ghar','મારું':'मेरा|Maru','ઘર':'घर|Home',
     'સેટિંગ્સ':'सेटिंग्स|Settings','⚙ સેટિંગ્સ':'⚙ सेटिंग्स|⚙ Settings','👤 એકાઉન્ટ':'👤 खाता|👤 Account','બંધ કરો':'बंद करें|Close',
     '🌐 સમગ્ર ગુજરાતનું નેટવર્ક':'🌐 पूरे गुजरात का नेटवर्क|🌐 Gujarat-wide Property Network',
