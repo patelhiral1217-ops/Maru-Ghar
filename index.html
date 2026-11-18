@@ -794,31 +794,53 @@ function filterProps(){
 ['fBhk','fFurn','fVerified','fMedia','fSort'].forEach(id=>document.getElementById(id)&&document.getElementById(id).addEventListener('change',filterProps));
 ['fMin','fMax','fAreaMin','fAreaMax'].forEach(id=>document.getElementById(id)&&document.getElementById(id).addEventListener('input',filterProps));
 (function(){const b=document.getElementById('favOnly');if(b)b.addEventListener('click',()=>{window.__favOnly=!window.__favOnly;b.classList.toggle('active',window.__favOnly);b.setAttribute('aria-pressed',String(window.__favOnly));filterProps()})})();
-// Reliable 1 / 2 / 3 column controls; ignore the separate Favorites button.
+// Reliable delegated 1–4 column controller. Capture clicks so other UI handlers cannot swallow them.
 (function(){
-  const grid=document.getElementById('properties'),switcher=document.getElementById('gridSwitch');
-  if(!grid||!switcher)return;
-  const buttons=[...switcher.querySelectorAll('button[data-cols]')];
-  const setColumns=value=>{
-    if(!['1','2','3','4'].includes(String(value)))return;
-    grid.dataset.cols=String(value);
+  let selected='2', observer=null;
+  function apply(value){
+    const cols=String(value);
+    if(!['1','2','3','4'].includes(cols))return;
+    selected=cols;
+    const grid=document.getElementById('properties');
+    const switcher=document.getElementById('gridSwitch');
+    if(!grid)return;
+    grid.dataset.cols=cols;
     grid.style.setProperty('display','grid','important');
-    grid.style.setProperty('grid-template-columns',`repeat(${String(value)},minmax(0,1fr))`,'important');
-    grid.style.setProperty('gap',String(value)==='1'?'16px':String(value)==='2'?'12px':'9px','important');
-    grid.querySelectorAll('.property').forEach(card=>{card.style.setProperty('min-width','0','important');card.style.setProperty('width','100%','important');});
-    buttons.forEach(button=>{
-      const active=button.dataset.cols===String(value);
+    grid.style.setProperty('grid-template-columns','repeat('+cols+',minmax(0,1fr))','important');
+    grid.style.setProperty('grid-auto-flow','row','important');
+    grid.style.setProperty('gap',cols==='1'?'16px':cols==='2'?'12px':cols==='3'?'9px':'7px','important');
+    grid.querySelectorAll(':scope > .property').forEach(card=>{
+      card.style.setProperty('min-width','0','important');
+      card.style.setProperty('max-width','100%','important');
+      card.style.setProperty('width','auto','important');
+      card.style.setProperty('grid-column','auto','important');
+    });
+    if(switcher)switcher.querySelectorAll('button[data-cols]').forEach(button=>{
+      const active=button.dataset.cols===cols;
       button.classList.toggle('active',active);
       button.setAttribute('aria-pressed',String(active));
     });
-    try{localStorage.setItem('mg_cols',String(value))}catch(_){}
-  };
-  let saved='2';try{saved=localStorage.getItem('mg_cols')||'2'}catch(_){}
-  setColumns(['1','2','3','4'].includes(saved)?saved:'2');
-  buttons.forEach(button=>button.addEventListener('click',event=>{
-    event.preventDefault();event.stopPropagation();setColumns(button.dataset.cols);
-  }));
-})();
+    try{localStorage.setItem('mg_cols',cols)}catch(_){}
+    if(!observer){
+      observer=new MutationObserver(()=>apply(selected));
+      observer.observe(grid,{childList:true});
+    }
+  }
+  function init(){
+    let saved='2';try{saved=localStorage.getItem('mg_cols')||'2'}catch(_){}
+    apply(['1','2','3','4'].includes(saved)?saved:'2');
+  }
+  document.addEventListener('click',event=>{
+    const button=event.target&&event.target.closest?event.target.closest('#gridSwitch button[data-cols]'):null;
+    if(!button)return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    apply(button.dataset.cols);
+  },true);
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+  window.addEventListener('pageshow',init);
+  window.addEventListener('mg-properties-rendered',()=>apply(selected));
+})();;
 </script>
 <script type="module" src="assets/maru-ghar-backend.js?v=20261118c"></script>
 <script type="module" src="assets/maru-ghar-extras.js"></script>
@@ -3923,7 +3945,7 @@ window.MG_I18N_DICTIONARY={
 
 </style>
 
-<script src="assets/maru-ghar-demo-showcase.js?v=20261117c"></script>
+<script src="assets/maru-ghar-demo-showcase.js?v=20261118d"></script>
 <script defer src="assets/maru-ghar-admin-content.js?v=20261118a"></script>\n
 <style id="mg-final-search-metal-and-range-apply-20261117">
 /* Exact same champagne-gold/silver 3D finish for the home dropdowns and every category chip. */
@@ -4026,6 +4048,27 @@ a#adminQuick.mg-admin-premium{
 </style>
 <link rel="stylesheet" href="assets/maru-ghar-site-content.css?v=20261118a">
 <script type="module" src="assets/maru-ghar-site-content.js?v=20261118a"></script>
+
+<script id="mg-settings-only-trust-actions-20261118">
+(function(){
+  const labels=['વેરીફાઈ લિસ્ટિંગ','વેરિફાઇડ લિસ્ટિંગ','વેરિફાઇડ પ્રોપર્ટી','માલિકનો નંબર સુરક્ષિત','માલિકનું નંબર સુરક્ષા','આખું ગુજરાત મફત','પૂરા ગુજરાત મફત','verified listings','owner number protected','all gujarat free','सत्यापित लिस्टिंग','मालिक का नंबर सुरक्षित','पूरा गुजरात मुफ़्त'];
+  const norm=s=>String(s||'').replace(/[✔🔒🗺️🌐]/g,'').replace(/\s+/g,' ').trim().toLowerCase();
+  function clean(){
+    document.querySelectorAll('#mgTrust,.mg-trust').forEach(box=>{if(!box.closest('#mgSettingsOverlay'))box.remove()});
+    document.querySelectorAll('button,a,[role="button"]').forEach(el=>{
+      if(el.closest('#mgSettingsOverlay'))return;
+      const value=norm(el.textContent);
+      if(labels.some(label=>value===norm(label)||value.includes(norm(label))))el.remove();
+    });
+  }
+  clean();
+  new MutationObserver(clean).observe(document.body,{childList:true,subtree:true});
+})();
+</script>
+<style id="mg-settings-only-trust-actions-css-20261118">
+body #mgTrust,body .mg-trust{display:none!important}
+</style>
+
 </body></html>
 
 <style id="mg-city-and-four-column-fix-20261118">
