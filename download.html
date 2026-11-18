@@ -69,7 +69,7 @@ function renderChoices(){
   for(const key of Object.keys(btns)){const b=btns[key];b.disabled=!links[key];b.classList.toggle('selected',selected===key);b.setAttribute('aria-pressed',String(selected===key));}
   $('okBtn').disabled=!selected||!links[selected];
   $('apkNote').hidden=Object.values(links).some(Boolean);
-  $('downloadStatus').textContent=tr(selected?'પસંદગી તૈયાર છે. OK દબાવો.':'ડાઉનલોડ માટે એક વિકલ્પ પસંદ કરો.');
+  $('downloadStatus').textContent=tr(selected?'OK — ડાઉનલોડ કરો':'ડાઉનલોડ માટે એક વિકલ્પ પસંદ કરો.');
 }
 for(const [key,b] of Object.entries(btns))b.addEventListener('click',()=>{if(!links[key])return;selected=key;renderChoices();});
 $('okBtn').addEventListener('click',()=>{
@@ -101,6 +101,7 @@ async function loadPublicConfig(){
   }catch(e){console.warn('Public app download settings unavailable:',e);}
   renderChoices();
 }
+window.addEventListener('mg-language-changed',renderChoices);
 renderChoices();loadPublicConfig();
 </script>
 
