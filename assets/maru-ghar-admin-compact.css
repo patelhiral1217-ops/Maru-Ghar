@@ -1,0 +1,39 @@
+/* Compact, mobile-first Maru Ghar admin dashboard */
+#dashboard{max-width:1100px;margin:0 auto}
+#dashboard .admin-shortcuts{position:sticky;top:0;z-index:20;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:9px;margin:0 0 12px;background:rgba(5,28,23,.96);backdrop-filter:blur(12px)}
+#dashboard .admin-shortcuts a{min-height:42px;justify-content:center;text-align:center;padding:8px 10px;font-size:13px;line-height:1.25}
+.mg-admin-fold{margin:0 0 10px;border:1px solid rgba(255,221,0,.34);border-radius:15px;overflow:hidden;background:linear-gradient(145deg,#10382f,#071f1a);box-shadow:0 7px 18px #0002}
+.mg-admin-fold>summary,.mg-cms-editor>summary,.mg-cms-items-fold>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 15px;color:#ffe6a1;font-weight:900;font-size:15px;line-height:1.4;background:linear-gradient(120deg,#164b3a,#09271f)}
+.mg-admin-fold>summary::-webkit-details-marker,.mg-cms-editor>summary::-webkit-details-marker,.mg-cms-items-fold>summary::-webkit-details-marker{display:none}
+.mg-admin-fold>summary:after,.mg-cms-editor>summary:after,.mg-cms-items-fold>summary:after{content:"＋";font-size:18px;color:#ffe6a1}
+.mg-admin-fold[open]>summary:after,.mg-cms-editor[open]>summary:after,.mg-cms-items-fold[open]>summary:after{content:"−"}
+.mg-admin-fold>.panel{margin:9px!important;padding:14px!important}
+.mg-admin-fold h2{font-size:18px!important;margin:3px 0 8px!important}
+.mg-admin-fold p{margin:5px 0 10px!important;font-size:13px;line-height:1.55}
+#mgSiteContentManager{scroll-margin-top:80px}
+#mgSiteContentManager>h2{font-size:19px!important}
+#mgSiteContentManager>.muted{font-size:13px;line-height:1.55}
+.mg-cms-editor,.mg-cms-items-fold{margin:12px 0;border:1px solid rgba(255,221,0,.35);border-radius:13px;overflow:hidden}
+.mg-cms-editor-body{padding:10px;background:rgba(3,24,19,.55)}
+.mg-cms-editor .formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.mg-cms-editor label{font-size:13px;line-height:1.45}
+.mg-cms-editor input,.mg-cms-editor select,.mg-cms-editor textarea{padding:10px 11px;margin:5px 0 9px;font-size:14px}
+.mg-cms-editor textarea{min-height:66px}
+.mg-cms-editor .actions{gap:7px;margin-top:5px}
+.mg-cms-editor .actions button{flex:1 1 130px;min-height:42px;padding:9px}
+.mg-cms-items-fold>.mg-cms-list{padding:10px}
+.mg-cms-admin-item{padding:10px!important}
+.mg-cms-admin-actions button{min-height:36px}
+@media(max-width:620px){
+ #dashboard .admin-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #dashboard .admin-shortcuts a{font-size:12px;min-height:40px}
+ .mg-admin-fold>summary,.mg-cms-editor>summary,.mg-cms-items-fold>summary{padding:12px;font-size:14px}
+ .mg-admin-fold>.panel{padding:11px!important}
+ .mg-cms-editor .formgrid{grid-template-columns:1fr}
+ .mg-cms-editor .formgrid .wide{grid-column:auto}
+ .mg-cms-editor .actions{display:grid;grid-template-columns:1fr 1fr}
+ .mg-cms-editor .actions button{min-width:0}
+ .mg-cms-admin-actions{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+ .mg-cms-admin-actions button{padding:7px 5px!important;font-size:12px}
+}
+@media(min-width:621px){.mg-cms-editor .formgrid .wide{grid-column:1/-1}}
