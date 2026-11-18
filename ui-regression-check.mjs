@@ -59,7 +59,7 @@ for(const term of ['x.visible===true&&!x.deletedAt','textContent=title','dataset
 if(!admin.includes('assets/maru-ghar-content-admin.js')||!home.includes('assets/maru-ghar-site-content.js'))throw new Error('CMS scripts not connected to pages');
 if(!admin.includes('assets/maru-ghar-admin-compact.js')||!admin.includes('assets/maru-ghar-admin-compact.css'))throw new Error('Compact admin assets not connected');
 const compactAdmin=fs.readFileSync('assets/maru-ghar-admin-compact.js','utf8');
-if(!compactAdmin.includes('mgAllAdminSettings')||!compactAdmin.includes('body.append(main,settings)'))throw new Error('All admin controls are not grouped under the unified Settings panel');
+if(!compactAdmin.includes('const sections=[...main.children,...settings.children]')||!compactAdmin.includes('settings.append(panel)')||!compactAdmin.includes('main.replaceChildren()'))throw new Error('Restored compact admin sections are not moved into the Settings panel');
 for(const slot of ['home_mid','home_bottom','home_listings_heading','home_categories','home_filters','home_results','home_submit','home_account','download_story'])if(!cmsAdmin.includes(slot))throw new Error('Admin CMS placement missing: '+slot);
 
 console.log('UI REGRESSION CHECK PASS — shared Gujarati/Hindi/English dictionaries across all four pages and property panel open/close logic. This is a code-level test, not a full browser/device test.');
