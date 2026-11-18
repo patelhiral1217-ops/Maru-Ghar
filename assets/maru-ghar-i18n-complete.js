@@ -353,7 +353,14 @@
     if(!root)return;
     if(root.nodeType===3){translateNode(root);return;}
     if(root.nodeType===1&&root.closest&&root.closest('#mgLanguage,#mgAdminLanguage'))return;
-    const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+    /* Never translate executable/source text or editable form fields. */
+    if(root.nodeType===1 && root.matches('script,style,textarea,pre,code'))return;
+    const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{
+      acceptNode(node){
+        return node.parentElement?.closest('script,style,textarea,pre,code')
+          ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
+      }
+    });
     let node;while((node=walker.nextNode()))translateNode(node);
     if(root.querySelectorAll)root.querySelectorAll('button,a,label,[title],[aria-label],[placeholder]').forEach(translateAttrs);
     if(root.nodeType===1)translateAttrs(root);
