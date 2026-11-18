@@ -112,3 +112,35 @@
   #dashboard .formgrid{grid-template-columns:1fr}
   #dashboard .formgrid .wide{grid-column:auto}
 }
+
+
+/* Stable two-device layout: preserve every existing navigation action. */
+#dashboard{width:100%;min-width:0}
+#dashboard .admin-shortcuts{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important;width:100%}
+#dashboard .admin-shortcuts>*{min-width:0!important;width:100%!important;max-width:100%;white-space:normal;overflow-wrap:anywhere;text-align:center}
+#dashboard #adminSettings{min-width:0;max-width:100%}
+#dashboard .mg-admin-section-menu{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+#dashboard .mg-admin-menu-tile{min-width:0}
+#dashboard .mg-admin-section-btn{width:100%;min-width:0;white-space:normal;overflow-wrap:anywhere;line-height:1.25}
+#dashboard .mg-admin-section-content{min-width:0;max-width:100%;overflow-wrap:anywhere}
+#dashboard .formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#dashboard .formgrid>*{min-width:0}
+#dashboard input,#dashboard select,#dashboard textarea{box-sizing:border-box;max-width:100%;min-width:0}
+@media(max-width:720px){
+ #dashboard .admin-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+ #dashboard .admin-shortcuts>*{font-size:12px!important;padding:9px 5px!important}
+ #dashboard .mg-admin-section-menu{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px}
+ #dashboard .mg-admin-section-btn{min-height:48px;font-size:12px;padding:9px 6px}
+ #dashboard .formgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ #dashboard .panel{padding:12px!important}
+}
+@media(max-width:390px){
+ #dashboard .admin-shortcuts{grid-template-columns:1fr 1fr!important}
+ #dashboard .formgrid{grid-template-columns:1fr}
+ #dashboard .formgrid .wide{grid-column:auto}
+}
+@media(min-width:721px){
+ #dashboard .admin-shortcuts{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+ #dashboard .mg-admin-section-menu{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+ #dashboard .formgrid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
