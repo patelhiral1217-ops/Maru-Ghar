@@ -2956,7 +2956,7 @@ Object.assign(window.MG_I18N_DICTIONARY = window.MG_I18N_DICTIONARY || {}, {
   if(!window.__mgI18nObserver&&document.body){
     window.__mgI18nObserver=new MutationObserver(records=>{
       for(const record of records){
-        if(record.type==='childList')record.addedNodes.forEach(node=>{if(node.nodeType===1)scan(node);else if(node.nodeType===3)translateNode(node);});
+        if(record.type==='childList')record.addedNodes.forEach(node=>{if(node.nodeType===1)scan(node);else if(node.nodeType===3&&!node.parentElement?.closest('script,style,textarea,pre,code'))translateNode(node);});
         else if(record.type==='attributes')translateAttrs(record.target);
       }
     });
