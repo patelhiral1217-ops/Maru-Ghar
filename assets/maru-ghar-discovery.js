@@ -53,6 +53,13 @@
       if(opening){requestAnimationFrame(()=>{refreshRangeGeometry();requestAnimationFrame(refreshRangeGeometry);});setTimeout(refreshRangeGeometry,90)}
     });
   });
+  const applyRangeButton=$('mgApplyRangeFilters');
+  if(applyRangeButton)applyRangeButton.addEventListener('click',()=>{
+    if(typeof window.filterProps==='function')window.filterProps();
+    const listings=$('listings');
+    if(listings)listings.scrollIntoView({behavior:'smooth',block:'start'});
+    status(tr('ભાવ અને ક્ષેત્રફળ પ્રમાણે શોધ લાગુ થઈ.'));
+  });
   const filterIds=['fBhk','fVerified','fFurn','fMedia','fSort'];
   const searchIds=['purpose','type','query','cityFilter',...filterIds];
   const savedKey='mg_saved_search_v1';
