@@ -802,6 +802,10 @@ function filterProps(){
   const setColumns=value=>{
     if(!['1','2','3','4'].includes(String(value)))return;
     grid.dataset.cols=String(value);
+    grid.style.setProperty('display','grid','important');
+    grid.style.setProperty('grid-template-columns',`repeat(${String(value)},minmax(0,1fr))`,'important');
+    grid.style.setProperty('gap',String(value)==='1'?'16px':String(value)==='2'?'12px':'9px','important');
+    grid.querySelectorAll('.property').forEach(card=>{card.style.setProperty('min-width','0','important');card.style.setProperty('width','100%','important');});
     buttons.forEach(button=>{
       const active=button.dataset.cols===String(value);
       button.classList.toggle('active',active);
