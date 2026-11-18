@@ -7,10 +7,11 @@ function init(){
 
  /* Preserve the three primary destinations in the compact top bar. */
  if(nav){
-  nav.replaceChildren();
-  [['#listings','🏠 લિસ્ટિંગ'],['#enquiryList','✉️ પૂછપરછ'],['#adminSettings','⚙️ સેટિંગ્સ']].forEach(([href,label])=>{
-   const a=document.createElement('a');a.href=href;a.textContent=label;nav.append(a);
-  });
+  /* Keep every existing working shortcut; only add enquiries when that target exists and is missing. */
+  const enquiry=document.getElementById('enquiryList');
+  if(enquiry&&!nav.querySelector('a[href="#enquiryList"]')){
+   const a=document.createElement('a');a.href='#enquiryList';a.textContent='✉️ પૂછપરછ';nav.append(a);
+  }
  }
 
  /* Every admin tool becomes its own gold/silver 3D button inside Settings. */
@@ -74,7 +75,7 @@ function init(){
     value.includes('window.__mgI18nObserver=new MutationObserver') ||
     value.includes('document.createTreeWalker(root,NodeFilter.SHOW_TEXT)') ||
     value.includes('function translateNode') ||
-    (value.length>160 && /document\\.getElementById|addEventListener\\s*\\(|window\\.mgSetLanguage|const originals/.test(value))
+    (value.length>160 && /document\.getElementById|addEventListener\\s*\\(|window\\.mgSetLanguage|const originals/.test(value))
    )) remove.push(node);
   }
   remove.forEach(n=>n.parentNode&&n.parentNode.removeChild(n));
