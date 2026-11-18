@@ -1,7 +1,7 @@
 /* Compact, mobile-first Maru Ghar admin dashboard */
 #dashboard{max-width:1100px;margin:0 auto}
-#dashboard .admin-shortcuts{position:sticky;top:0;z-index:20;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:9px;margin:0 0 12px;background:rgba(5,28,23,.96);backdrop-filter:blur(12px)}
-#dashboard .admin-shortcuts a{min-height:42px;justify-content:center;text-align:center;padding:8px 10px;font-size:13px;line-height:1.25}
+#dashboard .admin-shortcuts{position:sticky;top:0;z-index:20;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;padding:8px;margin:0 0 12px;background:rgba(5,28,23,.96);backdrop-filter:blur(12px);border:1px solid rgba(255,221,0,.28);border-radius:14px}
+#dashboard .admin-shortcuts a{display:flex;align-items:center;justify-content:center;min-width:0;min-height:40px;padding:7px 5px;text-align:center;font-size:13px;line-height:1.25;overflow-wrap:anywhere}
 .mg-admin-fold{margin:0 0 10px;border:1px solid rgba(255,221,0,.34);border-radius:15px;overflow:hidden;background:linear-gradient(145deg,#10382f,#071f1a);box-shadow:0 7px 18px #0002}
 .mg-admin-fold>summary,.mg-cms-editor>summary,.mg-cms-items-fold>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 15px;color:#ffe6a1;font-weight:900;font-size:15px;line-height:1.4;background:linear-gradient(120deg,#164b3a,#09271f)}
 .mg-admin-fold>summary::-webkit-details-marker,.mg-cms-editor>summary::-webkit-details-marker,.mg-cms-items-fold>summary::-webkit-details-marker{display:none}
@@ -24,9 +24,11 @@
 .mg-cms-items-fold>.mg-cms-list{padding:10px}
 .mg-cms-admin-item{padding:10px!important}
 .mg-cms-admin-actions button{min-height:36px}
+#adminSettings{margin:12px 0 18px}
+#adminSettings>summary{font-size:16px!important;padding:14px 15px!important}
 @media(max-width:620px){
- #dashboard .admin-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))}
- #dashboard .admin-shortcuts a{font-size:12px;min-height:40px}
+ #dashboard .admin-shortcuts{gap:5px;padding:6px}
+ #dashboard .admin-shortcuts a{font-size:11px;min-height:38px;padding:6px 3px}
  .mg-admin-fold>summary,.mg-cms-editor>summary,.mg-cms-items-fold>summary{padding:12px;font-size:14px}
  .mg-admin-fold>.panel{padding:11px!important}
  .mg-cms-editor .formgrid{grid-template-columns:1fr}
@@ -35,16 +37,6 @@
  .mg-cms-editor .actions button{min-width:0}
  .mg-cms-admin-actions{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
  .mg-cms-admin-actions button{padding:7px 5px!important;font-size:12px}
+ #adminSettings>summary{font-size:14px!important}
 }
 @media(min-width:621px){.mg-cms-editor .formgrid .wide{grid-column:1/-1}}
-
-#mgAllAdminSettings{margin:12px 0 18px;border:1px solid rgba(255,218,120,.55);border-radius:18px;overflow:hidden;background:linear-gradient(145deg,#123b30,#071e19);box-shadow:0 10px 25px #0003}
-#mgAllAdminSettings>summary{cursor:pointer;list-style:none;padding:17px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;background:linear-gradient(115deg,#c99b35,#f4df9a 48%,#b98525);color:#18271e;font-size:16px;font-weight:950}
-#mgAllAdminSettings>summary::-webkit-details-marker{display:none}
-#mgAllAdminSettings>summary:after{content:"＋";font-size:21px}
-#mgAllAdminSettings[open]>summary:after{content:"−"}
-.mg-all-admin-settings-body{padding:10px}
-.mg-all-admin-settings-body>.admin-shortcuts{position:static!important;border-radius:12px;margin-bottom:12px!important}
-.mg-all-admin-settings-body>#adminMain,.mg-all-admin-settings-body>#adminSettings{margin:0}
-#adminSettings{margin-top:10px}
-@media(max-width:620px){#mgAllAdminSettings>summary{font-size:15px;padding:15px}.mg-all-admin-settings-body{padding:8px}}

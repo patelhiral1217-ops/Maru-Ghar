@@ -9,21 +9,25 @@ function fold(panel,open=false){
 }
 function init(){
  const dashboard=$('#dashboard'),main=$('#adminMain'),settings=$('#adminSettings'),nav=document.querySelector('.admin-shortcuts');
- if(dashboard&&main&&settings&&!dashboard.querySelector('#mgAllAdminSettings')){
-  const root=document.createElement('details');root.id='mgAllAdminSettings';root.className='mg-all-admin-settings';
-  const summary=document.createElement('summary');summary.textContent='⚙️ બધા Admin Settings અને બટનો';
-  const body=document.createElement('div');body.className='mg-all-admin-settings-body';
-  dashboard.insertBefore(root,nav||main);root.append(summary,body);
-  if(nav)body.append(nav);body.append(main,settings);
-  let extra=settings.nextElementSibling;while(extra&&extra.matches('section.panel')){const next=extra.nextElementSibling;body.append(extra);fold(extra,false);extra=next;}
+ if(!dashboard||!main||!settings)return;
+
+ /* Keep only the three everyday destinations in the compact top bar. */
+ if(nav){
+  nav.replaceChildren();
+  [['#listings','🏠 લિસ્ટિંગ'],['#enquiryList','✉️ પૂછપરછ'],['#adminSettings','⚙️ સેટિંગ્સ']].forEach(([href,label])=>{
+   const a=document.createElement('a');a.href=href;a.textContent=label;nav.append(a);
+  });
  }
- if(main){
-  [...main.children].forEach(node=>{if(node.matches('section.panel')&&node.id!=='listings')fold(node,false);});
+
+ /* Put add-property, upload-test and reports inside Settings, not on the main screen. */
+ if(!settings.querySelector('#mgAdminToolsFold')){
+  const tools=document.createElement('details');tools.id='mgAdminToolsFold';tools.className='mg-admin-fold';
+  const summary=document.createElement('summary');summary.textContent='🧰 પ્રોપર્ટી ઉમેરો, અપલોડ ટેસ્ટ અને રિપોર્ટ';
+  tools.append(summary,main);settings.insertBefore(tools,settings.firstChild);
  }
- const currentSettings=$('#adminSettings');
- if(currentSettings){
-  [...currentSettings.children].forEach(node=>{if(node.matches('section.panel'))fold(node,false);});
- }
+ [...main.children].forEach(node=>{if(node.matches('section.panel'))fold(node,false);});
+ [...settings.children].forEach(node=>{if(node.matches('section.panel'))fold(node,false);});
+
  const manager=$('#mgSiteContentManager');
  if(manager){
   const grid=manager.querySelector(':scope > .formgrid');
@@ -45,7 +49,7 @@ function init(){
  }
  document.querySelectorAll('.admin-shortcuts a[href^="#"]').forEach(a=>a.addEventListener('click',()=>{
   const target=$(a.getAttribute('href'));if(!target)return;
-  let p=target.parentElement;while(p){if(p.tagName==='DETAILS')p.open=true;p=p.parentElement;}
+  if(target.tagName==='DETAILS')target.open=true;let p=target.parentElement;while(p){if(p.tagName==='DETAILS')p.open=true;p=p.parentElement;}
  }));
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
