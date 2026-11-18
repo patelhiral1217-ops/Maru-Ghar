@@ -117,7 +117,23 @@ button:active,.primary:active,.approve:active,.reject:active{transform:translate
 </section>
 <details class="admin-settings" id="adminSettings"><summary>⚙️ સેટિંગ્સ અને ડેટા બેકઅપ</summary>
 <button id="enableNotif" class="primary" type="button" style="margin-bottom:12px">🔔 નોટિફિકેશન ચાલુ કરો</button>
-<section class="panel"><h2>વેબસાઇટ લિંક (શેર કરવા માટે)</h2><p class="muted">તમારી વેબસાઇટની લિંક અહીં એકવાર લખો. લોકો લિસ્ટિંગ શેર કરશે ત્યારે અને પોસ્ટરમાં આ લિંક આવશે.</p><div class="formgrid"><label class="wide">વેબસાઇટ લિંક<input id="siteUrlInput" type="url" placeholder="https://..." maxlength="200"></label><button class="primary wide" id="saveSiteUrl" type="button">લિંક સેવ કરો</button></div><div id="siteStatus" class="status" role="status"></div></section><section class="panel"><h2>🚩 ફરિયાદો</h2><div id="reportList" class="muted">લોડ થઈ રહ્યું છે…</div></section>
+<section class="panel" id="mgAppContentSettings"><h2>📲 એપ ડાઉનલોડ અને તૈયાર ટેમ્પ્લેટ</h2>
+<p class="muted">Play Store, App Store અને APKની સાચી લિંક તૈયાર થાય ત્યારે અહીંથી ઉમેરો. નીચેના ટેમ્પ્લેટમાંથી પસંદ કરીને બેનર/જાહેરાતનો સંદેશ પણ સેવ કરી શકશો.</p>
+<div class="formgrid">
+<label class="wide">Google Play Store લિંક<input id="mgPlayUrl" type="url" placeholder="https://play.google.com/store/apps/details?id=..."></label>
+<label class="wide">Apple App Store લિંક<input id="mgAppleUrl" type="url" placeholder="https://apps.apple.com/app/..."></label>
+<label class="wide">Android APK સીધી ડાઉનલોડ લિંક<input id="mgApkUrl" type="url" placeholder="https://.../MARU-GHAR.apk"></label>
+<hr class="wide" style="opacity:.2">
+<label class="wide">ટેમ્પ્લેટ પસંદ કરો<select id="mgContentTemplate">
+<option value="family">પરિવાર / સપનાનું ઘર</option><option value="announcement">જાહેરાત / સૂચના</option><option value="offer">ખાસ ઓફર / સ્કીમ</option><option value="feature">નવી સુવિધા</option><option value="festival">તહેવારની શુભેચ્છા</option>
+</select></label>
+<label class="wide">મુખ્ય શીર્ષક<input id="mgContentTitle" maxlength="100" placeholder="પપ્પા, મારાં સપનાનું ઘર — Maru Ghar"></label>
+<label class="wide">નીચેનો સંદેશ<textarea id="mgContentSubtitle" maxlength="300" rows="3" placeholder="તમારા પરિવારના સપનાનું ઘર શોધો..."></textarea></label>
+<label class="wide">ફોટો / બેનર URL<input id="mgContentImage" type="url" maxlength="1000" placeholder="https://..."></label>
+<label><input id="mgContentEnabled" type="checkbox" style="width:auto"> આ ટેમ્પ્લેટ વેબસાઇટ પર બતાવો</label>
+<button class="primary wide" id="mgSaveAppContent" type="button">💾 લિંક્સ અને ટેમ્પ્લેટ સેવ કરો</button>
+</div><div id="mgAppContentStatus" class="status" role="status"></div>
+</section><section class="panel"><h2>વેબસાઇટ લિંક (શેર કરવા માટે)</h2><p class="muted">તમારી વેબસાઇટની લિંક અહીં એકવાર લખો. લોકો લિસ્ટિંગ શેર કરશે ત્યારે અને પોસ્ટરમાં આ લિંક આવશે.</p><div class="formgrid"><label class="wide">વેબસાઇટ લિંક<input id="siteUrlInput" type="url" placeholder="https://..." maxlength="200"></label><button class="primary wide" id="saveSiteUrl" type="button">લિંક સેવ કરો</button></div><div id="siteStatus" class="status" role="status"></div></section><section class="panel"><h2>🚩 ફરિયાદો</h2><div id="reportList" class="muted">લોડ થઈ રહ્યું છે…</div></section>
 <section class="panel"><h2>શહેરો</h2><p class="muted">નવું શહેર અહીં ઉમેરો એટલે વેબ અને APK બંનેમાં તરત દેખાશે (નવી APK બનાવવાની જરૂર નથી).</p><div class="formgrid"><label>શહેરનું નામ (ગુજરાતીમાં)<input id="newCityName" maxlength="60"></label><label>અંગ્રેજી નામ (વૈકલ્પિક)<input id="newCityEn" maxlength="60" placeholder="Surat"></label><button class="primary wide" id="addCityBtn" type="button">શહેર ઉમેરો</button></div><div id="cityList" class="muted" style="margin-top:10px"></div><div id="cityStatus" class="status" role="status"></div><hr style="opacity:.2;margin:14px 0"><p class="muted">જૂની લિસ્ટિંગમાં શહેર લખેલું ન હોય તો એકવાર આ બટન દબાવો:</p><button class="primary" id="fixCityBtn" type="button">જૂની લિસ્ટિંગમાં શહેર = ગાંધીનગર સેટ કરો</button></section>
 <section class="panel backup-panel" id="dataBackupSettings"><div class="backup-heading"><div class="backup-icon" aria-hidden="true">🗄️</div><div><div class="backup-eyebrow">DATA SAFETY CENTER</div><h2>ડેટા બેકઅપ અને રીસ્ટોર</h2><p class="muted">તમારી પ્રોપર્ટી લિસ્ટિંગનો બેકઅપ ડાઉનલોડ કરો અથવા અગાઉની બેકઅપ ફાઇલમાંથી રેકોર્ડ પાછા ઉમેરો.</p></div></div><div class="backup-actions"><button id="backupListings" class="primary backup-main" type="button">⬇️ ડેટાનો બેકઅપ લો (JSON)</button><button id="restoreListings" class="backup-restore" type="button">↻ બેકઅપ રીસ્ટોર કરો</button><input id="restoreFile" type="file" accept="application/json,.json" hidden></div><div class="backup-note"><strong>ધ્યાન આપો:</strong> રીસ્ટોર કરતી વખતે હાલના ID ધરાવતા રેકોર્ડ overwrite નહીં થાય; ફક્ત નવા રેકોર્ડ ઉમેરાશે.</div><div id="exportStatus" class="status" role="status"></div></section>
 <section class="panel"><h2>🔐 માલિકના મોબાઇલ નંબરની ખાનગી સુરક્ષા</h2><p class="muted">જૂની લિસ્ટિંગમાં રહેલા માલિકના મોબાઇલ નંબરને અલગ ખાનગી રેકોર્ડમાં ખસેડો. પહેલાં ખાનગી રેકોર્ડ સાચવાશે, ત્યારબાદ જાહેર લિસ્ટિંગમાંથી નંબર દૂર થશે.</p><button id="migrateOwnerContacts" class="primary" type="button">જૂના મોબાઇલ નંબર સુરક્ષિત કરો</button><div id="contactMigrationStatus" class="status" role="status"></div></section><section class="panel"><h2>🛠️ સિસ્ટમ Error Log</h2><p class="muted">એડમિન પેનલમાં થયેલી JavaScript ભૂલોનો મર્યાદિત રેકોર્ડ. કોઈ પાસવર્ડ કે ફોર્મનું ખાનગી લખાણ સાચવાતું નથી.</p><button id="refreshErrorLog" class="primary" type="button">Error Log લોડ કરો</button> <button id="exportErrorLog" class="primary" type="button">Error Log JSON ડાઉનલોડ</button><div id="errorLogList" class="muted"></div></section>
@@ -147,8 +163,11 @@ onAuthStateChanged(auth,async user=>{
     $('login').classList.remove('hidden');$('dashboard').classList.add('hidden');return}
   document.documentElement.style.visibility='visible';
   $('login').classList.add('hidden');$('dashboard').classList.remove('hidden');
-  await loadListings();loadCityAdmin();loadSiteUrl();loadReports();startPendingWatch();registerPush();
+  await loadListings();loadCityAdmin();loadSiteUrl();loadReports();loadMgAppContentSettings();startPendingWatch();registerPush();
 });
+const MG_PUBLIC_CONFIG_REF=doc(db,'settings','publicAppConfig');
+async function loadMgAppContentSettings(){try{const snap=await getDoc(MG_PUBLIC_CONFIG_REF);if(!snap.exists())return;const x=snap.data();$('mgPlayUrl').value=x.playStoreUrl||'';$('mgAppleUrl').value=x.appStoreUrl||'';$('mgApkUrl').value=x.apkUrl||'';$('mgContentTemplate').value=x.template||'family';$('mgContentTitle').value=x.title||'';$('mgContentSubtitle').value=x.subtitle||'';$('mgContentImage').value=x.imageUrl||'';$('mgContentEnabled').checked=!!x.enabled}catch(e){$('mgAppContentStatus').textContent='સેટિંગ્સ લોડ ન થઈ. Firebase Rules તપાસો.';console.error(e)}}
+$('mgSaveAppContent').addEventListener('click',async()=>{const status=$('mgAppContentStatus');const urls=['mgPlayUrl','mgAppleUrl','mgApkUrl','mgContentImage'].map(id=>$(id).value.trim());if(urls.some(v=>v&&!/^https:\/\//i.test(v))){status.textContent='બધી લિંક્સ https:// થી શરૂ થવી જોઈએ.';return}const btn=$('mgSaveAppContent');btn.disabled=true;status.textContent='સેવ થઈ રહ્યું છે…';try{await setDoc(MG_PUBLIC_CONFIG_REF,{playStoreUrl:urls[0],appStoreUrl:urls[1],apkUrl:urls[2],template:$('mgContentTemplate').value,title:$('mgContentTitle').value.trim(),subtitle:$('mgContentSubtitle').value.trim(),imageUrl:urls[3],enabled:$('mgContentEnabled').checked,updatedAt:serverTimestamp()},{merge:true});status.textContent='સેટિંગ્સ સફળતાપૂર્વક સેવ થઈ. લિંક્સ તૈયાર થાય ત્યારે અહીંથી ઉમેરશો.'}catch(e){status.textContent='સેવ ન થયું. ઇન્ટરનેટ અને Firebase Rules તપાસો.';console.error(e)}finally{btn.disabled=false}});
 async function loadListings(reset=true){if(loadingAdmin)return;loadingAdmin=true;$('dashStatus').textContent='લિસ્ટિંગ લોડ થઈ રહી છે…';$('loadOlder').disabled=true;try{if(reset){allListings=[];lastAdminDoc=null;moreAdmin=true;$('listings').replaceChildren()}if(!moreAdmin&&!reset)return;const constraints=[orderBy('createdAt','desc'),limit(ADMIN_PAGE_SIZE)];if(lastAdminDoc)constraints.push(startAfter(lastAdminDoc));const snap=await getDocs(query(collection(db,'listings'),...constraints));if(snap.docs.length)lastAdminDoc=snap.docs[snap.docs.length-1];moreAdmin=snap.size===ADMIN_PAGE_SIZE;const pageRows=snap.docs.map(d=>({id:d.id,...d.data()}));await mgAttachPrivateContacts(pageRows);allListings.push(...pageRows);renderListings();renderStats();loadEnquiries();$('dashStatus').textContent=`કુલ ${allListings.length} લિસ્ટિંગ હાલ લોડ છે.`;$('loadOlder').hidden=!moreAdmin}catch(e){$('dashStatus').textContent='લિસ્ટિંગ લોડ ન થઈ. Firebase Rules અને internet તપાસો.';console.error(e)}finally{loadingAdmin=false;$('loadOlder').disabled=false}}
 function renderListings(){const target=$('listings');target.replaceChildren();const filter=$('statusFilter').value;const visible=allListings.filter(p=>filter==='all'||p.status===filter);if(!visible.length){$('dashStatus').textContent='આ ફિલ્ટરમાં કોઈ લિસ્ટિંગ નથી.';return}for(const p of visible){const el=document.createElement('article');el.className='card';const photos=Array.isArray(p.photos)?p.photos:[];const statusLabel={pending:'પેન્ડિંગ',approved:'જાહેર / મંજૂર',rejected:'નામંજૂર'}[p.status]||p.status;el.innerHTML=`<span class="pill">${esc(statusLabel)}</span><h3>${esc(p.type)} — ${esc(p.purpose)}</h3><p><b>માલિક:</b> ${esc(p.ownerName)} &nbsp; <b>ફોન:</b> ${esc(p.ownerPhone)}</p><p><a class="primary" style="display:inline-block;text-decoration:none" target="_blank" rel="noopener noreferrer" href="https://wa.me/${String(p.ownerPhone||'').replace(/\D/g,'').replace(/^0/,'').replace(/^91(?=\d{10}$)/,'').replace(/^(\d{10})$/,'91$1')}?text=${encodeURIComponent('નમસ્તે, મારું ઘર તરફથી તમારી પ્રોપર્ટી લિસ્ટિંગ વિશે સંપર્ક કરું છું.')}">WhatsApp માલિક</a></p><p><b>શહેર:</b> ${esc(p.city||'— (સેટ નથી)')}<br><b>વિસ્તાર:</b> ${esc(p.location)}<br>${[p.bhk,p.areaSqft?p.areaSqft+' ચો.ફૂટ':'',p.floor?'માળ '+p.floor:'',p.furnishing,p.parking,p.deposit?'ડિપોઝિટ '+p.deposit:''].filter(Boolean).map(esc).join(' · ')||''}${p.offerTitle?`<br><b>🎉 સ્કીમ:</b> ${esc(p.offerTitle)} ${esc(p.offerText||'')} ${esc(p.offerUntil||'')}`:''}<br><b>સ્થિતિ:</b> ${p.verified?'✔ વેરિફાઇડ ':''}${p.featured?'⭐ ફીચર્ડ ':''}${p.closed?'🔴 બંધ ':''}<br><b>નકશો:</b> ${p.mapLink?`<a href="${esc(p.mapLink)}" target="_blank" rel="noopener noreferrer">લિંક ખોલો</a>`:'—'}<br><b>કિંમત/ભાડું:</b> ${esc(p.price||'સંપર્ક કરો')}<br><b>વિગત:</b> ${esc(p.description||'—')}${p.status==='rejected'&&p.reviewNote?`<br><b>નામંજૂરીનું કારણ:</b> ${esc(p.reviewNote)}`:''}</p>${photos.map((ph,pi)=>`<img class="photo" src="${esc(ph.url)}" alt="પ્રોપર્ટી ફોટો" loading="lazy"><button type="button" class="reject" data-action="delphoto" data-i="${pi}" style="margin:0 0 12px">આ ફોટો ડિલીટ કરો</button>`).join('')}${(Array.isArray(p.videos)?p.videos:[]).map((v,vi)=>[v,vi]).filter(([v])=>v&&/^https:\/\//i.test(v.url)).map(([v,vi])=>`<video class="photo" src="${esc(v.url)}" controls playsinline preload="metadata" style="background:#000"></video><button type="button" class="reject" data-action="delvideo" data-i="${vi}" style="margin:0 0 12px">આ વિડિયો ડિલીટ કરો</button>`).join('')}<div class="actions">${p.status!=='approved'?'<button class="approve" data-action="approve">મંજૂર / જાહેર કરો</button>':''}${p.status!=='rejected'?'<button class="reject" data-action="reject">નામંજૂર કરો</button>':''}<button data-action="toggle_verified">${p.verified?'✔ વેરિફાઇડ કાઢો':'✔ વેરિફાઇડ કરો'}</button><button data-action="toggle_featured">${p.featured?'⭐ ફીચર્ડ કાઢો':'⭐ ફીચર્ડ કરો'}</button><button data-action="toggle_closed">${p.closed?'ફરી ચાલુ કરો':'વેચાઈ / ભાડે અપાઈ ગયું'}</button><button data-action="propertypdf">📄 આ પ્રોપર્ટી PDF</button><button data-action="editprice">💰 ભાવ બદલો</button><button data-action="editoffer">🎉 સ્કીમ બદલો</button><button data-action="editcity">શહેર બદલો</button><button data-action="editmap">નકશો લિંક</button><button data-action="delete">કાયમ માટે ડિલીટ કરો</button></div>`;el.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>review(p.id,b.dataset.action,b)));target.appendChild(el)}}
 function mgCurrentLanguage(){try{const v=localStorage.getItem('mg_language');return ['gu','hi','en'].includes(v)?v:'gu'}catch(_){return 'gu'}}
@@ -2718,6 +2737,78 @@ window.MG_I18N_DICTIONARY={
   "એક સાથે વધુમાં વધુ 3 પ્રોપર્ટીની તુલના કરી શકાય છે.": {
     "hi": "एक साथ अधिकतम 3 प्रॉपर्टी की तुलना की जा सकती है।",
     "en": "You can compare up to 3 properties at a time."
+  },
+  "📲 એપ ડાઉનલોડ અને તૈયાર ટેમ્પ્લેટ": {
+    "hi": "📲 ऐप डाउनलोड और तैयार टेम्पलेट",
+    "en": "📲 App Downloads & Ready-Made Templates"
+  },
+  "Play Store, App Store અને APKની સાચી લિંક તૈયાર થાય ત્યારે અહીંથી ઉમેરો. નીચેના ટેમ્પ્લેટમાંથી પસંદ કરીને બેનર/જાહેરાતનો સંદેશ પણ સેવ કરી શકશો.": {
+    "hi": "Play Store, App Store और APK का सही लिंक तैयार होने पर यहाँ जोड़ें। नीचे दिए टेम्पलेट में से चुनकर बैनर/विज्ञापन संदेश भी सेव कर सकते हैं।",
+    "en": "Add the official Play Store, App Store and APK links here when ready. Choose a template below to save a banner or announcement."
+  },
+  "Google Play Store લિંક": {
+    "hi": "Google Play Store लिंक",
+    "en": "Google Play Store URL"
+  },
+  "Apple App Store લિંક": {
+    "hi": "Apple App Store लिंक",
+    "en": "Apple App Store URL"
+  },
+  "Android APK સીધી ડાઉનલોડ લિંક": {
+    "hi": "Android APK का सीधा डाउनलोड लिंक",
+    "en": "Direct Android APK Download URL"
+  },
+  "ટેમ્પ્લેટ પસંદ કરો": {
+    "hi": "टेम्पलेट चुनें",
+    "en": "Choose a Template"
+  },
+  "પરિવાર / સપનાનું ઘર": {
+    "hi": "परिवार / सपनों का घर",
+    "en": "Family / Dream Home"
+  },
+  "જાહેરાત / સૂચના": {
+    "hi": "विज्ञापन / सूचना",
+    "en": "Announcement / Notice"
+  },
+  "ખાસ ઓફર / સ્કીમ": {
+    "hi": "विशेष ऑफर / योजना",
+    "en": "Special Offer / Promotion"
+  },
+  "નવી સુવિધા": {
+    "hi": "नई सुविधा",
+    "en": "New Feature"
+  },
+  "તહેવારની શુભેચ્છા": {
+    "hi": "त्योहार की शुभकामनाएँ",
+    "en": "Festival Greeting"
+  },
+  "મુખ્ય શીર્ષક": {
+    "hi": "मुख्य शीर्षक",
+    "en": "Main Title"
+  },
+  "નીચેનો સંદેશ": {
+    "hi": "नीचे का संदेश",
+    "en": "Subtitle / Message"
+  },
+  "ફોટો / બેનર URL": {
+    "hi": "फोटो / बैनर URL",
+    "en": "Photo / Banner URL"
+  },
+  "આ ટેમ્પ્લેટ વેબસાઇટ પર બતાવો": {
+    "hi": "यह टेम्पलेट वेबसाइट पर दिखाएँ",
+    "en": "Show this template on the website"
+  },
+  "💾 લિંક્સ અને ટેમ્પ્લેટ સેવ કરો": {
+    "hi": "💾 लिंक और टेम्पलेट सेव करें",
+    "en": "💾 Save Links & Template"
+  },
+  "પપ્પા, મારાં સપનાનું ઘર — Maru Ghar": {
+    "hi": "पापा, मेरे सपनों का घर — Maru Ghar",
+    "en": "Papa, My Dream Home — Maru Ghar"
+  },
+  "તમારા પરિવારના સપનાનું ઘર શોધો...": {
+    "hi": "अपने परिवार के सपनों का घर खोजें...",
+    "en": "Find your family's dream home..."
   }
 };</script>
 <script data-mg-i18n-inline="engine">/* Supplemental complete UI translation layer. It only translates known interface phrases;

@@ -2311,5 +2311,77 @@ window.MG_I18N_DICTIONARY={
   "એક સાથે વધુમાં વધુ 3 પ્રોપર્ટીની તુલના કરી શકાય છે.": {
     "hi": "एक साथ अधिकतम 3 प्रॉपर्टी की तुलना की जा सकती है।",
     "en": "You can compare up to 3 properties at a time."
+  },
+  "📲 એપ ડાઉનલોડ અને તૈયાર ટેમ્પ્લેટ": {
+    "hi": "📲 ऐप डाउनलोड और तैयार टेम्पलेट",
+    "en": "📲 App Downloads & Ready-Made Templates"
+  },
+  "Play Store, App Store અને APKની સાચી લિંક તૈયાર થાય ત્યારે અહીંથી ઉમેરો. નીચેના ટેમ્પ્લેટમાંથી પસંદ કરીને બેનર/જાહેરાતનો સંદેશ પણ સેવ કરી શકશો.": {
+    "hi": "Play Store, App Store और APK का सही लिंक तैयार होने पर यहाँ जोड़ें। नीचे दिए टेम्पलेट में से चुनकर बैनर/विज्ञापन संदेश भी सेव कर सकते हैं।",
+    "en": "Add the official Play Store, App Store and APK links here when ready. Choose a template below to save a banner or announcement."
+  },
+  "Google Play Store લિંક": {
+    "hi": "Google Play Store लिंक",
+    "en": "Google Play Store URL"
+  },
+  "Apple App Store લિંક": {
+    "hi": "Apple App Store लिंक",
+    "en": "Apple App Store URL"
+  },
+  "Android APK સીધી ડાઉનલોડ લિંક": {
+    "hi": "Android APK का सीधा डाउनलोड लिंक",
+    "en": "Direct Android APK Download URL"
+  },
+  "ટેમ્પ્લેટ પસંદ કરો": {
+    "hi": "टेम्पलेट चुनें",
+    "en": "Choose a Template"
+  },
+  "પરિવાર / સપનાનું ઘર": {
+    "hi": "परिवार / सपनों का घर",
+    "en": "Family / Dream Home"
+  },
+  "જાહેરાત / સૂચના": {
+    "hi": "विज्ञापन / सूचना",
+    "en": "Announcement / Notice"
+  },
+  "ખાસ ઓફર / સ્કીમ": {
+    "hi": "विशेष ऑफर / योजना",
+    "en": "Special Offer / Promotion"
+  },
+  "નવી સુવિધા": {
+    "hi": "नई सुविधा",
+    "en": "New Feature"
+  },
+  "તહેવારની શુભેચ્છા": {
+    "hi": "त्योहार की शुभकामनाएँ",
+    "en": "Festival Greeting"
+  },
+  "મુખ્ય શીર્ષક": {
+    "hi": "मुख्य शीर्षक",
+    "en": "Main Title"
+  },
+  "નીચેનો સંદેશ": {
+    "hi": "नीचे का संदेश",
+    "en": "Subtitle / Message"
+  },
+  "ફોટો / બેનર URL": {
+    "hi": "फोटो / बैनर URL",
+    "en": "Photo / Banner URL"
+  },
+  "આ ટેમ્પ્લેટ વેબસાઇટ પર બતાવો": {
+    "hi": "यह टेम्पलेट वेबसाइट पर दिखाएँ",
+    "en": "Show this template on the website"
+  },
+  "💾 લિંક્સ અને ટેમ્પ્લેટ સેવ કરો": {
+    "hi": "💾 लिंक और टेम्पलेट सेव करें",
+    "en": "💾 Save Links & Template"
+  },
+  "પપ્પા, મારાં સપનાનું ઘર — Maru Ghar": {
+    "hi": "पापा, मेरे सपनों का घर — Maru Ghar",
+    "en": "Papa, My Dream Home — Maru Ghar"
+  },
+  "તમારા પરિવારના સપનાનું ઘર શોધો...": {
+    "hi": "अपने परिवार के सपनों का घर खोजें...",
+    "en": "Find your family's dream home..."
   }
 };
