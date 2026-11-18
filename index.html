@@ -678,7 +678,7 @@ h1,h2,h3,h4,.section-head h2,.searchbox h3,.mg-dialog-head h2,.mg-info-dialog h3
 </style>
 
 <link rel="stylesheet" href="assets/maru-ghar-responsive.css?v=20261118r1">
-<link rel="stylesheet" href="assets/maru-ghar-city-heading.css?v=20261118b"><script defer src="assets/maru-ghar-city-heading.js?v=20261118b"></script></head>
+<link rel="stylesheet" href="assets/maru-ghar-city-heading.css?v=20261118b"><script defer src="assets/maru-ghar-city-heading.js?v=20261118b"></script><link rel="stylesheet" href="assets/maru-ghar-mobile-repair.css?v=20261118a"></head>
 <body>
 <div id="mgLocalFileWarning" hidden role="status" style="max-width:1220px;margin:10px auto;padding:12px 16px;border:1px solid #d8b45d;border-radius:10px;background:#fff4cf;color:#49370a;font:600 13px/1.6 Arial,sans-serif">આ index.html ફાઇલ સીધી ફોન/કમ્પ્યુટરમાંથી ખોલેલી છે. ભાષા અને સામાન્ય પેજ દેખાઈ શકે છે, પરંતુ Firebase Login, લાઇવ લિસ્ટિંગ, ફોટો/વિડિયો અપલોડ અને એકાઉન્ટ Sync માટે વેબસાઇટની HTTPS લિંક અથવા ઇન્સ્ટોલ કરેલી APK ખોલો.</div>
 <div class="top"><span>📍 <b>ગાંધીનગર, ગુજરાત</b> — સ્થાનિક પ્રોપર્ટી પ્લેટફોર્મ</span><span><a class="mg-contact-trigger" href="#contact">☎ સંપર્ક કરો</a></span></div>
@@ -3584,7 +3584,14 @@ window.MG_I18N_DICTIONARY={
     if(!root)return;
     if(root.nodeType===3){translateNode(root);return;}
     if(root.nodeType===1&&root.closest&&root.closest('#mgLanguage,#mgAdminLanguage'))return;
-    const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+    /* Never translate executable/source text: it can corrupt inline JavaScript and expose it as page text. */
+    if(root.nodeType===1 && root.matches('script,style,textarea,pre,code'))return;
+    const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{
+      acceptNode(node){
+        return node.parentElement?.closest('script,style,textarea,pre,code')
+          ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
+      }
+    });
     let node;while((node=walker.nextNode()))translateNode(node);
     if(root.querySelectorAll)root.querySelectorAll('button,a,label,[title],[aria-label],[placeholder]').forEach(translateAttrs);
     if(root.nodeType===1)translateAttrs(root);
