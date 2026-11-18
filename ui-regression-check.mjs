@@ -73,7 +73,7 @@ if(!home.includes('data-cols="1" onclick=')||!home.includes('data-cols="4" oncli
 if(!demo.includes('કુલ 10 ડેમો નમૂનાઓ')||!demo.includes('rootObserver.observe'))throw new Error('Demo showcase must expose all ten samples and initialize when listing root is delayed');
 console.log('MARU GHAR DEMO / GRID / SETTINGS REGRESSION PASS — ten unique demo samples, delegated 1–4 column controls, trust buttons restricted to Settings.');
 const discovery=fs.readFileSync('assets/maru-ghar-discovery.js','utf8');
-if(!discovery.includes("$('mgApplyRangeFilters').addEventListener('click'"))throw new Error('Apply range filters button is not connected to an action');
+if(!discovery.includes("const applyRangeButton=$('mgApplyRangeFilters')")||!discovery.includes("if(applyRangeButton)applyRangeButton.addEventListener('click'"))throw new Error('Apply range filters button is not connected to an action');
 const gridController=fs.readFileSync('assets/maru-ghar-grid-controller.js','utf8');
 if(!home.includes('assets/maru-ghar-grid-controller.js?v=20261118c'))throw new Error('Independent property column controller is not loaded by the home page');
 for(const n of ['1','2','3','4'])if(!new RegExp(`data-cols="${n}" onclick="window\\.mgSetPropertyColumns&&window\\.mgSetPropertyColumns\\('${n}'\\)"`).test(home))throw new Error('Column '+n+' button is not directly connected to the controller');
