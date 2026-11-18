@@ -3228,8 +3228,7 @@ window.MG_I18N_DICTIONARY={
   "ફોટો 1 URL":{"hi":"फोटो 1 URL","en":"Photo 1 URL"},
   "ફોટો 2 URL":{"hi":"फोटो 2 URL","en":"Photo 2 URL"}
 };</script>
-<script data-mg-i18n-inline="engine">
-/* Supplemental complete UI translation layer. It only translates known interface phrases;
+<script data-mg-i18n-inline="engine">/* Supplemental complete UI translation layer. It only translates known interface phrases;
    user-entered property/customer content is intentionally excluded. */
 (()=>{
   const dict={
@@ -3582,10 +3581,13 @@ window.MG_I18N_DICTIONARY={
   }
   function scan(root=document.body){
     if(!root)return;
-    if(root.nodeType===3){translateNode(root);return;}
+    /* MutationObserver may pass a script's text node directly. Guard it BEFORE translateNode. */
+    if(root.nodeType===3){
+      if(root.parentElement?.closest('script,style,textarea,pre,code'))return;
+      translateNode(root);return;
+    }
     if(root.nodeType===1&&root.closest&&root.closest('#mgLanguage,#mgAdminLanguage'))return;
-    /* Never translate executable/source text: it can corrupt inline JavaScript and expose it as page text. */
-    if(root.nodeType===1 && root.matches('script,style,textarea,pre,code'))return;
+    if(root.nodeType===1&&root.matches('script,style,textarea,pre,code'))return;
     const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{
       acceptNode(node){
         return node.parentElement?.closest('script,style,textarea,pre,code')
@@ -3660,8 +3662,7 @@ window.MG_I18N_DICTIONARY={
     window.__mgI18nObserver.observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['placeholder','title','aria-label']});
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply,{once:true});else apply();
-})();
-</script>
+})();</script>
 <!-- MG_I18N_INLINE_BUNDLE_END -->
 <script>if(location.protocol==='file:'||location.protocol==='content:'||String(location.href||'').toLowerCase().startsWith('content:')){const n=document.getElementById('mgLocalFileWarning');if(n){n.hidden=false;n.textContent='આ ફાઇલ File Managerમાંથી સીધી ખોલેલી છે. Firebase Login, એકાઉન્ટ, લાઇવ ડેટા, ફોટો/વિડિયો અપલોડ અને Sync માટે HTTPS વેબસાઇટ જરૂરી છે. APKનું કામ બધા ટેસ્ટ પૂર્ણ થયા પછી થશે.';}}</script>
 <script src="assets/maru-ghar-file-mode.js?v=20261102r6"></script>
