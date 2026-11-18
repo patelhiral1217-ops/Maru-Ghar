@@ -1,5 +1,4 @@
 /* Maru Ghar responsive layout: mobile-first safeguards and desktop sizing. */
-:root{color-scheme:light dark}
 html{width:100%;max-width:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{width:100%;max-width:100%;min-width:320px;overflow-x:clip}
 *,*::before,*::after{box-sizing:border-box}
