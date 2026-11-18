@@ -26,10 +26,12 @@
  }
  function setup(){
    const dash=document.getElementById('dashboard');if(!dash)return;
-   /* The compact admin controller owns all section buttons. Do not wrap panels a second time. */
+   [...dash.querySelectorAll('.panel')].filter(p=>!p.closest('#adminSettings')).forEach((p,i)=>makeAccordion(p,i));
    /* Keep only the main three work areas outside Settings; secondary tools stay in the Settings drawer. */
    const main=document.getElementById('adminMain');
    if(main){const panels=[...main.querySelectorAll(':scope > .panel')];panels.forEach(p=>{p.hidden=false;});}
+   const formPanel=document.querySelector('#adminMain > .panel');
+   if(formPanel){const form=formPanel.querySelector('#adminAddForm');if(form){const content=form.closest('.mg-admin-panel-content');if(content){content.hidden=true;const b=formPanel.querySelector('.mg-admin-toggle');if(b)b.setAttribute('aria-expanded','false');}}}
    const city=document.getElementById('cityFilter');
    if(city&&!document.getElementById('mgCityHeading')){const label=document.createElement('div');label.id='mgCityHeading';label.className='mg-city-heading';label.textContent=city.value==='ગાંધીનગર'?'ગાંધીનગર':'આખું ગુજરાત';city.parentElement.insertBefore(label,city);}
    if(city){const label=document.getElementById('mgCityHeading');const update=()=>{if(label)label.textContent=city.value==='all'?'આખું ગુજરાત':city.value;};city.addEventListener('change',update);update();}
@@ -37,7 +39,7 @@
    if(adminCity){const names=['ગાંધીનગર','અમદાવાદ','સુરત','વડોદરા','રાજકોટ','ભાવનગર','જામનગર','જૂનાગઢ','આણંદ','નડિયાદ','મહેસાણા','કલોલ','મોરબી','સુરેન્દ્રનગર','ભરૂચ','વાપી','નવસારી','પાટણ','ગોધરા','પોરબંદર','ભુજ','અમરેલી','પાલનપુર','હિંમતનગર'];const old=adminCity.value||'ગાંધીનગર';adminCity.replaceChildren(...names.map(n=>new Option(n,n)));adminCity.value=names.includes(old)?old:'ગાંધીનગર';}
    if(location){location.setAttribute('list','mgAdminAreaOptions');let dl=document.getElementById('mgAdminAreaOptions');if(!dl){dl=document.createElement('datalist');dl.id='mgAdminAreaOptions';location.after(dl);}const cityField=document.getElementById('adminCityField');const fill=()=>{dl.replaceChildren(...(CITY_AREAS[cityField?.value]||[]).map(n=>new Option(n,n)));};cityField?.addEventListener('change',fill);fill();}
    /* Remove orphaned JavaScript that was accidentally rendered as page text, without touching real copy. */
-   const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);const remove=[];while(walker.nextNode()){const n=walker.currentNode,t=n.nodeValue||'';if(t.length>80&&!n.parentElement?.closest('script,style,textarea,pre,code')&&/(?:document\.getElementById|document\.createTreeWalker|addEventListener\s*\(|MutationObserver|window\.mgSetLanguage|function\s+[A-Za-z_$]|=>\s*\{|\bconst\s+[A-Za-z_$][\w$]*\s*=)/.test(t))remove.push(n);}remove.forEach(n=>n.parentNode&&n.parentNode.removeChild(n));
+   const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);const remove=[];while(walker.nextNode()){const n=walker.currentNode,t=n.nodeValue||'';if(t.length>90&&/(?:document\\.getElementById|addEventListener\\s*\\(|function\\s*\\(|=>\\s*\\{|\\bconst\\s+[A-Za-z_$][\\w$]*\\s*=)/.test(t))remove.push(n);}remove.forEach(n=>n.parentNode&&n.parentNode.removeChild(n));
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
 })();
