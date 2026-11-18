@@ -206,6 +206,7 @@ async function loadApproved(reset=false) {
   } finally {
     loadingMore=false;
     if(more){more.disabled=false;more.textContent='વધુ પ્રોપર્ટી જુઓ';more.hidden=!hasMoreListings;}
+    window.dispatchEvent(new CustomEvent('mg-city-listings-loaded',{detail:{city:currentCity}}));
   }
 }
 
