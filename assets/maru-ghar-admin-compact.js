@@ -68,14 +68,14 @@ function init(){
   let node;
   while((node=walker.nextNode())){
    const value=node.nodeValue||'';
-   if(value.length>100 && (
+   /* Never touch executable code, styles, form values, or code samples. */
+   if(value.length>100 && !node.parentElement?.closest('script,style,textarea,pre,code') && (
     value.includes('const originals=new WeakMap()') ||
     value.includes('window.mgSetLanguage=value=>') ||
     value.includes('document.createTreeWalker(root,NodeFilter.SHOW_TEXT)') ||
     value.includes('window.__mgI18nObserver=new MutationObserver') ||
-    value.includes('document.createTreeWalker(root,NodeFilter.SHOW_TEXT)') ||
     value.includes('function translateNode') ||
-    (value.length>160 && /document\.getElementById|addEventListener\\s*\\(|window\\.mgSetLanguage|const originals/.test(value))
+    (value.length>180 && ['document.getElementById','document.querySelector','addEventListener','MutationObserver','window.mgSetLanguage','const originals'].some(marker=>value.includes(marker)))
    )) remove.push(node);
   }
   remove.forEach(n=>n.parentNode&&n.parentNode.removeChild(n));
