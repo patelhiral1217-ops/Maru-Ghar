@@ -156,6 +156,36 @@ button:active,.primary:active,.approve:active,.reject:active{transform:translate
 <label><input id="mgContentEnabled" type="checkbox" style="width:auto"> આ ટેમ્પ્લેટ વેબસાઇટ પર બતાવો</label>
 <button class="primary wide" id="mgSaveAppContent" type="button">💾 લિંક્સ અને ટેમ્પ્લેટ સેવ કરો</button>
 </div><div id="mgAppContentStatus" class="status" role="status"></div>
+</section><section class="panel" id="mgSiteContentManager">
+<h2>🧩 આખી વેબસાઇટનું કન્ટેન્ટ મેનેજમેન્ટ</h2>
+<p class="muted">અહીંથી ફોટા, વીડિયો, લખાણ અને બટન બનાવીને વેબસાઇટના નક્કી કરેલા વિભાગોમાં મૂકો. Preview જોયા પછી Publish કરો. કોઈ પ્રોપર્ટી લિસ્ટિંગ બદલાશે નહીં.</p>
+<div class="formgrid">
+<label class="wide">પેજ પસંદ કરો<select id="mgCmsPage"><option value="home">મુખ્ય Home Page</option><option value="download">Download App Page</option></select></label>
+<label class="wide">ક્યાં બતાવવું<select id="mgCmsPlacement"><option value="home_top">Home — સૌથી ઉપર</option><option value="home_after_hero">Home — મોટા બેનર પછી</option><option value="home_before_listings">Home — પ્રોપર્ટી લિસ્ટિંગ પહેલાં</option><option value="home_footer">Home — Footer પહેલાં</option><option value="download_top">Download Page — સૌથી ઉપર</option><option value="download_bottom">Download Page — નીચે</option></select></label>
+<label class="wide">શીર્ષક — ગુજરાતી<input id="mgCmsTitle" maxlength="120" placeholder="તમારા સપનાનું ઘર"></label>
+<label class="wide">શીર્ષક — હિન્દી<input id="mgCmsTitleHi" maxlength="120"></label>
+<label class="wide">Title — English<input id="mgCmsTitleEn" maxlength="120"></label>
+<label class="wide">લખાણ — ગુજરાતી<textarea id="mgCmsBody" rows="3" maxlength="2000"></textarea></label>
+<label class="wide">લખાણ — હિન્દી<textarea id="mgCmsBodyHi" rows="3" maxlength="2000"></textarea></label>
+<label class="wide">Text — English<textarea id="mgCmsBodyEn" rows="3" maxlength="2000"></textarea></label>
+<label class="wide">ફોટો અથવા વીડિયો પસંદ કરો<input id="mgCmsMedia" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,video/quicktime"></label>
+<label class="wide">વૈકલ્પિક બટનનું લખાણ — ગુજરાતી<input id="mgCmsButton" maxlength="60"></label>
+<label class="wide">Button text — Hindi<input id="mgCmsButtonHi" maxlength="60"></label>
+<label class="wide">Button text — English<input id="mgCmsButtonEn" maxlength="60"></label>
+<label class="wide">બટન ક્લિક થાય ત્યારે ખોલવાની HTTPS લિંક<input id="mgCmsButtonUrl" type="url" maxlength="1000" placeholder="https://..."></label>
+<label>દેખાડવું?<select id="mgCmsVisible"><option value="true">હા — Publish</option><option value="false">ના — છુપાવો</option></select></label>
+<label>ડિઝાઇન<select id="mgCmsStyle"><option value="gold">Gold Premium</option><option value="emerald">Emerald</option><option value="light">Light</option></select></label>
+</div>
+<div class="actions">
+<button class="primary" id="mgCmsPreviewBtn" type="button">👁 Preview જુઓ</button>
+<button class="primary" id="mgCmsSaveBtn" type="button">💾 Publish / Save</button>
+<button class="primary" id="mgCmsCancelBtn" type="button">નવું લખાણ</button>
+</div>
+<div id="mgCmsPreview" class="mg-cms-preview" aria-live="polite"></div>
+<div id="mgCmsStatus" class="status" role="status" aria-live="polite"></div>
+<hr style="opacity:.2;margin:18px 0">
+<h3>📚 બનાવેલા વિભાગો</h3>
+<div id="mgCmsList" class="mg-cms-list">લોડ થઈ રહ્યા છે…</div>
 </section><section class="panel"><h2>વેબસાઇટ લિંક (શેર કરવા માટે)</h2><p class="muted">તમારી વેબસાઇટની લિંક અહીં એકવાર લખો. લોકો લિસ્ટિંગ શેર કરશે ત્યારે અને પોસ્ટરમાં આ લિંક આવશે.</p><div class="formgrid"><label class="wide">વેબસાઇટ લિંક<input id="siteUrlInput" type="url" placeholder="https://..." maxlength="200"></label><button class="primary wide" id="saveSiteUrl" type="button">લિંક સેવ કરો</button></div><div id="siteStatus" class="status" role="status"></div></section><section class="panel"><h2>🚩 ફરિયાદો</h2><div id="reportList" class="muted">લોડ થઈ રહ્યું છે…</div></section>
 <section class="panel"><h2>શહેરો</h2><p class="muted">નવું શહેર અહીં ઉમેરો એટલે વેબ અને APK બંનેમાં તરત દેખાશે (નવી APK બનાવવાની જરૂર નથી).</p><div class="formgrid"><label>શહેરનું નામ (ગુજરાતીમાં)<input id="newCityName" maxlength="60"></label><label>અંગ્રેજી નામ (વૈકલ્પિક)<input id="newCityEn" maxlength="60" placeholder="Surat"></label><button class="primary wide" id="addCityBtn" type="button">શહેર ઉમેરો</button></div><div id="cityList" class="muted" style="margin-top:10px"></div><div id="cityStatus" class="status" role="status"></div><hr style="opacity:.2;margin:14px 0"><p class="muted">જૂની લિસ્ટિંગમાં શહેર લખેલું ન હોય તો એકવાર આ બટન દબાવો:</p><button class="primary" id="fixCityBtn" type="button">જૂની લિસ્ટિંગમાં શહેર = ગાંધીનગર સેટ કરો</button></section>
 <section class="panel backup-panel" id="dataBackupSettings"><div class="backup-heading"><div class="backup-icon" aria-hidden="true">🗄️</div><div><div class="backup-eyebrow">DATA SAFETY CENTER</div><h2>ડેટા બેકઅપ અને રીસ્ટોર</h2><p class="muted">તમારી પ્રોપર્ટી લિસ્ટિંગનો બેકઅપ ડાઉનલોડ કરો અથવા અગાઉની બેકઅપ ફાઇલમાંથી રેકોર્ડ પાછા ઉમેરો.</p></div></div><div class="backup-actions"><button id="backupListings" class="primary backup-main" type="button">⬇️ ડેટાનો બેકઅપ લો (JSON)</button><button id="restoreListings" class="backup-restore" type="button">↻ બેકઅપ રીસ્ટોર કરો</button><input id="restoreFile" type="file" accept="application/json,.json" hidden></div><div class="backup-note"><strong>ધ્યાન આપો:</strong> રીસ્ટોર કરતી વખતે હાલના ID ધરાવતા રેકોર્ડ overwrite નહીં થાય; ફક્ત નવા રેકોર્ડ ઉમેરાશે.</div><div id="exportStatus" class="status" role="status"></div></section>
@@ -2925,6 +2955,49 @@ window.MG_I18N_DICTIONARY={
    user-entered property/customer content is intentionally excluded. */
 (()=>{
   const dict={
+    'લોડ થઈ રહ્યા છે…':'लोड हो रहे हैं…|Loading…',
+    'તમારા સપનાનું ઘર':'आपके सपनों का घर|Your Dream Home',
+    '🧩 આખી વેબસાઇટનું કન્ટેન્ટ મેનેજમેન્ટ':'🧩 पूरी वेबसाइट का कंटेंट प्रबंधन|🧩 Manage Website Content',
+    'અહીંથી ફોટા, વીડિયો, લખાણ અને બટન બનાવીને વેબસાઇટના નક્કી કરેલા વિભાગોમાં મૂકો. Preview જોયા પછી Publish કરો. કોઈ પ્રોપર્ટી લિસ્ટિંગ બદલાશે નહીં.':'यहाँ फोटो, वीडियो, टेक्स्ट और बटन बनाकर वेबसाइट के चुने हुए सेक्शन में रखें। Preview देखकर Publish करें। कोई प्रॉपर्टी लिस्टिंग नहीं बदलेगी।|Add photos, videos, text and buttons to selected website sections. Preview before publishing. Property listings will not be changed.',
+    'પેજ પસંદ કરો':'पेज चुनें|Choose Page',
+    'મુખ્ય Home Page':'मुख्य Home Page|Main Home Page',
+    'ક્યાં બતાવવું':'कहाँ दिखाना है|Placement',
+    'Home — સૌથી ઉપર':'Home — सबसे ऊपर|Home — Top',
+    'Home — મોટા બેનર પછી':'Home — बड़े बैनर के बाद|Home — After Hero Banner',
+    'Home — પ્રોપર્ટી લિસ્ટિંગ પહેલાં':'Home — प्रॉपर्टी लिस्टिंग से पहले|Home — Before Listings',
+    'Home — Footer પહેલાં':'Home — Footer से पहले|Home — Before Footer',
+    'Download Page — સૌથી ઉપર':'Download Page — सबसे ऊपर|Download Page — Top',
+    'Download Page — નીચે':'Download Page — नीचे|Download Page — Bottom',
+    'શીર્ષક — ગુજરાતી':'शीर्षक — गुजराती|Title — Gujarati',
+    'શીર્ષક — હિન્દી':'शीर्षक — हिंदी|Title — Hindi',
+    'લખાણ — ગુજરાતી':'टेक्स्ट — गुजराती|Text — Gujarati',
+    'લખાણ — હિન્દી':'टेक्स्ट — हिंदी|Text — Hindi',
+    'ફોટો અથવા વીડિયો પસંદ કરો':'फोटो या वीडियो चुनें|Choose Photo or Video',
+    'વૈકલ્પિક બટનનું લખાણ — ગુજરાતી':'वैकल्पिक बटन टेक्स्ट — गुजराती|Optional Button Text — Gujarati',
+    'બટન ક્લિક થાય ત્યારે ખોલવાની HTTPS લિંક':'बटन क्लिक करने पर खुलने वाला HTTPS लिंक|HTTPS Link to Open on Button Click',
+    'દેખાડવું?':'दिखाएँ?|Visible?',
+    'હા — Publish':'हाँ — Publish|Yes — Publish',
+    'ના — છુપાવો':'नहीं — छिपाएँ|No — Hide',
+    'ડિઝાઇન':'डिज़ाइन|Style',
+    '👁 Preview જુઓ':'👁 Preview देखें|👁 Preview',
+    '💾 Publish / Save':'💾 Publish / Save|💾 Publish / Save',
+    'નવું લખાણ':'नया कंटेंट|New Content',
+    '📚 બનાવેલા વિભાગો':'📚 बनाए गए सेक्शन|📚 Created Sections',
+    'હજુ કોઈ વિભાગ બનાવ્યો નથી.':'अभी कोई सेक्शन नहीं बनाया गया है।|No content blocks created yet.',
+    'નવું વિભાગ બનાવવા તૈયાર.':'नया सेक्शन बनाने के लिए तैयार।|Ready to create a new section.',
+    'Preview તૈયાર છે. Publish કરતાં પહેલાં તપાસો.':'Preview तैयार है। Publish करने से पहले जाँचें।|Preview is ready. Review it before publishing.',
+    'ફેરફાર સેવ કરો':'बदलाव सेव करें|Save Changes',
+    'વિભાગ Edit કરવા ખુલ્યો છે.':'सेक्शन Edit करने के लिए खुला है।|Section opened for editing.',
+    'આ વિભાગ અને તેનો ફોટો/વીડિયો Delete કરવો છે?':'क्या यह सेक्शन और इसका फोटो/वीडियो Delete करना है?|Delete this section and its photo/video?',
+    'વિભાગ Delete થયો.':'सेक्शन Delete हो गया।|Content block deleted.',
+    'વિભાગ સફળતાપૂર્વક Publish / Save થયો.':'सेक्शन सफलतापूर्वक Publish / Save हुआ।|Content block published/saved successfully.',
+    'ઓછામાં ઓછું લખાણ અથવા ફોટો/વીડિયો ઉમેરો.':'कम से कम टेक्स्ट या फोटो/वीडियो जोड़ें।|Add at least some text or a photo/video.',
+    'સેવ થઈ રહ્યું છે…':'सेव हो रहा है…|Saving…',
+    'લોડ થઈ રહ્યું છે…':'लोड हो रहा है…|Loading…',
+    'Edit':'Edit|Edit',
+    'Hide':'छिपाएँ|Hide',
+    'Show':'दिखाएँ|Show',
+    'Delete':'Delete|Delete',
     '🧪 ફોટો/વિડિયો અપલોડ ટેસ્ટ':'🧪 फोटो/वीडियो अपलोड टेस्ट|🧪 Photo/Video Upload Test',
     'આ વિભાગથી ફોટો/વિડિયો Cloudinaryમાં ટેસ્ટ થશે; કોઈ પ્રોપર્ટી અથવા Firestore રેકોર્ડ ઉમેરાશે નહીં. ટેસ્ટ ફાઇલ Cloudinaryમાં રહેશે, જરૂર પડે તો નીચે Delete કરો.':'इससे फोटो/वीडियो Cloudinary में टेस्ट होंगे; कोई प्रॉपर्टी या Firestore रिकॉर्ड नहीं जुड़ेगा। टेस्ट फ़ाइल Cloudinary में रहेगी; ज़रूरत न हो तो नीचे Delete करें।|This tests photo/video uploads to Cloudinary; no property or Firestore record is created. Test files remain in Cloudinary; delete them below if no longer needed.',
     'ટેસ્ટ ફોટો (JPG/PNG/WEBP, મહત્તમ 8 MB)':'टेस्ट फोटो (JPG/PNG/WEBP, अधिकतम 8 MB)|Test Photo (JPG/PNG/WEBP, max 8 MB)',
@@ -3450,4 +3523,6 @@ document.addEventListener('reset',function(){setTimeout(render,0)},true)})();
 :where(button,input[type="button"],input[type="submit"],input[type="reset"],[role="button"]):disabled{opacity:.58!important;filter:grayscale(.25);cursor:not-allowed}
 @media(prefers-reduced-motion:reduce){:where(button,input[type="button"],input[type="submit"],input[type="reset"],a[role="button"],[role="button"],[role="tab"]){transition:none!important}}
 </style>
+<link rel="stylesheet" href="assets/maru-ghar-site-content.css?v=20261118a">
+<script type="module" src="assets/maru-ghar-content-admin.js?v=20261118a"></script>
 </body></html>

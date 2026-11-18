@@ -47,4 +47,15 @@ if(!content.hidden||content.style.display!=='none'||attrs['aria-expanded']!=='fa
 
 if(!home.includes('onclick="if(window.mgTogglePropertyForm)'))throw new Error('Inline open fallback missing');
 if(!home.includes('MG_I18N_INLINE_BUNDLE_START')||!home.includes('MG_I18N_INLINE_BUNDLE_END'))throw new Error('Standalone inline language bundle markers missing');
+const admin=fs.readFileSync('admin.html','utf8');
+const rules=fs.readFileSync('firestore.rules','utf8');
+const cmsAdmin=fs.readFileSync('assets/maru-ghar-content-admin.js','utf8');
+const cmsPublic=fs.readFileSync('assets/maru-ghar-site-content.js','utf8');
+for(const slot of ['home_top','home_after_hero','home_before_listings','home_footer','download_top','download_bottom'])if(!home.includes('data-mg-content-slot="'+slot+'"')&&!fs.readFileSync('download.html','utf8').includes('data-mg-content-slot="'+slot+'"'))throw new Error('Managed content slot missing: '+slot);
+for(const id of ['mgSiteContentManager','mgCmsMedia','mgCmsPreviewBtn','mgCmsSaveBtn','mgCmsList'])if(!admin.includes('id="'+id+'"'))throw new Error('Admin content manager control missing: '+id);
+if(!rules.includes('match /siteContent/{blockId}')||!rules.includes('allow read: if true;')||!rules.includes('allow create, update, delete: if isAdmin();'))throw new Error('Admin-managed content Firestore rules missing');
+for(const term of ['upload(file)','deleteListingMedia','orderBy(\'order\')','visible'])if(!cmsAdmin.includes(term))throw new Error('Admin CMS behavior missing: '+term);
+for(const term of ['x.visible===true','textContent=title','dataset.userContent'])if(!cmsPublic.includes(term))throw new Error('Public CMS safe rendering missing: '+term);
+if(!admin.includes('assets/maru-ghar-content-admin.js')||!home.includes('assets/maru-ghar-site-content.js'))throw new Error('CMS scripts not connected to pages');
+
 console.log('UI REGRESSION CHECK PASS — shared Gujarati/Hindi/English dictionaries across all four pages and property panel open/close logic. This is a code-level test, not a full browser/device test.');
