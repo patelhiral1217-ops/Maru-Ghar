@@ -40,8 +40,15 @@ function init(){
     const b=menu.querySelector('[aria-controls="'+other.id+'"]');
     if(b)b.setAttribute('aria-expanded','false');
    });
-   if(willOpen){panel.hidden=false;button.setAttribute('aria-expanded','true');}
-   else{panel.hidden=true;button.setAttribute('aria-expanded','false');}
+   if(willOpen){
+    settings.open=true;
+    panel.hidden=false;
+    button.setAttribute('aria-expanded','true');
+    requestAnimationFrame(()=>panel.scrollIntoView({behavior:'smooth',block:'start'}));
+   }else{
+    panel.hidden=true;
+    button.setAttribute('aria-expanded','false');
+   }
   });
   tile.append(button);menu.append(tile);
  });
@@ -50,6 +57,31 @@ function init(){
  main.replaceChildren();
  /* Clicking Settings in the top bar opens the Settings drawer. */
  document.querySelectorAll('.admin-shortcuts a[href="#adminSettings"]').forEach(a=>a.addEventListener('click',()=>{settings.open=true;}));
+
+ /* Remove any accidental source-code text nodes left by a malformed inline script.
+    Only known JavaScript bundle signatures are targeted; normal admin copy is untouched. */
+ function removeLeakedSource(root=document.body){
+  if(!root)return;
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+  const remove=[];
+  let node;
+  while((node=walker.nextNode())){
+   const value=node.nodeValue||'';
+   if(value.length>100 && (
+    value.includes('const originals=new WeakMap()') ||
+    value.includes('window.mgSetLanguage=value=>') ||
+    value.includes('document.createTreeWalker(root,NodeFilter.SHOW_TEXT)') ||
+    value.includes('window.__mgI18nObserver=new MutationObserver')
+   )) remove.push(node);
+  }
+  remove.forEach(n=>n.parentNode&&n.parentNode.removeChild(n));
+ }
+ removeLeakedSource(document.body);
+ const leakObserver=new MutationObserver(records=>records.forEach(record=>{
+  record.addedNodes.forEach(node=>{if(node.nodeType===Node.TEXT_NODE)removeLeakedSource(node.parentNode||document.body);else if(node.nodeType===Node.ELEMENT_NODE)removeLeakedSource(node)});
+ }));
+ leakObserver.observe(document.body,{subtree:true,childList:true});
+
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
