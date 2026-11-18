@@ -8,13 +8,20 @@ function fold(panel,open=false){
  panel.before(details);details.append(summary,panel);panel.dataset.mgFolded='1';
 }
 function init(){
- const main=$('#adminMain');
+ const dashboard=$('#dashboard'),main=$('#adminMain'),settings=$('#adminSettings'),nav=document.querySelector('.admin-shortcuts');
+ if(dashboard&&main&&settings&&!dashboard.querySelector('#mgAllAdminSettings')){
+  const root=document.createElement('details');root.id='mgAllAdminSettings';root.className='mg-all-admin-settings';
+  const summary=document.createElement('summary');summary.textContent='⚙️ બધા Admin Settings અને બટનો';
+  const body=document.createElement('div');body.className='mg-all-admin-settings-body';
+  dashboard.insertBefore(root,nav||main);root.append(summary,body);
+  if(nav)body.append(nav);body.append(main,settings);
+ }
  if(main){
   [...main.children].forEach(node=>{if(node.matches('section.panel')&&node.id!=='listings')fold(node,false);});
  }
- const settings=$('#adminSettings');
- if(settings){
-  [...settings.children].forEach(node=>{if(node.matches('section.panel'))fold(node,false);});
+ const currentSettings=$('#adminSettings');
+ if(currentSettings){
+  [...currentSettings.children].forEach(node=>{if(node.matches('section.panel'))fold(node,false);});
  }
  const manager=$('#mgSiteContentManager');
  if(manager){
