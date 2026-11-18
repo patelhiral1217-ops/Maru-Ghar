@@ -15,7 +15,7 @@ function init(){
   const body=document.createElement('div');body.className='mg-all-admin-settings-body';
   dashboard.insertBefore(root,nav||main);root.append(summary,body);
   if(nav)body.append(nav);body.append(main,settings);
-  let extra=settings.nextElementSibling;while(extra&&extra.matches('section.panel')){const next=extra.nextElementSibling;body.append(extra);extra=next;}
+  let extra=settings.nextElementSibling;while(extra&&extra.matches('section.panel')){const next=extra.nextElementSibling;body.append(extra);fold(extra,false);extra=next;}
  }
  if(main){
   [...main.children].forEach(node=>{if(node.matches('section.panel')&&node.id!=='listings')fold(node,false);});
