@@ -7,7 +7,7 @@
 #dashboard .mg-admin-panel-content[hidden]{display:none!important}
 #dashboard .mg-admin-panel-content{padding-top:4px}
 #dashboard .mg-admin-toggle:focus-visible{outline:3px solid #ffdf55;outline-offset:3px}
-#dashboard .head h1,#dashboard .wrap>.head h1{color:#ffdf55!important;text-shadow:0 2px 0 #6b4c00,0 5px 14px #0008}
+#dashboard .head h1,#dashboard .wrap>.head h1,.wrap>.head h1{color:#ffdf55!important;text-shadow:0 2px 0 #6b4c00,0 5px 14px #0008}
 #dashboard .head p{color:#d0d9d2!important}
 #dashboard button:not(.approve):not(.reject):not(.mg-admin-toggle),#dashboard input[type=button],#dashboard input[type=submit],#dashboard a[role=button],#dashboard .admin-shortcuts a,#dashboard .admin-settings>summary{border:1px solid #d9bd72!important;border-radius:12px!important;background:linear-gradient(145deg,#fff5d7 0%,#e5e9e8 35%,#c4cdd0 63%,#f0d58e 100%)!important;color:#173b30!important;font-weight:850!important;text-shadow:0 1px 0 #fff9!important;box-shadow:0 4px 0 #806735,0 7px 13px #0004,inset 0 2px 3px #ffffffd9!important}
 #dashboard button.approve{box-shadow:0 4px 0 #07553b,0 7px 13px #0004!important}
