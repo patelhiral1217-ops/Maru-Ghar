@@ -108,8 +108,10 @@
  if(sample){const p=samples.find(x=>x.id===sample);if(p){detail(p);return}}
  function card(p,i){return '<article class="mg-demo-card" data-demo-id="'+p.id+'"><div class="mg-demo-photo"><img src="'+esc(p.photos[0])+'" alt="'+esc(p.title)+'" loading="lazy"><span class="mg-demo-tag">ડેમો નમૂનો</span><div class="mg-demo-controls"><button type="button" data-demo-pause aria-label="ફોટા રોકો">Ⅱ</button><button type="button" data-demo-next aria-label="આગળનો ફોટો">›</button></div><span class="mg-demo-counter">1 / '+p.photos.length+'</span></div><div class="mg-demo-body"><h3>'+esc(p.title)+'</h3><div class="mg-demo-location">📍 '+esc(p.area)+', '+esc(p.city)+'</div><div class="mg-demo-price">'+esc(p.price)+'</div><div class="mg-demo-spec">'+esc(p.bhk)+' · '+esc(p.size)+' · '+esc(p.purpose)+'</div><button class="mg-demo-open" type="button" data-demo-open="'+p.id+'">સંપૂર્ણ વિગત જુઓ →</button></div></article>'}
  function init(){
-  const listing=document.getElementById('listings');if(!listing||document.getElementById('mgDemoShowcase'))return;
-  const section=document.createElement('section');section.id='mgDemoShowcase';section.innerHTML='<div class="mg-demo-head"><h2>પસંદગીની પ્રોપર્ટી — ડેમો</h2><span class="mg-demo-note">ફક્ત નમૂના · વાસ્તવિક લિસ્ટિંગ નથી</span></div><div class="mg-demo-grid">'+samples.map(card).join('')+'</div>';
+  const listing=document.getElementById('listings');if(!listing)return;
+  const existing=document.getElementById('mgDemoShowcase');
+  if(existing){const grid=existing.querySelector('.mg-demo-grid');if(grid&&grid.children.length===samples.length)return;existing.remove();}
+  const section=document.createElement('section');section.id='mgDemoShowcase';section.innerHTML='<div class="mg-demo-head"><h2>પસંદગીની પ્રોપર્ટી — ડેમો</h2><span class="mg-demo-note">કુલ 10 ડેમો નમૂનાઓ · ફક્ત પ્રદર્શન માટે, વાસ્તવિક લિસ્ટિંગ નથી</span></div><div class="mg-demo-grid">'+samples.map(card).join('')+'</div>';
   listing.parentNode.insertBefore(section,listing);
   const timers=new Map(),indices=new Map(),paused=new Set();
   function show(card,idx){const p=samples.find(x=>x.id===card.dataset.demoId);idx=(idx+p.photos.length)%p.photos.length;indices.set(p.id,idx);const im=card.querySelector('img');im.style.opacity='.25';const next=new Image();next.onload=()=>{im.src=next.src;im.style.opacity='1'};next.onerror=()=>im.style.opacity='1';next.src=p.photos[idx];card.querySelector('.mg-demo-counter').textContent=(idx+1)+' / '+p.photos.length;}
@@ -122,4 +124,7 @@
   window.addEventListener('pagehide',()=>timers.forEach(clearInterval),{once:true});
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+ window.addEventListener('pageshow',init);
+ const rootObserver=new MutationObserver(()=>{if(!document.getElementById('mgDemoShowcase')&&document.getElementById('listings'))init()});
+ rootObserver.observe(document.documentElement,{childList:true,subtree:true});
 })();
