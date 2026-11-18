@@ -37,3 +37,14 @@
  .mg-cms-admin-actions button{padding:7px 5px!important;font-size:12px}
 }
 @media(min-width:621px){.mg-cms-editor .formgrid .wide{grid-column:1/-1}}
+
+#mgAllAdminSettings{margin:12px 0 18px;border:1px solid rgba(255,218,120,.55);border-radius:18px;overflow:hidden;background:linear-gradient(145deg,#123b30,#071e19);box-shadow:0 10px 25px #0003}
+#mgAllAdminSettings>summary{cursor:pointer;list-style:none;padding:17px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;background:linear-gradient(115deg,#c99b35,#f4df9a 48%,#b98525);color:#18271e;font-size:16px;font-weight:950}
+#mgAllAdminSettings>summary::-webkit-details-marker{display:none}
+#mgAllAdminSettings>summary:after{content:"＋";font-size:21px}
+#mgAllAdminSettings[open]>summary:after{content:"−"}
+.mg-all-admin-settings-body{padding:10px}
+.mg-all-admin-settings-body>.admin-shortcuts{position:static!important;border-radius:12px;margin-bottom:12px!important}
+.mg-all-admin-settings-body>#adminMain,.mg-all-admin-settings-body>#adminSettings{margin:0}
+#adminSettings{margin-top:10px}
+@media(max-width:620px){#mgAllAdminSettings>summary{font-size:15px;padding:15px}.mg-all-admin-settings-body{padding:8px}}
