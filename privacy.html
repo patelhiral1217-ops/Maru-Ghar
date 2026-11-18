@@ -2788,7 +2788,7 @@ window.MG_I18N_DICTIONARY={
     if(root.nodeType===3){translateNode(root);return;}
     if(root.nodeType===1&&root.closest&&root.closest('#mgLanguage,#mgAdminLanguage'))return;
     /* Never translate executable/source text or editable form fields. */
-    if(root.nodeType===1 && root.matches('script,style,textarea,pre,code'))return;
+    if(root.nodeType===1 && root.matches?.('script,style,textarea,pre,code'))return;
     const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{
       acceptNode(node){
         return node.parentElement?.closest('script,style,textarea,pre,code')
