@@ -700,7 +700,7 @@ h1,h2,h3,h4,.section-head h2,.searchbox h3,.mg-dialog-head h2,.mg-info-dialog h3
 <main>
 <div class="mg-ad-slot" data-mg-ad-slot="homeTop" hidden aria-label="જાહેરાત"></div>
 <div class="mg-cms-slot" data-mg-content-slot="home_mid"></div><div class="mg-cms-slot" data-mg-content-slot="home_before_listings"></div>
-<section id="listings"><div class="section-head"><div><button type="button" class="mg-listing-title-button" id="mgListingTitleButton">પ્રોપર્ટી લિસ્ટિંગ</button><p>તમારી જરૂર મુજબ કેટેગરી પસંદ કરો.</p></div><div class="mg-cms-slot" data-mg-content-slot="home_listings_heading"></div><span id="count" class="loc">લાઇવ લિસ્ટિંગ લોડ થઈ રહ્યું છે...</span></div><div class="cats"><button class="cat active" data-cat="all">બધી પ્રોપર્ટી</button><button class="cat" data-cat="ઘર">ઘર</button><button class="cat" data-cat="ફ્લેટ">ફ્લેટ</button><button class="cat" data-cat="દુકાન">દુકાન</button><button class="cat" data-cat="રેસિડેન્શિયલ પ્લોટ">રેસિડેન્શિયલ પ્લોટ</button><button class="cat" data-cat="કોમર્શિયલ પ્લોટ">કોમર્શિયલ પ્લોટ</button><button class="cat" data-cat="ઓફિસ">ઓફિસ</button><button class="cat" data-cat="વેરહાઉસ">વેરહાઉસ</button><button class="cat" data-cat="પી.જી. (PG)">પી.જી. (PG)</button></div><div class="mg-cms-slot" data-mg-content-slot="home_categories"></div><div class="gridsw" id="gridSwitch" role="group" aria-label="કાર્ડ દૃશ્ય"><span>દૃશ્ય (કોલમ):</span><button type="button" data-cols="1">1</button><button type="button" data-cols="2">2</button><button type="button" data-cols="3">3</button><button type="button" data-cols="4">4</button><button type="button" id="favOnly" aria-pressed="false">❤️ મનપસંદ</button></div><div class="mg-compare-shortcut-wrap"><button type="button" class="mg-compare-shortcut" id="mgOpenCompare" aria-label="પસંદ કરેલી પ્રોપર્ટીની તુલના કરો">⇄ તુલના (0)</button></div><section class="mg-discovery-panel" id="mgDiscoveryPanel" aria-label="એડવાન્સ પ્રોપર્ટી ફિલ્ટર">
+<section id="listings"><div class="section-head"><div><button type="button" class="mg-listing-title-button" id="mgListingTitleButton">પ્રોપર્ટી લિસ્ટિંગ</button><p>તમારી જરૂર મુજબ કેટેગરી પસંદ કરો.</p></div><div class="mg-cms-slot" data-mg-content-slot="home_listings_heading"></div><span id="count" class="loc">લાઇવ લિસ્ટિંગ લોડ થઈ રહ્યું છે...</span></div><div class="cats"><button class="cat active" data-cat="all">બધી પ્રોપર્ટી</button><button class="cat" data-cat="ઘર">ઘર</button><button class="cat" data-cat="ફ્લેટ">ફ્લેટ</button><button class="cat" data-cat="દુકાન">દુકાન</button><button class="cat" data-cat="રેસિડેન્શિયલ પ્લોટ">રેસિડેન્શિયલ પ્લોટ</button><button class="cat" data-cat="કોમર્શિયલ પ્લોટ">કોમર્શિયલ પ્લોટ</button><button class="cat" data-cat="ઓફિસ">ઓફિસ</button><button class="cat" data-cat="વેરહાઉસ">વેરહાઉસ</button><button class="cat" data-cat="પી.જી. (PG)">પી.જી. (PG)</button></div><div class="mg-cms-slot" data-mg-content-slot="home_categories"></div><div class="gridsw" id="gridSwitch" role="group" aria-label="કાર્ડ દૃશ્ય"><span>દૃશ્ય (કોલમ):</span><button type="button" data-cols="1" onclick="window.mgSetPropertyColumns&&window.mgSetPropertyColumns('1')">1</button><button type="button" data-cols="2" onclick="window.mgSetPropertyColumns&&window.mgSetPropertyColumns('2')">2</button><button type="button" data-cols="3" onclick="window.mgSetPropertyColumns&&window.mgSetPropertyColumns('3')">3</button><button type="button" data-cols="4" onclick="window.mgSetPropertyColumns&&window.mgSetPropertyColumns('4')">4</button><button type="button" id="favOnly" aria-pressed="false">❤️ મનપસંદ</button></div><div class="mg-compare-shortcut-wrap"><button type="button" class="mg-compare-shortcut" id="mgOpenCompare" aria-label="પસંદ કરેલી પ્રોપર્ટીની તુલના કરો">⇄ તુલના (0)</button></div><section class="mg-discovery-panel" id="mgDiscoveryPanel" aria-label="એડવાન્સ પ્રોપર્ટી ફિલ્ટર">
   <div class="mg-discovery-head">
     <div><strong>સ્માર્ટ પ્રોપર્ટી શોધ</strong><small>તમારા બજેટ, ક્ષેત્રફળ અને જરૂરિયાત પ્રમાણે પસંદ કરો</small></div>
     <div class="mg-discovery-head-actions">
@@ -794,53 +794,7 @@ function filterProps(){
 ['fBhk','fFurn','fVerified','fMedia','fSort'].forEach(id=>document.getElementById(id)&&document.getElementById(id).addEventListener('change',filterProps));
 ['fMin','fMax','fAreaMin','fAreaMax'].forEach(id=>document.getElementById(id)&&document.getElementById(id).addEventListener('input',filterProps));
 (function(){const b=document.getElementById('favOnly');if(b)b.addEventListener('click',()=>{window.__favOnly=!window.__favOnly;b.classList.toggle('active',window.__favOnly);b.setAttribute('aria-pressed',String(window.__favOnly));filterProps()})})();
-// Reliable delegated 1–4 column controller. Capture clicks so other UI handlers cannot swallow them.
-(function(){
-  let selected='2', observer=null;
-  function apply(value){
-    const cols=String(value);
-    if(!['1','2','3','4'].includes(cols))return;
-    selected=cols;
-    const grid=document.getElementById('properties');
-    const switcher=document.getElementById('gridSwitch');
-    if(!grid)return;
-    grid.dataset.cols=cols;
-    grid.style.setProperty('display','grid','important');
-    grid.style.setProperty('grid-template-columns','repeat('+cols+',minmax(0,1fr))','important');
-    grid.style.setProperty('grid-auto-flow','row','important');
-    grid.style.setProperty('gap',cols==='1'?'16px':cols==='2'?'12px':cols==='3'?'9px':'7px','important');
-    grid.querySelectorAll(':scope > .property').forEach(card=>{
-      card.style.setProperty('min-width','0','important');
-      card.style.setProperty('max-width','100%','important');
-      card.style.setProperty('width','auto','important');
-      card.style.setProperty('grid-column','auto','important');
-    });
-    if(switcher)switcher.querySelectorAll('button[data-cols]').forEach(button=>{
-      const active=button.dataset.cols===cols;
-      button.classList.toggle('active',active);
-      button.setAttribute('aria-pressed',String(active));
-    });
-    try{localStorage.setItem('mg_cols',cols)}catch(_){}
-    if(!observer){
-      observer=new MutationObserver(()=>apply(selected));
-      observer.observe(grid,{childList:true});
-    }
-  }
-  function init(){
-    let saved='2';try{saved=localStorage.getItem('mg_cols')||'2'}catch(_){}
-    apply(['1','2','3','4'].includes(saved)?saved:'2');
-  }
-  document.addEventListener('click',event=>{
-    const button=event.target&&event.target.closest?event.target.closest('#gridSwitch button[data-cols]'):null;
-    if(!button)return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    apply(button.dataset.cols);
-  },true);
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
-  window.addEventListener('pageshow',init);
-  window.addEventListener('mg-properties-rendered',()=>apply(selected));
-})();;
+// Column buttons call the independent controller directly; no competing delegated handler here.
 </script>
 <script type="module" src="assets/maru-ghar-backend.js?v=20261118c"></script>
 <script type="module" src="assets/maru-ghar-extras.js"></script>
@@ -4069,7 +4023,7 @@ a#adminQuick.mg-admin-premium{
 body #mgTrust,body .mg-trust{display:none!important}
 </style>
 
-<script src="assets/maru-ghar-grid-controller.js?v=20261118a"></script>
+<script src="assets/maru-ghar-grid-controller.js?v=20261118b"></script>
 </body></html>
 
 <style id="mg-city-and-four-column-fix-20261118">
