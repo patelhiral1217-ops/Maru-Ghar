@@ -27,8 +27,8 @@
    const seen=new Set(opts.map(o=>o.value.toLowerCase()));
    document.querySelectorAll('#properties .property').forEach(card=>{
     if(chosenCity!=='all'&&card.dataset.city!==chosenCity)return;
-    const raw=String(card.dataset.location||'').trim();if(!raw||seen.has(raw))return;
-    seen.add(raw);const o=new Option(raw,raw);o.dataset.match=raw;opts.push(o);
+    const raw=String(card.dataset.location||'').trim();if(!raw||seen.has(raw.toLowerCase()))return;
+    seen.add(raw.toLowerCase());const o=new Option(raw,raw);o.dataset.match=raw;opts.push(o);
    });
    return opts;
   }
@@ -36,11 +36,17 @@
    const wrap=document.createElement('div');wrap.className='mg-city-browser-grid';
    [...city.options].forEach(o=>wrap.append(button(o.value==='all'?t('allCities'):o.textContent,o.value===chosenCity,async()=>{
     if(busy)return;chosenCity=o.value;city.value=chosenCity;chosenArea='all';busy=true;step=2;content.innerHTML='<p class="mg-city-browser-note">'+t('loading')+'</p>';setProgress();
-    let done=false;const onLoaded=e=>{if(e.detail?.city===chosenCity){done=true;window.removeEventListener('mg-city-listings-loaded',onLoaded);}};
-    window.addEventListener('mg-city-listings-loaded',onLoaded);
-    city.dispatchEvent(new Event('change',{bubbles:true}));
-    await Promise.race([new Promise(resolve=>{const check=()=>{if(done)resolve();else setTimeout(check,180)};check()}),new Promise(resolve=>setTimeout(resolve,10000))]);
-    window.removeEventListener('mg-city-listings-loaded',onLoaded);busy=false;show();
+    try{
+     if(typeof window.mgSelectCity==='function') await window.mgSelectCity(chosenCity);
+     else {
+      let done=false;const onLoaded=e=>{if(e.detail?.city===chosenCity)done=true;};
+      window.addEventListener('mg-city-listings-loaded',onLoaded);
+      city.dispatchEvent(new Event('change',{bubbles:true}));
+      await Promise.race([new Promise(resolve=>{const check=()=>{if(done)resolve();else setTimeout(check,150)};check()}),new Promise(resolve=>setTimeout(resolve,12000))]);
+      window.removeEventListener('mg-city-listings-loaded',onLoaded);
+     }
+    }catch(err){console.error('City listing load failed:',err);}
+    busy=false;show();
    })));
    content.replaceChildren(wrap);
   }
