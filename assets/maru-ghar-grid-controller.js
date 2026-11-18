@@ -1,19 +1,22 @@
-/* Direct, independent controller for the Maru Ghar 1–4 column buttons.
-   Each button invokes window.mgSetPropertyColumns directly; no competing click-capture handler. */
+/* Maru Ghar — one column controller for live listings and the visible demo showcase.
+   The 1–4 controls must visibly work even before real listings have been added. */
 (function () {
   'use strict';
   const allowed = new Set(['1', '2', '3', '4']);
   let selected = '2';
-  let gridObserver = null;
+  let observer = null;
   let scheduled = false;
 
-  function applyColumns(value) {
-    const cols = String(value);
-    if (!allowed.has(cols)) return false;
-    const grid = document.getElementById('properties');
-    if (!grid) return false;
+  function grids() {
+    const result = [];
+    const live = document.getElementById('properties');
+    const demo = document.querySelector('#mgDemoShowcase .mg-demo-grid');
+    if (live) result.push(live);
+    if (demo && !result.includes(demo)) result.push(demo);
+    return result;
+  }
 
-    selected = cols;
+  function applyToGrid(grid, cols) {
     grid.dataset.cols = cols;
     grid.style.setProperty('display', 'grid', 'important');
     grid.style.setProperty('grid-template-columns', 'repeat(' + cols + ', minmax(0, 1fr))', 'important');
@@ -23,14 +26,24 @@
     grid.style.setProperty('align-items', 'stretch', 'important');
 
     Array.from(grid.children).forEach(function (card) {
-      if (card.classList && card.classList.contains('property')) {
-        card.style.setProperty('width', 'auto', 'important');
-        card.style.setProperty('min-width', '0', 'important');
-        card.style.setProperty('max-width', 'none', 'important');
-        card.style.setProperty('grid-column', 'auto', 'important');
-        card.style.setProperty('justify-self', 'stretch', 'important');
-      }
+      const isCard = card.classList && (card.classList.contains('property') || card.classList.contains('mg-demo-card'));
+      if (!isCard) return;
+      card.style.setProperty('width', 'auto', 'important');
+      card.style.setProperty('min-width', '0', 'important');
+      card.style.setProperty('max-width', 'none', 'important');
+      card.style.setProperty('grid-column', 'auto', 'important');
+      card.style.setProperty('justify-self', 'stretch', 'important');
     });
+  }
+
+  function applyColumns(value) {
+    const cols = String(value);
+    if (!allowed.has(cols)) return false;
+    const targets = grids();
+    if (!targets.length) return false;
+
+    selected = cols;
+    targets.forEach(function (grid) { applyToGrid(grid, cols); });
 
     const switcher = document.getElementById('gridSwitch');
     if (switcher) {
@@ -41,28 +54,34 @@
       });
     }
     try { localStorage.setItem('mg_cols', cols); } catch (_) {}
-
-    if (!gridObserver && typeof MutationObserver !== 'undefined') {
-      gridObserver = new MutationObserver(function () {
-        if (scheduled) return;
-        scheduled = true;
-        requestAnimationFrame(function () {
-          scheduled = false;
-          applyColumns(selected);
-        });
-      });
-      gridObserver.observe(grid, { childList: true });
-    }
     return true;
   }
 
-  // Public action used by the four real buttons and by regression tests.
+  function scheduleApply() {
+    if (scheduled) return;
+    scheduled = true;
+    const raf = typeof requestAnimationFrame === 'function' ? requestAnimationFrame : function (fn) { return setTimeout(fn, 0); };
+    raf(function () {
+      scheduled = false;
+      applyColumns(selected);
+    });
+  }
+
+  // Watch the page, not only #properties: the demo showcase is inserted dynamically.
+  function observePage() {
+    if (observer || typeof MutationObserver === 'undefined' || !document.body) return;
+    observer = new MutationObserver(scheduleApply);
+    observer.observe(document.body, { childList: true, subtree: true });
+  }
+
+  // Public action used by the four visible buttons and regression tests.
   window.mgSetPropertyColumns = applyColumns;
 
   function initialize() {
     let saved = '2';
     try { saved = localStorage.getItem('mg_cols') || '2'; } catch (_) {}
     applyColumns(allowed.has(saved) ? saved : '2');
+    observePage();
   }
 
   if (document.readyState === 'loading') {
