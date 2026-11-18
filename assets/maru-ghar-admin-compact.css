@@ -87,3 +87,28 @@
   #dashboard .actions>*{flex:1 1 calc(50% - 8px);font-size:13px}
   #adminSettings .mg-admin-section-btn{min-height:52px}
 }
+
+
+/* Responsive admin layout correction: one controller per section, compact touch targets. */
+#dashboard .admin-shortcuts{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;align-items:stretch}
+#dashboard .admin-shortcuts a{flex:initial!important;min-width:0!important;width:100%;white-space:normal;overflow-wrap:anywhere}
+#dashboard .mg-admin-section-menu{grid-template-columns:repeat(3,minmax(0,1fr))}
+#dashboard .mg-admin-section-btn{min-width:0;white-space:normal;overflow-wrap:anywhere}
+#dashboard .actions{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+#dashboard .actions>*{min-width:0!important;width:100%;flex:initial!important;overflow-wrap:anywhere}
+@media(max-width:700px){
+  #dashboard .admin-shortcuts{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  #dashboard .admin-shortcuts a{font-size:11px!important;line-height:1.2;padding:7px 3px!important}
+  #dashboard .mg-admin-section-menu{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #dashboard .actions{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #dashboard .actions>*{font-size:12px!important;padding:9px 5px!important}
+  #dashboard .panel,#dashboard .mg-admin-section-content{min-width:0;max-width:100%}
+  #dashboard .formgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #dashboard .formgrid>*{min-width:0}
+  #dashboard input,#dashboard select,#dashboard textarea{max-width:100%;min-width:0}
+}
+@media(max-width:380px){
+  #dashboard .admin-shortcuts a{font-size:10px!important}
+  #dashboard .formgrid{grid-template-columns:1fr}
+  #dashboard .formgrid .wide{grid-column:auto}
+}

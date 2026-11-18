@@ -71,7 +71,10 @@ function init(){
     value.includes('const originals=new WeakMap()') ||
     value.includes('window.mgSetLanguage=value=>') ||
     value.includes('document.createTreeWalker(root,NodeFilter.SHOW_TEXT)') ||
-    value.includes('window.__mgI18nObserver=new MutationObserver')
+    value.includes('window.__mgI18nObserver=new MutationObserver') ||
+    value.includes('document.createTreeWalker(root,NodeFilter.SHOW_TEXT)') ||
+    value.includes('function translateNode') ||
+    (value.length>160 && /document\\.getElementById|addEventListener\\s*\\(|window\\.mgSetLanguage|const originals/.test(value))
    )) remove.push(node);
   }
   remove.forEach(n=>n.parentNode&&n.parentNode.removeChild(n));
