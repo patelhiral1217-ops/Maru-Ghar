@@ -1,4 +1,5 @@
-/* Independent, late-loaded controller for the Maru Ghar 1–4 column switcher. */
+/* Direct, independent controller for the Maru Ghar 1–4 column buttons.
+   Each button invokes window.mgSetPropertyColumns directly; no competing click-capture handler. */
 (function () {
   'use strict';
   const allowed = new Set(['1', '2', '3', '4']);
@@ -55,16 +56,8 @@
     return true;
   }
 
-  function handleColumnClick(event) {
-    const target = event.target;
-    const button = target && target.closest ? target.closest('#gridSwitch button[data-cols]') : null;
-    if (!button || !allowed.has(button.dataset.cols)) return;
-    event.preventDefault();
-    event.stopPropagation();
-    applyColumns(button.dataset.cols);
-  }
-
-  document.addEventListener('click', handleColumnClick, true);
+  // Public action used by the four real buttons and by regression tests.
+  window.mgSetPropertyColumns = applyColumns;
 
   function initialize() {
     let saved = '2';
@@ -79,5 +72,4 @@
   }
   window.addEventListener('pageshow', initialize);
   window.addEventListener('mg-properties-rendered', function () { applyColumns(selected); });
-  window.mgSetPropertyColumns = applyColumns;
 })();
