@@ -306,7 +306,7 @@ async function init() {
     if(cityEl) cityEl.addEventListener('change',async()=>{currentCity=cityEl.value||'all';populateAreaFilter(currentCity);while(loadingMore) await new Promise(r=>setTimeout(r,100));loadApproved(true);});
     populateAreaFilter(currentCity);
     const areaEl=document.getElementById('areaFilter');
-    if(areaEl)areaEl.addEventListener('change',async()=>{while(loadingMore)await new Promise(r=>setTimeout(r,100));loadApproved(true);});
+    if(areaEl)areaEl.addEventListener('change',async()=>{while(loadingMore)await new Promise(r=>setTimeout(r,100));if(typeof window.filterProps==='function')window.filterProps();});
     window.addEventListener('mg-language-changed',()=>populateAreaFilter(currentCity));
     await loadApproved(true);
     setStatus('',false);

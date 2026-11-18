@@ -3799,4 +3799,25 @@ a#adminQuick.mg-admin-premium{
   }
 }
 </style>
+
+<style id="mg-area-filter-metal-20261118">
+/* Keep the area selector visually consistent with the city selector; never cover adjacent controls. */
+#home .searchbox .row>select#areaFilter,
+.searchbox .row>select#areaFilter{
+  display:block!important;box-sizing:border-box!important;width:100%!important;min-width:0!important;max-width:100%!important;
+  height:50px!important;min-height:50px!important;max-height:50px!important;
+  padding:8px 30px 8px 12px!important;margin:0!important;
+  border:1px solid #c9a95c!important;border-radius:14px!important;
+  background:linear-gradient(145deg,#fff4c9 0%,#e5e9ec 42%,#c5ced5 66%,#f0d58d 100%)!important;
+  color:#173b30!important;font-size:13px!important;font-weight:900!important;line-height:1.2!important;
+  white-space:nowrap!important;text-overflow:ellipsis!important;overflow:hidden!important;
+  -webkit-appearance:none!important;appearance:none!important;
+  box-shadow:0 4px 0 #806024,0 8px 14px rgba(0,0,0,.20),inset 0 2px 3px rgba(255,255,255,.95)!important;
+}
+#home .searchbox .row>select#areaFilter{grid-column:1/-1!important}
+.searchbox .row>select#areaFilter option{background:#f1f3ed!important;color:#173b30!important}
+#home .searchbox .row>select#areaFilter:focus-visible{outline:2px solid #c9a95c!important;outline-offset:2px!important}
+@media(min-width:700px){#home .searchbox .row>select#areaFilter{grid-column:auto!important}}
+@media(max-width:380px){#home .searchbox .row>select#areaFilter{font-size:12px!important;padding-left:9px!important;padding-right:25px!important}}
+</style>
 </body></html>
