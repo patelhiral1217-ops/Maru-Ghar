@@ -51,11 +51,15 @@ const admin=fs.readFileSync('admin.html','utf8');
 const rules=fs.readFileSync('firestore.rules','utf8');
 const cmsAdmin=fs.readFileSync('assets/maru-ghar-content-admin.js','utf8');
 const cmsPublic=fs.readFileSync('assets/maru-ghar-site-content.js','utf8');
-for(const slot of ['home_top','home_after_hero','home_before_listings','home_footer','download_top','download_bottom'])if(!home.includes('data-mg-content-slot="'+slot+'"')&&!fs.readFileSync('download.html','utf8').includes('data-mg-content-slot="'+slot+'"'))throw new Error('Managed content slot missing: '+slot);
+for(const slot of ['home_top','home_before_showcase','home_showcase','home_after_hero','home_before_listings','home_listings_heading','home_categories','home_filters','home_results','home_submit','home_account','home_footer','download_top','download_story','download_bottom'])if(!home.includes('data-mg-content-slot="'+slot+'"')&&!fs.readFileSync('download.html','utf8').includes('data-mg-content-slot="'+slot+'"'))throw new Error('Managed content slot missing: '+slot);
 for(const id of ['mgSiteContentManager','mgCmsMedia','mgCmsPreviewBtn','mgCmsSaveBtn','mgCmsList'])if(!admin.includes('id="'+id+'"'))throw new Error('Admin content manager control missing: '+id);
 if(!rules.includes('match /siteContent/{blockId}')||!rules.includes('allow read: if true;')||!rules.includes('allow create, update, delete: if isAdmin();'))throw new Error('Admin-managed content Firestore rules missing');
 for(const term of ['upload(file)','deleteListingMedia','orderBy(\'order\')','visible'])if(!cmsAdmin.includes(term))throw new Error('Admin CMS behavior missing: '+term);
 for(const term of ['x.visible===true','textContent=title','dataset.userContent'])if(!cmsPublic.includes(term))throw new Error('Public CMS safe rendering missing: '+term);
 if(!admin.includes('assets/maru-ghar-content-admin.js')||!home.includes('assets/maru-ghar-site-content.js'))throw new Error('CMS scripts not connected to pages');
+if(!admin.includes('assets/maru-ghar-admin-compact.js')||!admin.includes('assets/maru-ghar-admin-compact.css'))throw new Error('Compact admin assets not connected');
+const compactAdmin=fs.readFileSync('assets/maru-ghar-admin-compact.js','utf8');
+if(!compactAdmin.includes('mgAllAdminSettings')||!compactAdmin.includes('body.append(main,settings)'))throw new Error('All admin controls are not grouped under the unified Settings panel');
+for(const slot of ['home_listings_heading','home_categories','home_filters','home_results','home_submit','home_account','download_story'])if(!cmsAdmin.includes(slot))throw new Error('Admin CMS placement missing: '+slot);
 
 console.log('UI REGRESSION CHECK PASS — shared Gujarati/Hindi/English dictionaries across all four pages and property panel open/close logic. This is a code-level test, not a full browser/device test.');

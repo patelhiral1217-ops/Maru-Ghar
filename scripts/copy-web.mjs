@@ -46,7 +46,9 @@ for (const required of [
   'assets/maru-ghar-ads.js',
   'assets/maru-ghar-content-admin.js',
   'assets/maru-ghar-site-content.js',
-  'assets/maru-ghar-site-content.css'
+  'assets/maru-ghar-site-content.css',
+  'assets/maru-ghar-admin-compact.js',
+  'assets/maru-ghar-admin-compact.css'
 ]) {
   if (!fs.existsSync(path.join(out, required))) {
     throw new Error(`Hosting build missing required file: ${required}`);
