@@ -63,3 +63,12 @@ if(!compactAdmin.includes('const sections=[...main.children,...settings.children
 for(const slot of ['home_mid','home_bottom','home_listings_heading','home_categories','home_filters','home_results','home_submit','home_account','download_story'])if(!cmsAdmin.includes(slot))throw new Error('Admin CMS placement missing: '+slot);
 
 console.log('UI REGRESSION CHECK PASS — shared Gujarati/Hindi/English dictionaries across all four pages and property panel open/close logic. This is a code-level test, not a full browser/device test.');
+
+// Maru Ghar user-requested regression: ten demo cards, delegated 1–4 columns, trust actions only in Settings.
+const demo=fs.readFileSync('assets/maru-ghar-demo-showcase.js','utf8');
+const demoIds=[...demo.matchAll(/\{id:'([^']+)'/g)].map(x=>x[1]);
+if(demoIds.length!==10||new Set(demoIds).size!==10)throw new Error('Demo showcase must contain exactly ten unique demo properties');
+if(!home.includes('mg-settings-only-trust-actions-20261118')||!home.includes('new MutationObserver(clean)'))throw new Error('Trust strip must be removed outside Settings, including dynamically inserted duplicates');
+if(!home.includes('event.target.closest(\'#gridSwitch button[data-cols]\')')||!home.includes('event.stopImmediatePropagation()')||!home.includes("grid.style.setProperty('grid-template-columns'"))throw new Error('Delegated 1–4 column switcher must apply grid layout on captured clicks');
+if(!demo.includes('કુલ 10 ડેમો નમૂનાઓ')||!demo.includes('rootObserver.observe'))throw new Error('Demo showcase must expose all ten samples and initialize when listing root is delayed');
+console.log('MARU GHAR DEMO / GRID / SETTINGS REGRESSION PASS — ten unique demo samples, delegated 1–4 column controls, trust buttons restricted to Settings.');
