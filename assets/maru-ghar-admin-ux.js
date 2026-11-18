@@ -10,9 +10,12 @@
    const heading=panel.querySelector(':scope > h2')||panel.querySelector(':scope > .row h2');if(!heading)return;
    panel.dataset.mgAccordionReady='1';
    const title=heading.textContent.trim();const content=document.createElement('div');content.className='mg-admin-panel-content';content.hidden=true;
-   let node=heading.nextSibling;while(node){const next=node.nextSibling;content.appendChild(node);node=next;}
+   const header=heading.closest('.row')&&heading.closest('.row').parentElement===panel?heading.closest('.row'):heading;
    const button=document.createElement('button');button.type='button';button.className='mg-admin-toggle';button.setAttribute('aria-expanded','false');button.innerHTML='<span></span><span class="mg-chevron" aria-hidden="true">⌄</span>';button.firstElementChild.textContent=title;
-   heading.hidden=true;panel.insertBefore(button,heading);panel.appendChild(content);
+   panel.insertBefore(button,header);
+   if(header===heading){heading.hidden=true;let node=heading.nextSibling;while(node){const next=node.nextSibling;content.appendChild(node);node=next;}}
+   else{header.hidden=true;let node=header.nextSibling;while(node){const next=node.nextSibling;content.appendChild(node);node=next;}}
+   panel.appendChild(content);
    button.addEventListener('click',function(){
      const open=button.getAttribute('aria-expanded')!=='true';
      const group=panel.parentElement;
