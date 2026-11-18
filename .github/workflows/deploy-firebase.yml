@@ -26,12 +26,12 @@ jobs:
           node-version: 22
       - name: Install project dependencies
         run: npm ci
+      - name: Build website folder
+        run: npm run copy-web
       - name: Run full project validation
         run: npm test
-      - name: Build website folder
-        run: |
-          npm run copy-web
-          node scripts/hosting-preflight.mjs
+      - name: Hosting preflight
+        run: node scripts/hosting-preflight.mjs
       - name: Install Firebase CLI
         run: npm install --global firebase-tools@13
       - name: Deploy Hosting
