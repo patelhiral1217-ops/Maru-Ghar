@@ -7,7 +7,7 @@
  };
  function makeAccordion(panel,index){
    if(panel.dataset.mgAccordionReady==='1')return;
-   const heading=panel.querySelector(':scope > h2');if(!heading)return;
+   const heading=panel.querySelector(':scope > h2')||panel.querySelector(':scope > .row h2');if(!heading)return;
    panel.dataset.mgAccordionReady='1';
    const title=heading.textContent.trim();const content=document.createElement('div');content.className='mg-admin-panel-content';content.hidden=true;
    let node=heading.nextSibling;while(node){const next=node.nextSibling;content.appendChild(node);node=next;}
@@ -23,10 +23,10 @@
  }
  function setup(){
    const dash=document.getElementById('dashboard');if(!dash)return;
-   dash.querySelectorAll('#adminMain > .panel, #adminMain + .panel, #listings.panel, #listings > .panel, #mgCloudinaryTest, #mgSiteContentManager').forEach((p,i)=>makeAccordion(p,i));
+   [...dash.querySelectorAll('.panel')].filter(p=>!p.closest('#adminSettings')).forEach((p,i)=>makeAccordion(p,i));
    /* Keep only the main three work areas outside Settings; secondary tools stay in the Settings drawer. */
    const main=document.getElementById('adminMain');
-   if(main){const panels=[...main.querySelectorAll(':scope > .panel')];panels.forEach((p,i)=>{if(i>2)p.hidden=true;});}
+   if(main){const panels=[...main.querySelectorAll(':scope > .panel')];panels.forEach(p=>{p.hidden=false;});}
    const formPanel=document.querySelector('#adminMain > .panel');
    if(formPanel){const form=formPanel.querySelector('#adminAddForm');if(form){const content=form.closest('.mg-admin-panel-content');if(content){content.hidden=true;const b=formPanel.querySelector('.mg-admin-toggle');if(b)b.setAttribute('aria-expanded','false');}}}
    const city=document.getElementById('cityFilter');
