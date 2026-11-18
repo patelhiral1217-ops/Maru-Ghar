@@ -42,7 +42,7 @@ small{color:var(--muted)}.note{font-size:13px;color:#b42318;display:none}@media 
 <div class="mg-cms-slot" data-mg-content-slot="download_bottom"></div>
 <div class="noprint"><div id="qr"></div><small>આ QR સ્કેન કરતાં આ પેજ ખૂલશે, જ્યાંથી વેબસાઇટ ખોલી શકાય અથવા APK ડાઉનલોડ થાય.</small>
 <button class="btn ghost" id="dl">⬇ QR ઇમેજ (PNG) સેવ કરો</button><button class="btn ghost" onclick="window.print()">🖨 પ્રિન્ટ કરો</button></div>
-<small>સંપર્ક: 6357030198 · 9737296498 · 7016873003</small></div></main>
+<small>સંપર્ક: 6357030198 · 7016873003</small></div></main>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" referrerpolicy="no-referrer"></script><script src="assets/maru-ghar-qr.js"></script>
 <script>
 (function(){
@@ -821,9 +821,9 @@ window.MG_I18N_DICTIONARY={
     "hi": "मेरा घर · गांधीनगर",
     "en": "Maru Ghar · Gandhinagar"
   },
-  "સંપર્ક: 6357030198 · 9737296498 · 7016873003": {
-    "hi": "संपर्क: 6357030198 · 9737296498 · 7016873003",
-    "en": "Contact: 6357030198 · 9737296498 · 7016873003"
+  "સંપર્ક: 6357030198 · 7016873003": {
+    "hi": "संपर्क: 6357030198 · 7016873003",
+    "en": "Contact: 6357030198 · 7016873003"
   },
   "બધી પ્રોપર્ટી": {
     "hi": "सभी प्रॉपर्टी",
@@ -2528,7 +2528,7 @@ Object.assign(window.MG_I18N_DICTIONARY = window.MG_I18N_DICTIONARY || {}, {
   "આ QR સ્કેન કરતાં આ પેજ ખૂલશે, જ્યાંથી વેબસાઇટ ખોલી શકાય અથવા APK ડાઉનલોડ થાય.":{"hi":"इस QR को स्कैन करने पर यह पेज खुलेगा। यहाँ से वेबसाइट खोली जा सकती है या APK डाउनलोड किया जा सकता है।","en":"Scan this QR code to open this page. From here, you can open the website or download the APK when a valid release is available."},
   "⬇ QR ઇમેજ (PNG) સેવ કરો":{"hi":"⬇ QR इमेज (PNG) सेव करें","en":"⬇ Save QR Image (PNG)"},
   "🖨 પ્રિન્ટ કરો":{"hi":"🖨 प्रिंट करें","en":"🖨 Print"},
-  "સંપર્ક: 6357030198 · 9737296498 · 7016873003":{"hi":"संपर्क: 6357030198 · 9737296498 · 7016873003","en":"Contact: 6357030198 · 9737296498 · 7016873003"}
+  "સંપર્ક: 6357030198 · 7016873003":{"hi":"संपर्क: 6357030198 · 7016873003","en":"Contact: 6357030198 · 7016873003"}
 });
 </script>
 <script data-mg-i18n-inline="engine">
@@ -2969,146 +2969,7 @@ Object.assign(window.MG_I18N_DICTIONARY = window.MG_I18N_DICTIONARY || {}, {
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply,{once:true});else apply();
 })();
-</script>');
-  const makePhraseMatcher=sourceMap=>{
-    const keys=Object.keys(sourceMap).filter(Boolean).sort((a,b)=>b.length-a.length);
-    if(!keys.length)return value=>String(value??'');
-    const pattern=new RegExp('(^|[^A-Za-z0-9\\u0900-\\u097F\\u0A80-\\u0AFF])('+keys.map(escapeRegExp).join('|')+')(?=$|[^A-Za-z0-9\\u0900-\\u097F\\u0A80-\\u0AFF])','gu');
-    return value=>String(value??'').replace(pattern,(_match,prefix,phrase)=>prefix+sourceMap[phrase]);
-  };
-  const reverseMap=Object.create(null);
-  for(const [gu,v] of entries){if(v.hi)reverseMap[v.hi]=gu;if(v.en)reverseMap[v.en]=gu;}
-  const toGujaratiRaw=makePhraseMatcher(reverseMap);const _bc=new Map();const toGujarati=v=>{const k=String(v??'');let r=_bc.get(k);if(r===undefined){r=toGujaratiRaw(k);if(_bc.size>4000)_bc.clear();_bc.set(k,r)}return r};
-  const basePhrasePattern=new RegExp('('+entries.map(([gu])=>escapeRegExp(gu)).join('|')+')','u');const _bpt=new Map();const hasBasePhrase=v=>{let r=_bpt.get(v);if(r===undefined){r=basePhrasePattern.test(v);if(_bpt.size>4000)_bpt.clear();_bpt.set(v,r)}return r};
-  const renderers={
-    hi:makePhraseMatcher(Object.fromEntries(entries.filter(([gu,v])=>v.hi).map(([gu,v])=>[gu,v.hi]))),
-    en:makePhraseMatcher(Object.fromEntries(entries.filter(([gu,v])=>v.en).map(([gu,v])=>[gu,v.en])))
-  };
-  const renderUncached=value=>{const l=lang();return l==='gu'?String(value??''):(renderers[l]||renderers.gu||((x)=>String(x??'')))(value);};const _rc=new Map();const render=value=>{const s=String(value??'');const l=lang();if(l==='gu')return s;const k=l+'\u0001'+s;let r=_rc.get(k);if(r===undefined){r=renderUncached(s);if(_rc.size>4000)_rc.clear();_rc.set(k,r)}return r};
-  /* Keep owner-entered property text unchanged, but never exclude an entire page section/card.
-     Buttons and links inside property cards remain translatable. */
-  const isUserContent=el=>!!(el&&el.closest&&el.closest('[data-user-content],[contenteditable="true"],textarea,input,[data-owner-text]'));
-  const isDynamicRecordBodyText=el=>{
-    if(!el||!el.closest)return false;
-    const property=el.closest('.property');
-    if(property&&property.hasAttribute('data-demo'))return false;
-    if(!el.closest('.property,.card,#enquiryList,#listingManager,[data-record-content]'))return false;
-    return !el.closest('button,a,[data-i18n],[data-ui-text]');
-  };
-  const shouldSkipText=n=>{
-    const el=n&&n.parentElement;if(!el)return true;
-    if(el.closest('script,style,noscript,textarea,input,[contenteditable="true"],#mgLanguage,#mgAdminLanguage,[data-user-content],[data-owner-text]'))return true;
-    return isDynamicRecordBodyText(el);
-  };
-  const shouldSkipAttr=el=>{
-    if(!el||!el.closest)return true;
-    if(el.closest('#mgLanguage,#mgAdminLanguage,[data-user-content],[data-owner-text],[contenteditable="true"]'))return true;
-    return isDynamicRecordBodyText(el);
-  };
-  function translateNode(node){
-    if(!node||node.nodeType!==3||shouldSkipText(node))return;
-    const raw=node.nodeValue||'';
-    let state=originals.get(node);
-    if(!state||raw!==state.last){
-      const base=toGujarati(raw);
-      if(base===raw&&!hasBasePhrase(raw)) { originals.delete(node);translatableTextNodes.delete(node);return; }
-      state={base,last:raw};originals.set(node,state);
-    }
-    translatableTextNodes.add(node);
-    const next=render(state.base);
-    state.last=next;
-    if(next!==raw)node.nodeValue=next;
-  }
-  function translateAttrs(el){
-    if(!el||el.nodeType!==1||shouldSkipAttr(el))return;
-    for(const attr of ['placeholder','title','aria-label']){
-      const raw=el.getAttribute(attr);if(raw===null)continue;
-      let state=attrOriginals.get(el);if(!state){state={};attrOriginals.set(el,state);}
-      if(!state[attr]||raw!==state[attr].last){
-        const base=toGujarati(raw);
-        if(base===raw&&!hasBasePhrase(raw)){delete state[attr];continue;}
-        state[attr]={base,last:raw};
-      }
-      const next=render(state[attr].base);state[attr].last=next;
-      if(next!==raw)el.setAttribute(attr,next);
-    }
-    const cached=attrOriginals.get(el);
-    if(cached&&Object.keys(cached).length)translatableAttrElements.add(el);
-  }
-  function scan(root=document.body){
-    if(!root)return;
-    if(root.nodeType===3){translateNode(root);return;}
-    if(root.nodeType===1&&root.closest&&root.closest('#mgLanguage,#mgAdminLanguage'))return;
-    const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
-    let node;while((node=walker.nextNode()))translateNode(node);
-    if(root.querySelectorAll)root.querySelectorAll('button,a,label,[title],[aria-label],[placeholder]').forEach(translateAttrs);
-    if(root.nodeType===1)translateAttrs(root);
-  }
-  let appliedLanguage='';
-  const apply=()=>{
-    const selected=lang();
-    if(!i18nInitialScanDone){
-      scan(document.body);
-      i18nInitialScanDone=true;
-    }else{
-      // Repaint cached Gujarati originals; do not rescan the whole page on every switch.
-      for(const node of translatableTextNodes){
-        if(node.isConnected===false){translatableTextNodes.delete(node);continue;}
-        const state=originals.get(node);if(!state)continue;
-        const next=render(state.base);
-        if(node.nodeValue!==next)node.nodeValue=next;
-        state.last=next;
-      }
-      for(const el of translatableAttrElements){
-        if(el.isConnected===false){translatableAttrElements.delete(el);continue;}
-        translateAttrs(el);
-      }
-    }
-    appliedLanguage=selected;
-    document.documentElement.lang=selected;
-    try{localStorage.setItem('mg_language',selected);}catch(_){}
-  };
-  window.mgI18nText=value=>render(String(value??''));
-  window.mgTranslate=window.mgI18nText;
-  window.mgAdminTranslate=window.mgI18nText;
-  if((document.getElementById('mgAdminLanguage')||document.getElementById('mgLanguage'))&&!window.__mgI18nDialogsBound){
-    window.__mgI18nDialogsBound=true;
-    const nativeAlert=window.alert?.bind(window),nativeConfirm=window.confirm?.bind(window),nativePrompt=window.prompt?.bind(window);
-    if(nativeAlert)window.alert=message=>nativeAlert(window.mgI18nText(message));
-    if(nativeConfirm)window.confirm=message=>nativeConfirm(window.mgI18nText(message));
-    if(nativePrompt)window.prompt=(message,value)=>nativePrompt(window.mgI18nText(message),value);
-  }
-  window.mgSetLanguage=value=>{
-    if(!['gu','hi','en'].includes(value))return false;
-    const s=getSelect();
-    const unchanged=appliedLanguage===value;
-    if(s)s.value=value;
-    try{localStorage.setItem('mg_language',value);}catch(_){}
-    if(unchanged)return true;
-    apply();window.dispatchEvent(new Event('mg-language-changed'));return true;
-  };
-  const select=getSelect();
-  if(select){
-    let saved='gu';try{saved=localStorage.getItem('mg_language')||'gu';}catch(_){}
-    if(['gu','hi','en'].includes(saved))select.value=saved;
-  }
-  const onLanguageChange=event=>{
-    if(event.target?.id!=='mgLanguage'&&event.target?.id!=='mgAdminLanguage')return;
-    const chosen=event.target.value;if(!['gu','hi','en'].includes(chosen))return;
-    window.mgSetLanguage(chosen);
-  };
-  document.addEventListener('change',onLanguageChange,true);
-  if(!window.__mgI18nObserver&&document.body){
-    window.__mgI18nObserver=new MutationObserver(records=>{
-      for(const record of records){
-        if(record.type==='childList')record.addedNodes.forEach(node=>{if(node.nodeType===1)scan(node);else if(node.nodeType===3)translateNode(node);});
-        else if(record.type==='attributes')translateAttrs(record.target);
-      }
-    });
-    window.__mgI18nObserver.observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['placeholder','title','aria-label']});
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply,{once:true});else apply();
-})();</script>
+</script>
 <!-- MG_I18N_INLINE_BUNDLE_END -->
 
 <style id="mg-all-controls-unified-3d-20261117">
