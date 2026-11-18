@@ -28,8 +28,12 @@
    document.querySelectorAll('#properties .property').forEach(card=>{
     if(chosenCity!=='all'&&card.dataset.city!==chosenCity)return;
     const raw=String(card.dataset.location||'').trim();if(!raw||seen.has(raw.toLowerCase()))return;
-    seen.add(raw.toLowerCase());const o=new Option(raw,raw);o.dataset.match=raw;opts.push(o);
+    seen.add(raw.toLowerCase());
+    const option=new Option(raw,raw);option.dataset.match=raw;opts.push(option);
+    // Keep dynamically discovered, real listing areas selectable by the filter itself.
+    area.add(option.cloneNode(true));
    });
+   if(opts.length)area.disabled=false;
    return opts;
   }
   function showCities(){
