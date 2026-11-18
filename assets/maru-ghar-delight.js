@@ -107,27 +107,6 @@
     }, 3200);
   };
 
-  /* ---------- Trust strip ---------- */
-  function addTrust() {
-    if (document.getElementById('mgTrust')) return;
-    var search = document.querySelector('.searchbox');
-    if (!search || !search.parentNode) return;
-    var row = document.createElement('div');
-    row.id = 'mgTrust';
-    row.className = 'mg-trust';
-    [
-      ['verified','✅ ','વેરિફાઇડ લિસ્ટિંગ'],
-      ['owner','🔒 ','માલિકનો નંબર સુરક્ષિત'],
-      ['gujarat-free','🌐 ','આખું ગુજરાત મફત શોધો']
-    ].forEach(function(item){
-      var b=document.createElement('button');
-      b.type='button';b.className='mg-trust-action';b.dataset.mgAction=item[0];
-      b.textContent=item[1]+tr(item[2]);
-      row.appendChild(b);
-    });
-    search.parentNode.insertBefore(row, search.nextSibling);
-  }
-
   function showInfo(title, message) {
     var overlay=document.getElementById('mgInfoOverlay');
     if(!overlay){
@@ -164,21 +143,6 @@
     var all=document.querySelector('.cat[data-cat="all"]');if(all)all.click();
     if(typeof window.filterProps==='function')window.filterProps();
     var list=document.getElementById('listings');if(list)list.scrollIntoView({behavior:'smooth',block:'start'});
-  }
-
-  function wireTrustActions() {
-    document.addEventListener('click',function(e){
-      var b=e.target.closest&&e.target.closest('[data-mg-action]');
-      if(!b)return;
-      var action=b.dataset.mgAction;
-      if(action==='verified'){
-        var v=document.getElementById('fVerified');if(v){v.value='yes';v.dispatchEvent(new Event('change',{bubbles:true}))}
-        if(typeof window.filterProps==='function')window.filterProps();
-        var list=document.getElementById('listings');if(list)list.scrollIntoView({behavior:'smooth',block:'start'});
-      }else if(action==='owner'){
-        showInfo('માલિકનો નંબર સુરક્ષિત','માલિકનો નંબર સામાન્ય મુલાકાતીઓને જાહેર દેખાતો નથી. પસંદ કરેલી પ્રોપર્ટીના સંપર્ક બટનથી જ માલિકનો સંપર્ક કરો.');
-      }else if(action==='gujarat-free'){resetPropertySearch()}
-    });
   }
 
   function addGujaratiTypingHelp() {
@@ -383,8 +347,6 @@
   }
 
   function init() {
-    addTrust();
-    wireTrustActions();
     addGujaratiTypingHelp();
     showSkeleton();
     wireClicks();
