@@ -4,7 +4,7 @@ const lang=()=>{try{return localStorage.getItem('mg_language')||'gu'}catch(_){re
 const safe=v=>{try{const u=new URL(String(v||''));return /^https?:$/.test(u.protocol)?u.href:''}catch(_){return''}};
 let cfg=null,root=null;
 const val=k=>{const l=lang();return(l==='en'&&cfg[k+'En'])||(l==='hi'&&cfg[k+'Hi'])||cfg[k]||''};
-function render(){if(!root)return;root.replaceChildren();if(!cfg||!cfg.enabled)return;const title=val('title'),sub=val('subtitle'),imgs=[safe(cfg.imageUrl),safe(cfg.imageUrl2)].filter(Boolean);if(!title&&!sub&&!imgs.length)return;
+function render(){if(!root)return;root.replaceChildren();if(!cfg||!cfg.enabled)return;const title=val('title'),sub=val('subtitle'),imgs=[safe(cfg.imageUrl),safe(cfg.imageUrl2)].filter(Boolean);if(!title&&!sub&&!imgs.length){root.hidden=true;return}root.hidden=false;
 const wrap=document.createElement('div');wrap.className='mg-admin-pub-wrap';const copy=document.createElement('div');copy.className='mg-admin-pub-copy';
 const names={family:{gu:'MARU GHAR · સપનાનું ઘર',hi:'MARU GHAR · सपनों का घर',en:'MARU GHAR · DREAM HOME'},announcement:{gu:'મહત્વપૂર્ણ સૂચના',hi:'महत्वपूर्ण सूचना',en:'IMPORTANT ANNOUNCEMENT'},offer:{gu:'ખાસ ઓફર',hi:'विशेष ऑफर',en:'SPECIAL OFFER'},feature:{gu:'નવી સુવિધા',hi:'नई सुविधा',en:'NEW FEATURE'},festival:{gu:'શુભેચ્છાઓ',hi:'शुभकामनाएँ',en:'GREETINGS'}};
 const kicker=document.createElement('small');kicker.textContent=(names[cfg.template]||names.family)[lang()]||'MARU GHAR';const h=document.createElement('h2');h.textContent=title;const p=document.createElement('p');p.textContent=sub;copy.append(kicker,h,p);wrap.append(copy);
