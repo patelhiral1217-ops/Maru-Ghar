@@ -11,6 +11,7 @@ on:
       - 'firebase-config.js'
       - 'google-services.json'
       - 'assets/**'
+      - 'firestore.rules'
       - 'scripts/copy-web.mjs'
       - 'package.json'
       - 'firebase.json'
@@ -36,4 +37,4 @@ jobs:
           test -n "$FIREBASE_SERVICE_ACCOUNT" || (echo "Missing FIREBASE_SERVICE_ACCOUNT repository secret" && exit 1)
           printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/firebase-service-account.json"
           export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-service-account.json"
-          firebase deploy --only hosting --project maru-ghar-gandhinagar-8dbe4 --non-interactive
+          firebase deploy --only hosting,firestore:rules --project maru-ghar-gandhinagar-8dbe4 --non-interactive
