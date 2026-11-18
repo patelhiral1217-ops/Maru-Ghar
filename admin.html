@@ -2954,8 +2954,7 @@ window.MG_I18N_DICTIONARY={
   "ફોટો 1 URL":{"hi":"फोटो 1 URL","en":"Photo 1 URL"},
   "ફોટો 2 URL":{"hi":"फोटो 2 URL","en":"Photo 2 URL"}
 };</script>
-<script data-mg-i18n-inline="engine">
-/* Supplemental complete UI translation layer. It only translates known interface phrases;
+<script data-mg-i18n-inline="engine">/* Supplemental complete UI translation layer. It only translates known interface phrases;
    user-entered property/customer content is intentionally excluded. */
 (()=>{
   const dict={
@@ -3308,9 +3307,19 @@ window.MG_I18N_DICTIONARY={
   }
   function scan(root=document.body){
     if(!root)return;
-    if(root.nodeType===3){translateNode(root);return;}
+    /* MutationObserver may pass a script's text node directly. Guard it BEFORE translateNode. */
+    if(root.nodeType===3){
+      if(root.parentElement?.closest('script,style,textarea,pre,code'))return;
+      translateNode(root);return;
+    }
     if(root.nodeType===1&&root.closest&&root.closest('#mgLanguage,#mgAdminLanguage'))return;
-    const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+    if(root.nodeType===1&&root.matches('script,style,textarea,pre,code'))return;
+    const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{
+      acceptNode(node){
+        return node.parentElement?.closest('script,style,textarea,pre,code')
+          ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
+      }
+    });
     let node;while((node=walker.nextNode()))translateNode(node);
     if(root.querySelectorAll)root.querySelectorAll('button,a,label,[title],[aria-label],[placeholder]').forEach(translateAttrs);
     if(root.nodeType===1)translateAttrs(root);
@@ -3379,8 +3388,7 @@ window.MG_I18N_DICTIONARY={
     window.__mgI18nObserver.observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['placeholder','title','aria-label']});
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply,{once:true});else apply();
-})();
-</script>
+})();</script>
 <!-- MG_I18N_INLINE_BUNDLE_END -->
 <script src="assets/maru-ghar-file-mode.js?v=20261102r5"></script>
 <script>
