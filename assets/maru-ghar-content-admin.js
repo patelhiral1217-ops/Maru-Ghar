@@ -7,7 +7,7 @@ import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/
 const ADMIN_UID='yJYiuaUE3KXVLVuWqLyLRH5owQJ3', $=id=>document.getElementById(id), tr=s=>window.mgI18nText?window.mgI18nText(s):s;
 const root=$('mgSiteContentManager');if(!root)return;
 const app=getApps().length?getApp():initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
-const placements={home:[['home_top','Home — સૌથી ઉપર'],['home_after_hero','Home — મોટા બેનર પછી'],['home_before_listings','Home — પ્રોપર્ટી લિસ્ટિંગ પહેલાં'],['home_footer','Home — Footer પહેલાં']],download:[['download_top','Download Page — સૌથી ઉપર'],['download_bottom','Download Page — નીચે']]};
+const placements={home:[['home_top','Home — સૌથી ઉપર'],['home_before_showcase','Home — મુખ્ય બેનર પહેલાં'],['home_showcase','Home — બેનર વિભાગમાં'],['home_after_hero','Home — મોટા બેનર પછી'],['home_before_listings','Home — લિસ્ટિંગ પહેલાં'],['home_listings_heading','Home — લિસ્ટિંગ શીર્ષક પછી'],['home_categories','Home — કેટેગરી બટન પછી'],['home_filters','Home — સર્ચ ફિલ્ટર પછી'],['home_results','Home — પ્રોપર્ટી પરિણામ પછી'],['home_submit','Home — પ્રોપર્ટી ઉમેરવાના ફોર્મ પહેલાં'],['home_account','Home — ગ્રાહક એકાઉન્ટ પહેલાં'],['home_footer','Home — Footer પહેલાં']],download:[['download_top','Download — સૌથી ઉપર'],['download_story','Download — પરિવાર સ્ટોરી પહેલાં'],['download_bottom','Download — નીચે']]};
 let records=[],editingId='',oldMedia=null,previewUrl='';
 const status=$('mgCmsStatus'),list=$('mgCmsList'),mediaInput=$('mgCmsMedia'),say=s=>status.textContent=tr(s);
 const val=id=>$(id).value.trim(),page=()=>$('mgCmsPage').value;
