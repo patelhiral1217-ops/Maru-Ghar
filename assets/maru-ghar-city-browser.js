@@ -34,19 +34,19 @@
   }
   function showCities(){
    const wrap=document.createElement('div');wrap.className='mg-city-browser-grid';
-   [...city.options].forEach(o=>wrap.append(button(o.value==='all'?t('allCities'):o.textContent,o.value===chosenCity,async()=>{
-    if(busy)return;chosenCity=o.value;city.value=chosenCity;chosenArea='all';busy=true;step=2;content.innerHTML='<p class="mg-city-browser-note">'+t('loading')+'</p>';setProgress();
+   [...city.options].forEach(o=>wrap.append(button(o.value==='all'?t('allCities'):o.textContent,o.value===chosenCity,()=>{
+    if(busy)return;
+    chosenCity=o.value;city.value=chosenCity;chosenArea='all';step=2;busy=false;
+    // Move to the area step immediately; the listing query continues in the background.
+    show();
+    let request;
     try{
-     if(typeof window.mgSelectCity==='function') await window.mgSelectCity(chosenCity);
-     else {
-      let done=false;const onLoaded=e=>{if(e.detail?.city===chosenCity)done=true;};
-      window.addEventListener('mg-city-listings-loaded',onLoaded);
-      city.dispatchEvent(new Event('change',{bubbles:true}));
-      await Promise.race([new Promise(resolve=>{const check=()=>{if(done)resolve();else setTimeout(check,150)};check()}),new Promise(resolve=>setTimeout(resolve,12000))]);
-      window.removeEventListener('mg-city-listings-loaded',onLoaded);
-     }
-    }catch(err){console.error('City listing load failed:',err);}
-    busy=false;show();
+     if(typeof window.mgSelectCity==='function') request=window.mgSelectCity(chosenCity);
+     else {city.dispatchEvent(new Event('change',{bubbles:true}));request=Promise.resolve();}
+    }catch(err){console.error('City listing load failed:',err);return;}
+    Promise.resolve(request).then(()=>{
+     if(!modal.hidden&&step===2&&chosenCity===o.value)show();
+    }).catch(err=>console.error('City listing load failed:',err));
    })));
    content.replaceChildren(wrap);
   }
