@@ -72,3 +72,9 @@ if(!home.includes('mg-settings-only-trust-actions-20261118')||!home.includes('ne
 if(!home.includes('event.target.closest(\'#gridSwitch button[data-cols]\')')||!home.includes('event.stopImmediatePropagation()')||!home.includes("grid.style.setProperty('grid-template-columns'"))throw new Error('Delegated 1–4 column switcher must apply grid layout on captured clicks');
 if(!demo.includes('કુલ 10 ડેમો નમૂનાઓ')||!demo.includes('rootObserver.observe'))throw new Error('Demo showcase must expose all ten samples and initialize when listing root is delayed');
 console.log('MARU GHAR DEMO / GRID / SETTINGS REGRESSION PASS — ten unique demo samples, delegated 1–4 column controls, trust buttons restricted to Settings.');
+const gridController=fs.readFileSync('assets/maru-ghar-grid-controller.js','utf8');
+if(!home.includes('assets/maru-ghar-grid-controller.js?v=20261118a'))throw new Error('Independent property column controller is not loaded by the home page');
+for(const term of ["repeat(' + cols + ', minmax(0, 1fr))","grid.style.setProperty('display', 'grid', 'important')","gridObserver.observe(grid, { childList: true })","window.mgSetPropertyColumns = applyColumns"])if(!gridController.includes(term))throw new Error('Independent column controller missing behavior: '+term);
+if(!gridController.includes("closest('#gridSwitch button[data-cols]')"))throw new Error('Independent column controller does not delegate all four buttons');
+console.log('INDEPENDENT PROPERTY COLUMN CONTROLLER PASS — external late-loaded controller applies 1–4 columns and preserves the selected layout after listing refresh.');
+
