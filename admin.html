@@ -276,6 +276,7 @@ function printPropertyPDF(p){const lang=mgCurrentLanguage(),locale=lang==='hi'?'
 }
 :where(button,input[type="button"],input[type="submit"],input[type="reset"],a[role="button"],.btn,.outline,.wa-btn,.contact-wa,.mg-head-action,.mg-chip,.mg-mapbtn,.mg-compare-shortcut,.mg-contact-trigger,.mg-contact-main,.mg-mobile-nav a,.mg-settings-grid button,.admin-shortcuts a,.admin-shortcuts button,.admin-quick a,.admin-quick button,.backup-actions button,.login-submit,.mg-submit-toggle,.mg-tools button,.cats .cat,.searchbox button,.morefilters button,.property-foot a,.property-foot button,.admin-settings>summary,.primary,.approve,.reject):focus-visible{outline:3px solid rgba(218,180,83,.7)!important;outline-offset:3px!important}
 </style>
+<link rel="stylesheet" href="assets/maru-ghar-site-content.css?v=20261118a">
 <script type="module" src="assets/maru-ghar-content-admin.js?v=20261118a"></script>
 </body></html>`);w.document.close();}
 async function review(id,action,button){
@@ -2956,6 +2957,47 @@ window.MG_I18N_DICTIONARY={
    user-entered property/customer content is intentionally excluded. */
 (()=>{
   const dict={
+    '🧩 આખી વેબસાઇટનું કન્ટેન્ટ મેનેજમેન્ટ':'🧩 पूरी वेबसाइट का कंटेंट प्रबंधन|🧩 Manage Website Content',
+    'અહીંથી ફોટા, વીડિયો, લખાણ અને બટન બનાવીને વેબસાઇટના નક્કી કરેલા વિભાગોમાં મૂકો. Preview જોયા પછી Publish કરો. કોઈ પ્રોપર્ટી લિસ્ટિંગ બદલાશે નહીં.':'यहाँ फोटो, वीडियो, टेक्स्ट और बटन बनाकर वेबसाइट के चुने हुए सेक्शन में रखें। Preview देखकर Publish करें। कोई प्रॉपर्टी लिस्टिंग नहीं बदलेगी।|Add photos, videos, text and buttons to selected website sections. Preview before publishing. Property listings will not be changed.',
+    'પેજ પસંદ કરો':'पेज चुनें|Choose Page',
+    'મુખ્ય Home Page':'मुख्य Home Page|Main Home Page',
+    'ક્યાં બતાવવું':'कहाँ दिखाना है|Placement',
+    'Home — સૌથી ઉપર':'Home — सबसे ऊपर|Home — Top',
+    'Home — મોટા બેનર પછી':'Home — बड़े बैनर के बाद|Home — After Hero Banner',
+    'Home — પ્રોપર્ટી લિસ્ટિંગ પહેલાં':'Home — प्रॉपर्टी लिस्टिंग से पहले|Home — Before Listings',
+    'Home — Footer પહેલાં':'Home — Footer से पहले|Home — Before Footer',
+    'Download Page — સૌથી ઉપર':'Download Page — सबसे ऊपर|Download Page — Top',
+    'Download Page — નીચે':'Download Page — नीचे|Download Page — Bottom',
+    'શીર્ષક — ગુજરાતી':'शीर्षक — गुजराती|Title — Gujarati',
+    'શીર્ષક — હિન્દી':'शीर्षक — हिंदी|Title — Hindi',
+    'લખાણ — ગુજરાતી':'टेक्स्ट — गुजराती|Text — Gujarati',
+    'લખાણ — હિન્દી':'टेक्स्ट — हिंदी|Text — Hindi',
+    'ફોટો અથવા વીડિયો પસંદ કરો':'फोटो या वीडियो चुनें|Choose Photo or Video',
+    'વૈકલ્પિક બટનનું લખાણ — ગુજરાતી':'वैकल्पिक बटन टेक्स्ट — गुजराती|Optional Button Text — Gujarati',
+    'બટન ક્લિક થાય ત્યારે ખોલવાની HTTPS લિંક':'बटन क्लिक करने पर खुलने वाला HTTPS लिंक|HTTPS Link to Open on Button Click',
+    'દેખાડવું?':'दिखाएँ?|Visible?',
+    'હા — Publish':'हाँ — Publish|Yes — Publish',
+    'ના — છુપાવો':'नहीं — छिपाएँ|No — Hide',
+    'ડિઝાઇન':'डिज़ाइन|Style',
+    '👁 Preview જુઓ':'👁 Preview देखें|👁 Preview',
+    '💾 Publish / Save':'💾 Publish / Save|💾 Publish / Save',
+    'નવું લખાણ':'नया कंटेंट|New Content',
+    '📚 બનાવેલા વિભાગો':'📚 बनाए गए सेक्शन|📚 Created Sections',
+    'હજુ કોઈ વિભાગ બનાવ્યો નથી.':'अभी कोई सेक्शन नहीं बनाया गया है।|No content blocks created yet.',
+    'નવું વિભાગ બનાવવા તૈયાર.':'नया सेक्शन बनाने के लिए तैयार।|Ready to create a new section.',
+    'Preview તૈયાર છે. Publish કરતાં પહેલાં તપાસો.':'Preview तैयार है। Publish करने से पहले जाँचें।|Preview is ready. Review it before publishing.',
+    'ફેરફાર સેવ કરો':'बदलाव सेव करें|Save Changes',
+    'વિભાગ Edit કરવા ખુલ્યો છે.':'सेक्शन Edit करने के लिए खुला है।|Section opened for editing.',
+    'આ વિભાગ અને તેનો ફોટો/વીડિયો Delete કરવો છે?':'क्या यह सेक्शन और इसका फोटो/वीडियो Delete करना है?|Delete this section and its photo/video?',
+    'વિભાગ Delete થયો.':'सेक्शन Delete हो गया।|Content block deleted.',
+    'વિભાગ સફળતાપૂર્વક Publish / Save થયો.':'सेक्शन सफलतापूर्वक Publish / Save हुआ।|Content block published/saved successfully.',
+    'ઓછામાં ઓછું લખાણ અથવા ફોટો/વીડિયો ઉમેરો.':'कम से कम टेक्स्ट या फोटो/वीडियो जोड़ें।|Add at least some text or a photo/video.',
+    'સેવ થઈ રહ્યું છે…':'सेव हो रहा है…|Saving…',
+    'લોડ થઈ રહ્યું છે…':'लोड हो रहा है…|Loading…',
+    'Edit':'Edit|Edit',
+    'Hide':'छिपाएँ|Hide',
+    'Show':'दिखाएँ|Show',
+    'Delete':'Delete|Delete'
     '🧪 ફોટો/વિડિયો અપલોડ ટેસ્ટ':'🧪 फोटो/वीडियो अपलोड टेस्ट|🧪 Photo/Video Upload Test',
     'આ વિભાગથી ફોટો/વિડિયો Cloudinaryમાં ટેસ્ટ થશે; કોઈ પ્રોપર્ટી અથવા Firestore રેકોર્ડ ઉમેરાશે નહીં. ટેસ્ટ ફાઇલ Cloudinaryમાં રહેશે, જરૂર પડે તો નીચે Delete કરો.':'इससे फोटो/वीडियो Cloudinary में टेस्ट होंगे; कोई प्रॉपर्टी या Firestore रिकॉर्ड नहीं जुड़ेगा। टेस्ट फ़ाइल Cloudinary में रहेगी; ज़रूरत न हो तो नीचे Delete करें।|This tests photo/video uploads to Cloudinary; no property or Firestore record is created. Test files remain in Cloudinary; delete them below if no longer needed.',
     'ટેસ્ટ ફોટો (JPG/PNG/WEBP, મહત્તમ 8 MB)':'टेस्ट फोटो (JPG/PNG/WEBP, अधिकतम 8 MB)|Test Photo (JPG/PNG/WEBP, max 8 MB)',
