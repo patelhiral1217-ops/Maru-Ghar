@@ -76,7 +76,7 @@ const discovery=fs.readFileSync('assets/maru-ghar-discovery.js','utf8');
 if(!discovery.includes("$('mgApplyRangeFilters').addEventListener('click'"))throw new Error('Apply range filters button is not connected to an action');
 const gridController=fs.readFileSync('assets/maru-ghar-grid-controller.js','utf8');
 if(!home.includes('assets/maru-ghar-grid-controller.js?v=20261118c'))throw new Error('Independent property column controller is not loaded by the home page');
-for(const n of ['1','2','3','4'])if(!home.includes('data-cols="'+n+'" onclick="window.mgSetPropertyColumns&&window.mgSetPropertyColumns(\\''+n+'\\')'))throw new Error('Column '+n+' button is not directly connected to the controller');
+for(const n of ['1','2','3','4'])if(!new RegExp(`data-cols="${n}" onclick="window\\.mgSetPropertyColumns&&window\\.mgSetPropertyColumns\\('${n}'\\)"`).test(home))throw new Error('Column '+n+' button is not directly connected to the controller');
 if(!gridController.includes("document.querySelector('#mgDemoShowcase .mg-demo-grid')"))throw new Error('Demo showcase grid is not connected to the column controller');
 if(!gridController.includes("observer.observe(document.body, { childList: true, subtree: true })"))throw new Error('Dynamically inserted demo showcase is not observed');
 for(const term of ["repeat(' + cols + ', minmax(0, 1fr))","grid.style.setProperty('display', 'grid', 'important')","window.mgSetPropertyColumns = applyColumns","card.classList.contains('mg-demo-card')"])if(!gridController.includes(term))throw new Error('Independent column controller missing behavior: '+term);
