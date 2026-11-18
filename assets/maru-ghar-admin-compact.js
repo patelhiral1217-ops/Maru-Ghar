@@ -45,7 +45,7 @@ function init(){
   });
   tile.append(button);menu.append(tile);
  });
- settings.insertBefore(menu,settings.firstChild);
+ const summary=settings.querySelector(':scope > summary');settings.insertBefore(menu,summary?.nextSibling||settings.firstChild);
  /* Remove the old Add Property / Reports container from the visible page. */
  main.replaceChildren();
  /* Clicking Settings in the top bar opens the Settings drawer. */
