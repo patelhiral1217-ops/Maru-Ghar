@@ -41,13 +41,14 @@
    [...city.options].forEach(o=>wrap.append(button(o.value==='all'?t('allCities'):o.textContent,o.value===chosenCity,()=>{
     if(busy)return;
     chosenCity=o.value;city.value=chosenCity;chosenArea='all';step=2;busy=false;
-    // Move to the area step immediately; the listing query continues in the background.
-    show();
     let request;
     try{
+     // Start the city change first so its area options are populated synchronously.
      if(typeof window.mgSelectCity==='function') request=window.mgSelectCity(chosenCity);
      else {city.dispatchEvent(new Event('change',{bubbles:true}));request=Promise.resolve();}
     }catch(err){console.error('City listing load failed:',err);return;}
+    // Move to the area step immediately; the listing query continues in the background.
+    show();
     Promise.resolve(request).then(()=>{
      if(!modal.hidden&&step===2&&chosenCity===o.value)show();
     }).catch(err=>console.error('City listing load failed:',err));
