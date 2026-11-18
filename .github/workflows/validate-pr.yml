@@ -1,0 +1,28 @@
+name: Validate Maru Ghar changes
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'admin.html'
+      - 'privacy.html'
+      - 'download.html'
+      - 'assets/**'
+      - 'scripts/**'
+      - 'smoke-check.mjs'
+      - 'ui-regression-check.mjs'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'firestore.rules'
+      - '.github/workflows/validate-pr.yml'
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
