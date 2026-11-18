@@ -5,6 +5,12 @@ function init(){
  if(!dashboard||!main||!settings||settings.dataset.mgSectionButtons==='1')return;
  settings.dataset.mgSectionButtons='1';
 
+ /* Keep the complete admin workspace together in one responsive Settings container. */
+ const all=document.createElement('div');all.id='mgAllAdminSettings';all.className='mg-all-admin-settings';
+ const body=document.createElement('div');body.className='mg-all-admin-settings-body';
+ body.append(main,settings);
+ all.append(body);dashboard.append(all);
+
  /* Preserve the three primary destinations in the compact top bar. */
  if(nav){
   /* Keep every existing working shortcut; only add enquiries when that target exists and is missing. */
