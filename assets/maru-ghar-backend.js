@@ -336,8 +336,8 @@ async function init() {
     // Admin shortcut buttons exist in the page but stay hidden for everyone except the signed-in admin.
     onAuthStateChanged(auth,u=>{const ok=!!u&&!u.isAnonymous&&u.uid===ADMIN_UID;['adminNavLink','adminQuick'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('hidden',!ok)})});
     // Do not block the first property render on secondary settings/city metadata reads.
-    const cityOptionsLoad=loadCities();
-    const siteSettingsLoad=loadSettings();
+    loadCities();
+    loadSettings();
     const cityEl=document.getElementById('cityFilter');
     window.mgSelectCity=async(nextCity)=>{
       currentCity=String(nextCity||'all');
