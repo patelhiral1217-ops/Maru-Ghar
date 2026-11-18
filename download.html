@@ -15,7 +15,7 @@ small{color:var(--muted)}.note{font-size:13px;color:#b42318;display:none}@media 
 #okBtn{width:100%;margin:8px 0 12px}
 #downloadStatus{display:block;color:var(--muted);font-size:13px;margin:8px 0}#apkNote:not([hidden]){display:block}
 #mgAppStory{margin:20px auto 8px;padding:14px;border:1px solid #d7b65f;border-radius:16px;background:linear-gradient(145deg,#fff8e4,#e8ece9);color:#173b30;text-align:center}
-#mgAppStory img{display:block;width:100%;max-height:250px;object-fit:cover;border-radius:12px;box-shadow:0 8px 20px #0002}
+#mgAppStory .mg-story-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}#mgAppStory img{display:block;width:100%;max-height:250px;min-width:0;object-fit:cover;border-radius:12px;box-shadow:0 8px 20px #0002}#mgAppStory img:only-child{grid-column:1/-1}@media(max-width:560px){#mgAppStory .mg-story-gallery{grid-template-columns:1fr}}
 #mgAppStory h2{margin:12px 0 6px;color:#173b30}
 #mgAppStory p{margin:0;line-height:1.6}
 @media(max-width:560px){.store-grid{grid-template-columns:1fr}.store-option{min-height:48px}}
@@ -34,7 +34,7 @@ small{color:var(--muted)}.note{font-size:13px;color:#b42318;display:none}@media 
 <button class="btn confirm" id="okBtn" type="button" disabled>OK — ડાઉનલોડ કરો</button>
 <small id="apkHelp">APK ઇન્સ્ટોલ કરતી વખતે ફોન "અજાણ્યા સ્ત્રોતમાંથી ઇન્સ્ટોલ" ની પરવાનગી માંગે તો મંજૂર કરો.</small>
 <section id="mgAppStory" hidden>
-  <img id="mgAppStoryImage" alt="Maru Ghar family story" loading="lazy">
+  <div class="mg-story-gallery"><img id="mgAppStoryImage" alt="Maru Ghar family story 1" loading="lazy"><img id="mgAppStoryImage2" alt="Maru Ghar family story 2" loading="lazy" hidden></div>
   <h2 id="mgAppStoryTitle"></h2>
   <p id="mgAppStorySubtitle"></p>
 </section>
@@ -77,7 +77,7 @@ $('okBtn').addEventListener('click',()=>{
   if(selected==='apk')location.assign(links[selected]);
   else window.open(links[selected],'_blank','noopener,noreferrer');
 });
-async function loadPublicConfig(){
+let mgPublicStoryConfig=null;\nfunction renderAppStory(){const cfg=mgPublicStoryConfig;if(!cfg||!cfg.enabled)return;const l=localStorage.getItem('mg_language')||'gu';const title=(l==='en'&&cfg.titleEn)||(l==='hi'&&cfg.titleHi)||cfg.title||'';const subtitle=(l==='en'&&cfg.subtitleEn)||(l==='hi'&&cfg.subtitleHi)||cfg.subtitle||'';const image=safeUrl(cfg.imageUrl),image2=safeUrl(cfg.imageUrl2);const box=$('mgAppStory'),one=$('mgAppStoryImage'),two=$('mgAppStoryImage2');if(image){one.src=image;one.hidden=false}else one.hidden=true;if(image2){two.src=image2;two.hidden=false}else two.hidden=true;if(title){$('mgAppStoryTitle').textContent=String(title).slice(0,100);box.hidden=false}if(subtitle){$('mgAppStorySubtitle').textContent=String(subtitle).slice(0,300);box.hidden=false}if(image||image2)box.hidden=false}\nasync function loadPublicConfig(){
   if(location.protocol==='file:'){renderChoices();return;}
   try{
     const {firebaseConfig,isFirebaseConfigured}=await import('./firebase-config.js');
@@ -91,17 +91,12 @@ async function loadPublicConfig(){
       links.play=safeUrl(cfg.playStoreUrl,'play.google.com');
       links.apple=safeUrl(cfg.appStoreUrl,'apps.apple.com');
       links.apk=safeUrl(cfg.apkUrl);
-      if(cfg.enabled){
-        const img=safeUrl(cfg.imageUrl);
-        if(img){$('mgAppStoryImage').src=img;$('mgAppStory').hidden=false;}
-        if(cfg.title){$('mgAppStoryTitle').textContent=String(cfg.title).slice(0,100);$('mgAppStory').hidden=false;}
-        if(cfg.subtitle){$('mgAppStorySubtitle').textContent=String(cfg.subtitle).slice(0,300);$('mgAppStory').hidden=false;}
-      }
+      mgPublicStoryConfig=cfg;renderAppStory();
     }
   }catch(e){console.warn('Public app download settings unavailable:',e);}
   renderChoices();
 }
-window.addEventListener('mg-language-changed',renderChoices);
+window.addEventListener('mg-language-changed',()=>{renderChoices();renderAppStory()});
 renderChoices();loadPublicConfig();
 </script>
 
