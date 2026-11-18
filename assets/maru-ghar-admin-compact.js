@@ -49,7 +49,7 @@ function init(){
  }
  document.querySelectorAll('.admin-shortcuts a[href^="#"]').forEach(a=>a.addEventListener('click',()=>{
   const target=$(a.getAttribute('href'));if(!target)return;
-  let p=target.parentElement;while(p){if(p.tagName==='DETAILS')p.open=true;p=p.parentElement;}
+  if(target.tagName==='DETAILS')target.open=true;let p=target.parentElement;while(p){if(p.tagName==='DETAILS')p.open=true;p=p.parentElement;}
  }));
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
