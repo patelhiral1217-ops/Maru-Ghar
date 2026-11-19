@@ -19,8 +19,11 @@ jobs:
           npm install
           npm run copy-web
           npm test
+      - name: Install Android SDK platform
+        run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
       - name: Add Android project
         run: |
+          npm install @capacitor/cli@^7 @capacitor/core@^7 @capacitor/android@^7
           npx cap add android
           cp google-services.json android/app/google-services.json
           M=android/app/src/main/AndroidManifest.xml
