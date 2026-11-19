@@ -64,26 +64,27 @@ for(const slot of ['home_mid','home_bottom','home_listings_heading','home_catego
 
 console.log('UI REGRESSION CHECK PASS — shared Gujarati/Hindi/English dictionaries across all four pages and property panel open/close logic. This is a code-level test, not a full browser/device test.');
 
-// Maru Ghar user-requested regression: ten demo cards, delegated 1–4 columns, trust actions only in Settings.
+// Maru Ghar user-requested regression: ten demo cards, direct 1–2 columns, trust actions only in Settings.
 const demo=fs.readFileSync('assets/maru-ghar-demo-showcase.js','utf8');
 const demoIds=[...demo.matchAll(/\{id:'([^']+)'/g)].map(x=>x[1]);
 if(demoIds.length!==10||new Set(demoIds).size!==10)throw new Error('Demo showcase must contain exactly ten unique demo properties');
 if(!home.includes('mg-settings-only-trust-actions-20261118')||!home.includes('new MutationObserver(clean)'))throw new Error('Trust strip must be removed outside Settings, including dynamically inserted duplicates');
 if(!home.includes('data-cols="1" onclick=')||!home.includes('data-cols="2" onclick=')||home.includes('data-cols="3" onclick=')||home.includes('data-cols="4" onclick='))throw new Error('Only 1 and 2 column buttons must call the direct grid controller');
 if(!demo.includes('કુલ 10 ડેમો નમૂનાઓ')||!demo.includes('rootObserver.observe'))throw new Error('Demo showcase must expose all ten samples and initialize when listing root is delayed');
-console.log('MARU GHAR DEMO / GRID / SETTINGS REGRESSION PASS — ten unique demo samples, delegated 1–4 column controls, trust buttons restricted to Settings.');
+console.log('MARU GHAR DEMO / GRID / SETTINGS REGRESSION PASS — ten unique demo samples, direct 1–2 column controls, trust buttons restricted to Settings.');
 const discovery=fs.readFileSync('assets/maru-ghar-discovery.js','utf8');
 if(!discovery.includes("const applyRangeButton=$('mgApplyRangeFilters')")||!discovery.includes("if(applyRangeButton)applyRangeButton.addEventListener('click'"))throw new Error('Apply range filters button is not connected to an action');
 const gridController=fs.readFileSync('assets/maru-ghar-grid-controller.js','utf8');
 if(!home.includes('assets/maru-ghar-grid-controller.js?v=20261118c'))throw new Error('Independent property column controller is not loaded by the home page');
-for(const n of ['1','2','3','4'])if(!new RegExp(`data-cols="${n}" onclick="window\\.mgSetPropertyColumns&&window\\.mgSetPropertyColumns\\('${n}'\\)"`).test(home))throw new Error('Column '+n+' button is not directly connected to the controller');
+for(const n of ['1','2'])if(!new RegExp(`data-cols="${n}" onclick="window\\.mgSetPropertyColumns&&window\\.mgSetPropertyColumns\\('${n}'\\)"`).test(home))throw new Error('Column '+n+' button is not directly connected to the controller');
+if(home.includes('data-cols="3" onclick=')||home.includes('data-cols="4" onclick='))throw new Error('3 and 4 column buttons must be removed');
 if(!gridController.includes("document.querySelector('#mgDemoShowcase .mg-demo-grid')"))throw new Error('Demo showcase grid is not connected to the column controller');
 if(!gridController.includes("observer.observe(document.body, { childList: true, subtree: true })"))throw new Error('Dynamically inserted demo showcase is not observed');
 for(const term of ["repeat(' + cols + ', minmax(0, 1fr))","grid.style.setProperty('display', 'grid', 'important')","window.mgSetPropertyColumns = applyColumns","card.classList.contains('mg-demo-card')"])if(!gridController.includes(term))throw new Error('Independent column controller missing behavior: '+term);
 if(gridController.includes("document.addEventListener('click'"))throw new Error('Competing delegated capture handler must not intercept direct column button actions');
 // Execute the actual controller against both real grid types and verify every column choice.
 const makeStyle=()=>({values:{},setProperty(k,v){this.values[k]=v}});
-const buttons=['1','2','3','4'].map(n=>({dataset:{cols:n},classList:{toggle(){}},setAttribute(k,v){this[k]=v}}));
+const buttons=['1','2'].map(n=>({dataset:{cols:n},classList:{toggle(){}},setAttribute(k,v){this[k]=v}}));
 const makeCard=cls=>({classList:{contains:x=>x===cls},style:makeStyle()});
 const liveGrid={dataset:{},style:makeStyle(),children:[makeCard('property'),makeCard('property')]};
 const demoGrid={dataset:{},style:makeStyle(),children:[makeCard('mg-demo-card'),makeCard('mg-demo-card')]};
@@ -92,10 +93,10 @@ const fakeDoc={readyState:'complete',body:{},getElementById:id=>id==='properties
 const fakeWindow={addEventListener(){}};
 const fakeLocal={setItem(k,v){this[k]=v},getItem(k){return this[k]||null}};
 vm.runInNewContext(gridController,{window:fakeWindow,document:fakeDoc,localStorage:fakeLocal,MutationObserver:class{observe(){}},requestAnimationFrame:fn=>fn(),Array,Set,String});
-for(const n of ['1','2','3','4']){
+for(const n of ['1','2']){
  const expected='repeat('+n+', minmax(0, 1fr))';
  if(fakeWindow.mgSetPropertyColumns(n)!==true||liveGrid.dataset.cols!==n||demoGrid.dataset.cols!==n||liveGrid.style.values['grid-template-columns']!==expected||demoGrid.style.values['grid-template-columns']!==expected||fakeLocal.mg_cols!==n)throw new Error('Column controller failed on live/demo grids for '+n);
 }
-console.log('INDEPENDENT PROPERTY COLUMN CONTROLLER PASS — all four choices update live listings and the visible demo showcase.');
+console.log('INDEPENDENT PROPERTY COLUMN CONTROLLER PASS — 1 and 2 column choices update live listings and the visible demo showcase.');
 
 
