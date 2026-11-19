@@ -78,16 +78,19 @@ async function processPriceDrops(cursor) {
         tx.create(noteRef, {
           type: 'price_drop', listingId: listing.id,
           message: `મનપસંદ પ્રોપર્ટીનો ભાવ ઘટ્યો: ₹${oldPrice.toLocaleString('en-IN')} → ₹${newPrice.toLocaleString('en-IN')} (₹${(oldPrice-newPrice).toLocaleString('en-IN')} ઓછો).`,
-          oldPrice, newPrice, createdAt: admin.firestore.FieldValue.serverTimestamp(), read: false
+          oldPrice, newPrice, createdAt: admin.firestore.FieldValue.serverTimestamp(), read: false, pushSent: false
         });
         created = true;
       });
-      if (!created) continue;
-      const userTokens = await userRef.collection('pushTokens').get();
-      if (!userTokens.empty) {
-        await sendTokens(userTokens.docs,
-          { title: 'મારું ઘર — પ્રોપર્ટીનો ભાવ ઘટ્યો', body: `તમારી મનપસંદ પ્રોપર્ટીનો ભાવ ₹${(oldPrice-newPrice).toLocaleString('en-IN')} ઘટ્યો છે.` },
-          { listingId: listing.id, kind: 'price_drop' });
+      const note = await noteRef.get();
+      if (!note.data()?.pushSent) {
+        const userTokens = await userRef.collection('pushTokens').get();
+        if (!userTokens.empty) {
+          const delivered = await sendTokens(userTokens.docs,
+            { title: 'મારું ઘર — પ્રોપર્ટીનો ભાવ ઘટ્યો', body: `તમારી મનપસંદ પ્રોપર્ટીનો ભાવ ₹${(oldPrice-newPrice).toLocaleString('en-IN')} ઘટ્યો છે.` },
+            { listingId: listing.id, kind: 'price_drop' });
+          if (delivered > 0) await noteRef.update({ pushSent: true, pushSentAt: admin.firestore.FieldValue.serverTimestamp() });
+        }
       }
     }
     processed++;
