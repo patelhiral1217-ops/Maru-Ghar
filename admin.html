@@ -194,7 +194,7 @@ button:active,.primary:active,.approve:active,.reject:active{transform:translate
 </div></details>
 <details class="mg-cms-items-fold"><summary>📚 બનાવેલા વિભાગો — ખેંચીને ક્રમ અથવા જગ્યા બદલો</summary><div id="mgCmsList" class="mg-cms-list">લોડ થઈ રહ્યા છે…</div></details>
 <details class="mg-cms-items-fold"><summary>🗑️ કચરાપેટી — Delete થયેલું પાછું લાવો</summary><p class="muted">અહીંથી Restore કરશો તો સામગ્રી ફરી વેબસાઇટ પર ઉપલબ્ધ થશે.</p><div id="mgCmsTrashList" class="mg-cms-list">લોડ થઈ રહ્યું છે…</div></details></section><section class="panel"><h2>વેબસાઇટ લિંક (શેર કરવા માટે)</h2><p class="muted">તમારી વેબસાઇટની લિંક અહીં એકવાર લખો. લોકો લિસ્ટિંગ શેર કરશે ત્યારે અને પોસ્ટરમાં આ લિંક આવશે.</p><div class="formgrid"><label class="wide">વેબસાઇટ લિંક<input id="siteUrlInput" type="url" placeholder="https://..." maxlength="200"></label><button class="primary wide" id="saveSiteUrl" type="button">લિંક સેવ કરો</button></div><div id="siteStatus" class="status" role="status"></div></section><section class="panel"><h2>🚩 ફરિયાદો</h2><div id="reportList" class="muted">લોડ થઈ રહ્યું છે…</div></section>
-<section class="panel"><h2>શહેરો</h2><p class="muted">નવું શહેર અહીં ઉમેરો એટલે વેબ અને APK બંનેમાં તરત દેખાશે (નવી APK બનાવવાની જરૂર નથી).</p><div class="formgrid"><label>શહેરનું નામ (ગુજરાતીમાં)<input id="newCityName" maxlength="60"></label><label>અંગ્રેજી નામ (વૈકલ્પિક)<input id="newCityEn" maxlength="60" placeholder="Surat"></label><button class="primary wide" id="addCityBtn" type="button">શહેર ઉમેરો</button></div><div id="cityList" class="muted" style="margin-top:10px"></div><div id="cityStatus" class="status" role="status"></div><hr style="opacity:.2;margin:14px 0"><p class="muted">જૂની લિસ્ટિંગમાં શહેર લખેલું ન હોય તો એકવાર આ બટન દબાવો:</p><button class="primary" id="fixCityBtn" type="button">જૂની લિસ્ટિંગમાં શહેર = ગાંધીનગર સેટ કરો</button></section>
+<section class="panel"><h2>શહેરો અને વિસ્તારો</h2><p class="muted">શરૂઆતમાં અમદાવાદ અને ગાંધીનગર રહેશે. અહીંથી નવા શહેરો અને દરેક શહેરના વિસ્તારો ઉમેરો અથવા કાઢી શકો છો. ફેરફાર વેબસાઇટ અને APK બંનેમાં લાગુ થશે.</p><div class="formgrid"><label>શહેરનું નામ (ગુજરાતીમાં)<input id="newCityName" maxlength="60"></label><label>અંગ્રેજી નામ (વૈકલ્પિક)<input id="newCityEn" maxlength="60" placeholder="Surat"></label><button class="primary wide" id="addCityBtn" type="button">શહેર ઉમેરો</button></div><div id="cityList" class="muted" style="margin-top:10px"></div><hr style="opacity:.2;margin:14px 0"><div class="formgrid"><label>વિસ્તાર ઉમેરવા માટે શહેર પસંદ કરો<select id="cityAreaCity"></select></label><label>નવા વિસ્તારનું નામ<input id="newAreaName" maxlength="80" placeholder="જેમ કે કુડાસણ / સેક્ટર 21"></label><button class="primary wide" id="addAreaBtn" type="button">વિસ્તાર ઉમેરો</button></div><div id="cityAreaList" class="muted" style="margin-top:10px"></div><div id="cityStatus" class="status" role="status"></div><hr style="opacity:.2;margin:14px 0"><p class="muted">જૂની લિસ્ટિંગમાં શહેર લખેલું ન હોય તો એકવાર આ બટન દબાવો:</p><button class="primary" id="fixCityBtn" type="button">જૂની લિસ્ટિંગમાં શહેર = ગાંધીનગર સેટ કરો</button></section>
 <section class="panel backup-panel" id="dataBackupSettings"><div class="backup-heading"><div class="backup-icon" aria-hidden="true">🗄️</div><div><div class="backup-eyebrow">DATA SAFETY CENTER</div><h2>ડેટા બેકઅપ અને રીસ્ટોર</h2><p class="muted">તમારી પ્રોપર્ટી લિસ્ટિંગનો બેકઅપ ડાઉનલોડ કરો અથવા અગાઉની બેકઅપ ફાઇલમાંથી રેકોર્ડ પાછા ઉમેરો.</p></div></div><div class="backup-actions"><button id="backupListings" class="primary backup-main" type="button">⬇️ ડેટાનો બેકઅપ લો (JSON)</button><button id="restoreListings" class="backup-restore" type="button">↻ બેકઅપ રીસ્ટોર કરો</button><input id="restoreFile" type="file" accept="application/json,.json" hidden></div><div class="backup-note"><strong>ધ્યાન આપો:</strong> રીસ્ટોર કરતી વખતે હાલના ID ધરાવતા રેકોર્ડ overwrite નહીં થાય; ફક્ત નવા રેકોર્ડ ઉમેરાશે.</div><div id="exportStatus" class="status" role="status"></div></section>
 <section class="panel"><h2>🔐 માલિકના મોબાઇલ નંબરની ખાનગી સુરક્ષા</h2><p class="muted">જૂની લિસ્ટિંગમાં રહેલા માલિકના મોબાઇલ નંબરને અલગ ખાનગી રેકોર્ડમાં ખસેડો. પહેલાં ખાનગી રેકોર્ડ સાચવાશે, ત્યારબાદ જાહેર લિસ્ટિંગમાંથી નંબર દૂર થશે.</p><button id="migrateOwnerContacts" class="primary" type="button">જૂના મોબાઇલ નંબર સુરક્ષિત કરો</button><div id="contactMigrationStatus" class="status" role="status"></div></section><section class="panel"><h2>🛠️ સિસ્ટમ Error Log</h2><p class="muted">એડમિન પેનલમાં થયેલી JavaScript ભૂલોનો મર્યાદિત રેકોર્ડ. કોઈ પાસવર્ડ કે ફોર્મનું ખાનગી લખાણ સાચવાતું નથી.</p><button id="refreshErrorLog" class="primary" type="button">Error Log લોડ કરો</button> <button id="exportErrorLog" class="primary" type="button">Error Log JSON ડાઉનલોડ</button><div id="errorLogList" class="muted"></div></section>
 </details>
@@ -476,25 +476,105 @@ $('restoreFile').addEventListener('change',async e=>{const file=e.target.files?.
 $('backupListings').addEventListener('click',async()=>{const b=$('backupListings');b.disabled=true;$('exportStatus').textContent='બેકઅપ તૈયાર થઈ રહ્યો છે…';try{const rows=await getAllListingRows();const payload={schemaVersion:1,createdAt:new Date().toISOString(),project:'maru-ghar-gandhinagar',listings:rows};const url=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='maru-ghar-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);$('exportStatus').textContent=rows.length+' લિસ્ટિંગનો JSON બેકઅપ ડાઉનલોડ થયો. તેને સુરક્ષિત જગ્યાએ રાખો.'}catch(e){$('exportStatus').textContent='બેકઅપ નિષ્ફળ: '+(e.code||e.message)}finally{b.disabled=false}});
 async function loadEnquiries(){const box=$('enquiryList');try{const snap=await getDocs(query(collection(db,'enquiries'),orderBy('createdAt','desc'),limit(100)));box.replaceChildren();if(snap.empty){box.textContent='હાલ કોઈ પૂછપરછ નથી.';return}snap.docs.forEach(d=>{const x=d.data(),row=document.createElement('div');row.style.cssText='padding:12px;margin:8px 0;border:1px solid #ffffff30;border-radius:10px';const title=document.createElement('b');title.textContent=x.customerName+' · '+x.customerPhone;const detail=document.createElement('p');detail.textContent=(x.listingTitle||x.listingId)+' — '+(x.message||'કોઈ વધારાનો સંદેશ નથી')+' · સ્થિતિ: '+(x.status||'pending');const call=document.createElement('a');call.href='tel:'+x.customerPhone;call.textContent='કોલ કરો';call.style.marginRight='12px';const wa=document.createElement('a');wa.href='https://wa.me/'+String(x.customerPhone).replace(/\D/g,'');wa.target='_blank';wa.rel='noopener noreferrer';wa.textContent='WhatsApp';const done=document.createElement('button');done.type='button';done.textContent='સંપર્ક થયો';done.style.marginLeft='12px';done.addEventListener('click',async()=>{try{await updateDoc(d.ref,{status:'contacted'});await loadEnquiries()}catch(e){$('enquiryStatus').textContent='ફેરફાર નિષ્ફળ: '+(e.code||e.message)}});const follow=document.createElement('button');follow.type='button';follow.textContent='ફોલો-અપ બાકી';follow.style.marginLeft='8px';follow.addEventListener('click',async()=>{try{await updateDoc(d.ref,{status:'follow_up'});await loadEnquiries()}catch(e){$('enquiryStatus').textContent='ફેરફાર નિષ્ફળ: '+(e.code||e.message)}});const plan=document.createElement('button');plan.type='button';plan.textContent='તારીખ/નોંધ';plan.style.marginLeft='8px';plan.addEventListener('click',async()=>{const date=prompt('ફોલો-અપ તારીખ (YYYY-MM-DD):',x.followUpDate||'');if(date===null)return;const note=prompt('ફોલો-અપ નોંધ:',x.adminNote||'');if(note===null)return;try{await updateDoc(d.ref,{status:'follow_up',followUpDate:date.trim().slice(0,10),adminNote:note.trim().slice(0,500)});await loadEnquiries()}catch(e){$('enquiryStatus').textContent='ફેરફાર નિષ્ફળ: '+(e.code||e.message)}});const complete=document.createElement('button');complete.type='button';complete.textContent='પૂર્ણ';complete.style.marginLeft='8px';complete.addEventListener('click',async()=>{try{await updateDoc(d.ref,{status:'completed'});await loadEnquiries()}catch(e){$('enquiryStatus').textContent='ફેરફાર નિષ્ફળ: '+(e.code||e.message)}});row.append(title,detail,call,wa,done,follow,plan,complete);box.append(row)})}catch(e){box.textContent='પૂછપરછ લોડ ન થઈ: '+(e.code||e.message);}}
 
-// ---- Cities (admin-managed; shown on website and APK without rebuilding) ----
-const DEFAULT_CITIES=[["ગાંધીનગર", "Gandhinagar"], ["અમદાવાદ", "Ahmedabad"], ["સુરત", "Surat"], ["વડોદરા", "Vadodara"], ["રાજકોટ", "Rajkot"], ["ભાવનગર", "Bhavnagar"], ["જામનગર", "Jamnagar"], ["જૂનાગઢ", "Junagadh"], ["આણંદ", "Anand"], ["નડિયાદ", "Nadiad"], ["મહેસાણા", "Mehsana"], ["કલોલ", "Kalol"], ["મોરબી", "Morbi"], ["સુરેન્દ્રનગર", "Surendranagar"], ["ભરૂચ", "Bharuch"], ["વાપી", "Vapi"], ["નવસારી", "Navsari"], ["પાટણ", "Patan"], ["ગોધરા", "Godhra"], ["પોરબંદર", "Porbandar"], ["ભુજ", "Bhuj"], ["અમરેલી", "Amreli"], ["પાલનપુર", "Palanpur"], ["હિંમતનગર", "Himatnagar"]];
+// ---- Admin-managed city and area catalog ----
+const DEFAULT_CITIES=[["અમદાવાદ","Ahmedabad"],["ગાંધીનગર","Gandhinagar"]];
 let customCities=[];
+const cityDocId=name=>encodeURIComponent(name).replace(/%/g,'_');
 async function loadCityAdmin(){
-  try{const s=await getDocs(collection(db,'cities'));customCities=s.docs.map(d=>({id:d.id,...d.data()}))}catch(e){console.warn(e);customCities=[]}
-  const m=new Map(DEFAULT_CITIES.map(([n])=>[n,n]));customCities.forEach(c=>m.set(c.name,c.name));
-  const sel=$('adminCityField');if(sel){const cur=sel.value||'ગાંધીનગર';sel.replaceChildren();[...m.keys()].forEach(n=>sel.appendChild(new Option(n,n)));sel.value=m.has(cur)?cur:'ગાંધીનગર'}
-  const box=$('cityList');if(box){box.replaceChildren();if(!customCities.length){box.textContent='તમે ઉમેરેલા શહેર: હજી કોઈ નથી (24 મુખ્ય શહેર પહેલેથી છે).'}else{box.append('તમે ઉમેરેલા શહેર: ');customCities.forEach(c=>{const b=document.createElement('button');b.type='button';b.className='reject';b.style.margin='3px';b.textContent=c.name+' ✕';b.addEventListener('click',async()=>{if(!confirm(c.name+' શહેર કાઢી નાખવું છે? (તેની લિસ્ટિંગ રહેશે)'))return;try{await deleteDoc(doc(db,'cities',c.id));await loadCityAdmin()}catch(e){$('cityStatus').textContent='નિષ્ફળ: '+(e.code||e.message)}});box.appendChild(b)})}}
+  try{
+    let snap=await getDocs(collection(db,'cities'));
+    const catalogRef=doc(db,'settings','cityCatalog');
+    const catalog=await getDoc(catalogRef);
+    if(!catalog.exists()){
+      const keep=new Set(DEFAULT_CITIES.map(([name])=>name));
+      for(const d of snap.docs){if(!keep.has(d.data().name))await deleteDoc(d.ref);}
+      for(const [name,nameEn] of DEFAULT_CITIES){
+        await setDoc(doc(db,'cities',cityDocId(name)),{name,nameEn,areas:[],createdAt:serverTimestamp()},{merge:true});
+      }
+      await setDoc(catalogRef,{initialized:true,updatedAt:serverTimestamp()});
+      snap=await getDocs(collection(db,'cities'));
+    }else if(snap.empty){
+      for(const [name,nameEn] of DEFAULT_CITIES)await setDoc(doc(db,'cities',cityDocId(name)),{name,nameEn,areas:[],createdAt:serverTimestamp()},{merge:true});
+      snap=await getDocs(collection(db,'cities'));
+    }
+    customCities=snap.docs.map(d=>({id:d.id,...d.data()})).filter(c=>c.name);
+    const names=customCities.map(c=>c.name).sort((a,b)=>a.localeCompare(b,'gu'));
+    const listingCity=$('adminCityField');
+    if(listingCity){
+      const current=listingCity.value;
+      listingCity.replaceChildren(...names.map(n=>new Option(n,n)));
+      listingCity.value=names.includes(current)?current:(names.includes('ગાંધીનગર')?'ગાંધીનગર':names[0]||'');
+    }
+    const cityList=$('cityList');
+    if(cityList){
+      cityList.replaceChildren();
+      if(!customCities.length)cityList.textContent='હજુ કોઈ શહેર નથી.';
+      customCities.forEach(c=>{
+        const row=document.createElement('div');row.style.cssText='display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:8px;margin:6px 0;border:1px solid #ffffff25;border-radius:10px';
+        const label=document.createElement('b');label.textContent=c.name+(c.nameEn?' · '+c.nameEn:'');
+        const remove=document.createElement('button');remove.type='button';remove.className='reject';remove.textContent='શહેર કાઢો';
+        remove.addEventListener('click',async()=>{
+          if(!confirm(c.name+' શહેર કાઢી નાખવું છે? તેની જૂની લિસ્ટિંગ ડિલીટ નહીં થાય.'))return;
+          try{await deleteDoc(doc(db,'cities',c.id));$('cityStatus').textContent=c.name+' શહેર યાદીમાંથી કાઢી નાખ્યું.';await loadCityAdmin();}
+          catch(e){$('cityStatus').textContent='શહેર કાઢી શકાયું નથી: '+(e.code||e.message);}
+        });
+        row.append(label,remove);cityList.append(row);
+      });
+    }
+    const areaCity=$('cityAreaCity');
+    if(areaCity){
+      const keep=areaCity.value;
+      areaCity.replaceChildren(...names.map(n=>new Option(n,n)));
+      areaCity.value=names.includes(keep)?keep:(names.includes('ગાંધીનગર')?'ગાંધીનગર':names[0]||'');
+      renderCityAreas();
+    }
+  }catch(e){console.error('City admin load failed',e);$('cityStatus').textContent='શહેરોની યાદી લોડ થઈ નથી: '+(e.code||e.message);}
 }
+function renderCityAreas(){
+  const city=$('cityAreaCity')?.value,box=$('cityAreaList');if(!box)return;
+  box.replaceChildren();
+  const record=customCities.find(c=>c.name===city),areas=Array.isArray(record?.areas)?record.areas:[];
+  if(!city){box.textContent='પહેલાં શહેર ઉમેરો.';return;}
+  if(!areas.length){box.textContent=city+' માટે હજી કોઈ અલગથી ઉમેરેલો વિસ્તાર નથી. તમે ઉપરથી વિસ્તાર ઉમેરી શકો છો.';return;}
+  areas.forEach((area,index)=>{
+    const b=document.createElement('button');b.type='button';b.className='reject';b.style.margin='4px';b.textContent=area+' ✕';
+    b.addEventListener('click',async()=>{
+      if(!confirm(city+'માંથી "'+area+'" વિસ્તાર કાઢવો છે?'))return;
+      try{
+        const next=areas.filter((_,i)=>i!==index);
+        await updateDoc(doc(db,'cities',record.id),{areas:next});
+        $('cityStatus').textContent=area+' વિસ્તાર કાઢી નાખ્યો.';await loadCityAdmin();
+      }catch(e){$('cityStatus').textContent='વિસ્તાર કાઢી શકાયો નથી: '+(e.code||e.message);}
+    });
+    box.append(b);
+  });
+}
+$('cityAreaCity')?.addEventListener('change',renderCityAreas);
 $('addCityBtn').addEventListener('click',async()=>{
   const name=$('newCityName').value.trim(),en=$('newCityEn').value.trim();
-  if(name.length<2){$('cityStatus').textContent='શહેરનું નામ લખો.';return}
-  try{await setDoc(doc(db,'cities',encodeURIComponent(name).replace(/%/g,'_')),{name,nameEn:en,createdAt:serverTimestamp()});$('newCityName').value='';$('newCityEn').value='';$('cityStatus').textContent=name+' ઉમેરાયું. વેબ અને APK બંનેમાં હવે પસંદગીમાં દેખાશે.';await loadCityAdmin()}
-  catch(e){$('cityStatus').textContent='નિષ્ફળ: '+(e.code||e.message)+' (નવા Rules Publish કર્યા?)';console.error(e)}
+  if(name.length<2){$('cityStatus').textContent='શહેરનું નામ લખો.';return;}
+  if(customCities.some(c=>c.name.toLowerCase()===name.toLowerCase())){$('cityStatus').textContent='આ શહેર પહેલેથી છે.';return;}
+  try{
+    await setDoc(doc(db,'cities',cityDocId(name)),{name,nameEn:en,areas:[],createdAt:serverTimestamp()});
+    $('newCityName').value='';$('newCityEn').value='';
+    $('cityStatus').textContent=name+' શહેર ઉમેરાયું.';await loadCityAdmin();
+  }catch(e){$('cityStatus').textContent='શહેર ઉમેરાયું નથી: '+(e.code||e.message)+' (Firestore Rules તપાસો.)';console.error(e);}
+});
+$('addAreaBtn').addEventListener('click',async()=>{
+  const city=$('cityAreaCity').value,area=$('newAreaName').value.trim(),record=customCities.find(c=>c.name===city);
+  if(!city||!record){$('cityStatus').textContent='પહેલાં શહેર પસંદ કરો.';return;}
+  if(area.length<2){$('cityStatus').textContent='વિસ્તારનું નામ લખો.';return;}
+  const areas=Array.isArray(record.areas)?record.areas:[];
+  if(areas.some(a=>String(a).toLowerCase()===area.toLowerCase())){$('cityStatus').textContent='આ વિસ્તાર પહેલેથી ઉમેરેલો છે.';return;}
+  try{
+    await setDoc(doc(db,'cities',record.id),{name:record.name,nameEn:record.nameEn||'',areas:[...areas,area],createdAt:record.createdAt||serverTimestamp()},{merge:true});
+    $('newAreaName').value='';$('cityStatus').textContent=area+' વિસ્તાર '+city+'માં ઉમેરાયો.';await loadCityAdmin();
+  }catch(e){$('cityStatus').textContent='વિસ્તાર ઉમેરાયો નથી: '+(e.code||e.message)+' (Firestore Rules તપાસો.)';console.error(e);}
 });
 $('fixCityBtn').addEventListener('click',async()=>{
   if(!confirm('જે લિસ્ટિંગમાં શહેર લખેલું નથી તે બધીમાં "ગાંધીનગર" સેટ કરવું છે?'))return;
-  try{const s=await getDocs(collection(db,'listings'));let n=0;for(const d of s.docs){if(!d.data().city){await updateDoc(d.ref,{city:'ગાંધીનગર'});n++}}$('cityStatus').textContent=n+' લિસ્ટિંગમાં શહેર સેટ થયું.';await loadListings()}
-  catch(e){$('cityStatus').textContent='નિષ્ફળ: '+(e.code||e.message)+' (નવા Rules Publish કર્યા?)';console.error(e)}
+  try{const s=await getDocs(collection(db,'listings'));let n=0;for(const d of s.docs){if(!d.data().city){await updateDoc(d.ref,{city:'ગાંધીનગર'});n++;}}$('cityStatus').textContent=n+' લિસ્ટિંગમાં શહેર સેટ થયું.';await loadListings();}
+  catch(e){$('cityStatus').textContent='નિષ્ફળ: '+(e.code||e.message)+' (નવા Rules Publish કર્યા?)';console.error(e);}
 });
 
 // ---- Site link + complaints ----
