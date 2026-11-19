@@ -1,8 +1,8 @@
-/* Maru Ghar — one column controller for live listings and the visible demo showcase.
-   The 1–4 controls must visibly work even before real listings have been added. */
+/* Maru Ghar — horizontal swipe controller for live listings and the visible demo showcase.
+   The 1–2 controls set how many property cards are visible side by side. */
 (function () {
   'use strict';
-  const allowed = new Set(['1', '2', '3', '4']);
+  const allowed = new Set(['1', '2']);
   let selected = '2';
   let observer = null;
   let scheduled = false;
@@ -18,21 +18,30 @@
 
   function applyToGrid(grid, cols) {
     grid.dataset.cols = cols;
-    grid.style.setProperty('display', 'grid', 'important');
-    grid.style.setProperty('grid-template-columns', 'repeat(' + cols + ', minmax(0, 1fr))', 'important');
-    grid.style.setProperty('grid-auto-flow', 'row', 'important');
-    grid.style.setProperty('grid-auto-columns', 'minmax(0, 1fr)', 'important');
-    grid.style.setProperty('gap', cols === '1' ? '16px' : cols === '2' ? '12px' : cols === '3' ? '9px' : '7px', 'important');
+    // Keep all property cards in one horizontal track. Native touch scrolling lets
+    // the user swipe left/right without interfering with normal page scrolling.
+    grid.style.setProperty('display', 'flex', 'important');
+    grid.style.setProperty('flex-flow', 'row nowrap', 'important');
+    grid.style.setProperty('overflow-x', 'auto', 'important');
+    grid.style.setProperty('overflow-y', 'hidden', 'important');
+    grid.style.setProperty('-webkit-overflow-scrolling', 'touch', 'important');
+    grid.style.setProperty('scroll-snap-type', 'x mandatory', 'important');
+    grid.style.setProperty('overscroll-behavior-x', 'contain', 'important');
+    grid.style.setProperty('gap', cols === '1' ? '14px' : '12px', 'important');
     grid.style.setProperty('align-items', 'stretch', 'important');
+    grid.style.setProperty('padding-bottom', '10px', 'important');
+    grid.style.setProperty('scrollbar-width', 'thin', 'important');
 
     Array.from(grid.children).forEach(function (card) {
       const isCard = card.classList && (card.classList.contains('property') || card.classList.contains('mg-demo-card'));
       if (!isCard) return;
-      card.style.setProperty('width', 'auto', 'important');
+      card.style.setProperty('flex', cols === '1' ? '0 0 86%' : '0 0 calc(50% - 6px)', 'important');
+      card.style.setProperty('width', cols === '1' ? '86%' : 'calc(50% - 6px)', 'important');
       card.style.setProperty('min-width', '0', 'important');
       card.style.setProperty('max-width', 'none', 'important');
-      card.style.setProperty('grid-column', 'auto', 'important');
-      card.style.setProperty('justify-self', 'stretch', 'important');
+      card.style.setProperty('scroll-snap-align', 'start', 'important');
+      card.style.setProperty('scroll-snap-stop', 'normal', 'important');
+      card.style.setProperty('align-self', 'stretch', 'important');
     });
   }
 
