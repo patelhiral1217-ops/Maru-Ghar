@@ -76,7 +76,7 @@ async function processPriceDrops(cursor) {
         if (prior.exists) return;
         tx.create(noteRef, {
           type: 'price_drop', listingId: listing.id,
-          message: `મનપસંદ પ્રોપર્ટીનો ભાવ ઘટ્યો: ${d.price || oldPrice} → ${d.price || newPrice} (₹${(oldPrice-newPrice).toLocaleString('en-IN')} ઓછો).`,
+          message: `મનપસંદ પ્રોપર્ટીનો ભાવ ઘટ્યો: ₹${oldPrice.toLocaleString('en-IN')} → ₹${newPrice.toLocaleString('en-IN')} (₹${(oldPrice-newPrice).toLocaleString('en-IN')} ઓછો).`,
           oldPrice, newPrice, createdAt: admin.firestore.FieldValue.serverTimestamp(), read: false
         });
         created = true;
