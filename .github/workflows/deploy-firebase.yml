@@ -12,6 +12,8 @@ on:
       - 'google-services.json'
       - 'assets/**'
       - 'firestore.rules'
+      - 'firestore.indexes.json'
+      - 'functions/**'
       - 'scripts/copy-web.mjs'
       - 'package.json'
       - 'firebase.json'
@@ -42,5 +44,35 @@ jobs:
           printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/firebase-service-account.json"
           export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-service-account.json"
           firebase deploy --only hosting --project maru-ghar-gandhinagar-8dbe4 --non-interactive
+      - name: Deploy Firestore rules and indexes when changed
+        if: github.event_name == 'push'
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          if git diff --name-only HEAD^ HEAD | grep -Eq '^(firestore.rules|firestore.indexes.json); then
+            printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/firebase-service-account.json"
+            export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-service-account.json"
+            firebase deploy --only firestore:rules,firestore:indexes --project maru-ghar-gandhinagar-8dbe4 --non-interactive
+          else
+            echo "No Firestore rules/index changes; deployment skipped."
+          fi
+      - name: Deploy Cloud Functions when changed
+        if: github.event_name == 'push'
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+        run: |
+          if git diff --name-only HEAD^ HEAD | grep -q '^functions/'; then
+            npm install --prefix functions --no-audit --no-fund
+            if [ -n "$CLOUDINARY_API_KEY" ] && [ -n "$CLOUDINARY_API_SECRET" ]; then
+              printf "CLOUDINARY_API_KEY=%s\\nCLOUDINARY_API_SECRET=%s\\n" "$CLOUDINARY_API_KEY" "$CLOUDINARY_API_SECRET" > functions/.env
+            fi
+            printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/firebase-service-account.json"
+            export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-service-account.json"
+            firebase deploy --only functions --project maru-ghar-gandhinagar-8dbe4 --non-interactive
+          else
+            echo "No Cloud Functions changes; deployment skipped."
+          fi
 
 # Re-deploy restored approved Maru Ghar appearance.
