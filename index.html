@@ -4511,3 +4511,35 @@ body #mgTrust,body .mg-trust{display:none!important}
  .top.mg-top-banner .mg-tagline-background img{object-position:center 48%!important}
 }
 </style>
+
+<style id="mg-mobile-banner-heading-refine-20261119">
+/* Shorter mobile hero; retain full-bleed photo background. */
+@media(max-width:600px){
+ .top.mg-top-banner{
+  height:132px!important;min-height:132px!important;max-height:132px!important;
+ }
+ .top.mg-top-banner .mg-tagline{
+  height:132px!important;min-height:132px!important;max-height:132px!important;
+ }
+ .top.mg-top-banner .mg-tagline-background img{
+  width:100%!important;height:100%!important;object-fit:cover!important;
+  object-position:center center!important;
+ }
+}
+/* Keep the Property Listings heading on one clean line instead of wrapping. */
+#listings .section-head{display:flex!important;align-items:center!important;gap:10px!important;flex-wrap:nowrap!important}
+#listings .section-head>div:first-child{flex:0 0 auto!important;min-width:max-content!important;width:auto!important}
+#listings .mg-listing-title-button{
+ display:inline-flex!important;align-items:center!important;justify-content:center!important;
+ width:auto!important;max-width:none!important;min-width:max-content!important;
+ white-space:nowrap!important;word-break:keep-all!important;overflow-wrap:normal!important;
+ font-size:clamp(17px,2.2vw,24px)!important;line-height:1.2!important;
+ padding:7px 0!important;
+}
+#listings #count{flex:0 1 auto!important;min-width:0!important;white-space:nowrap!important}
+@media(max-width:600px){
+ #listings .section-head{gap:7px!important;margin-bottom:12px!important}
+ #listings .mg-listing-title-button{font-size:17px!important;letter-spacing:0!important}
+ #listings #count{font-size:10px!important;padding:6px 8px!important}
+}
+</style>
