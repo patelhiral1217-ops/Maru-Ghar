@@ -3,6 +3,7 @@ const fn=fs.readFileSync('functions/index.js','utf8');
 const rules=fs.readFileSync('firestore.rules','utf8');
 const extras=fs.readFileSync('assets/maru-ghar-extras.js','utf8');
 const admin=fs.readFileSync('admin.html','utf8');
+const worker=fs.readFileSync('functions/free-notification-worker.js','utf8');
 const errors=[];
 if(!fn.includes("require('crypto')"))errors.push('Cloud Function must import crypto for deterministic notification IDs');
 if(!fn.includes('context.eventId'))errors.push('Price-drop notifications must use the Firestore event ID for retry idempotency');
@@ -19,5 +20,11 @@ if(!extras.includes("{read:true}"))errors.push('Customer notification read actio
 if(!admin.includes("doc(db,'adminTokens',t.value)"))errors.push('Admin FCM token registration missing');
 if(!admin.includes("PN.addListener('registration'"))errors.push('Android FCM registration listener missing');
 if(!admin.includes("PN.requestPermissions()"))errors.push('Android notification permission request missing');
+if(!worker.includes("collection('adminTokens')")||!worker.includes('sendEachForMulticast'))errors.push('Free scheduled worker must send admin FCM notifications');
+if(!worker.includes("collectionGroup('favorites')")||!worker.includes("collection('pushTokens')"))errors.push('Free scheduled worker must notify saved-property customers');
+if(!worker.includes('notificationWorkerState')||!worker.includes('lastCheckedAt'))errors.push('Free worker cursor state missing');
+if(!worker.includes('previousPriceNum')||!worker.includes('priceUpdatedAt'))errors.push('Free worker price-drop tracking missing');
+if(!rules.includes('match /users/{uid}/pushTokens/{token}'))errors.push('Customer FCM token security rules missing');
+if(!rules.includes("'previousPriceNum', 'priceNum', 'priceUpdatedAt'"))errors.push('Previous price must be authorized only in admin price updates');
 if(errors.length){console.error('NOTIFICATION AUDIT FAILED');errors.forEach(e=>console.error(' - '+e));process.exit(1)}
 console.log('NOTIFICATION AUDIT PASS — retry-idempotent price-drop alerts, approved-listing guard, exact wishlist targeting, bounded Firestore batches, UID-private notification access, read-only customer updates, and admin FCM registration markers.');
