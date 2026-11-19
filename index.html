@@ -4485,9 +4485,27 @@ body #mgTrust,body .mg-trust{display:none!important}
 }
 </style>
 
-<style id="mg-banner-landscape-photo-and-showcase-fallback-20261119">
-.top.mg-top-banner .mg-tagline-background{background:#102b28!important}
-.top.mg-top-banner .mg-tagline-background img{object-fit:cover!important;object-position:center 48%!important}
+<style id="mg-banner-full-photo-metal-title-fix-20261119">
+/* Full photograph visible: match the banner's shape to the landscape photo instead of zoom-cropping it. */
+.top.mg-top-banner{height:auto!important;min-height:0!important;padding:0!important;background:#102b28!important}
+.top.mg-top-banner .mg-tagline{height:auto!important;min-height:0!important;aspect-ratio:2.44/1!important;padding:14px 18px!important}
+.top.mg-top-banner .mg-tagline-background{background:linear-gradient(135deg,#173b32,#071d20)!important}
+.top.mg-top-banner .mg-tagline-background img{object-fit:contain!important;object-position:center center!important;background:#102b28!important}
+.top.mg-top-banner .mg-tagline-copy strong{
+ background:linear-gradient(180deg,#fff9dd 0%,#f2d47a 22%,#b8c3c9 48%,#fff0bd 65%,#bd8d31 82%,#fff4d0 100%)!important;
+ -webkit-background-clip:text!important;background-clip:text!important;
+ color:transparent!important;-webkit-text-fill-color:transparent!important;
+ -webkit-text-stroke:1px #5b451e!important;
+ text-shadow:0 1px 0 #fff7d8,0 2px 0 #c6a34d,0 4px 0 #8b6827,0 6px 0 #53616a,0 8px 0 #5c451e,0 11px 16px rgba(0,0,0,.92)!important;
+ filter:drop-shadow(0 2px 2px rgba(0,0,0,.75))!important;
+}
+@media(max-width:600px){
+ .top.mg-top-banner .mg-tagline{aspect-ratio:2/1!important;padding:8px 9px!important}
+ .top.mg-top-banner .mg-tagline-copy strong{font-size:clamp(27px,7.4vw,39px)!important;-webkit-text-stroke:.7px #5b451e!important}
+}
 .mg-showcase-frame{background:#173b32!important}
-.mg-showcase-slide{background-color:#173b32!important;background-size:cover!important;background-position:center 48%!important}
+.mg-showcase-slide{background-color:#173b32!important;background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important}
+#mgDemoShowcase .mg-demo-photo{background:linear-gradient(135deg,#173b32,#e7ece7)!important}
+#mgDemoShowcase .mg-demo-photo img{object-fit:contain!important;background:#e7ece7!important}
+#mgDemoDetail .mg-detail-gallery img{object-fit:contain!important;background:#e7ece7!important}
 </style>
