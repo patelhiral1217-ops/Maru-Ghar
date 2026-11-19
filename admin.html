@@ -318,7 +318,7 @@ if(action==='propertypdf'){printPropertyPDF(selectedProperty);return}
   const price=prompt('નવો ભાવ / ભાડું લખો:',p.price||'');if(price===null)return;
   const raw=prompt('ફિલ્ટર અને ભાવ ઘટાડાની સૂચના માટે માત્ર આંકડામાં નવો ભાવ લખો (જેમ કે 15000).',String(p.priceNum||''));if(raw===null)return;
   const n=Number(raw.replace(/,/g,''));if(!Number.isFinite(n)||n<0){alert('યોગ્ય આંકડાકીય ભાવ લખો.');return;}
-  try{await updateDoc(doc(db,'listings',id),{price:price.trim().slice(0,60),priceNum:n,priceUpdatedAt:serverTimestamp()});await loadListings()}catch(e){$('dashStatus').textContent='ભાવ બદલાયો નહીં: '+(e.code||e.message);console.error(e)}
+  try{await updateDoc(doc(db,'listings',id),{price:price.trim().slice(0,60),previousPriceNum:Number(p.priceNum||0),priceNum:n,priceUpdatedAt:serverTimestamp()});await loadListings()}catch(e){$('dashStatus').textContent='ભાવ બદલાયો નહીં: '+(e.code||e.message);console.error(e)}
   return}
 if(action==='editoffer'){
   const p=allListings.find(x=>x.id===id);if(!p)return;
