@@ -122,7 +122,7 @@
  function init(){
   const listing=document.getElementById('listings');if(!listing)return;
   const existing=document.getElementById('mgDemoShowcase');
-  if(existing){const grid=existing.querySelector('.mg-demo-grid');if(grid&&grid.children.length===samples.length&&existing.querySelector('.mg-family-feature'))return;existing.remove();}
+  if(existing){const grid=existing.querySelector('.mg-demo-grid');existing.querySelectorAll('.mg-family-feature').forEach(node=>node.remove());if(grid&&grid.children.length===samples.length)return;existing.remove();}
   const section=document.createElement('section');section.id='mgDemoShowcase';section.innerHTML='<div class="mg-demo-head"><h2>પસંદગીની પ્રોપર્ટી — ડેમો</h2><span class="mg-demo-note">કુલ 10 ડેમો નમૂનાઓ · ફક્ત પ્રદર્શન માટે, વાસ્તવિક લિસ્ટિંગ નથી</span></div><div class="mg-demo-grid">'+samples.map(card).join('')+'</div>'
   listing.parentNode.insertBefore(section,listing);
   const timers=new Map(),indices=new Map(),paused=new Set();
