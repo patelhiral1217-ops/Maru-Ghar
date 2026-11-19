@@ -80,7 +80,7 @@ for(const n of ['1','2'])if(!new RegExp(`data-cols="${n}" onclick="window\\.mgSe
 if(home.includes('data-cols="3" onclick=')||home.includes('data-cols="4" onclick='))throw new Error('3 and 4 column buttons must be removed');
 if(!gridController.includes("document.querySelector('#mgDemoShowcase .mg-demo-grid')"))throw new Error('Demo showcase grid is not connected to the column controller');
 if(!gridController.includes("observer.observe(document.body, { childList: true, subtree: true })"))throw new Error('Dynamically inserted demo showcase is not observed');
-for(const term of ["repeat(' + cols + ', minmax(0, 1fr))","grid.style.setProperty('display', 'grid', 'important')","window.mgSetPropertyColumns = applyColumns","card.classList.contains('mg-demo-card')"])if(!gridController.includes(term))throw new Error('Independent column controller missing behavior: '+term);
+for(const term of ["grid.style.setProperty('display', 'flex', 'important')","grid.style.setProperty('overflow-x', 'auto', 'important')","grid.style.setProperty('scroll-snap-type', 'x mandatory', 'important')","window.mgSetPropertyColumns = applyColumns","card.classList.contains('mg-demo-card')"])if(!gridController.includes(term))throw new Error('Independent column controller missing behavior: '+term);
 if(gridController.includes("document.addEventListener('click'"))throw new Error('Competing delegated capture handler must not intercept direct column button actions');
 // Execute the actual controller against both real grid types and verify every column choice.
 const makeStyle=()=>({values:{},setProperty(k,v){this.values[k]=v}});
@@ -95,8 +95,8 @@ const fakeLocal={setItem(k,v){this[k]=v},getItem(k){return this[k]||null}};
 vm.runInNewContext(gridController,{window:fakeWindow,document:fakeDoc,localStorage:fakeLocal,MutationObserver:class{observe(){}},requestAnimationFrame:fn=>fn(),Array,Set,String});
 for(const n of ['1','2']){
  const expected='repeat('+n+', minmax(0, 1fr))';
- if(fakeWindow.mgSetPropertyColumns(n)!==true||liveGrid.dataset.cols!==n||demoGrid.dataset.cols!==n||liveGrid.style.values['grid-template-columns']!==expected||demoGrid.style.values['grid-template-columns']!==expected||fakeLocal.mg_cols!==n)throw new Error('Column controller failed on live/demo grids for '+n);
+ if(fakeWindow.mgSetPropertyColumns(n)!==true||liveGrid.dataset.cols!==n||demoGrid.dataset.cols!==n||liveGrid.style.values.display!=='flex'||demoGrid.style.values.display!=='flex'||liveGrid.style.values['overflow-x']!=='auto'||demoGrid.style.values['overflow-x']!=='auto'||liveGrid.children[0].style.values.flex!==(n==='1'?'0 0 86%':'0 0 calc(50% - 6px)')||demoGrid.children[0].style.values.flex!==(n==='1'?'0 0 86%':'0 0 calc(50% - 6px)')||fakeLocal.mg_cols!==n)throw new Error('Horizontal swipe controller failed on live/demo grids for '+n);
 }
-console.log('INDEPENDENT PROPERTY COLUMN CONTROLLER PASS — 1 and 2 column choices update live listings and the visible demo showcase.');
+console.log('HORIZONTAL PROPERTY SWIPE CONTROLLER PASS — 1 and 2 visible-card choices update live listings and the visible demo showcase.');
 
 
