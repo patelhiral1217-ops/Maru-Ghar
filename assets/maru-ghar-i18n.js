@@ -2415,3 +2415,28 @@ window.MG_I18N_DICTIONARY={
   "ફોટો 1 URL":{"hi":"फोटो 1 URL","en":"Photo 1 URL"},
   "ફોટો 2 URL":{"hi":"फोटो 2 URL","en":"Photo 2 URL"}
 };
+
+Object.assign(window.MG_I18N_DICTIONARY,{
+"વધુ વિકલ્પો":{"hi":"अधिक विकल्प","en":"More options"},
+"આખી વેબસાઇટના ઉપલબ્ધ વિભાગોમાં લખાણ, ફોટા અને વીડિયો મૂકો. કમ્પ્યુટર પર વિભાગને માઉસથી ખેંચીને જગ્યા પર Drop કરો; મોબાઇલમાં જગ્યા પર ટેપ કરો. Preview પછી Publish કરો.":{"hi":"पूरी वेबसाइट के उपलब्ध सेक्शन में टेक्स्ट, फोटो और वीडियो रखें। कंप्यूटर पर माउस से सेक्शन को खींचकर जगह पर छोड़ें; मोबाइल में सही जगह टैप करें। प्रीव्यू के बाद प्रकाशित करें।","en":"Add text, photos and videos to available website sections. On a computer, drag a section with the mouse and drop it into position; on mobile, tap the desired position. Preview before publishing."},
+"＋ નવું લખાણ / ફોટો ઉમેરો":{"hi":"＋ नया टेक्स्ट / फोटो जोड़ें","en":"＋ Add Text / Photo"},
+"નીચેની જગ્યાઓ વેબસાઇટના જુદા જુદા ભાગો છે. બનાવેલો વિભાગ અહીં ખેંચીને મૂકો અથવા મોબાઇલમાં યોગ્ય જગ્યા પસંદ કરો.":{"hi":"नीचे दिए गए स्थान वेबसाइट के अलग-अलग हिस्से हैं। बनाए गए सेक्शन को यहाँ खींचकर छोड़ें या मोबाइल पर सही जगह चुनें।","en":"The locations below represent different parts of the website. Drag a created section onto a location, or tap the desired location on mobile."},
+"✍️ લખાણ / ફોટો બનાવો અને Edit કરો":{"hi":"✍️ टेक्स्ट / फोटो बनाएँ और संपादित करें","en":"✍️ Create / Edit Text & Photo"},
+"📚 બનાવેલા વિભાગો — ખેંચીને ક્રમ અથવા જગ્યા બદલો":{"hi":"📚 बनाए गए सेक्शन — खींचकर क्रम या जगह बदलें","en":"📚 Created Sections — Drag to reorder or move"},
+"🗑️ કચરાપેટી — Delete થયેલું પાછું લાવો":{"hi":"🗑️ कूड़ेदान — हटाई गई सामग्री वापस लाएँ","en":"🗑️ Trash — Restore Deleted Content"},
+"અહીંથી Restore કરશો તો સામગ્રી ફરી વેબસાઇટ પર ઉપલબ્ધ થશે.":{"hi":"यहाँ से Restore करने पर सामग्री फिर वेबसाइट पर उपलब्ध होगी।","en":"Restore content here to make it available on the website again."},
+"ફોટા અને લખાણ મૂકવાની જગ્યાઓ":{"hi":"फोटो और टेक्स्ट रखने के स्थान","en":"Photo and text placement areas"},
+"કમ્પ્યુટર પર માઉસથી ખેંચો":{"hi":"कंप्यूटर पर माउस से खींचें","en":"Drag with the mouse on a computer"},
+"વિભાગ નવી જગ્યાએ મૂકાયો.":{"hi":"सेक्शन नई जगह पर रख दिया गया।","en":"Section moved to the new location."},
+"ક્રમ Drag & Dropથી બદલાયો.":{"hi":"क्रम Drag & Drop से बदल गया।","en":"Order changed using drag and drop."},
+"Home — Header પછી":{"hi":"Home — Header के बाद","en":"Home — After Header"},
+"Home — Showcase પછી":{"hi":"Home — Showcase के बाद","en":"Home — After Showcase"},
+"Home — Listings પછી":{"hi":"Home — Listings के बाद","en":"Home — After Listings"},
+"Home — Property Form પછી":{"hi":"Home — Property Form के बाद","en":"Home — After Property Form"},
+"Home — Customer Account પછી":{"hi":"Home — Customer Account के बाद","en":"Home — After Customer Account"},
+"Home — Contact પહેલાં":{"hi":"Home — Contact से पहले","en":"Home — Before Contact"},
+"Home — Footer પછી":{"hi":"Home — Footer के बाद","en":"Home — After Footer"},
+"Download — મુખ્ય કાર્ડ પછી":{"hi":"Download — मुख्य कार्ड के बाद","en":"Download — After Main Card"},
+"Download — Story પછી":{"hi":"Download — Story के बाद","en":"Download — After Story"},
+"Download — QR પહેલાં":{"hi":"Download — QR से पहले","en":"Download — Before QR"}
+});
