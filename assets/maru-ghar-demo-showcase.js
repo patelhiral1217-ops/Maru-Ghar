@@ -119,7 +119,7 @@
  }
  const params=new URLSearchParams(location.search),sample=params.get('demo-property');
  if(sample){const p=samples.find(x=>x.id===sample);if(p){detail(p);return}}
- function card(p,i){return '<article class="mg-demo-card" data-demo-id="'+p.id+'"><div class="mg-demo-photo"><img src="'+esc(p.photos[0])+'" alt="'+esc(p.title)+'" loading="lazy"><span class="mg-demo-tag">ડેમો નમૂનો</span><span class="mg-demo-counter">1 / '+p.photos.length+'</span></div><div class="mg-demo-body"><h3>'+esc(p.title)+'</h3><div class="mg-demo-location">📍 '+esc(p.area)+', '+esc(p.city)+'</div><div class="mg-demo-price">'+esc(p.price)+'</div><div class="mg-demo-spec">'+esc(p.bhk)+' · '+esc(p.size)+' · '+esc(p.purpose)+'</div><button class="mg-demo-open" type="button" data-demo-open="'+p.id+'">સંપૂર્ણ વિગત જુઓ →</button></div></article>'}
+ function card(p,i){return '<article class="mg-demo-card" data-demo-id="'+p.id+'"><div class="mg-demo-photo"><img src="'+esc(p.photos[0])+'" alt="'+esc(p.title)+'" loading="lazy"><span class="mg-demo-tag">ડેમો નમૂનો</span><span class="mg-demo-counter">1 / '+p.photos.length+'</span></div><div class="mg-demo-body"><h3>'+esc(p.title)+'</h3><div class="mg-demo-location">📍 '+esc(p.area)+', '+esc(p.city)+'</div><div class="mg-demo-price"><span>'+esc(p.price)+'</span></div><div class="mg-demo-spec">'+esc(p.bhk)+' · '+esc(p.size)+' · '+esc(p.purpose)+'</div><button class="mg-demo-open" type="button" data-demo-open="'+p.id+'">સંપૂર્ણ વિગત જુઓ →</button></div></article>'}
  function init(){
   const listing=document.getElementById('listings');if(!listing)return;
   const existing=document.getElementById('mgDemoShowcase');
