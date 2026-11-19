@@ -16,7 +16,25 @@ import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/
  window.alert=m=>oldAlert(mgTr(m));window.confirm=m=>oldConfirm(mgTr(m));window.prompt=(m,v)=>oldPrompt(mgTr(m),v);
 
  if(!status)return;
- let app,auth,db,functions,currentUser=null;
+ let app,auth,db,functions,currentUser=null,customerPushReady=false,customerPushToken='';
+ const isNativeCustomerApp=()=>!!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());
+ async function saveCustomerPushToken(uid,token){if(!uid||!token)return;try{await setDoc(doc(db,'users',uid,'pushTokens',token),{token,platform:'android',updatedAt:serverTimestamp()})}catch(e){console.warn('customer push token save failed',e)}}
+ async function registerCustomerPush(uid){
+   if(!isNativeCustomerApp()||!uid)return;
+   try{
+     const PN=window.Capacitor.registerPlugin('PushNotifications');
+     if(!customerPushReady){
+       customerPushReady=true;
+       PN.addListener('registration',async t=>{customerPushToken=t.value;if(currentUser&&!currentUser.isAnonymous)await saveCustomerPushToken(currentUser.uid,customerPushToken)});
+       PN.addListener('registrationError',e=>console.warn('customer push registration failed',e));
+       PN.addListener('pushNotificationReceived',()=>loadNotifications());
+       PN.addListener('pushNotificationActionPerformed',()=>loadNotifications());
+     }
+     let p=await PN.checkPermissions();
+     if(p.receive!=='granted')p=await PN.requestPermissions();
+     if(p.receive==='granted'){await PN.register();if(customerPushToken)await saveCustomerPushToken(uid,customerPushToken)}
+   }catch(e){console.warn('customer push unavailable',e)}
+ }
  const say=(m,bad=false)=>{status.textContent=mgTr(m);status.style.color=bad?'#b42318':'#536071'};
  // Keep guest and signed-in customer favourites separate on shared devices.
  const favKey=()=>currentUser&&!currentUser.isAnonymous?`mg_favs_user_${currentUser.uid}`:'mg_favs_guest';
@@ -120,7 +138,7 @@ import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/
    onAuthStateChanged(auth,async u=>{
      currentUser=u;
      $('customerLogout').classList.toggle('hidden',!u||u.isAnonymous);$('customerExport').classList.toggle('hidden',!u||u.isAnonymous);$('customerDelete').classList.toggle('hidden',!u||u.isAnonymous);if($('customerRestore'))$('customerRestore').classList.toggle('hidden',!u||u.isAnonymous);$('customerRegister').classList.toggle('hidden',!!u&&!u.isAnonymous);$('customerLogin').classList.toggle('hidden',!!u&&!u.isAnonymous);
-     if(u&&!u.isAnonymous){say('લોગિન: '+(u.email||'ગ્રાહક'));try{await refreshFavs();await loadNotifications();await loadMyProperties()}catch(e){say('એકાઉન્ટ ડેટા લોડ ન થયું: '+(e.code||e.message),true)}}
+     if(u&&!u.isAnonymous){say('લોગિન: '+(u.email||'ગ્રાહક'));try{await registerCustomerPush(u.uid);await refreshFavs();await loadNotifications();await loadMyProperties()}catch(e){say('એકાઉન્ટ ડેટા લોડ ન થયું: '+(e.code||e.message),true)}}
      else {showActiveFavs();$('customerFavList').textContent='લોગિન કર્યા પછી મનપસંદ પ્રોપર્ટી Sync થશે.';if($('customerMyPropertiesList'))$('customerMyPropertiesList').textContent=mgTr('મારી પ્રોપર્ટી જોવા માટે ગ્રાહક એકાઉન્ટમાં લોગિન કરો.');document.dispatchEvent(new CustomEvent('marughar:favorites-updated'))}
    });
  }
