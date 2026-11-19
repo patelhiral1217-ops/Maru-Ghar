@@ -51,7 +51,7 @@
  #mgDemoShowcase .mg-demo-body{padding:13px}
  #mgDemoShowcase .mg-demo-body h3{margin:0 0 7px;color:#203b31;font-size:16px;line-height:1.35}
  #mgDemoShowcase .mg-demo-location{color:#68766e;font-size:12px;margin-bottom:8px}
- #mgDemoShowcase .mg-demo-price{color:#a27b25;font-size:19px;font-weight:900;margin:8px 0}
+ #mgDemoShowcase .mg-demo-price{display:block;width:100%;max-width:100%;box-sizing:border-box;color:#a27b25;font-size:clamp(14px,4.2vw,19px);font-weight:900;margin:8px 0;white-space:nowrap;line-height:1.35;letter-spacing:-.2px;overflow:visible} #mgDemoDetail .mg-detail-price{white-space:nowrap;line-height:1.35;font-size:clamp(19px,5.5vw,26px)}
  #mgDemoShowcase .mg-demo-spec{font-size:12px;color:#59675f;line-height:1.7}
  #mgDemoShowcase .mg-demo-open{width:100%;margin-top:12px;padding:11px;border:1px solid #b28b3f;border-radius:11px;background:linear-gradient(145deg,#fff1bb,#d7b75e 58%,#b9c4bb);color:#183c30;font-weight:900;box-shadow:0 3px 0 #89692c,0 5px 10px #203b2c18}
  #mgDemoDetail{position:fixed;inset:0;z-index:100500;overflow:auto;background:#f6f5ef;color:#203b31;padding:0 0 36px}
