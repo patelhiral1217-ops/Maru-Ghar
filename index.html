@@ -705,6 +705,44 @@ h1,h2,h3,h4,.section-head h2,.searchbox h3,.mg-dialog-head h2,.mg-info-dialog h3
 }
 @media(prefers-reduced-motion:reduce){.mg-tagline-background img{animation:none!important}.mg-tagline-background img:first-child{opacity:1}}
 </style>
+<style id="mg-gujarati-heading-font-fix">
+
+/* Gujarati headline typography refinement: native Gujarati glyphs, balanced weight and spacing. */
+.mg-tagline-copy{
+  font-family:"Noto Sans Gujarati","Noto Sans",sans-serif!important;
+  font-synthesis:none!important;
+  text-rendering:optimizeLegibility!important;
+  line-height:1.55!important;
+}
+.mg-tagline-copy strong{
+  font-family:"Noto Sans Gujarati","Noto Sans",sans-serif!important;
+  font-size:clamp(23px,3vw,38px)!important;
+  font-weight:700!important;
+  letter-spacing:0!important;
+  line-height:1.5!important;
+}
+.mg-tagline-copy span{
+  font-family:"Noto Sans Gujarati","Noto Sans",sans-serif!important;
+  font-size:clamp(18px,2.2vw,27px)!important;
+  font-weight:600!important;
+  letter-spacing:0!important;
+  line-height:1.55!important;
+}
+.mg-tagline-copy b{
+  font-family:"Noto Sans Gujarati","Noto Sans",sans-serif!important;
+  font-size:clamp(16px,1.65vw,20px)!important;
+  font-weight:700!important;
+  letter-spacing:0!important;
+  line-height:1.5!important;
+}
+@media(max-width:600px){
+ .mg-tagline-copy{gap:5px!important;padding:14px 10px!important}
+ .mg-tagline-copy strong{font-size:21px!important;line-height:1.5!important;font-weight:700!important}
+ .mg-tagline-copy span{font-size:17px!important;line-height:1.55!important;font-weight:600!important}
+ .mg-tagline-copy b{font-size:15px!important;line-height:1.5!important;font-weight:700!important}
+}
+
+</style>
 </head>
 <body>
 <div id="mgLocalFileWarning" hidden role="status" style="max-width:1220px;margin:10px auto;padding:12px 16px;border:1px solid #d8b45d;border-radius:10px;background:#fff4cf;color:#49370a;font:600 13px/1.6 Arial,sans-serif">આ index.html ફાઇલ સીધી ફોન/કમ્પ્યુટરમાંથી ખોલેલી છે. ભાષા અને સામાન્ય પેજ દેખાઈ શકે છે, પરંતુ Firebase Login, લાઇવ લિસ્ટિંગ, ફોટો/વિડિયો અપલોડ અને એકાઉન્ટ Sync માટે વેબસાઇટની HTTPS લિંક અથવા ઇન્સ્ટોલ કરેલી APK ખોલો.</div>
