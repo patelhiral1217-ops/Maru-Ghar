@@ -3,6 +3,10 @@
 (()=>{
   const dict={
     'લોડ થઈ રહ્યા છે…':'लोड हो रहे हैं…|Loading…',
+'🖥️ Live Website Editor — વેબસાઇટ જોઈને જગ્યા પસંદ કરો':'🖥️ Live Website Editor — वेबसाइट पर जगह चुनें|🖥️ Live Website Editor — Choose a Website Area',
+'નીચે વેબસાઇટનું Preview દેખાશે. પીળા નિશાનવાળી જગ્યાને ટેપ/ક્લિક કરો; પછી લખાણ કે ફોટો ઉમેરવાનું ફોર્મ ખુલી જશે. Publish કરતાં પહેલાં Preview ચકાસો.':'नीचे वेबसाइट का Preview दिखेगा। पीले निशान वाली जगह पर टैप/क्लिक करें; फिर कंटेंट जोड़ने का फ़ॉर्म खुलेगा। Publish करने से पहले Preview जाँचें।|The website preview appears below. Tap/click a marked area to open the content form. Review the preview before publishing.',
+'↻ Preview ફરી ખોલો':'↻ Preview फिर खोलें|↻ Reload Preview',
+'Preview લોડ થયા પછી પીળા નિશાનવાળી જગ્યા પસંદ કરો.':'Preview लोड होने के बाद पीले निशान वाली जगह चुनें।|Select a highlighted area after the preview loads.',
 
     '⚙️ બધા Admin Settings અને બટનો':'⚙️ सभी Admin Settings और बटन|⚙️ All Admin Settings & Buttons',
     '🧩 એપ કન્ટેન્ટ':'🧩 ऐप कंटेंट|🧩 App Content',
