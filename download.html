@@ -58,7 +58,8 @@ small{color:var(--muted)}.note{font-size:13px;color:#b42318;display:none}@media 
 </script>
 <script type="module">
 const $=id=>document.getElementById(id);
-const links={play:'',apple:'',apk:''};let selected='';
+const DEFAULT_APK_URL='https://maru-ghar-gandhinagar-8dbe4.web.app/downloads/Maru-Ghar.apk';
+const links={play:'',apple:'',apk:DEFAULT_APK_URL};let selected='';
 const btns={play:$('playBtn'),apple:$('appleBtn'),apk:$('apkBtn')};
 const tr=s=>window.mgTranslate?window.mgTranslate(s):s;
 function safeUrl(value,host){
@@ -92,7 +93,7 @@ let mgPublicStoryConfig=null;\nfunction renderAppStory(){const cfg=mgPublicStory
       const cfg=snap.data();
       links.play=safeUrl(cfg.playStoreUrl,'play.google.com');
       links.apple=safeUrl(cfg.appStoreUrl,'apps.apple.com');
-      links.apk=safeUrl(cfg.apkUrl);
+      const configuredApk=safeUrl(cfg.apkUrl);if(configuredApk)links.apk=configuredApk;
       mgPublicStoryConfig=cfg;renderAppStory();
     }
   }catch(e){console.warn('Public app download settings unavailable:',e);}
