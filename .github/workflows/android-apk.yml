@@ -17,6 +17,7 @@ jobs:
       - name: Install and run tests
         run: |
           npm install
+          npm install --no-save @capacitor/assets@^3
           npm run copy-web
           npm test
       - name: Install Android SDK platform
@@ -29,9 +30,12 @@ jobs:
           M=android/app/src/main/AndroidManifest.xml
           grep -q POST_NOTIFICATIONS $M || sed -i 's#<application#<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />\n    <uses-permission android:name="android.permission.CAMERA" />\n    <application#' $M
           npx cap sync android
-      - name: App icons (best effort)
-        continue-on-error: true
-        run: npx capacitor-assets generate --android
+      - name: Generate Android app icon from approved Maru Ghar logo
+        run: |
+          test -s assets/maru-ghar-approved-app-icon.png
+          cp assets/maru-ghar-approved-app-icon.png assets/icon.png
+          ./node_modules/.bin/capacitor-assets generate --android --iconBackgroundColor '#12382f' --splashBackgroundColor '#12382f'
+          test -s android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
       - name: Build release APK (unsigned)
         run: cd android && chmod +x gradlew && ./gradlew assembleRelease --no-daemon
       - name: Sign APK (debug key if secrets missing)
