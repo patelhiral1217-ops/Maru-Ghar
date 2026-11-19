@@ -76,7 +76,7 @@ exports.notifyPriceDrop = functions.firestore
   });
 
 
-// Account deletion cleanup is deployed with this Functions bundle; deployment path verified.
+// Account deletion cleanup is deployed with this Functions bundle; deployment condition verified.
 // Customer-initiated account deletion. Remove the account's listings and private
 // contact records as well, so an erased account cannot leave public listings with
 // stale personal details. Cloudinary assets are removed when server credentials exist.
