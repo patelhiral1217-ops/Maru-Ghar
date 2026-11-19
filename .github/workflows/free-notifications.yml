@@ -1,5 +1,10 @@
 name: Maru Ghar Free Notifications
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'functions/free-notification-worker.js'
+      - '.github/workflows/free-notifications.yml'
   schedule:
     - cron: '*/5 * * * *'
   workflow_dispatch:
