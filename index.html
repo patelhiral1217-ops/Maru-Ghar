@@ -772,24 +772,34 @@ h1,h2,h3,h4,.section-head h2,.searchbox h3,.mg-dialog-head h2,.mg-info-dialog h3
 </style>
 
 <style id="mg-dream-home-3d-heading">
-/* Final hero heading: large raised gold-and-silver 3D lettering; retain the agreed green theme. */
-.mg-tagline-copy{background:rgba(0,77,42,.58)!important;border:2px solid #C0C0C0!important;box-shadow:0 10px 0 rgba(0,0,0,.24),0 16px 34px rgba(0,0,0,.38),inset 0 2px 0 rgba(255,255,255,.28)!important}
-.mg-tagline-copy strong{
-  display:block!important;
-  width:100%!important;
+/* Final, authoritative hero title rules. This block is deliberately last so earlier
+   Gujarati font/mobile rules cannot shrink or flatten the requested 3D heading. */
+.top.mg-top-banner .mg-tagline-copy{
+  width:100%!important;max-width:1200px!important;min-height:0!important;
+  padding:10px 14px!important;gap:0!important;
+  border:0!important;border-radius:0!important;background:transparent!important;
+  box-shadow:none!important;backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;text-shadow:none!important;
   font-family:"Noto Sans Gujarati","Noto Sans",system-ui,sans-serif!important;
-  font-size:clamp(34px,6.2vw,68px)!important;
-  font-weight:900!important;
-  line-height:1.35!important;
-  letter-spacing:0!important;
-  color:#FFDD00!important;
-  -webkit-text-fill-color:#FFDD00!important;
-  -webkit-text-stroke:1px #C0C0C0!important;
-  text-shadow:1px 1px 0 #fff0a0,2px 2px 0 #c99a16,3px 3px 0 #9b7410,4px 4px 0 #76560b,5px 6px 0 rgba(0,0,0,.62),0 9px 16px rgba(0,0,0,.7)!important;
+}
+.top.mg-top-banner .mg-tagline-copy strong{
+  display:block!important;width:100%!important;
+  font-family:"Noto Sans Gujarati","Noto Sans",system-ui,sans-serif!important;
+  font-size:clamp(40px,5.8vw,74px)!important;
+  font-weight:1000!important;line-height:1.28!important;letter-spacing:0!important;
+  color:#FFDD00!important;-webkit-text-fill-color:#FFDD00!important;
+  -webkit-text-stroke:1.2px #C0C0C0!important;
+  text-shadow:0 1px 0 #fff8bd,0 2px 0 #f4d34b,0 4px 0 #c99a16,
+    0 6px 0 #8d650c,0 8px 0 #624508,0 11px 16px rgba(0,0,0,.88)!important;
 }
 @media(max-width:600px){
- .mg-tagline-copy{padding:16px 12px!important;gap:0!important}
- .mg-tagline-copy strong{font-size:clamp(32px,8.2vw,42px)!important;line-height:1.5!important;-webkit-text-stroke:.7px #C0C0C0!important}
+ .top.mg-top-banner .mg-tagline-copy{padding:8px 5px!important}
+ .top.mg-top-banner .mg-tagline-copy strong{
+   font-size:clamp(29px,8.2vw,43px)!important;line-height:1.4!important;
+   -webkit-text-stroke:.85px #C0C0C0!important;
+   text-shadow:0 1px 0 #fff8bd,0 2px 0 #f4d34b,0 4px 0 #c99a16,
+     0 6px 0 #694b0b,0 8px 11px rgba(0,0,0,.88)!important;
+ }
 }
 </style>
 </head>
