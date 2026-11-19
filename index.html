@@ -987,6 +987,33 @@ header .navlinks > a:not(.admin-link):focus-visible{
 (()=>{function init(){const box=document.querySelector('.mg-tagline-background');if(!box)return;const pics=[...box.querySelectorAll('img')];if(!pics.length)return;let at=0,timer=null;function show(n){at=(n+pics.length)%pics.length;pics.forEach((p,i)=>p.classList.toggle('mg-bg-active',i===at))}function stop(){if(timer){clearInterval(timer);timer=null}}function start(){stop();if(!document.hidden&&pics.length>1)timer=setInterval(()=>show(at+1),5000)}pics.forEach(p=>{p.loading='eager';p.decoding='async'});show(0);start();document.addEventListener('visibilitychange',start)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init()})();
 </script>
 
+
+<style id="mg-banner-heading-compact-and-showcase-rotation-fix-20261119">
+/* Compact, stronger metallic Gujarati heading; retain the original banner photos. */
+.top.mg-top-banner,.top.mg-top-banner .mg-tagline{min-height:176px!important}
+.top.mg-top-banner .mg-tagline{padding:8px 12px!important}
+.top.mg-top-banner .mg-tagline-copy{padding:2px 8px!important;transform:translateY(-7px)!important}
+.top.mg-top-banner .mg-tagline-copy strong{
+ font-family:'Anek Gujarati','Noto Sans Gujarati',sans-serif!important;
+ font-size:clamp(50px,7.4vw,88px)!important;
+ font-weight:950!important;line-height:1.16!important;letter-spacing:.15px!important;
+ color:#ffe7a0!important;-webkit-text-fill-color:#ffe7a0!important;
+ -webkit-text-stroke:.8px #704b12!important;
+ text-shadow:0 1px 0 #fff4c4,0 3px 0 #c28d28,0 5px 0 #815714,0 8px 14px #000e!important;
+}
+@media(max-width:600px){
+ .top.mg-top-banner,.top.mg-top-banner .mg-tagline{min-height:148px!important}
+ .top.mg-top-banner .mg-tagline{padding:5px 8px!important}
+ .top.mg-top-banner .mg-tagline-copy{padding:0 3px!important;transform:translateY(-5px)!important}
+ .top.mg-top-banner .mg-tagline-copy strong{font-size:clamp(37px,9.5vw,51px)!important;line-height:1.18!important;-webkit-text-stroke:.5px #704b12!important;text-shadow:0 1px 0 #fff4c4,0 2px 0 #c28d28,0 4px 0 #815714,0 6px 10px #000e!important}
+}
+/* Ensure the large photo showcase fades between slides and does not pause on hover. */
+.mg-showcase{margin-top:16px!important}
+.mg-showcase-slide{opacity:0!important;visibility:hidden!important;transition:opacity .9s ease!important}
+.mg-showcase-slide.active{opacity:1!important;visibility:visible!important}
+@media(max-width:600px){.mg-showcase{margin-top:12px!important}}
+</style>
+
 </head>
 <body>
 <div id="mgLocalFileWarning" hidden role="status" style="max-width:1220px;margin:10px auto;padding:12px 16px;border:1px solid #d8b45d;border-radius:10px;background:#fff4cf;color:#49370a;font:600 13px/1.6 Arial,sans-serif">આ index.html ફાઇલ સીધી ફોન/કમ્પ્યુટરમાંથી ખોલેલી છે. ભાષા અને સામાન્ય પેજ દેખાઈ શકે છે, પરંતુ Firebase Login, લાઇવ લિસ્ટિંગ, ફોટો/વિડિયો અપલોડ અને એકાઉન્ટ Sync માટે વેબસાઇટની HTTPS લિંક અથવા ઇન્સ્ટોલ કરેલી APK ખોલો.</div>
@@ -1122,8 +1149,7 @@ function filterProps(){
 
 
 <script>
-(()=>{const root=document.getElementById('mgShowcase');if(!root)return;const slides=[...root.querySelectorAll('.mg-showcase-slide')],dots=[...document.querySelectorAll('#mgShowcaseDots button')],title=document.getElementById('mgShowcaseTitle'),sub=document.getElementById('mgShowcaseSub'),prev=document.getElementById('mgShowcasePrev'),next=document.getElementById('mgShowcaseNext');if(!slides.length||!title||!sub)return;let index=0,timer=null,hovered=false;const tr=window.mgTranslate||((x)=>x);function show(n){index=(n+slides.length)%slides.length;slides.forEach((el,i)=>el.classList.toggle('active',i===index));dots.forEach((el,i)=>el.classList.toggle('active',i===index));title.textContent=tr(slides[index].dataset.title||'');sub.textContent=tr(slides[index].dataset.sub||'')}function stop(){if(timer){clearInterval(timer);timer=null}}function restart(){stop();if(!document.hidden&&!hovered&&slides.length>1)timer=setInterval(()=>show(index+1),5000)}if(prev)prev.addEventListener('click',()=>{show(index-1);restart()});if(next)next.addEventListener('click',()=>{show(index+1);restart()});dots.forEach((d,i)=>d.addEventListener('click',()=>{show(i);restart()}));root.addEventListener('mouseenter',()=>{hovered=true;stop()});root.addEventListener('mouseleave',()=>{hovered=false;restart()});document.addEventListener('visibilitychange',restart);window.addEventListener('mg-language-changed',()=>show(index));show(0);restart()})();
-</script>
+(()=>{function init(){const root=document.getElementById('mgShowcase');if(!root||root.dataset.mgRotationReady==='1')return;const slides=[...root.querySelectorAll('.mg-showcase-slide')],dots=[...document.querySelectorAll('#mgShowcaseDots button')],title=document.getElementById('mgShowcaseTitle'),sub=document.getElementById('mgShowcaseSub'),prev=document.getElementById('mgShowcasePrev'),next=document.getElementById('mgShowcaseNext');if(slides.length<2||!title||!sub)return;root.dataset.mgRotationReady='1';let index=0,timer=null;const tr=x=>(typeof window.mgTranslate==='function'?window.mgTranslate(x):x);function show(n){index=(n+slides.length)%slides.length;slides.forEach((el,i)=>el.classList.toggle('active',i===index));dots.forEach((el,i)=>el.classList.toggle('active',i===index));title.textContent=tr(slides[index].dataset.title||'');sub.textContent=tr(slides[index].dataset.sub||'')}function start(){if(timer)clearInterval(timer);timer=setInterval(()=>{if(!document.hidden)show(index+1)},4000)}if(prev)prev.addEventListener('click',()=>{show(index-1);start()});if(next)next.addEventListener('click',()=>{show(index+1);start()});dots.forEach((d,i)=>d.addEventListener('click',()=>{show(i);start()}));document.addEventListener('visibilitychange',()=>{if(!document.hidden)start()});window.addEventListener('mg-language-changed',()=>show(index));slides.forEach(el=>{const u=(el.style.backgroundImage.match(/url\\(["']?(.*?)["']?\\)/)||[])[1];if(u){const im=new Image();im.src=u}});show(0);start()}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init()})();
 <script src="assets/maru-ghar-form-steps.js"></script>
 <script defer src="assets/maru-ghar-polish.js?v=20261117b"></script>
 <script defer src="assets/maru-ghar-delight.js?v=20261117b"></script>
