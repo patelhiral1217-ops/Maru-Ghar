@@ -76,25 +76,91 @@ exports.notifyPriceDrop = functions.firestore
   });
 
 
-// Customer-initiated account deletion required by the privacy workflow.
+// Customer-initiated account deletion. Remove the account's listings and private
+// contact records as well, so an erased account cannot leave public listings with
+// stale personal details. Cloudinary assets are removed when server credentials exist.
 exports.deleteMyAccount = functions.https.onCall(async (_data, context) => {
   if (!context.auth || context.auth.token.firebase?.sign_in_provider === 'anonymous') {
     throw new functions.https.HttpsError('unauthenticated', 'લોગિન જરૂરી છે.');
   }
   const uid = context.auth.uid;
   if (uid === ADMIN_UID) throw new functions.https.HttpsError('failed-precondition', 'એડમિન એકાઉન્ટ આ વિકલ્પથી ડિલીટ કરી શકાતું નથી.');
+
   const db = admin.firestore();
-  const userRef = db.collection('users').doc(uid);
-  // Remove customer-owned subcollections and enquiry documents before Auth user.
-  await db.recursiveDelete(userRef);
-  const enquiries = await db.collection('enquiries').where('uid', '==', uid).get();
-  for (let i = 0; i < enquiries.docs.length; i += 400) {
+  const cloudName = 't5gd6nts';
+  const cloudKey = process.env.CLOUDINARY_API_KEY;
+  const cloudSecret = process.env.CLOUDINARY_API_SECRET;
+  const mediaToDelete = [];
+  let deletedListings = 0;
+
+  // Delete every listing submitted by this account in bounded batches.
+  while (true) {
+    const page = await db.collection('listings')
+      .where('submitterUid', '==', uid).limit(400).get();
+    if (page.empty) break;
+
     const batch = db.batch();
-    enquiries.docs.slice(i, i + 400).forEach(d => batch.delete(d.ref));
+    for (const listing of page.docs) {
+      const data = listing.data() || {};
+      for (const media of [...(Array.isArray(data.photos) ? data.photos : []),
+        ...(Array.isArray(data.videos) ? data.videos : [])]) {
+        if (media && media.publicId) {
+          mediaToDelete.push({ publicId: String(media.publicId), type:
+            (Array.isArray(data.videos) ? data.videos : []).includes(media) ? 'video' : 'image' });
+        }
+      }
+      batch.delete(db.collection('listingContacts').doc(listing.id));
+      batch.delete(listing.ref);
+      deletedListings++;
+    }
     await batch.commit();
   }
+
+  // Also remove any orphaned private contacts owned by this UID.
+  while (true) {
+    const page = await db.collection('listingContacts')
+      .where('ownerUid', '==', uid).limit(400).get();
+    if (page.empty) break;
+    const batch = db.batch();
+    page.docs.forEach(d => batch.delete(d.ref));
+    await batch.commit();
+  }
+
+  // Remove customer-owned subcollections and enquiry documents before Auth user.
+  await db.recursiveDelete(db.collection('users').doc(uid));
+  while (true) {
+    const page = await db.collection('enquiries').where('uid', '==', uid).limit(400).get();
+    if (page.empty) break;
+    const batch = db.batch();
+    page.docs.forEach(d => batch.delete(d.ref));
+    await batch.commit();
+  }
+
+  // Cloudinary cleanup is best-effort; database privacy cleanup must not be
+  // blocked if optional Cloudinary API credentials have not been configured.
+  let mediaDeleted = 0, mediaSkipped = mediaToDelete.length;
+  if (cloudKey && cloudSecret && mediaToDelete.length) {
+    mediaSkipped = 0;
+    for (const item of mediaToDelete) {
+      if (!/^[A-Za-z0-9_\-/.]{1,200}$/.test(item.publicId)) { mediaSkipped++; continue; }
+      const timestamp = Math.floor(Date.now() / 1000);
+      const signature = crypto.createHash('sha1')
+        .update(`public_id=${item.publicId}&timestamp=${timestamp}${cloudSecret}`).digest('hex');
+      try {
+        const body = new URLSearchParams({ public_id: item.publicId, timestamp: String(timestamp), api_key: cloudKey, signature });
+        const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/${item.type}/destroy`, { method: 'POST', body });
+        const result = await response.json().catch(() => ({}));
+        if (response.ok && (result.result === 'ok' || result.result === 'not found')) mediaDeleted++;
+        else mediaSkipped++;
+      } catch (error) {
+        console.error('Cloudinary account-cleanup failed', error);
+        mediaSkipped++;
+      }
+    }
+  }
+
   await admin.auth().deleteUser(uid);
-  return { ok: true };
+  return { ok: true, deletedListings, mediaDeleted, mediaSkipped };
 });
 
 
