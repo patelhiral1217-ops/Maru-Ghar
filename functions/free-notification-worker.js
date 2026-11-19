@@ -41,14 +41,15 @@ async function processNewListings(cursor) {
     const marker = db.collection('notificationWorkerEvents').doc('admin_' + doc.id);
     const existing = await marker.get();
     if (existing.exists) continue;
-    if (!tokens.empty) {
-      const body = [d.type, d.purpose, d.location].filter(Boolean).join(' · ') || 'નવી પ્રોપર્ટી મંજૂરી માટે આવી છે';
-      await sendTokens(tokens.docs,
-        { title: 'મારું ઘર — નવી લિસ્ટિંગ મંજૂરી માટે', body },
-        { listingId: doc.id, kind: 'new_listing' });
+    if (tokens.empty) continue; // Keep it eligible; send after the admin phone registers its token.
+    const body = [d.type, d.purpose, d.location].filter(Boolean).join(' · ') || 'નવી પ્રોપર્ટી મંજૂરી માટે આવી છે';
+    const delivered = await sendTokens(tokens.docs,
+      { title: 'મારું ઘર — નવી લિસ્ટિંગ મંજૂરી માટે', body },
+      { listingId: doc.id, kind: 'new_listing' });
+    if (delivered > 0) {
+      await marker.set({ kind: 'admin_new_listing', listingId: doc.id, sentAt: admin.firestore.FieldValue.serverTimestamp() });
+      processed++;
     }
-    await marker.set({ kind: 'admin_new_listing', listingId: doc.id, sentAt: admin.firestore.FieldValue.serverTimestamp() });
-    processed++;
   }
   return processed;
 }
@@ -98,14 +99,16 @@ async function processPriceDrops(cursor) {
   const stateRef = db.collection('notificationWorkerState').doc('main');
   const state = await stateRef.get();
   const now = admin.firestore.Timestamp.now();
+  let previous;
   if (!state.exists || !state.data()?.lastCheckedAt) {
-    await stateRef.set({ lastCheckedAt: now, initializedAt: admin.firestore.FieldValue.serverTimestamp() }, { merge: true });
-    console.log('Notification worker initialized; historical records intentionally skipped.');
-    return;
+    // First run checks the last hour so submissions made during setup are not missed.
+    previous = now.toMillis() - 60 * 60 * 1000;
+    await stateRef.set({ lastCheckedAt: admin.firestore.Timestamp.fromMillis(previous), initializedAt: admin.firestore.FieldValue.serverTimestamp() }, { merge: true });
+  } else {
+    previous = state.data().lastCheckedAt.toMillis();
   }
-  // A 10-minute overlap protects against slightly delayed scheduled runs.
-  const previous = state.data().lastCheckedAt.toMillis();
-  const cursor = admin.firestore.Timestamp.fromMillis(Math.max(0, previous - 10 * 60 * 1000));
+  // A one-hour overlap protects against delayed schedules; event markers prevent repeats.
+  const cursor = admin.firestore.Timestamp.fromMillis(Math.max(0, previous - 60 * 60 * 1000));
   const [newListings, priceDrops] = await Promise.all([
     processNewListings(cursor),
     processPriceDrops(cursor)
