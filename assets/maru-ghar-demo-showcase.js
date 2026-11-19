@@ -135,7 +135,8 @@
   section.querySelectorAll('.mg-demo-card').forEach(card=>{const id=card.dataset.demoId;if(visibilityObserver)visibilityObserver.observe(card);else visibleCards.add(card);timers.set(id,setInterval(()=>{if(visibleCards.has(card)&&!paused.has(id)&&!document.hidden)show(card,(indices.get(id)||0)+1)},6500));});
   section.addEventListener('click',e=>{const card=e.target.closest('.mg-demo-card');if(!card)return;const id=card.dataset.demoId;
    if(e.target.closest('[data-demo-pause]')){const b=e.target.closest('button');if(paused.has(id)){paused.delete(id);b.textContent='Ⅱ';b.setAttribute('aria-label','ફોટા રોકો')}else{paused.add(id);b.textContent='▶';b.setAttribute('aria-label','ફોટા ચાલુ કરો')}return}
-   if(e.target.closest('[data-demo-prev]')){show(card,(indices.get(id)||0)-1);return}\n    if(e.target.closest('[data-demo-next]')){show(card,(indices.get(id)||0)+1);return}
+   if(e.target.closest('[data-demo-prev]')){show(card,(indices.get(id)||0)-1);return}
+    if(e.target.closest('[data-demo-next]')){show(card,(indices.get(id)||0)+1);return}
    const open=e.target.closest('[data-demo-open]');if(open){location.href='index.html?demo-property='+encodeURIComponent(id);return}
   });
   window.addEventListener('pagehide',()=>timers.forEach(clearInterval),{once:true});
