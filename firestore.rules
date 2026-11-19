@@ -177,7 +177,10 @@ service cloud.firestore {
         )
         // Admin price update; price-drop Cloud Function reacts to priceNum decrease.
         || (
-          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['price', 'priceNum', 'priceUpdatedAt'])
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['price', 'previousPriceNum', 'priceNum', 'priceUpdatedAt'])
+          && request.resource.data.previousPriceNum is number
+          && request.resource.data.previousPriceNum >= 0
+          && request.resource.data.previousPriceNum <= 100000000000
           && request.resource.data.price is string
           && request.resource.data.price.size() <= 60
           && request.resource.data.priceNum is number
@@ -304,6 +307,19 @@ service cloud.firestore {
         && request.auth.uid == uid
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read'])
         && request.resource.data.read is bool;
+    }
+
+    match /users/{uid}/pushTokens/{token} {
+      allow read, delete: if request.auth != null && request.auth.uid == uid;
+      allow create, update: if request.auth != null
+        && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['token', 'platform', 'updatedAt'])
+        && request.resource.data.token == token
+        && request.resource.data.token is string
+        && request.resource.data.token.size() >= 20
+        && request.resource.data.token.size() <= 4096
+        && request.resource.data.platform == 'android'
+        && request.resource.data.updatedAt is timestamp;
     }
 
     // ---------------------------------------------------------
