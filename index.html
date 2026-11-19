@@ -926,8 +926,65 @@ header .navlinks > a:not(.admin-link):focus-visible{
 .mg-showcase-copy p{font-family:'Noto Sans Gujarati','Mukta Vaani',sans-serif!important;font-size:clamp(15px,1.5vw,18px)!important}
 @media(max-width:600px){.top.mg-top-banner,.top.mg-top-banner .mg-tagline{min-height:184px!important}.top.mg-top-banner .mg-tagline-copy{width:96%!important;padding:13px 9px!important;border-radius:14px!important}.top.mg-top-banner .mg-tagline-copy strong{font-size:clamp(34px,9vw,46px)!important;line-height:1.28!important}.mg-showcase{padding:0 12px!important;margin-top:18px!important}.mg-showcase-frame{height:300px!important;min-height:300px!important;border-radius:17px!important}.mg-showcase-copy{padding:18px 18px 66px!important}.mg-showcase-copy h2{font-size:clamp(25px,7vw,34px)!important;line-height:1.3!important}}
 </style>
+<style id="mg-banner-heading-clean-photo-rotation-fix">
+/* Clean full-width photo banner: remove the title card and restore a clear, prominent heading. */
+.top.mg-top-banner,.top.mg-top-banner .mg-tagline{
+  min-height:244px!important;
+}
+.top.mg-top-banner{
+  border-bottom:3px solid #d4b15e!important;
+  background:#102a25!important;
+}
+.top.mg-top-banner .mg-tagline{
+  padding:28px 16px!important;
+}
+.top.mg-top-banner .mg-tagline-copy{
+  position:relative!important;z-index:2!important;
+  width:100%!important;max-width:1240px!important;min-height:0!important;
+  margin:0 auto!important;padding:12px 10px!important;gap:0!important;
+  border:0!important;outline:0!important;border-radius:0!important;
+  background:transparent!important;box-shadow:none!important;
+  -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+  text-shadow:none!important;
+}
+.top.mg-top-banner .mg-tagline-copy strong{
+  display:block!important;width:100%!important;
+  font-family:'Anek Gujarati','Noto Sans Gujarati',sans-serif!important;
+  font-size:clamp(48px,7.1vw,82px)!important;
+  font-weight:900!important;line-height:1.3!important;letter-spacing:0!important;
+  text-align:center!important;color:#fff4d0!important;
+  -webkit-text-fill-color:#fff4d0!important;
+  -webkit-text-stroke:.5px rgba(67,48,15,.9)!important;
+  text-shadow:0 2px 0 #b58b36,0 5px 0 #76551d,0 9px 18px rgba(0,0,0,.9)!important;
+  overflow-wrap:normal!important;text-wrap:balance!important;
+}
+.top.mg-top-banner .mg-tagline-background{z-index:0!important}
+.top.mg-top-banner .mg-tagline-background:after{
+  z-index:1!important;
+  background:linear-gradient(90deg,rgba(0,15,13,.55),rgba(0,15,13,.25) 50%,rgba(0,15,13,.55)),linear-gradient(0deg,rgba(0,0,0,.35),rgba(0,0,0,.12))!important;
+}
+.top.mg-top-banner .mg-tagline-background img{
+  z-index:0!important;display:block!important;
+  opacity:0!important;transition:opacity 1.2s ease!important;
+  animation:none!important;object-fit:cover!important;object-position:center 55%!important;
+}
+.top.mg-top-banner .mg-tagline-background img.mg-bg-active{opacity:1!important}
+@media(max-width:600px){
+ .top.mg-top-banner,.top.mg-top-banner .mg-tagline{min-height:204px!important}
+ .top.mg-top-banner .mg-tagline{padding:20px 10px!important}
+ .top.mg-top-banner .mg-tagline-copy{width:100%!important;padding:10px 4px!important}
+ .top.mg-top-banner .mg-tagline-copy strong{
+  font-size:clamp(35px,9.2vw,48px)!important;line-height:1.35!important;
+  -webkit-text-stroke:.35px rgba(67,48,15,.9)!important;
+  text-shadow:0 1px 0 #b58b36,0 3px 0 #76551d,0 6px 12px rgba(0,0,0,.9)!important;
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ .top.mg-top-banner .mg-tagline-background img{transition:none!important}
+}
+</style>
 <script id="mg-banner-photo-rotation-20261119">
-(()=>{const box=document.querySelector('.mg-tagline-background');if(!box)return;const pics=[...box.querySelectorAll('img')];if(pics.length<2)return;let at=0,timer=null;function show(n){at=(n+pics.length)%pics.length;pics.forEach((p,i)=>p.classList.toggle('mg-bg-active',i===at))}function stop(){if(timer){clearInterval(timer);timer=null}}function start(){stop();if(!document.hidden&&pics.length>1)timer=setInterval(()=>show(at+1),6000)}show(0);start();document.addEventListener('visibilitychange',start)})();
+(()=>{function init(){const box=document.querySelector('.mg-tagline-background');if(!box)return;const pics=[...box.querySelectorAll('img')];if(!pics.length)return;let at=0,timer=null;function show(n){at=(n+pics.length)%pics.length;pics.forEach((p,i)=>p.classList.toggle('mg-bg-active',i===at))}function stop(){if(timer){clearInterval(timer);timer=null}}function start(){stop();if(!document.hidden&&pics.length>1)timer=setInterval(()=>show(at+1),5000)}pics.forEach(p=>{p.loading='eager';p.decoding='async'});show(0);start();document.addEventListener('visibilitychange',start)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init()})();
 </script>
 
 </head>
