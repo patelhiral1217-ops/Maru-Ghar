@@ -210,11 +210,12 @@ exports.adminDeleteCustomer = functions.https.onCall(async (data, context) => {
   const db = admin.firestore();
   const target = await admin.auth().getUser(uid);
   let hiddenListings = 0;
-  while (true) {
-    const page = await db.collection('listings').where('submitterUid', '==', uid).limit(400).get();
-    if (page.empty) break;
+  // Read once and process bounded batches; re-querying submitterUid after updates
+  // would repeatedly select the same documents and never finish.
+  const ownedListings = await db.collection('listings').where('submitterUid', '==', uid).get();
+  for (let offset = 0; offset < ownedListings.docs.length; offset += 400) {
     const batch = db.batch();
-    page.docs.forEach(listing => {
+    ownedListings.docs.slice(offset, offset + 400).forEach(listing => {
       batch.update(listing.ref, {
         status: 'rejected',
         reviewNote: 'ગ્રાહક એકાઉન્ટ કાયમી ડિલીટ થયું — Admin તપાસ બાકી.',
@@ -244,8 +245,7 @@ exports.adminDeleteCustomer = functions.https.onCall(async (data, context) => {
     await batch.commit();
   }
   await db.collection('adminLogs').add({
-    kind: 'customer_deleted', uid, email: target.email || '',
-    phoneNumber: target.phoneNumber || '', hiddenListings,
+    kind: 'customer_deleted', uid, hiddenListings,
     mediaPreserved: true, changedBy: context.auth.uid,
     at: new Date().toISOString(),
     createdAt: admin.firestore.FieldValue.serverTimestamp()
