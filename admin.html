@@ -284,7 +284,36 @@ function printPropertyPDF(p){const lang=mgCurrentLanguage(),locale=lang==='hi'?'
 }
 :where(button,input[type="button"],input[type="submit"],input[type="reset"],a[role="button"],.btn,.outline,.wa-btn,.contact-wa,.mg-head-action,.mg-chip,.mg-mapbtn,.mg-compare-shortcut,.mg-contact-trigger,.mg-contact-main,.mg-mobile-nav a,.mg-settings-grid button,.admin-shortcuts a,.admin-shortcuts button,.admin-quick a,.admin-quick button,.backup-actions button,.login-submit,.mg-submit-toggle,.mg-tools button,.cats .cat,.searchbox button,.morefilters button,.property-foot a,.property-foot button,.admin-settings>summary,.primary,.approve,.reject):focus-visible{outline:3px solid rgba(218,180,83,.7)!important;outline-offset:3px!important}
 </style>
-</body></html>`);w.document.close();}
+<style id="mg-admin-mobile-fit-and-stability-20261119">
+/* Mobile admin layout: keep every workspace/card inside the screen width. */
+html,body{width:100%;max-width:100%;overflow-x:hidden}
+.wrap,#dashboard,#adminMain,#adminSettings{width:100%;max-width:100%;min-width:0;margin-left:auto;margin-right:auto}
+#dashboard *,#adminMain *,#adminSettings *{box-sizing:border-box;min-width:0}
+#dashboard .panel,#dashboard .card,#adminMain .panel,#adminMain .card{max-width:100%;min-width:0}
+#dashboard .row,#dashboard .actions,#adminMain .row,#adminMain .actions{max-width:100%;flex-wrap:wrap}
+#dashboard input,#dashboard select,#dashboard textarea,#dashboard button,#adminMain input,#adminMain select,#adminMain textarea,#adminMain button{max-width:100%;min-width:0}
+#dashboard img,#adminMain img,#dashboard video,#adminMain video{max-width:100%;height:auto}
+#dashboard table,#adminMain table{width:100%;max-width:100%}
+@media(max-width:700px){
+ .wrap{padding:12px!important}
+ .head{max-width:100%;flex-wrap:wrap}
+ .head img{flex:0 0 52px}
+ .head h1{overflow-wrap:anywhere}
+ #dashboard,#adminMain,#adminSettings{padding-left:0;padding-right:0}
+ #dashboard .panel,#dashboard .card,#adminMain .panel,#adminMain .card{width:100%;padding:12px!important;margin-left:0;margin-right:0}
+ #dashboard .admin-shortcuts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+ #dashboard .admin-shortcuts a{min-width:0;white-space:normal;overflow-wrap:anywhere;text-align:center;padding:9px 6px}
+ #dashboard .formgrid{grid-template-columns:minmax(0,1fr)!important}
+ #dashboard .formgrid>*{grid-column:1/-1;min-width:0}
+ #dashboard .actions>*{flex:1 1 125px}
+ #dashboard .mg-cms-target-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .table-wrap,.table-responsive,.report-table-wrap{width:100%;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+}
+@media(hover:none){
+ #dashboard .panel,#dashboard .card,#adminMain .panel,#adminMain .card{transform:none!important;transition:none!important}
+ #dashboard button:active,#adminMain button:active{transform:none!important;transition:none!important}
+}
+</style></body></html>`);w.document.close();}
 async function review(id,action,button){
 const selectedProperty=allListings.find(x=>x.id===id);if(!selectedProperty)return;
 if(action==='toggle_verified'){
