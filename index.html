@@ -4254,7 +4254,7 @@ window.MG_I18N_DICTIONARY={
 
 </style>
 
-<script src="assets/maru-ghar-demo-showcase.js?v=20261119familyfixd"></script>
+<script src="assets/maru-ghar-demo-showcase.js?v=20261119familyfixe"></script>
 <script defer src="assets/maru-ghar-admin-content.js?v=20261118a"></script>
 <style id="mg-final-search-metal-and-range-apply-20261117">
 /* Exact same champagne-gold/silver 3D finish for the home dropdowns and every category chip. */
@@ -4438,18 +4438,21 @@ body #mgTrust,body .mg-trust{display:none!important}
  #listings #properties[data-cols="4"] .property .photo{height:clamp(64px,20vw,95px)!important}
 }
 
-/* Keep the banner full-size while showing each complete photo without cropping. */
+/* Keep the original banner height; fill the entire background with the photo. */
 .top.mg-top-banner,.top.mg-top-banner .mg-tagline{
-  min-height:clamp(300px,48vw,620px)!important;
+  min-height:244px!important;
 }
 .top.mg-top-banner .mg-tagline-background img{
-  object-fit:contain!important;
+  object-fit:cover!important;
   object-position:center center!important;
   background:#071d20!important;
 }
+.top.mg-top-banner .mg-tagline-background:after{
+  background:linear-gradient(90deg,rgba(0,15,13,.32),rgba(0,15,13,.16) 50%,rgba(0,15,13,.32)),linear-gradient(0deg,rgba(0,0,0,.24),rgba(0,0,0,.08))!important;
+}
 @media(max-width:600px){
   .top.mg-top-banner,.top.mg-top-banner .mg-tagline{
-    min-height:clamp(260px,68vw,430px)!important;
+    min-height:204px!important;
   }
 }
 </style>
