@@ -32,6 +32,8 @@
  #mgDemoShowcase .mg-family-copy a{color:#795d25;text-decoration:underline}
  #properties .property .photo{background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important;background-color:#102c32!important}
  #properties .property .photo img{object-fit:contain!important;background:#102c32!important}
+ .photo.mg-slider .mg-slide{background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important;background-color:#0d1a1f!important}
+ .photo.mg-slider .mg-slide img{width:100%!important;height:100%!important;object-fit:contain!important;background:#0d1a1f!important}
  .mgm-gal img{object-fit:contain!important;background:#102c32!important}
  #mgDemoDetail .mg-detail-gallery img{object-fit:contain!important;background:#e7ece7!important}
  #mgDemoShowcase .mg-demo-photo .mg-demo-tag{position:absolute;left:10px;top:10px;padding:5px 9px;border-radius:20px;background:#fff5d7;color:#664b17;font-size:11px;font-weight:900}
