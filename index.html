@@ -984,7 +984,7 @@ header .navlinks > a:not(.admin-link):focus-visible{
 }
 </style>
 <script id="mg-banner-photo-rotation-20261119">
-(()=>{function init(){const box=document.querySelector('.mg-tagline-background');if(!box)return;let pics=[...box.querySelectorAll('img')];if(!pics.length)return;let at=0,timer=null;function show(n){at=(n+pics.length)%pics.length;pics.forEach((p,i)=>p.classList.toggle('mg-bg-active',i===at))}function stop(){if(timer){clearInterval(timer);timer=null}}function start(){stop();if(!document.hidden&&pics.length>1)timer=setInterval(()=>show(at+1),6000)}pics.forEach((p,i)=>{p.decoding='async';p.loading='eager';try{p.fetchPriority=i===0?'high':'low'}catch(e){}});const ready=pics.map(p=>new Promise(resolve=>{if(p.complete){resolve();return}p.addEventListener('load',resolve,{once:true});p.addEventListener('error',resolve,{once:true})}));show(0);Promise.all(ready).then(()=>{pics=pics.filter(p=>p.naturalWidth>0);if(!pics.length)return;show(0);start()});document.addEventListener('visibilitychange',start)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init()})();
+(()=>{function init(){const box=document.querySelector('.mg-tagline-background');if(!box)return;const pics=[...box.querySelectorAll('img')];if(!pics.length)return;let at=0,timer=null;function show(n){at=(n+pics.length)%pics.length;pics.forEach((p,i)=>p.classList.toggle('mg-bg-active',i===at));const active=pics[at];if(active){active.loading='eager';active.decoding='async'}}function stop(){if(timer){clearInterval(timer);timer=null}}function start(){stop();if(!document.hidden&&pics.length>1)timer=setInterval(()=>show(at+1),7000)}pics.forEach((p,i)=>{p.decoding='async';p.loading=i===0?'eager':'lazy';try{p.fetchPriority=i===0?'high':'low'}catch(e){}});show(0);const first=pics[0];if(first.complete)start();else{first.addEventListener('load',start,{once:true});first.addEventListener('error',start,{once:true})}document.addEventListener('visibilitychange',start)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init()})();
 </script>
 
 
@@ -3924,6 +3924,8 @@ Object.assign(window.MG_I18N_DICTIONARY,{
   const isUserContent=el=>!!(el&&el.closest&&el.closest('[data-user-content],[contenteditable="true"],textarea,input,[data-owner-text]'));
   const isDynamicRecordBodyText=el=>{
     if(!el||!el.closest)return false;
+    /* Demo showcase content is authored sample content, not owner-entered listing data. */
+    if(el.closest('#mgDemoShowcase,#mgDemoDetail'))return false;
     const property=el.closest('.property');
     if(property&&property.hasAttribute('data-demo'))return false;
     if(!el.closest('.property,.card,#enquiryList,#listingManager,[data-record-content]'))return false;
