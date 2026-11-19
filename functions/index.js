@@ -194,8 +194,67 @@ exports.deleteListingMedia = functions
   });
 
 
-// Admin-only customer account control. Blocking disables Firebase Authentication access;
-// account deletion is deliberately not exposed here to prevent accidental data loss.
+// Admin-only customer account deletion. Keep property records and media for manual review,
+// but hide every listing, remove private contacts/enquiries, and erase the Auth/customer account.
+exports.adminDeleteCustomer = functions.https.onCall(async (data, context) => {
+  if (!context.auth || context.auth.uid !== ADMIN_UID) {
+    throw new functions.https.HttpsError('permission-denied', 'Only the admin can manage customers.');
+  }
+  const uid = String(data?.uid || '').trim();
+  if (!uid || uid.length > 128 || data?.confirmation !== 'DELETE') {
+    throw new functions.https.HttpsError('invalid-argument', 'Customer ID or confirmation is invalid.');
+  }
+  if (uid === ADMIN_UID) {
+    throw new functions.https.HttpsError('failed-precondition', 'The administrator account cannot be deleted here.');
+  }
+  const db = admin.firestore();
+  const target = await admin.auth().getUser(uid);
+  let hiddenListings = 0;
+  while (true) {
+    const page = await db.collection('listings').where('submitterUid', '==', uid).limit(400).get();
+    if (page.empty) break;
+    const batch = db.batch();
+    page.docs.forEach(listing => {
+      batch.update(listing.ref, {
+        status: 'rejected',
+        reviewNote: 'ગ્રાહક એકાઉન્ટ કાયમી ડિલીટ થયું — Admin તપાસ બાકી.',
+        reviewedAt: admin.firestore.FieldValue.serverTimestamp(),
+        reviewedBy: ADMIN_UID,
+        accountDeleted: true,
+        accountDeletedAt: admin.firestore.FieldValue.serverTimestamp()
+      });
+      batch.delete(db.collection('listingContacts').doc(listing.id));
+      hiddenListings++;
+    });
+    await batch.commit();
+  }
+  while (true) {
+    const page = await db.collection('listingContacts').where('ownerUid', '==', uid).limit(400).get();
+    if (page.empty) break;
+    const batch = db.batch();
+    page.docs.forEach(d => batch.delete(d.ref));
+    await batch.commit();
+  }
+  await db.recursiveDelete(db.collection('users').doc(uid));
+  while (true) {
+    const page = await db.collection('enquiries').where('uid', '==', uid).limit(400).get();
+    if (page.empty) break;
+    const batch = db.batch();
+    page.docs.forEach(d => batch.delete(d.ref));
+    await batch.commit();
+  }
+  await db.collection('adminLogs').add({
+    kind: 'customer_deleted', uid, email: target.email || '',
+    phoneNumber: target.phoneNumber || '', hiddenListings,
+    mediaPreserved: true, changedBy: context.auth.uid,
+    at: new Date().toISOString(),
+    createdAt: admin.firestore.FieldValue.serverTimestamp()
+  });
+  await admin.auth().deleteUser(uid);
+  return { ok: true, uid, hiddenListings, mediaPreserved: true };
+});
+
+// Admin-only customer account control. Blocking disables Firebase Authentication access.
 exports.adminListCustomers = functions.https.onCall(async (data, context) => {
   if (!context.auth || context.auth.uid !== ADMIN_UID) {
     throw new functions.https.HttpsError('permission-denied', 'Only the admin can manage customers.');
