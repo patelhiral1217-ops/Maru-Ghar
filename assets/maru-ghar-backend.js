@@ -21,37 +21,46 @@ let db=null, auth=null, liveMode=false, lastListingDoc=null, loadingMore=false, 
 const PAGE_SIZE=12;
 const ADMIN_UID='yJYiuaUE3KXVLVuWqLyLRH5owQJ3';
 // Default Gujarat cities. The admin can add more cities from the admin panel (stored in Firestore) - no rebuild needed.
-const DEFAULT_CITIES=[["ગાંધીનગર", "Gandhinagar"], ["અમદાવાદ", "Ahmedabad"], ["સુરત", "Surat"], ["વડોદરા", "Vadodara"], ["રાજકોટ", "Rajkot"], ["ભાવનગર", "Bhavnagar"], ["જામનગર", "Jamnagar"], ["જૂનાગઢ", "Junagadh"], ["આણંદ", "Anand"], ["નડિયાદ", "Nadiad"], ["મહેસાણા", "Mehsana"], ["કલોલ", "Kalol"], ["મોરબી", "Morbi"], ["સુરેન્દ્રનગર", "Surendranagar"], ["ભરૂચ", "Bharuch"], ["વાપી", "Vapi"], ["નવસારી", "Navsari"], ["પાટણ", "Patan"], ["ગોધરા", "Godhra"], ["પોરબંદર", "Porbandar"], ["ભુજ", "Bhuj"], ["અમરેલી", "Amreli"], ["પાલનપુર", "Palanpur"], ["હિંમતનગર", "Himatnagar"]];
+const DEFAULT_CITIES=[["અમદાવાદ","Ahmedabad"],["ગાંધીનગર","Gandhinagar"]];
 const GANDHINAGAR_AREAS=[{gu:"સેક્ટર 1",en:"Sector 1",hi:"सेक्टर 1",match:"સેક્ટર 1|sector 1|sector-1"},{gu:"સેક્ટર 2",en:"Sector 2",hi:"सेक्टर 2",match:"સેક્ટર 2|sector 2|sector-2"},{gu:"સેક્ટર 3",en:"Sector 3",hi:"सेक्टर 3",match:"સેક્ટર 3|sector 3|sector-3"},{gu:"સેક્ટર 4",en:"Sector 4",hi:"सेक्टर 4",match:"સેક્ટર 4|sector 4|sector-4"},{gu:"સેક્ટર 5",en:"Sector 5",hi:"सेक्टर 5",match:"સેક્ટર 5|sector 5|sector-5"},{gu:"સેક્ટર 6",en:"Sector 6",hi:"सेक्टर 6",match:"સેક્ટર 6|sector 6|sector-6"},{gu:"સેક્ટર 7",en:"Sector 7",hi:"सेक्टर 7",match:"સેક્ટર 7|sector 7|sector-7"},{gu:"સેક્ટર 8",en:"Sector 8",hi:"सेक्टर 8",match:"સેક્ટર 8|sector 8|sector-8"},{gu:"સેક્ટર 9",en:"Sector 9",hi:"सेक्टर 9",match:"સેક્ટર 9|sector 9|sector-9"},{gu:"સેક્ટર 10",en:"Sector 10",hi:"सेक्टर 10",match:"સેક્ટર 10|sector 10|sector-10"},{gu:"સેક્ટર 11",en:"Sector 11",hi:"सेक्टर 11",match:"સેક્ટર 11|sector 11|sector-11"},{gu:"સેક્ટર 12",en:"Sector 12",hi:"सेक्टर 12",match:"સેક્ટર 12|sector 12|sector-12"},{gu:"સેક્ટર 13",en:"Sector 13",hi:"सेक्टर 13",match:"સેક્ટર 13|sector 13|sector-13"},{gu:"સેક્ટર 14",en:"Sector 14",hi:"सेक्टर 14",match:"સેક્ટર 14|sector 14|sector-14"},{gu:"સેક્ટર 15",en:"Sector 15",hi:"सेक्टर 15",match:"સેક્ટર 15|sector 15|sector-15"},{gu:"સેક્ટર 16",en:"Sector 16",hi:"सेक्टर 16",match:"સેક્ટર 16|sector 16|sector-16"},{gu:"સેક્ટર 17",en:"Sector 17",hi:"सेक्टर 17",match:"સેક્ટર 17|sector 17|sector-17"},{gu:"સેક્ટર 18",en:"Sector 18",hi:"सेक्टर 18",match:"સેક્ટર 18|sector 18|sector-18"},{gu:"સેક્ટર 19",en:"Sector 19",hi:"सेक्टर 19",match:"સેક્ટર 19|sector 19|sector-19"},{gu:"સેક્ટર 20",en:"Sector 20",hi:"सेक्टर 20",match:"સેક્ટર 20|sector 20|sector-20"},{gu:"સેક્ટર 21",en:"Sector 21",hi:"सेक्टर 21",match:"સેક્ટર 21|sector 21|sector-21"},{gu:"સેક્ટર 22",en:"Sector 22",hi:"सेक्टर 22",match:"સેક્ટર 22|sector 22|sector-22"},{gu:"સેક્ટર 23",en:"Sector 23",hi:"सेक्टर 23",match:"સેક્ટર 23|sector 23|sector-23"},{gu:"સેક્ટર 24",en:"Sector 24",hi:"सेक्टर 24",match:"સેક્ટર 24|sector 24|sector-24"},{gu:"સેક્ટર 25",en:"Sector 25",hi:"सेक्टर 25",match:"સેક્ટર 25|sector 25|sector-25"},{gu:"સેક્ટર 26",en:"Sector 26",hi:"सेक्टर 26",match:"સેક્ટર 26|sector 26|sector-26"},{gu:"સેક્ટર 27",en:"Sector 27",hi:"सेक्टर 27",match:"સેક્ટર 27|sector 27|sector-27"},{gu:"સેક્ટર 28",en:"Sector 28",hi:"सेक्टर 28",match:"સેક્ટર 28|sector 28|sector-28"},{gu:"સેક્ટર 29",en:"Sector 29",hi:"सेक्टर 29",match:"સેક્ટર 29|sector 29|sector-29"},{gu:"સેક્ટર 30",en:"Sector 30",hi:"सेक्टर 30",match:"સેક્ટર 30|sector 30|sector-30"},{gu:"કુડાસણ",en:"Kudasan",hi:"कुडासन",match:"કુડાસણ|kudasan"},{gu:"રાંદેસણ",en:"Randesan",hi:"रांदेसण",match:"રાંદેસણ|રાંદેસ|randesan|randes"},{gu:"રાયસણ",en:"Raysan",hi:"रायसण",match:"રાયસણ|raisan|raysan"},{gu:"સરગાસણ",en:"Sargasan",hi:"सरगासन",match:"સરગાસણ|sargasan"},{gu:"વાવોલ",en:"Vavol",hi:"वावोल",match:"વાવોલ|vavol"},{gu:"પેથાપુર",en:"Pethapur",hi:"पेथापुर",match:"પેથાપુર|pethapur"},{gu:"કોબા",en:"Koba",hi:"कोबा",match:"કોબા|koba"},{gu:"કોલવડા",en:"Kolavada",hi:"कोलवाडा",match:"કોલવડા|kolavada|kolvada"},{gu:"રાંધેજા",en:"Randheja",hi:"रांधेजा",match:"રાંધેજા|randheja"},{gu:"પોર",en:"Por",hi:"पोर",match:"પોર|por"},{gu:"અંબાપુર",en:"Ambapur",hi:"अंबापुर",match:"અંબાપુર|ambapur"},{gu:"વાસણા-હડમતીયા",en:"Vasna-Hadmatia",hi:"वासणा-हडमतिया",match:"વાસણા|હડમતીયા|vasna|hadmatia"},{gu:"ભાટ",en:"Bhat",hi:"भाट",match:"ભાટ|bhat"},{gu:"સુઘડ",en:"Sughad",hi:"सुघड़",match:"સુઘડ|sughad"},{gu:"ઝુંડાલ",en:"Zundal",hi:"झुंडाल",match:"ઝુંડાલ|zundal"},{gu:"ખોરજ",en:"Khoraj",hi:"खोरज",match:"ખોરજ|khoraj"},{gu:"અમિયાપુર",en:"Amiyapur",hi:"अमियापुर",match:"અમિયાપુર|amiyapur"},{gu:"અડાલજ",en:"Adalaj",hi:"अडालज",match:"અડાલજ|adalaj"},{gu:"ઇન્ફોસિટી",en:"Infocity",hi:"इन्फोसिटी",match:"ઇન્ફોસિટી|infocity"}];
 const CITY_AREAS={
 'ગાંધીનગર':GANDHINAGAR_AREAS,
 'અમદાવાદ':[
 {gu:'ચાંદખેડા',en:'Chandkheda',hi:'चांदखेड़ा',match:'ચાંદખેડા|chandkheda'},{gu:'અડાલજ',en:'Adalaj',hi:'अडालज',match:'અડાલજ|adalaj'},{gu:'બોપલ',en:'Bopal',hi:'बोपल',match:'બોપલ|bopal'},{gu:'સેટેલાઇટ',en:'Satellite',hi:'सैटेलाइट',match:'સેટેલાઇટ|satellite'},{gu:'ગોતા',en:'Gota',hi:'गोता',match:'ગોતા|gota'},{gu:'થલતેજ',en:'Thaltej',hi:'थलतेज',match:'થલતેજ|thaltej'},{gu:'વસ્ત્રાપુર',en:'Vastrapur',hi:'वस्त्रापुर',match:'વસ્ત્રાપુર|vastrapur'},{gu:'મણિનગર',en:'Maninagar',hi:'मणिनगर',match:'મણિનગર|maninagar'},{gu:'નરોડા',en:'Naroda',hi:'नरोडा',match:'નરોડા|naroda'},{gu:'નિકોલ',en:'Nikol',hi:'निकोल',match:'નિકોલ|nikol'},{gu:'મોટેરા',en:'Motera',hi:'मोटेरा',match:'મોટેરા|motera'},{gu:'સાબરમતી',en:'Sabarmati',hi:'साबરमती',match:'સાબરમતી|sabarmati'},{gu:'બોડકદેવ',en:'Bodakdev',hi:'बोडकदेव',match:'બોડકદેવ|bodakdev'},{gu:'પ્રહલાદનગર',en:'Prahladnagar',hi:'प्रह्लादनगर',match:'પ્રહલાદનગર|prahladnagar'},{gu:'સાયન્સ સિટી',en:'Science City',hi:'साइंस सिटी',match:'સાયન્સ સિટી|science city'},{gu:'એસ.જી. હાઇવે',en:'SG Highway',hi:'एसजी हाईवे',match:'એસ.જી. હાઇવે|sg highway'},{gu:'સાઉથ બોપલ',en:'South Bopal',hi:'साउथ बोपल',match:'સાઉથ બોપલ|south bopal'},{gu:'શેલા',en:'Shela',hi:'शेला',match:'શેલા|shela'},{gu:'ઘુમા',en:'Ghuma',hi:'घुमा',match:'ઘુમા|ghuma'},{gu:'ચાંદલોડિયા',en:'Chandlodia',hi:'चांदलोड़िया',match:'ચાંદલોડિયા|chandlodia'},{gu:'વેજલપુર',en:'Vejalpur',hi:'वेजलपुर',match:'વેજલપુર|vejalpur'}
 ]};
+const CITY_AREAS_REMOTE={};
 function populateAreaFilter(city){
   const el=document.getElementById('areaFilter');if(!el)return;
   const lang=(()=>{try{return localStorage.getItem('mg_language')||'gu'}catch(_){return 'gu'}})();
   const selected=el.value||'all';el.replaceChildren();
   const allLabel=lang==='hi'?'सभी क्षेत्र':lang==='en'?'All areas':'બધા વિસ્તાર';
   el.appendChild(new Option(allLabel,'all'));
-  const areas=CITY_AREAS[city]||[];
-  if(areas.length){
-    areas.forEach(a=>{const o=new Option(a[lang]||a.gu,a.gu);o.dataset.match=a.match;el.appendChild(o)});
-    el.disabled=false;el.value=areas.some(a=>a.gu===selected)?selected:'all';
+  const builtIn=CITY_AREAS[city]||[];
+  const managed=(CITY_AREAS_REMOTE[city]||[]).map(name=>({gu:String(name),en:String(name),hi:String(name),match:String(name)}));
+  const merged=[...new Map([...builtIn,...managed].map(a=>[String(a.gu).toLowerCase(),a])).values()];
+  if(merged.length){
+    merged.forEach(a=>{const o=new Option(a[lang]||a.gu,a.gu);o.dataset.match=a.match||a.gu;el.appendChild(o)});
+    el.disabled=false;el.value=merged.some(a=>a.gu===selected)?selected:'all';
   }else{
-    el.disabled=true;el.replaceChildren(new Option(lang==='hi'?'पहले गांधीनगर चुनें':lang==='en'?'Select Gandhinagar for area filters':'વિસ્તાર સર્ચ માટે ગાંધીનગર પસંદ કરો','all'));
+    el.disabled=true;el.replaceChildren(new Option(lang==='hi'?'पहले शहर चुनें':lang==='en'?'No areas added for this city yet':'આ શહેર માટે હજી વિસ્તાર ઉમેરાયો નથી','all'));
   }
 }
 let currentCity='ગાંધીનગર';
-function mergeCities(extra){const m=new Map(DEFAULT_CITIES.map(([n,e])=>[n,e]));(extra||[]).forEach(c=>{if(c&&c.name)m.set(c.name,c.nameEn||m.get(c.name)||'')});return [...m.entries()];}
+function mergeCities(extra){
+  const source=Array.isArray(extra)&&extra.length?extra:DEFAULT_CITIES.map(([name,nameEn])=>({name,nameEn}));
+  return [...new Map(source.filter(c=>c&&c.name).map(c=>[c.name,[c.name,c.nameEn||'']])).values()];
+}
 function applyCityOptions(extra){
-  const list=mergeCities(extra);
+  const source=Array.isArray(extra)?extra:[];
+  Object.keys(CITY_AREAS_REMOTE).forEach(k=>delete CITY_AREAS_REMOTE[k]);
+  source.forEach(c=>{if(c&&c.name&&Array.isArray(c.areas))CITY_AREAS_REMOTE[c.name]=c.areas.filter(a=>typeof a==='string'&&a.trim()).map(a=>a.trim())});
+  const list=mergeCities(source);
   const cf=document.getElementById('cityFilter');
   if(cf){
     const selected=cf.value||currentCity;
     cf.replaceChildren(new Option('આખું ગુજરાત','all'));
     list.forEach(([n,en])=>{const o=new Option(n,n);o.dataset.en=en||'';cf.appendChild(o)});
-    cf.value=list.some(([n])=>n===selected)?selected:(list.some(([n])=>n===currentCity)?currentCity:'ગાંધીનગર');
+    cf.value=list.some(([n])=>n===selected)?selected:(list.some(([n])=>n===currentCity)?currentCity:(list[0]?.[0]||'all'));
     currentCity=cf.value;
   }
   const ff=document.getElementById('cityField');
@@ -59,12 +68,12 @@ function applyCityOptions(extra){
     const cur=ff.value||'ગાંધીનગર';
     ff.replaceChildren();
     list.forEach(([n])=>ff.appendChild(new Option(n,n)));
-    ff.value=list.some(([n])=>n===cur)?cur:(list[0]?.[0]||'ગાંધીનગર');
+    ff.value=list.some(([n])=>n===cur)?cur:(list[0]?.[0]||'');
   }
 }
-// Render the built-in city list immediately; refresh admin-added cities in the background.
+// Show only the two starting cities until the admin-managed Firestore catalog is loaded.
 function loadCities(){
-  const cacheKey='mg_city_options_v1';
+  const cacheKey='mg_city_options_v2';
   let cached=[];
   try{
     const c=JSON.parse(localStorage.getItem(cacheKey)||'null');
@@ -72,9 +81,9 @@ function loadCities(){
   }catch(_){}
   applyCityOptions(cached);
   return getDocs(collection(db,'cities')).then(s=>{
-    const extra=s.docs.map(d=>d.data());
-    applyCityOptions(extra);
-    try{localStorage.setItem(cacheKey,JSON.stringify({t:Date.now(),items:extra}));}catch(_){}
+    const managed=s.docs.map(d=>d.data());
+    applyCityOptions(managed);
+    try{localStorage.setItem(cacheKey,JSON.stringify({t:Date.now(),items:managed}));}catch(_){}
   }).catch(e=>console.warn('cities load failed (cached/default city list used):',e));
 }
 function isTrustedMapsUrl(value){try{const u=new URL(String(value||''));return u.protocol==='https:'&&(['google.com','www.google.com','maps.google.com','maps.app.goo.gl','goo.gl'].includes(u.hostname.toLowerCase()))&&((u.hostname==='google.com'||u.hostname==='www.google.com')?u.pathname.startsWith('/maps'):u.hostname==='goo.gl'?u.pathname.startsWith('/maps'):true)}catch(_){return false}}
