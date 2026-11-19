@@ -4486,30 +4486,20 @@ body #mgTrust,body .mg-trust{display:none!important}
 </style>
 
 <style id="mg-banner-full-photo-metal-title-fix-20261119">
-/* Keep the existing banner height unchanged. Use new wide house photographs, not zoomed/cropped source thumbnails. */
+/* Preserve the existing banner height. Show every source photo in full without cropping. */
 .top.mg-top-banner{height:auto!important;min-height:214px!important;padding:0!important;background:#102b28!important}
-.top.mg-top-banner .mg-tagline{height:auto!important;min-height:214px!important;aspect-ratio:auto!important;padding:14px 18px!important}
-.top.mg-top-banner .mg-tagline-background{background:#102b28!important}
-.top.mg-top-banner .mg-tagline-background img{object-fit:cover!important;object-position:center 52%!important;background:#102b28!important}
-.top.mg-top-banner .mg-tagline-copy strong{
- display:block!important;width:100%!important;
- font-family:"Noto Sans Gujarati","Noto Sans",sans-serif!important;
- font-size:clamp(36px,5.2vw,62px)!important;line-height:1.3!important;font-weight:1000!important;
- background:linear-gradient(180deg,#fffbe7 0%,#f8e9b0 14%,#d4dce0 31%,#ffffff 43%,#e8c66d 58%,#b77e20 76%,#fff2bd 91%,#a9b6bd 100%)!important;
- -webkit-background-clip:text!important;background-clip:text!important;
- color:transparent!important;-webkit-text-fill-color:transparent!important;
- -webkit-text-stroke:1.15px #344b40!important;
- text-shadow:0 1px 0 #fff9dc,0 2px 0 #d7b65f,0 4px 0 #98702a,0 6px 0 #53616a,0 8px 0 #49330f,0 11px 17px rgba(0,0,0,.92)!important;
- filter:drop-shadow(0 2px 3px rgba(0,0,0,.8))!important;
+.top.mg-top-banner .mg-tagline{height:auto!important;min-height:214px!important;aspect-ratio:auto!important;padding:0!important}
+.top.mg-top-banner .mg-tagline-background{
+ position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
+ background:linear-gradient(135deg,#173b32,#071d20)!important;overflow:hidden!important;
 }
+.top.mg-top-banner .mg-tagline-background img{
+ position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
+ object-fit:contain!important;object-position:center center!important;
+ background:transparent!important;
+}
+.top.mg-top-banner .mg-tagline-copy{display:none!important}
 @media(max-width:600px){
  .top.mg-top-banner,.top.mg-top-banner .mg-tagline{min-height:184px!important}
- .top.mg-top-banner .mg-tagline{padding:10px 9px!important}
- .top.mg-top-banner .mg-tagline-copy strong{font-size:clamp(29px,8.2vw,43px)!important;-webkit-text-stroke:.8px #344b40!important}
 }
-.mg-showcase-frame{background:#173b32!important}
-.mg-showcase-slide{background-color:#173b32!important;background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important}
-#mgDemoShowcase .mg-demo-photo{background:linear-gradient(135deg,#173b32,#e7ece7)!important}
-#mgDemoShowcase .mg-demo-photo img{object-fit:contain!important;background:#e7ece7!important}
-#mgDemoDetail .mg-detail-gallery img{object-fit:contain!important;background:#e7ece7!important}
 </style>
