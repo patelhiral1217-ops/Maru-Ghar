@@ -379,7 +379,7 @@ if(form) form.addEventListener('submit', async ev=>{
     }
     const fd=new FormData(form); const payload={
       ownerName:String(fd.get('ownerName')||'').trim(),
-      type:String(fd.get('type')||''), purpose:String(fd.get('purpose')||''), location:String(fd.get('location')||'').trim(), area:String(fd.get('location')||'').trim(),
+      type:String(fd.get('type')||''), purpose:String(fd.get('purpose')||''), location:String(fd.get('location')||'').trim(),
       city:String(fd.get('city')||'ગાંધીનગર').trim(), price:String(fd.get('price')||'').trim(), description:String(fd.get('description')||'').trim(), ownerConsent:fd.get('ownerConsent')==='on', photos:uploaded, videos:uploadedVideos,
       status:'pending', createdAt:serverTimestamp(), submitterUid:auth.currentUser.uid
     };
