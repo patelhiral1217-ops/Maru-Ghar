@@ -984,7 +984,7 @@ header .navlinks > a:not(.admin-link):focus-visible{
 }
 </style>
 <script id="mg-banner-photo-rotation-20261119">
-(()=>{function init(){const box=document.querySelector('.mg-tagline-background');if(!box)return;const pics=[...box.querySelectorAll('img')];if(!pics.length)return;let at=0,timer=null;function show(n){at=(n+pics.length)%pics.length;pics.forEach((p,i)=>p.classList.toggle('mg-bg-active',i===at));const active=pics[at];if(active){active.loading='eager';active.decoding='async'}}function stop(){if(timer){clearInterval(timer);timer=null}}function start(){stop();if(!document.hidden&&pics.length>1)timer=setInterval(()=>show(at+1),7000)}pics.forEach((p,i)=>{p.decoding='async';p.loading=i===0?'eager':'lazy';try{p.fetchPriority=i===0?'high':'low'}catch(e){}});show(0);const first=pics[0];if(first.complete)start();else{first.addEventListener('load',start,{once:true});first.addEventListener('error',start,{once:true})}document.addEventListener('visibilitychange',start)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init()})();
+(()=>{function init(){const box=document.querySelector('.mg-tagline-background');if(!box||box.dataset.mgReliableRotation==='1')return;box.dataset.mgReliableRotation='1';const pics=[...box.querySelectorAll('img')];if(!pics.length)return;let good=[],at=0,timer=null;const fallback='assets/maru-ghar-approved-app-icon.png';function show(n){if(!good.length)return;at=(n+good.length)%good.length;pics.forEach(p=>p.classList.remove('mg-bg-active'));good[at].classList.add('mg-bg-active')}function start(){if(timer)clearInterval(timer);if(!document.hidden&&good.length>1)timer=setInterval(()=>show(at+1),7000)}let pending=pics.length;pics.forEach((p,i)=>{p.loading='eager';p.decoding='async';try{p.fetchPriority=i===0?'high':'auto'}catch(e){}const settle=ok=>{if(p.dataset.mgSettled==='1')return;p.dataset.mgSettled='1';if(ok)good.push(p);pending--;if(pending===0){if(!good.length){p.src=fallback;p.style.objectFit='contain';p.style.background='#102a25';good=[p]}show(0);start()}};p.addEventListener('load',()=>settle(true),{once:true});p.addEventListener('error',()=>settle(false),{once:true});if(p.complete){if(p.naturalWidth>0)settle(true);else if(p.currentSrc||p.src)settle(false)}});document.addEventListener('visibilitychange',start)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init()})();
 </script>
 
 
@@ -1014,6 +1014,18 @@ header .navlinks > a:not(.admin-link):focus-visible{
 @media(max-width:600px){.mg-showcase{margin-top:12px!important}}
 </style>
 
+<style id="mg-final-demo-empty-banner-fix-20261119">
+/* Hide truly empty CMS/ad placeholders; never hide populated content. */
+.mg-cms-slot:empty,[data-mg-content-slot]:empty,.mg-ad-slot[hidden]{display:none!important;min-height:0!important;height:0!important;margin:0!important;padding:0!important;border:0!important;box-shadow:none!important}
+/* A failed remote banner photo must not leave a blank heading strip. */
+.top.mg-top-banner{background-color:#102a25!important}
+.mg-tagline-background img{background:#102a25!important}
+.mg-tagline-background img:not(.mg-bg-active){visibility:hidden!important}
+.mg-tagline-background img.mg-bg-active{visibility:visible!important}
+/* Keep the demo detail action compact and readable on narrow phones. */
+#mgDemoShowcase .mg-demo-open{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;min-height:40px!important;margin-top:8px!important;padding:8px 10px!important;font-size:13px!important;line-height:1.25!important;white-space:normal!important;overflow-wrap:anywhere!important;border-radius:9px!important;box-shadow:0 2px 0 #89692c,0 4px 8px #203b2c18!important}
+@media(max-width:600px){#mgDemoShowcase .mg-demo-open{min-height:38px!important;padding:7px 9px!important;font-size:12px!important}}
+</style>
 </head>
 <body>
 <div id="mgLocalFileWarning" hidden role="status" style="max-width:1220px;margin:10px auto;padding:12px 16px;border:1px solid #d8b45d;border-radius:10px;background:#fff4cf;color:#49370a;font:600 13px/1.6 Arial,sans-serif">આ index.html ફાઇલ સીધી ફોન/કમ્પ્યુટરમાંથી ખોલેલી છે. ભાષા અને સામાન્ય પેજ દેખાઈ શકે છે, પરંતુ Firebase Login, લાઇવ લિસ્ટિંગ, ફોટો/વિડિયો અપલોડ અને એકાઉન્ટ Sync માટે વેબસાઇટની HTTPS લિંક અથવા ઇન્સ્ટોલ કરેલી APK ખોલો.</div>
