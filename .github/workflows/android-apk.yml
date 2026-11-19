@@ -19,6 +19,11 @@ jobs:
           npm install
           npm run copy-web
           npm test
+      - name: Install OTA updater for native APK and bundle its browser bridge
+        run: |
+          npm install --no-save @capgo/capacitor-updater@^7 @capacitor/core@^7 esbuild
+          mkdir -p www/assets
+          npx esbuild scripts/maru-ghar-ota.js --bundle --format=esm --platform=browser --target=es2020 --outfile=www/assets/maru-ghar-ota.bundle.js
       - name: Install Android SDK platform
         run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
       - name: Add Android project
