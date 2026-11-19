@@ -28,7 +28,7 @@ jobs:
         run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
       - name: Add Android project
         run: |
-          npm install @capacitor/cli@^7 @capacitor/core@^7 @capacitor/android@^7 @capacitor/push-notifications@^7 @capacitor/assets@^3
+          npm install @capacitor/cli@^7 @capacitor/core@^7 @capacitor/android@^7 @capacitor/push-notifications@^7 @capacitor/assets@^3 @capgo/capacitor-updater@^7
           npx cap add android
           cp google-services.json android/app/google-services.json
           M=android/app/src/main/AndroidManifest.xml
