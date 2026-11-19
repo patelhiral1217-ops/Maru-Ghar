@@ -4436,4 +4436,35 @@ body #mgTrust,body .mg-trust{display:none!important}
  #listings #properties[data-cols="3"] .property .photo{height:clamp(78px,24vw,120px)!important}
  #listings #properties[data-cols="4"] .property .photo{height:clamp(64px,20vw,95px)!important}
 }
+
+/* Image-only correction: show the complete hero and family photos without cropping. */
+.mg-tagline-background img{
+  object-fit:contain!important;
+  object-position:center!important;
+  background-color:#071d20!important;
+}
+.top.mg-top-banner{
+  background-color:#071d20!important;
+}
+.top.mg-top-banner header{
+  background-size:auto,contain!important;
+  background-position:center,center!important;
+  background-repeat:no-repeat,no-repeat!important;
+  background-color:#071d20!important;
+}
+#mgDemoShowcase .mg-family-feature img{
+  display:block!important;
+  width:100%!important;
+  height:330px!important;
+  max-height:none!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  background:#e7ece7!important;
+}
+@media(max-width:650px){
+  #mgDemoShowcase .mg-family-feature img{
+    height:260px!important;
+  }
+}
+
 </style>
