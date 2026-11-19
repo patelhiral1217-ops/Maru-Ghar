@@ -18,7 +18,7 @@ if(!rules.includes('allow create, delete: if false'))errors.push('Customers must
 if(!rules.includes("request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read'])"))errors.push('Customer may only mark their own notification read');
 if(!extras.includes("collection(db,'users',currentUser.uid,'notifications')"))errors.push('Customer notification list must be UID scoped');
 if(!extras.includes("{read:true}"))errors.push('Customer notification read action missing');
-if(!extras.includes('registerCustomerPush')||!extras.includes("collection(db,'users',uid,'pushTokens',token)"))errors.push('Customer Android FCM token registration missing');
+if(!extras.includes('registerCustomerPush')||!extras.includes("doc(db,'users',uid,'pushTokens',token)"))errors.push('Customer Android FCM token registration missing');
 if(!android.includes('@capacitor/push-notifications@^7'))errors.push('Android build must install Capacitor Push Notifications plugin');
 if(!admin.includes("doc(db,'adminTokens',t.value)"))errors.push('Admin FCM token registration missing');
 if(!admin.includes("PN.addListener('registration'"))errors.push('Android FCM registration listener missing');
