@@ -192,3 +192,59 @@ exports.deleteListingMedia = functions
     }
     return { deleted, failed };
   });
+
+
+// Admin-only customer account control. Blocking disables Firebase Authentication access;
+// account deletion is deliberately not exposed here to prevent accidental data loss.
+exports.adminListCustomers = functions.https.onCall(async (data, context) => {
+  if (!context.auth || context.auth.uid !== ADMIN_UID) {
+    throw new functions.https.HttpsError('permission-denied', 'Only the admin can manage customers.');
+  }
+  const pageToken = typeof data?.pageToken === 'string' ? data.pageToken : undefined;
+  const result = await admin.auth().listUsers(100, pageToken);
+  return {
+    users: result.users.map(user => ({
+      uid: user.uid,
+      email: user.email || '',
+      phoneNumber: user.phoneNumber || '',
+      displayName: user.displayName || '',
+      disabled: !!user.disabled,
+      createdAt: user.metadata?.creationTime || '',
+      lastSignInAt: user.metadata?.lastSignInTime || '',
+      providers: (user.providerData || []).map(p => p.providerId)
+    })),
+    nextPageToken: result.pageToken || null
+  };
+});
+
+exports.adminSetCustomerDisabled = functions.https.onCall(async (data, context) => {
+  if (!context.auth || context.auth.uid !== ADMIN_UID) {
+    throw new functions.https.HttpsError('permission-denied', 'Only the admin can manage customers.');
+  }
+  const uid = String(data?.uid || '').trim();
+  const disabled = data?.disabled;
+  const reason = String(data?.reason || '').trim().slice(0, 300);
+  if (!uid || uid.length > 128 || typeof disabled !== 'boolean') {
+    throw new functions.https.HttpsError('invalid-argument', 'Customer ID or action is invalid.');
+  }
+  if (uid === ADMIN_UID) {
+    throw new functions.https.HttpsError('failed-precondition', 'The administrator account cannot be blocked here.');
+  }
+  if (disabled && reason.length < 3) {
+    throw new functions.https.HttpsError('invalid-argument', 'Blocking requires a short reason.');
+  }
+  const target = await admin.auth().getUser(uid);
+  await admin.auth().updateUser(uid, { disabled });
+  const db = admin.firestore();
+  await db.collection('adminLogs').add({
+    kind: disabled ? 'customer_blocked' : 'customer_unblocked',
+    uid,
+    email: target.email || '',
+    phoneNumber: target.phoneNumber || '',
+    reason,
+    changedBy: context.auth.uid,
+    at: new Date().toISOString(),
+    createdAt: admin.firestore.FieldValue.serverTimestamp()
+  });
+  return { ok: true, uid, disabled };
+});
