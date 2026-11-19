@@ -213,9 +213,9 @@ exports.adminDeleteCustomer = functions.https.onCall(async (data, context) => {
   // Read once and process bounded batches; re-querying submitterUid after updates
   // would repeatedly select the same documents and never finish.
   const ownedListings = await db.collection('listings').where('submitterUid', '==', uid).get();
-  for (let offset = 0; offset < ownedListings.docs.length; offset += 400) {
+  for (let offset = 0; offset < ownedListings.docs.length; offset += 200) {
     const batch = db.batch();
-    ownedListings.docs.slice(offset, offset + 400).forEach(listing => {
+    ownedListings.docs.slice(offset, offset + 200).forEach(listing => {
       batch.update(listing.ref, {
         status: 'rejected',
         reviewNote: 'ગ્રાહક એકાઉન્ટ કાયમી ડિલીટ થયું — Admin તપાસ બાકી.',
