@@ -1,6 +1,7 @@
 /* Central Gujarati/Hindi/English interface dictionary. User-entered listing content is never translated. */
 window.MG_I18N_DICTIONARY={
   "ગાંધીનગરથી સમગ્ર ગુજરાત સુધી":{"hi":"गांधीनगर से पूरे गुजरात तक","en":"From Gandhinagar across Gujarat"},
+  "મારૂ ઘર સપનાનું ઘર":{"hi":"मेरा घर, सपनों का घर","en":"Maru Ghar – A Home of Dreams"},
   "તમારી પ્રોપર્ટીનું એક સરનામું":{"hi":"आपकी प्रॉपर्टी का एक पता","en":"One address for your property"},
   "મારું ઘર એપ":{"hi":"मेरा घर ऐप","en":"Maru Ghar App"},
   "EMI બંધ કરો":{"hi":"EMI बंद करें","en":"Close EMI"},
