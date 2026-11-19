@@ -162,6 +162,7 @@ button:active,.primary:active,.approve:active,.reject:active{transform:translate
 <p class="muted">આખી વેબસાઇટના ઉપલબ્ધ વિભાગોમાં લખાણ, ફોટા અને વીડિયો મૂકો. કમ્પ્યુટર પર વિભાગને માઉસથી ખેંચીને જગ્યા પર Drop કરો; મોબાઇલમાં જગ્યા પર ટેપ કરો. Preview પછી Publish કરો.</p>
 <div class="actions"><button class="primary" id="mgCmsNewBtn" type="button">＋ નવું લખાણ / ફોટો ઉમેરો</button></div>
 <p class="muted">નીચેની જગ્યાઓ વેબસાઇટના જુદા જુદા ભાગો છે. બનાવેલો વિભાગ અહીં ખેંચીને મૂકો અથવા મોબાઇલમાં યોગ્ય જગ્યા પસંદ કરો.</p><div id="mgCmsPlacementTargets" class="mg-cms-placement-targets" aria-label="ફોટા અને લખાણ મૂકવાની જગ્યાઓ"></div>
+<div class="mg-live-editor panel" id="mgLiveEditor"><div class="mg-live-editor-head"><div><h3>🖥️ Live Website Editor — વેબસાઇટ જોઈને જગ્યા પસંદ કરો</h3><p class="muted">નીચે વેબસાઇટનું Preview દેખાશે. પીળા નિશાનવાળી જગ્યાને ટેપ/ક્લિક કરો; પછી લખાણ કે ફોટો ઉમેરવાનું ફોર્મ ખુલી જશે. Publish કરતાં પહેલાં Preview ચકાસો.</p></div><div class="mg-live-editor-controls"><select id="mgCmsPreviewPage" aria-label="Preview page"><option value="home">Home Page</option><option value="download">Download Page</option></select><button class="primary" id="mgCmsPreviewReload" type="button">↻ Preview ફરી ખોલો</button></div></div><iframe id="mgCmsLivePreview" title="Maru Ghar live website preview" src="index.html?mgAdminPreview=1" loading="lazy" referrerpolicy="same-origin"></iframe><p id="mgCmsLiveStatus" class="status" role="status">Preview લોડ થયા પછી પીળા નિશાનવાળી જગ્યા પસંદ કરો.</p></div>
 <details class="mg-cms-editor" id="mgCmsEditor"><summary>✍️ લખાણ / ફોટો બનાવો અને Edit કરો</summary><div class="mg-cms-editor-body">
 <div class="formgrid">
 <label class="wide">પેજ પસંદ કરો<select id="mgCmsPage"><option value="home">મુખ્ય Home Page</option><option value="download">Download App Page</option></select></label>
@@ -179,7 +180,7 @@ button:active,.primary:active,.approve:active,.reject:active{transform:translate
 <label class="wide">Button text — English<input id="mgCmsButtonEn" maxlength="60"></label>
 <label class="wide">બટન ક્લિક થાય ત્યારે ખોલવાની HTTPS લિંક<input id="mgCmsButtonUrl" type="url" maxlength="1000" placeholder="https://..."></label>
 <label>દેખાડવું?<select id="mgCmsVisible"><option value="true">હા — Publish</option><option value="false">ના — છુપાવો</option></select></label>
-<label>ડિઝાઇન<select id="mgCmsStyle"><option value="gold">Gold Premium</option><option value="emerald">Emerald</option><option value="light">Light</option></select></label>
+<label>ડિઝાઇન<select id="mgCmsStyle"><option value="gold">Gold Premium</option><option value="emerald">Emerald</option><option value="light">Light</option><option value="royal">Royal Gold</option><option value="silver">Silver Premium</option><option value="ivory">Ivory Minimal</option></select></label>
 </div>
 <div class="actions">
 <button class="primary" id="mgCmsPreviewBtn" type="button">👁 Preview જુઓ</button>
@@ -3561,7 +3562,7 @@ document.addEventListener('reset',function(){setTimeout(render,0)},true)})();
 @media(prefers-reduced-motion:reduce){:where(button,input[type="button"],input[type="submit"],input[type="reset"],a[role="button"],[role="button"],[role="tab"]){transition:none!important}}
 </style>
 <link rel="stylesheet" href="assets/maru-ghar-site-content.css?v=20261118a">
-<script type="module" src="assets/maru-ghar-content-admin.js?v=20261119b"></script><script type="module" src="assets/maru-ghar-customer-admin.js?v=20261119a"></script><script type="module" src="assets/maru-ghar-activity-admin.js?v=20261119a"></script>
+<script type="module" src="assets/maru-ghar-content-admin.js?v=20261119b"></script><script src="assets/maru-ghar-live-editor.js?v=20261119a" defer></script><script type="module" src="assets/maru-ghar-customer-admin.js?v=20261119a"></script><script type="module" src="assets/maru-ghar-activity-admin.js?v=20261119a"></script>
 <link rel="stylesheet" href="assets/maru-ghar-admin-compact.css?v=20261118f">
 <script src="assets/maru-ghar-admin-compact.js?v=20261118g" defer></script>
 </body></html>
