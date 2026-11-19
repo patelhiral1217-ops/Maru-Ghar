@@ -837,34 +837,54 @@ h1,h2,h3,h4,.section-head h2,.searchbox h3,.mg-dialog-head h2,.mg-info-dialog h3
 </style>
 
 <style id="mg-digital-signage-title">
-/* Premium digital-signage title: bold, oversized and readable */
-.top.mg-top-banner{min-height:218px!important}
-.top.mg-top-banner .mg-tagline{min-height:218px!important;padding:12px 8px!important}
+/* Refined premium digital signboard: balanced gold lettering, dark emerald plaque. */
+.top.mg-top-banner{
+  min-height:196px!important;
+  border-bottom:3px solid #c7a34e!important;
+}
+.top.mg-top-banner .mg-tagline{
+  min-height:196px!important;
+  padding:18px 12px!important;
+}
 .top.mg-top-banner .mg-tagline-copy{
-  width:min(94%,980px)!important;max-width:980px!important;
-  min-height:0!important;padding:8px 12px!important;
-  border:1px solid rgba(255,222,139,.72)!important;border-radius:13px!important;
-  background:linear-gradient(135deg,rgba(4,25,21,.76),rgba(22,38,30,.62),rgba(4,25,21,.76))!important;
-  box-shadow:0 8px 24px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.24)!important;
+  position:relative!important;
+  box-sizing:border-box!important;
+  width:min(94%,1000px)!important;
+  max-width:1000px!important;
+  min-height:0!important;
+  padding:17px 24px!important;
+  border:2px solid #d8b65c!important;
+  border-radius:16px!important;
+  outline:1px solid rgba(255,239,190,.62)!important;
+  outline-offset:-7px!important;
+  background:linear-gradient(120deg,rgba(3,30,25,.91),rgba(12,48,40,.86),rgba(3,25,23,.92))!important;
+  box-shadow:0 12px 28px rgba(0,0,0,.48),inset 0 2px 0 rgba(255,255,255,.16),inset 0 -5px 16px rgba(0,0,0,.28)!important;
+  backdrop-filter:blur(4px)!important;
 }
 .top.mg-top-banner .mg-tagline-copy strong{
-  display:block!important;width:100%!important;
-  font-size:clamp(48px,6.1vw,78px)!important;
-  font-weight:1000!important;line-height:1.22!important;
-  letter-spacing:.2px!important;text-align:center!important;
-  color:#FFE8A6!important;-webkit-text-fill-color:#FFE8A6!important;
-  -webkit-text-stroke:1.2px #70490A!important;
-  text-shadow:0 1px 0 #fff4c7,0 3px 0 #e0b84d,0 5px 0 #b17b18,
-    0 7px 0 #76500d,0 10px 16px rgba(0,0,0,.9)!important;
-  overflow-wrap:anywhere!important;
+  display:block!important;
+  width:100%!important;
+  font-size:clamp(44px,6.8vw,76px)!important;
+  font-family:'Noto Sans Gujarati',Arial,sans-serif!important;
+  font-weight:900!important;
+  line-height:1.24!important;
+  letter-spacing:0!important;
+  text-align:center!important;
+  color:#f9e7ad!important;
+  -webkit-text-fill-color:#f9e7ad!important;
+  -webkit-text-stroke:.65px #76571b!important;
+  text-shadow:0 -1px 0 #fff9df,0 1px 0 #fff0bd,0 3px 0 #d2a94e,0 5px 0 #9b742b,0 8px 13px rgba(0,0,0,.85)!important;
+  overflow-wrap:normal!important;
+  text-wrap:balance!important;
 }
 @media(max-width:600px){
- .top.mg-top-banner{min-height:204px!important}
- .top.mg-top-banner .mg-tagline{min-height:204px!important;padding:10px 5px!important}
- .top.mg-top-banner .mg-tagline-copy{width:97%!important;padding:8px 6px!important}
+ .top.mg-top-banner{min-height:174px!important}
+ .top.mg-top-banner .mg-tagline{min-height:174px!important;padding:12px 7px!important}
+ .top.mg-top-banner .mg-tagline-copy{width:96%!important;padding:15px 10px!important;border-radius:13px!important}
  .top.mg-top-banner .mg-tagline-copy strong{
-   font-size:clamp(38px,10.2vw,52px)!important;line-height:1.28!important;
-   -webkit-text-stroke:.9px #70490A!important;
+   font-size:clamp(36px,9.2vw,48px)!important;
+   line-height:1.32!important;
+   -webkit-text-stroke:.45px #76571b!important;
  }
 }
 </style>
