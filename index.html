@@ -1020,10 +1020,10 @@ header .navlinks > a:not(.admin-link):focus-visible{
 <div class="top mg-top-banner">
   <div class="mg-tagline" aria-label="Maru Ghar App">
     <div class="mg-tagline-background" aria-hidden="true">
-      <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=2200&h=900&q=88" alt="" loading="lazy" decoding="async">
-      <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2200&h=900&q=88" alt="" loading="lazy" decoding="async">
-      <img src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=2200&h=900&q=88" alt="" loading="lazy" decoding="async">
-      <img src="https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=2200&h=900&q=88" alt="" loading="lazy" decoding="async">
+      <img src="https://www.hbs.studio/api/img/7a70ab59c2bc4f80a5fba29292d27730.jpeg?w=2200" alt="" loading="eager" decoding="async">
+      <img src="https://volzero.com/img/article/105348_65272.jpg" alt="" loading="eager" decoding="async">
+      <img src="https://www.kusharchitects.com/assets/front/images/Luxury_Villa_Design_in_Jaipur_%E2%80%93_Kush_Architects.jpeg" alt="" loading="eager" decoding="async">
+      <img src="https://cdn.home-designing.com/wp-content/uploads/2014/11/pegasus-lawn-structure.jpg" alt="" loading="eager" decoding="async">
     </div>
     <div class="mg-tagline-copy" aria-label="મારૂ ઘર સપનાનું ઘર">
       <strong>મારૂ ઘર સપનાનું ઘર</strong>
@@ -4486,22 +4486,26 @@ body #mgTrust,body .mg-trust{display:none!important}
 </style>
 
 <style id="mg-banner-full-photo-metal-title-fix-20261119">
-/* Full photograph visible: match the banner's shape to the landscape photo instead of zoom-cropping it. */
-.top.mg-top-banner{height:auto!important;min-height:0!important;padding:0!important;background:#102b28!important}
-.top.mg-top-banner .mg-tagline{height:auto!important;min-height:0!important;aspect-ratio:2.44/1!important;padding:14px 18px!important}
-.top.mg-top-banner .mg-tagline-background{background:linear-gradient(135deg,#173b32,#071d20)!important}
-.top.mg-top-banner .mg-tagline-background img{object-fit:contain!important;object-position:center center!important;background:#102b28!important}
+/* Keep the existing banner height unchanged. Use new wide house photographs, not zoomed/cropped source thumbnails. */
+.top.mg-top-banner{height:auto!important;min-height:214px!important;padding:0!important;background:#102b28!important}
+.top.mg-top-banner .mg-tagline{height:auto!important;min-height:214px!important;aspect-ratio:auto!important;padding:14px 18px!important}
+.top.mg-top-banner .mg-tagline-background{background:#102b28!important}
+.top.mg-top-banner .mg-tagline-background img{object-fit:cover!important;object-position:center 52%!important;background:#102b28!important}
 .top.mg-top-banner .mg-tagline-copy strong{
- background:linear-gradient(180deg,#fff9dd 0%,#f2d47a 22%,#b8c3c9 48%,#fff0bd 65%,#bd8d31 82%,#fff4d0 100%)!important;
+ display:block!important;width:100%!important;
+ font-family:"Noto Sans Gujarati","Noto Sans",sans-serif!important;
+ font-size:clamp(36px,5.2vw,62px)!important;line-height:1.3!important;font-weight:1000!important;
+ background:linear-gradient(180deg,#fffbe7 0%,#f8e9b0 14%,#d4dce0 31%,#ffffff 43%,#e8c66d 58%,#b77e20 76%,#fff2bd 91%,#a9b6bd 100%)!important;
  -webkit-background-clip:text!important;background-clip:text!important;
  color:transparent!important;-webkit-text-fill-color:transparent!important;
- -webkit-text-stroke:1px #5b451e!important;
- text-shadow:0 1px 0 #fff7d8,0 2px 0 #c6a34d,0 4px 0 #8b6827,0 6px 0 #53616a,0 8px 0 #5c451e,0 11px 16px rgba(0,0,0,.92)!important;
- filter:drop-shadow(0 2px 2px rgba(0,0,0,.75))!important;
+ -webkit-text-stroke:1.15px #344b40!important;
+ text-shadow:0 1px 0 #fff9dc,0 2px 0 #d7b65f,0 4px 0 #98702a,0 6px 0 #53616a,0 8px 0 #49330f,0 11px 17px rgba(0,0,0,.92)!important;
+ filter:drop-shadow(0 2px 3px rgba(0,0,0,.8))!important;
 }
 @media(max-width:600px){
- .top.mg-top-banner .mg-tagline{aspect-ratio:2/1!important;padding:8px 9px!important}
- .top.mg-top-banner .mg-tagline-copy strong{font-size:clamp(27px,7.4vw,39px)!important;-webkit-text-stroke:.7px #5b451e!important}
+ .top.mg-top-banner,.top.mg-top-banner .mg-tagline{min-height:184px!important}
+ .top.mg-top-banner .mg-tagline{padding:10px 9px!important}
+ .top.mg-top-banner .mg-tagline-copy strong{font-size:clamp(29px,8.2vw,43px)!important;-webkit-text-stroke:.8px #344b40!important}
 }
 .mg-showcase-frame{background:#173b32!important}
 .mg-showcase-slide{background-color:#173b32!important;background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important}
