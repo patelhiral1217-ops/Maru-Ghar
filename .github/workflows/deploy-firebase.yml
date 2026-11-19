@@ -34,6 +34,19 @@ jobs:
         run: npm run copy-web
       - name: Run full project validation
         run: npm test
+      - name: Build native OTA updater bridge and versioned web bundle
+        env:
+          GITHUB_RUN_NUMBER: ${{ github.run_number }}
+          GITHUB_SHA: ${{ github.sha }}
+        run: |
+          npm install --no-save @capgo/capacitor-updater@^7 @capacitor/core@^7 esbuild
+          mkdir -p www/assets www/ota/bundles
+          npx esbuild scripts/maru-ghar-ota.js --bundle --format=esm --platform=browser --target=es2020 --outfile=www/assets/maru-ghar-ota.bundle.js
+          VERSION="1.0.${GITHUB_RUN_NUMBER}"
+          ZIP="$RUNNER_TEMP/maru-ghar-ota.zip"
+          (cd www && zip -qr "$ZIP" . -x 'ota/*')
+          cp "$ZIP" "www/ota/bundles/${GITHUB_SHA}.zip"
+          node --input-type=module -e 'import fs from "node:fs"; const version="1.0."+process.env.GITHUB_RUN_NUMBER; const sha=process.env.GITHUB_SHA; const manifest={version,url:"https://maru-ghar-gandhinagar-8dbe4.web.app/ota/bundles/"+sha+".zip",nativeUpdateRequired:false}; fs.writeFileSync("www/ota/latest.json",JSON.stringify(manifest,null,2)+"\\n"); console.log("Prepared Maru Ghar OTA bundle",version);'
       - name: Hosting preflight
         run: node scripts/hosting-preflight.mjs
       - name: Install Firebase CLI
