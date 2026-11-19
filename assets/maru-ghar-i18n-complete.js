@@ -309,6 +309,8 @@
   const isUserContent=el=>!!(el&&el.closest&&el.closest('[data-user-content],[contenteditable="true"],textarea,input,[data-owner-text]'));
   const isDynamicRecordBodyText=el=>{
     if(!el||!el.closest)return false;
+    /* Demo showcase content is authored sample content, not owner-entered listing data. */
+    if(el.closest('#mgDemoShowcase,#mgDemoDetail'))return false;
     const property=el.closest('.property');
     if(property&&property.hasAttribute('data-demo'))return false;
     if(!el.closest('.property,.card,#enquiryList,#listingManager,[data-record-content]'))return false;
