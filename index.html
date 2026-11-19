@@ -984,7 +984,7 @@ header .navlinks > a:not(.admin-link):focus-visible{
 }
 </style>
 <script id="mg-banner-photo-rotation-20261119">
-(()=>{function init(){const box=document.querySelector('.mg-tagline-background');if(!box)return;const pics=[...box.querySelectorAll('img')];if(!pics.length)return;let at=0,timer=null;function show(n){at=(n+pics.length)%pics.length;pics.forEach((p,i)=>p.classList.toggle('mg-bg-active',i===at))}function stop(){if(timer){clearInterval(timer);timer=null}}function start(){stop();if(!document.hidden&&pics.length>1)timer=setInterval(()=>show(at+1),5000)}pics.forEach((p,i)=>{p.decoding='async';if(i===0){p.loading='eager';p.fetchPriority='high'}else{p.loading='lazy'}});show(0);start();document.addEventListener('visibilitychange',start)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init()})();
+(()=>{function init(){const box=document.querySelector('.mg-tagline-background');if(!box)return;let pics=[...box.querySelectorAll('img')];if(!pics.length)return;let at=0,timer=null;function show(n){at=(n+pics.length)%pics.length;pics.forEach((p,i)=>p.classList.toggle('mg-bg-active',i===at))}function stop(){if(timer){clearInterval(timer);timer=null}}function start(){stop();if(!document.hidden&&pics.length>1)timer=setInterval(()=>show(at+1),6000)}pics.forEach((p,i)=>{p.decoding='async';p.loading='eager';try{p.fetchPriority=i===0?'high':'low'}catch(e){}});const ready=pics.map(p=>new Promise(resolve=>{if(p.complete){resolve();return}p.addEventListener('load',resolve,{once:true});p.addEventListener('error',resolve,{once:true})}));show(0);Promise.all(ready).then(()=>{pics=pics.filter(p=>p.naturalWidth>0);if(!pics.length)return;show(0);start()});document.addEventListener('visibilitychange',start)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init()})();
 </script>
 
 
@@ -4454,5 +4454,34 @@ body #mgTrust,body .mg-trust{display:none!important}
   .top.mg-top-banner,.top.mg-top-banner .mg-tagline{
     min-height:204px!important;
   }
+}
+
+/* Final requested header-only refinement: seamless crossfade, full photo, metallic 3D title. */
+.top.mg-top-banner .mg-tagline-background{background:#071d20!important}
+.top.mg-top-banner .mg-tagline-background img{
+  object-fit:contain!important;
+  object-position:center center!important;
+  background:#071d20!important;
+  opacity:0!important;
+  transition:opacity 1.35s ease-in-out!important;
+  animation:none!important;
+}
+.top.mg-top-banner .mg-tagline-background img.mg-bg-active{opacity:1!important}
+.top.mg-top-banner .mg-tagline-copy strong{
+  font-family:'Anek Gujarati','Noto Sans Gujarati',sans-serif!important;
+  font-weight:1000!important;
+  color:#ffe8a6!important;
+  -webkit-text-fill-color:#ffe8a6!important;
+  -webkit-text-stroke:1px #315b43!important;
+  text-shadow:0 1px 0 #fff9d7,0 2px 0 #e4bc56,0 4px 0 #a8751d,
+    0 6px 0 #65400d,0 9px 15px rgba(0,0,0,.88)!important;
+}
+@media(max-width:600px){
+ .top.mg-top-banner .mg-tagline-background img{object-fit:contain!important}
+ .top.mg-top-banner .mg-tagline-copy strong{
+   -webkit-text-stroke:.65px #315b43!important;
+   text-shadow:0 1px 0 #fff9d7,0 2px 0 #e4bc56,0 4px 0 #a8751d,
+     0 6px 11px rgba(0,0,0,.88)!important;
+ }
 }
 </style>
