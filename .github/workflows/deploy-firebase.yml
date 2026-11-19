@@ -38,6 +38,11 @@ jobs:
         run: node scripts/hosting-preflight.mjs
       - name: Install Firebase CLI
         run: npm install --global firebase-tools@13
+      - name: Identify deployment service account safely
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          node -e 'const s=JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT); console.log("GitHub deployment service account:", s.client_email || "client_email missing")'
       - name: Deploy Hosting
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
