@@ -64,7 +64,7 @@ jobs:
             echo "No Firestore rules/index changes; deployment skipped."
           fi
       - name: Deploy Cloud Functions when changed
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && vars.DEPLOY_CLOUD_FUNCTIONS == 'true'
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
@@ -79,7 +79,7 @@ jobs:
             export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-service-account.json"
             firebase deploy --only functions --project maru-ghar-gandhinagar-8dbe4 --non-interactive
           else
-            echo "No Cloud Functions changes; deployment skipped."
+            echo "Cloud Functions deployment is disabled unless repository variable DEPLOY_CLOUD_FUNCTIONS=true. This avoids attempting a Blaze-only deployment on the current plan."
           fi
 
 # Re-deploy restored approved Maru Ghar appearance.
