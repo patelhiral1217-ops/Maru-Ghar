@@ -4,6 +4,8 @@ on:
   push:
     branches: ['main']
     tags: ['v*']
+permissions:
+  contents: write
 jobs:
   apk:
     runs-on: ubuntu-latest
@@ -60,21 +62,24 @@ jobs:
             $BT/apksigner sign --ks debug.jks --ks-key-alias dbg --ks-pass pass:android --key-pass pass:android --out Maru-Ghar-TEST.apk aligned.apk
           fi
           $BT/apksigner verify --print-certs Maru-Ghar-*.apk
-          sha256sum Maru-Ghar-*.apk | tee checksum.txt
-      - name: Publish signed APK at permanent Firebase Hosting download URL
-        env:
-          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-        run: |
-          test -n "$FIREBASE_SERVICE_ACCOUNT" || (echo "Missing FIREBASE_SERVICE_ACCOUNT repository secret" && exit 1)
-          mkdir -p www/downloads
-          cp Maru-Ghar-*.apk www/downloads/Maru-Ghar.apk
-          printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/firebase-service-account.json"
-          export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-service-account.json"
-          npm install --global firebase-tools@13
-          firebase deploy --only hosting --project maru-ghar-gandhinagar-8dbe4 --non-interactive
+          cp "$(ls Maru-Ghar-*.apk | head -1)" Maru-Ghar.apk
+          sha256sum Maru-Ghar.apk | tee checksum.txt
+      - name: Publish APK as a GitHub release asset (works with Firebase Spark plan)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: apk-latest
+          name: Maru Ghar latest APK
+          prerelease: true
+          overwrite_files: true
+          files: |
+            Maru-Ghar.apk
+            checksum.txt
+          body: |
+            Automatically built Maru Ghar APK.
+            This is a TEST build until a permanent release signing keystore is configured.
       - uses: actions/upload-artifact@v4
         with:
           name: maru-ghar-apk
           path: |
-            Maru-Ghar-*.apk
+            Maru-Ghar.apk
             checksum.txt
