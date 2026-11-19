@@ -22,7 +22,7 @@
  #mgDemoShowcase .mg-demo-note{font-size:12px;color:#795d25;font-weight:800}
  #mgDemoShowcase .mg-demo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:15px}
  #mgDemoShowcase .mg-demo-card{min-width:0;overflow:hidden;border:1px solid #d8d8c9;border-radius:16px;background:#fff;box-shadow:0 4px 13px #203b2c12} #mgDemoShowcase .mg-demo-card{container-type:inline-size}
- #mgDemoShowcase .mg-demo-photo{position:relative;height:190px;overflow:hidden;background:#e7ece7}
+ #mgDemoShowcase .mg-demo-photo{position:relative;height:190px;overflow:hidden;background:#e7ece7;touch-action:pan-y;user-select:none}
  #mgDemoShowcase .mg-demo-photo img{width:100%;height:100%;display:block;object-fit:contain;background:#e7ece7;transition:opacity .3s ease}
  #mgDemoShowcase .mg-family-feature{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(220px,.75fr);gap:18px;align-items:center;margin:8px 0 18px;padding:12px;border:1px solid #d8c58d;border-radius:16px;background:linear-gradient(145deg,#fffdf7,#edf2ed)}
  #mgDemoShowcase .mg-family-feature img{display:block;width:100%;height:auto;max-height:330px;object-fit:contain;background:#e7ece7;border-radius:12px}
@@ -38,7 +38,7 @@
  #mgDemoDetail .mg-detail-gallery img{object-fit:contain!important;background:#e7ece7!important}
  #mgDemoShowcase .mg-demo-photo .mg-demo-tag{position:absolute;left:10px;top:10px;padding:5px 9px;border-radius:20px;background:#fff5d7;color:#664b17;font-size:11px;font-weight:900}
  #mgDemoShowcase .mg-demo-photo .mg-demo-counter{position:absolute;right:10px;bottom:10px;padding:4px 8px;border-radius:20px;background:#102a23cc;color:white;font-size:11px}
- #mgDemoShowcase .mg-demo-controls{position:absolute;inset:0;display:block;pointer-events:none} #mgDemoShowcase .mg-demo-controls button{position:absolute;pointer-events:auto;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #b28b3f;border-radius:50%;background:linear-gradient(145deg,#fff6d5 0%,#e5c76f 58%,#c3cfc5 100%);color:#173d32;font-size:17px;font-weight:950;box-shadow:0 3px 0 #89692c,0 5px 9px #203b2c30,inset 0 1px 2px #fff;cursor:pointer;transition:filter .15s,box-shadow .15s} #mgDemoShowcase .mg-demo-controls [data-demo-pause]{top:9px;right:9px;width:29px;height:29px;font-size:13px} #mgDemoShowcase .mg-demo-controls [data-demo-prev]{left:9px;top:50%;transform:translateY(-50%)} #mgDemoShowcase .mg-demo-controls [data-demo-next]{right:9px;top:50%;transform:translateY(-50%)} #mgDemoShowcase .mg-demo-controls button:hover{filter:brightness(1.06);box-shadow:0 4px 0 #89692c,0 6px 11px #203b2c30,inset 0 1px 2px #fff} #mgDemoShowcase .mg-demo-controls button:active{filter:brightness(.97);box-shadow:0 1px 0 #89692c,0 2px 5px #203b2c25,inset 0 1px 2px #0001}
+ #mgDemoShowcase .mg-demo-controls{display:none!important} #mgDemoShowcase .mg-demo-controls button{display:none!important;position:absolute;pointer-events:auto;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #b28b3f;border-radius:50%;background:linear-gradient(145deg,#fff6d5 0%,#e5c76f 58%,#c3cfc5 100%);color:#173d32;font-size:17px;font-weight:950;box-shadow:0 3px 0 #89692c,0 5px 9px #203b2c30,inset 0 1px 2px #fff;cursor:pointer;transition:filter .15s,box-shadow .15s} #mgDemoShowcase .mg-demo-controls [data-demo-pause]{top:9px;right:9px;width:29px;height:29px;font-size:13px} #mgDemoShowcase .mg-demo-controls [data-demo-prev]{left:9px;top:50%;transform:translateY(-50%)} #mgDemoShowcase .mg-demo-controls [data-demo-next]{right:9px;top:50%;transform:translateY(-50%)} #mgDemoShowcase .mg-demo-controls button:hover{filter:brightness(1.06);box-shadow:0 4px 0 #89692c,0 6px 11px #203b2c30,inset 0 1px 2px #fff} #mgDemoShowcase .mg-demo-controls button:active{filter:brightness(.97);box-shadow:0 1px 0 #89692c,0 2px 5px #203b2c25,inset 0 1px 2px #0001}
  #mgDemoShowcase .mg-demo-controls button{width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #b28b3f;border-radius:50%;background:linear-gradient(145deg,#fff6d5 0%,#e5c76f 58%,#c3cfc5 100%);color:#173d32;font-size:15px;font-weight:950;box-shadow:0 3px 0 #89692c,0 5px 9px #203b2c30,inset 0 1px 2px #fff;cursor:pointer;transition:transform .15s,box-shadow .15s,filter .15s}
  #mgDemoShowcase .mg-demo-controls button:hover{transform:translateY(-2px);filter:brightness(1.04);box-shadow:0 5px 0 #89692c,0 7px 12px #203b2c30,inset 0 1px 2px #fff}
  #mgDemoShowcase .mg-demo-controls button:active{transform:translateY(2px);box-shadow:0 1px 0 #89692c,0 2px 5px #203b2c25,inset 0 1px 2px #0001}
@@ -51,7 +51,7 @@
  #mgDemoShowcase .mg-demo-body{padding:13px}
  #mgDemoShowcase .mg-demo-body h3{margin:0 0 7px;color:#203b31;font-size:16px;line-height:1.35}
  #mgDemoShowcase .mg-demo-location{color:#68766e;font-size:12px;margin-bottom:8px}
- #mgDemoShowcase .mg-demo-price{display:block!important;box-sizing:border-box;width:100%;max-width:100%;min-width:0;color:#a27b25;font-size:clamp(10px,6cqi,17px)!important;font-weight:900;margin:8px 0;white-space:nowrap!important;word-break:keep-all!important;overflow-wrap:normal!important;line-height:1.35;letter-spacing:-.45px;overflow:hidden;text-overflow:clip} #mgDemoDetail .mg-detail-price{display:inline-block;white-space:nowrap!important;word-break:keep-all;overflow-wrap:normal;line-height:1.35;font-size:clamp(18px,5vw,25px)}
+ #mgDemoShowcase .mg-demo-price{display:block!important;box-sizing:border-box;width:100%;max-width:100%;min-width:0;min-height:22px;color:#a27b25;font-size:16px!important;font-weight:900;margin:8px 0;white-space:nowrap!important;word-break:keep-all!important;overflow-wrap:normal!important;line-height:1.35;letter-spacing:-.55px;overflow:visible;text-overflow:clip} #mgDemoShowcase .mg-demo-price span{display:inline-block;max-width:none;white-space:nowrap!important;word-break:keep-all!important;overflow-wrap:normal!important;line-height:1.35;transform-origin:left center} #mgDemoDetail .mg-detail-price{display:inline-block;white-space:nowrap!important;word-break:keep-all;overflow-wrap:normal;line-height:1.35;font-size:clamp(18px,5vw,25px)}
  #mgDemoShowcase .mg-demo-spec{font-size:12px;color:#59675f;line-height:1.7}
  #mgDemoShowcase .mg-demo-open{width:100%;margin-top:12px;padding:11px;border:1px solid #b28b3f;border-radius:11px;background:linear-gradient(145deg,#fff1bb,#d7b75e 58%,#b9c4bb);color:#183c30;font-weight:900;box-shadow:0 3px 0 #89692c,0 5px 10px #203b2c18}
  #mgDemoDetail{position:fixed;inset:0;z-index:100500;overflow:auto;background:#f6f5ef;color:#203b31;padding:0 0 36px}
@@ -119,7 +119,7 @@
  }
  const params=new URLSearchParams(location.search),sample=params.get('demo-property');
  if(sample){const p=samples.find(x=>x.id===sample);if(p){detail(p);return}}
- function card(p,i){return '<article class="mg-demo-card" data-demo-id="'+p.id+'"><div class="mg-demo-photo"><img src="'+esc(p.photos[0])+'" alt="'+esc(p.title)+'" loading="lazy"><span class="mg-demo-tag">ડેમો નમૂનો</span><div class="mg-demo-controls"><button type="button" data-demo-pause aria-label="ફોટા રોકો">Ⅱ</button><button type="button" data-demo-prev aria-label="પાછળનો ફોટો">‹</button><button type="button" data-demo-next aria-label="આગળનો ફોટો">›</button></div><span class="mg-demo-counter">1 / '+p.photos.length+'</span></div><div class="mg-demo-body"><h3>'+esc(p.title)+'</h3><div class="mg-demo-location">📍 '+esc(p.area)+', '+esc(p.city)+'</div><div class="mg-demo-price">'+esc(p.price)+'</div><div class="mg-demo-spec">'+esc(p.bhk)+' · '+esc(p.size)+' · '+esc(p.purpose)+'</div><button class="mg-demo-open" type="button" data-demo-open="'+p.id+'">સંપૂર્ણ વિગત જુઓ →</button></div></article>'}
+ function card(p,i){return '<article class="mg-demo-card" data-demo-id="'+p.id+'"><div class="mg-demo-photo"><img src="'+esc(p.photos[0])+'" alt="'+esc(p.title)+'" loading="lazy"><span class="mg-demo-tag">ડેમો નમૂનો</span><span class="mg-demo-counter">1 / '+p.photos.length+'</span></div><div class="mg-demo-body"><h3>'+esc(p.title)+'</h3><div class="mg-demo-location">📍 '+esc(p.area)+', '+esc(p.city)+'</div><div class="mg-demo-price">'+esc(p.price)+'</div><div class="mg-demo-spec">'+esc(p.bhk)+' · '+esc(p.size)+' · '+esc(p.purpose)+'</div><button class="mg-demo-open" type="button" data-demo-open="'+p.id+'">સંપૂર્ણ વિગત જુઓ →</button></div></article>'}
  function init(){
   const listing=document.getElementById('listings');if(!listing)return;
   const existing=document.getElementById('mgDemoShowcase');
@@ -133,12 +133,19 @@
   const visibilityObserver=('IntersectionObserver' in window)?new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting)visibleCards.add(entry.target);else visibleCards.delete(entry.target)}),{rootMargin:'120px'}):null;
   function show(card,idx){const p=samples.find(x=>x.id===card.dataset.demoId);idx=(idx+p.photos.length)%p.photos.length;indices.set(p.id,idx);const im=card.querySelector('img');im.style.opacity='.25';const next=new Image();next.decoding='async';next.onload=()=>{im.src=next.src;im.style.opacity='1'};next.onerror=()=>im.style.opacity='1';next.src=p.photos[idx];card.querySelector('.mg-demo-counter').textContent=(idx+1)+' / '+p.photos.length;}
   section.querySelectorAll('.mg-demo-card').forEach(card=>{const id=card.dataset.demoId;if(visibilityObserver)visibilityObserver.observe(card);else visibleCards.add(card);timers.set(id,setInterval(()=>{if(visibleCards.has(card)&&!paused.has(id)&&!document.hidden)show(card,(indices.get(id)||0)+1)},6500));});
-  section.addEventListener('click',e=>{const card=e.target.closest('.mg-demo-card');if(!card)return;const id=card.dataset.demoId;
-   if(e.target.closest('[data-demo-pause]')){const b=e.target.closest('button');if(paused.has(id)){paused.delete(id);b.textContent='Ⅱ';b.setAttribute('aria-label','ફોટા રોકો')}else{paused.add(id);b.textContent='▶';b.setAttribute('aria-label','ફોટા ચાલુ કરો')}return}
-   if(e.target.closest('[data-demo-prev]')){show(card,(indices.get(id)||0)-1);return}
-    if(e.target.closest('[data-demo-next]')){show(card,(indices.get(id)||0)+1);return}
-   const open=e.target.closest('[data-demo-open]');if(open){location.href='index.html?demo-property='+encodeURIComponent(id);return}
+  /* Touch swipe replaces all on-photo arrow and pause controls. */
+  section.querySelectorAll('.mg-demo-photo').forEach(photo=>{
+   let startX=0,startY=0;
+   photo.addEventListener('touchstart',e=>{if(!e.changedTouches.length)return;startX=e.changedTouches[0].clientX;startY=e.changedTouches[0].clientY;},{passive:true});
+   photo.addEventListener('touchend',e=>{if(!e.changedTouches.length)return;const dx=e.changedTouches[0].clientX-startX,dy=e.changedTouches[0].clientY-startY;if(Math.abs(dx)>38&&Math.abs(dx)>Math.abs(dy)*1.25){const card=photo.closest('.mg-demo-card');const id=card.dataset.demoId;show(card,(indices.get(id)||0)+(dx<0?1:-1));}},{passive:true});
+   photo.querySelector('img').draggable=false;
   });
+  /* Measure actual rendered Gujarati text and shrink only as much as each card needs. */
+  const fitPrice=el=>{const span=el.querySelector('span');if(!span)return;span.style.fontSize='16px';const available=Math.max(1,el.clientWidth);const natural=Math.max(1,span.scrollWidth);span.style.fontSize=Math.max(8,Math.min(16,16*available/natural))+'px';};
+  const priceObserver=('ResizeObserver' in window)?new ResizeObserver(entries=>entries.forEach(entry=>fitPrice(entry.target))):null;
+  section.querySelectorAll('.mg-demo-price').forEach(el=>{fitPrice(el);if(priceObserver)priceObserver.observe(el);});
+  section.addEventListener('click',e=>{const open=e.target.closest('[data-demo-open]');if(open){location.href='index.html?demo-property='+encodeURIComponent(open.dataset.demoOpen);return}});
+
   window.addEventListener('pagehide',()=>timers.forEach(clearInterval),{once:true});
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
