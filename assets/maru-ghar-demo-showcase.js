@@ -21,7 +21,7 @@
  #mgDemoShowcase h2{margin:0;color:#173d32;font-size:clamp(20px,3vw,27px)}
  #mgDemoShowcase .mg-demo-note{font-size:12px;color:#795d25;font-weight:800}
  #mgDemoShowcase .mg-demo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:15px}
- #mgDemoShowcase .mg-demo-card{min-width:0;overflow:hidden;border:1px solid #d8d8c9;border-radius:16px;background:#fff;box-shadow:0 4px 13px #203b2c12}
+ #mgDemoShowcase .mg-demo-card{min-width:0;overflow:hidden;border:1px solid #d8d8c9;border-radius:16px;background:#fff;box-shadow:0 4px 13px #203b2c12} #mgDemoShowcase .mg-demo-card{container-type:inline-size}
  #mgDemoShowcase .mg-demo-photo{position:relative;height:190px;overflow:hidden;background:#e7ece7}
  #mgDemoShowcase .mg-demo-photo img{width:100%;height:100%;display:block;object-fit:contain;background:#e7ece7;transition:opacity .3s ease}
  #mgDemoShowcase .mg-family-feature{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(220px,.75fr);gap:18px;align-items:center;margin:8px 0 18px;padding:12px;border:1px solid #d8c58d;border-radius:16px;background:linear-gradient(145deg,#fffdf7,#edf2ed)}
@@ -51,7 +51,7 @@
  #mgDemoShowcase .mg-demo-body{padding:13px}
  #mgDemoShowcase .mg-demo-body h3{margin:0 0 7px;color:#203b31;font-size:16px;line-height:1.35}
  #mgDemoShowcase .mg-demo-location{color:#68766e;font-size:12px;margin-bottom:8px}
- #mgDemoShowcase .mg-demo-price{display:inline-flex;align-items:center;justify-content:flex-start;flex-wrap:nowrap;max-width:100%;width:max-content;box-sizing:border-box;color:#a27b25;font-size:clamp(13px,3.9vw,18px);font-weight:900;margin:8px 0;white-space:nowrap!important;word-break:keep-all;overflow-wrap:normal;line-height:1.35;letter-spacing:-.25px;overflow:visible} #mgDemoDetail .mg-detail-price{display:inline-block;white-space:nowrap!important;word-break:keep-all;overflow-wrap:normal;line-height:1.35;font-size:clamp(18px,5vw,25px)}
+ #mgDemoShowcase .mg-demo-price{display:block!important;box-sizing:border-box;width:100%;max-width:100%;min-width:0;color:#a27b25;font-size:clamp(10px,6cqi,17px)!important;font-weight:900;margin:8px 0;white-space:nowrap!important;word-break:keep-all!important;overflow-wrap:normal!important;line-height:1.35;letter-spacing:-.45px;overflow:hidden;text-overflow:clip} #mgDemoDetail .mg-detail-price{display:inline-block;white-space:nowrap!important;word-break:keep-all;overflow-wrap:normal;line-height:1.35;font-size:clamp(18px,5vw,25px)}
  #mgDemoShowcase .mg-demo-spec{font-size:12px;color:#59675f;line-height:1.7}
  #mgDemoShowcase .mg-demo-open{width:100%;margin-top:12px;padding:11px;border:1px solid #b28b3f;border-radius:11px;background:linear-gradient(145deg,#fff1bb,#d7b75e 58%,#b9c4bb);color:#183c30;font-weight:900;box-shadow:0 3px 0 #89692c,0 5px 10px #203b2c18}
  #mgDemoDetail{position:fixed;inset:0;z-index:100500;overflow:auto;background:#f6f5ef;color:#203b31;padding:0 0 36px}
