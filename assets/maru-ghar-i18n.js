@@ -1,5 +1,13 @@
 /* Central Gujarati/Hindi/English interface dictionary. User-entered listing content is never translated. */
 window.MG_I18N_DICTIONARY={
+  "👥 ગ્રાહક એકાઉન્ટ અને સુરક્ષા":{"hi":"👥 ग्राहक खाता और सुरक्षा","en":"👥 Customer Account & Security"},
+  "અહીંથી નોંધાયેલા એકાઉન્ટ જુઓ અને શંકાસ્પદ એકાઉન્ટને કારણ સાથે Block / Unblock કરો. બ્લોક કરવાથી તે એકાઉન્ટ Firebaseમાં લોગિન કરી શકશે નહીં. કાયમી ડિલીટ અહીંથી કરવામાં આવતું નથી.":{"hi":"यहाँ पंजीकृत खाते देखें और संदिग्ध खाते को कारण सहित Block / Unblock करें। ब्लॉक करने पर वह Firebase में लॉगिन नहीं कर सकेगा। स्थायी रूप से डिलीट यहाँ से नहीं किया जाता।","en":"View registered accounts and block or unblock suspicious accounts with a reason. A blocked account cannot sign in to Firebase. Permanent deletion is not available here."},
+  "ગ્રાહકો લોડ કરો":{"hi":"ग्राहक लोड करें","en":"Load Customers"},
+  "વધુ ગ્રાહકો":{"hi":"और ग्राहक","en":"More Customers"},
+  "નામ / ઈમેલ / મોબાઇલ / UIDથી શોધો":{"hi":"नाम / ईमेल / मोबाइल / UID से खोजें","en":"Search by name / email / mobile / UID"},
+  "ગ્રાહકો જોવા માટે ઉપરનું બટન દબાવો.":{"hi":"ग्राहक देखने के लिए ऊपर दिया गया बटन दबाएँ।","en":"Press the button above to view customers."},
+  "શોધો…":{"hi":"खोजें…","en":"Search…"},
+
   "ગાંધીનગરથી સમગ્ર ગુજરાત સુધી":{"hi":"गांधीनगर से पूरे गुजरात तक","en":"From Gandhinagar across Gujarat"},
   "મારૂ ઘર સપનાનું ઘર":{"hi":"मेरा घर, सपनों का घर","en":"Maru Ghar – A Home of Dreams"},
   "તમારી પ્રોપર્ટીનું એક સરનામું":{"hi":"आपकी प्रॉपर्टी का एक पता","en":"One address for your property"},
