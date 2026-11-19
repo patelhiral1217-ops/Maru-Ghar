@@ -1024,6 +1024,7 @@ header .navlinks > a:not(.admin-link):focus-visible{
       <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=max&w=2000&q=90" alt="">
       <img src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=max&w=2000&q=90" alt="">
       <img src="https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=max&w=2000&q=90" alt="">
+      <img src="https://images.pexels.com/photos/7642042/pexels-photo-7642042.jpeg?auto=compress&cs=tinysrgb&w=2000" alt="">
     </div>
     <div class="mg-tagline-copy" aria-label="મારૂ ઘર સપનાનું ઘર">
       <strong>મારૂ ઘર સપનાનું ઘર</strong>
@@ -4253,7 +4254,7 @@ window.MG_I18N_DICTIONARY={
 
 </style>
 
-<script src="assets/maru-ghar-demo-showcase.js?v=20261118d"></script>
+<script src="assets/maru-ghar-demo-showcase.js?v=20261119familyfixd"></script>
 <script defer src="assets/maru-ghar-admin-content.js?v=20261118a"></script>
 <style id="mg-final-search-metal-and-range-apply-20261117">
 /* Exact same champagne-gold/silver 3D finish for the home dropdowns and every category chip. */
@@ -4437,21 +4438,18 @@ body #mgTrust,body .mg-trust{display:none!important}
  #listings #properties[data-cols="4"] .property .photo{height:clamp(64px,20vw,95px)!important}
 }
 
-/* Only the heading background photo display and its rotation are adjusted. */
-.mg-tagline-background img{
-  object-fit:contain!important;
-  object-position:center!important;
-  background:#071d20!important;
-  animation-duration:30s!important;
+/* Keep the banner full-size while showing each complete photo without cropping. */
+.top.mg-top-banner,.top.mg-top-banner .mg-tagline{
+  min-height:clamp(300px,48vw,620px)!important;
 }
-.mg-tagline-background img:nth-child(1){animation-delay:0s!important}
-.mg-tagline-background img:nth-child(2){animation-delay:6s!important}
-.mg-tagline-background img:nth-child(3){animation-delay:12s!important}
-.mg-tagline-background img:nth-child(4){animation-delay:18s!important}
-.mg-tagline-background img:nth-child(5){animation-delay:24s!important}
-@keyframes mgTaglineHeroFade{
-  0%,4%{opacity:0}
-  7%,18%{opacity:1}
-  21%,100%{opacity:0}
+.top.mg-top-banner .mg-tagline-background img{
+  object-fit:contain!important;
+  object-position:center center!important;
+  background:#071d20!important;
+}
+@media(max-width:600px){
+  .top.mg-top-banner,.top.mg-top-banner .mg-tagline{
+    min-height:clamp(260px,68vw,430px)!important;
+  }
 }
 </style>
