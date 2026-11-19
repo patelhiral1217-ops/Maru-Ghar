@@ -4378,6 +4378,48 @@ body #mgTrust,body .mg-trust{display:none!important}
 </style>
 
 <script src="assets/maru-ghar-grid-controller.js?v=20261118c"></script>
+
+<style id="mg-final-mobile-banner-listing-fix-20261119">
+/* Apply final overrides inside the document body, after all legacy stylesheets. */
+@media (max-width:600px){
+  html body .top.mg-top-banner,
+  html body .top.mg-top-banner .mg-tagline{
+    height:132px!important;min-height:132px!important;max-height:132px!important;
+    padding-top:0!important;padding-bottom:0!important;overflow:hidden!important;
+  }
+  html body .top.mg-top-banner .mg-tagline-background,
+  html body .top.mg-top-banner .mg-tagline-background img{
+    position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
+  }
+  html body .top.mg-top-banner .mg-tagline-background img{
+    object-fit:cover!important;object-position:center center!important;
+  }
+}
+/* Exact listing title element and its wrapper: no wrapping or narrow flex shrink. */
+html body #listings .section-head{
+  display:flex!important;align-items:center!important;justify-content:space-between!important;
+  flex-wrap:nowrap!important;gap:8px!important;
+}
+html body #listings .section-head>div:first-child{
+  display:block!important;flex:0 0 auto!important;width:auto!important;min-width:0!important;
+}
+html body #listings #mgListingTitleButton{
+  display:inline-flex!important;flex:0 0 auto!important;width:auto!important;
+  min-width:0!important;max-width:none!important;height:auto!important;
+  white-space:nowrap!important;word-break:normal!important;overflow-wrap:normal!important;
+  font-size:clamp(15px,4.2vw,24px)!important;line-height:1.2!important;
+  padding:7px 0!important;
+}
+html body #listings #count{
+  flex:0 1 auto!important;min-width:0!important;max-width:55%!important;
+  white-space:nowrap!important;font-size:clamp(9px,2.5vw,13px)!important;
+}
+@media(max-width:380px){
+  html body #listings .section-head{gap:5px!important}
+  html body #listings #mgListingTitleButton{font-size:14px!important}
+  html body #listings #count{font-size:9px!important}
+}
+</style>
 </body></html>
 
 <style id="mg-city-and-four-column-fix-20261118">
@@ -4512,34 +4554,4 @@ body #mgTrust,body .mg-trust{display:none!important}
 }
 </style>
 
-<style id="mg-mobile-banner-heading-refine-20261119">
-/* Shorter mobile hero; retain full-bleed photo background. */
-@media(max-width:600px){
- .top.mg-top-banner{
-  height:132px!important;min-height:132px!important;max-height:132px!important;
- }
- .top.mg-top-banner .mg-tagline{
-  height:132px!important;min-height:132px!important;max-height:132px!important;
- }
- .top.mg-top-banner .mg-tagline-background img{
-  width:100%!important;height:100%!important;object-fit:cover!important;
-  object-position:center center!important;
- }
-}
-/* Keep the Property Listings heading on one clean line instead of wrapping. */
-#listings .section-head{display:flex!important;align-items:center!important;gap:10px!important;flex-wrap:nowrap!important}
-#listings .section-head>div:first-child{flex:0 0 auto!important;min-width:max-content!important;width:auto!important}
-#listings .mg-listing-title-button{
- display:inline-flex!important;align-items:center!important;justify-content:center!important;
- width:auto!important;max-width:none!important;min-width:max-content!important;
- white-space:nowrap!important;word-break:keep-all!important;overflow-wrap:normal!important;
- font-size:clamp(17px,2.2vw,24px)!important;line-height:1.2!important;
- padding:7px 0!important;
-}
-#listings #count{flex:0 1 auto!important;min-width:0!important;white-space:nowrap!important}
-@media(max-width:600px){
- #listings .section-head{gap:7px!important;margin-bottom:12px!important}
- #listings .mg-listing-title-button{font-size:17px!important;letter-spacing:0!important}
- #listings #count{font-size:10px!important;padding:6px 8px!important}
-}
-</style>
+
