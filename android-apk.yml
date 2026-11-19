@@ -2,6 +2,7 @@ name: Build Maru Ghar Android APK
 on:
   workflow_dispatch:
   push:
+    branches: ['main']
     tags: ['v*']
 jobs:
   apk:
