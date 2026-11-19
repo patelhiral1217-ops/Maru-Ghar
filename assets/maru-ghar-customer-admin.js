@@ -5,7 +5,7 @@ import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/
 (()=>{
  const ADMIN_UID='yJYiuaUE3KXVLVuWqLyLRH5owQJ3', $=id=>document.getElementById(id), root=$('mgCustomerAdmin'); if(!root)return;
  const app=getApps().length?getApp():initializeApp(firebaseConfig),auth=getAuth(app),functions=getFunctions(app);
- const listCall=httpsCallable(functions,'adminListCustomers'),blockCall=httpsCallable(functions,'adminSetCustomerDisabled');
+ const listCall=httpsCallable(functions,'adminListCustomers'),blockCall=httpsCallable(functions,'adminSetCustomerDisabled'),deleteCall=httpsCallable(functions,'adminDeleteCustomer');
  let users=[],pageToken=null,busy=false,authorized=false;
  const status=$('mgCustomerStatus'),list=$('mgCustomerList'),say=s=>status.textContent=s;
  const el=(tag,cls,txt)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=txt;return n;};
@@ -19,7 +19,7 @@ import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/
  b.addEventListener('click',async()=>{if(busy)return;let reason='';if(!u.disabled){reason=(prompt('આ એકાઉન્ટ શા માટે બ્લોક કરવું છે? કારણ લખો:')||'').trim();if(reason.length<3){say('બ્લોક કરવા માટે ઓછામાં ઓછા 3 અક્ષરનું કારણ જરૂરી છે.');return;}}else if(!confirm('આ ગ્રાહકને ફરી લોગિન કરવાની મંજૂરી આપવી છે?'))return;
  if(!u.disabled&&!confirm('ખાતરી કરો: આ એકાઉન્ટ બ્લોક થશે અને લોગિન કરી શકશે નહીં.'))return;b.disabled=true;say('એકાઉન્ટ સ્થિતિ બદલાઈ રહી છે…');
  try{await blockCall({uid:u.uid,disabled:!u.disabled,reason});u.disabled=!u.disabled;render();say('એકાઉન્ટ સ્થિતિ સફળતાપૂર્વક બદલાઈ. ફેરફારનો રેકોર્ડ સાચવાયો.');}catch(e){say('ફેરફાર નિષ્ફળ: '+(e.message||e.code||'સર્વર તપાસો.'));b.disabled=false;}});
- actions.append(b);card.append(actions);list.append(card);});}
+ const del=el('button','primary','કાયમી ડિલીટ');del.type='button';del.addEventListener('click',async()=>{if(busy||u.uid===ADMIN_UID)return;const typed=(prompt('આ એકાઉન્ટ કાયમી ડિલીટ થશે. તેની પ્રોપર્ટી અને ફોટા Admin તપાસ માટે છુપાવીને રાખવામાં આવશે. આગળ વધવા DELETE લખો:')||'').trim();if(typed!=='DELETE'){say('ડિલીટ રદ થયું.');return;}if(!confirm('છેલ્લી પુષ્ટિ: ગ્રાહક એકાઉન્ટ અને ખાનગી સંપર્ક/પૂછપરછ દૂર થશે. પ્રોપર્ટી અને મીડિયા છુપાયેલા રહેશે. ખાતરી છે?'))return;del.disabled=true;say('એકાઉન્ટ સુરક્ષિત રીતે ડિલીટ થઈ રહ્યું છે…');try{const result=await deleteCall({uid:u.uid,confirmation:'DELETE'});users=users.filter(x=>x.uid!==u.uid);render();say('એકાઉન્ટ ડિલીટ થયું. '+(result.data?.hiddenListings||0)+' પ્રોપર્ટી Admin તપાસ માટે છુપાવીને રાખી છે. ફોટા/વીડિયો જાળવ્યા છે.');}catch(e){say('ડિલીટ નિષ્ફળ: '+(e.message||e.code||'સર્વર તપાસો.'));del.disabled=false;}});if(u.uid!==ADMIN_UID)actions.append(del);actions.append(b);card.append(actions);list.append(card);});}
  async function load(more=false){if(busy||!authorized)return;busy=true;$('mgLoadCustomers').disabled=true;$('mgLoadMoreCustomers').disabled=true;say('ગ્રાહકો લોડ થઈ રહ્યા છે…');
  try{const result=await listCall({pageToken:more?pageToken:null}),payload=result.data||{};users=more?users.concat(payload.users||[]):(payload.users||[]);pageToken=payload.nextPageToken||null;$('mgLoadMoreCustomers').hidden=!pageToken;render();say(users.length+' ગ્રાહક એકાઉન્ટ લોડ થયા.');}
  catch(e){say('ગ્રાહકો લોડ ન થયા: '+(e.message||e.code||'Cloud Function તપાસો.'));}finally{busy=false;$('mgLoadCustomers').disabled=false;$('mgLoadMoreCustomers').disabled=false;}}
