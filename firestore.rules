@@ -1,4 +1,4 @@
-// Re-deployed with the current Maru Ghar security policy; deployment path verified.
+// Re-deployed with the current Maru Ghar security policy; deployment condition verified.
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
