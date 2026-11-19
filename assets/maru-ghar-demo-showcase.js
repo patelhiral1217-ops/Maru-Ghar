@@ -23,7 +23,17 @@
  #mgDemoShowcase .mg-demo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:15px}
  #mgDemoShowcase .mg-demo-card{min-width:0;overflow:hidden;border:1px solid #d8d8c9;border-radius:16px;background:#fff;box-shadow:0 4px 13px #203b2c12}
  #mgDemoShowcase .mg-demo-photo{position:relative;height:190px;overflow:hidden;background:#e7ece7}
- #mgDemoShowcase .mg-demo-photo img{width:100%;height:100%;display:block;object-fit:cover;transition:opacity .3s ease}
+ #mgDemoShowcase .mg-demo-photo img{width:100%;height:100%;display:block;object-fit:contain;background:#e7ece7;transition:opacity .3s ease}
+ #mgDemoShowcase .mg-family-feature{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(220px,.75fr);gap:18px;align-items:center;margin:8px 0 18px;padding:12px;border:1px solid #d8c58d;border-radius:16px;background:linear-gradient(145deg,#fffdf7,#edf2ed)}
+ #mgDemoShowcase .mg-family-feature img{display:block;width:100%;height:auto;max-height:330px;object-fit:contain;background:#e7ece7;border-radius:12px}
+ #mgDemoShowcase .mg-family-copy h3{margin:0 0 8px;color:#173d32;font-size:clamp(18px,2.5vw,24px)}
+ #mgDemoShowcase .mg-family-copy p{margin:0;color:#59675f;line-height:1.7;font-size:14px}
+ #mgDemoShowcase .mg-family-copy small{display:block;margin-top:9px;color:#7b806f;font-size:11px}
+ #mgDemoShowcase .mg-family-copy a{color:#795d25;text-decoration:underline}
+ #properties .property .photo{background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important;background-color:#102c32!important}
+ #properties .property .photo img{object-fit:contain!important;background:#102c32!important}
+ .mgm-gal img{object-fit:contain!important;background:#102c32!important}
+ #mgDemoDetail .mg-detail-gallery img{object-fit:contain!important;background:#e7ece7!important}
  #mgDemoShowcase .mg-demo-photo .mg-demo-tag{position:absolute;left:10px;top:10px;padding:5px 9px;border-radius:20px;background:#fff5d7;color:#664b17;font-size:11px;font-weight:900}
  #mgDemoShowcase .mg-demo-photo .mg-demo-counter{position:absolute;right:10px;bottom:10px;padding:4px 8px;border-radius:20px;background:#102a23cc;color:white;font-size:11px}
  #mgDemoShowcase .mg-demo-controls{display:flex;gap:6px;position:absolute;right:9px;top:9px}
@@ -58,7 +68,7 @@
  #mgDemoDetail .mg-detail-amenities{display:flex;flex-wrap:wrap;gap:8px}
  #mgDemoDetail .mg-detail-amenities span{padding:8px 11px;border-radius:20px;background:#e5eee7;color:#315b48;font-weight:700;font-size:13px}
  #mgDemoDetail .mg-detail-warning{padding:12px;border:1px solid #d9bd76;border-radius:12px;background:#fff6dc;color:#72551c;font-size:13px;line-height:1.6}
- @media(max-width:650px){#mgDemoShowcase{padding:12px}#mgDemoShowcase .mg-demo-grid{grid-template-columns:1fr}#mgDemoShowcase .mg-demo-photo{height:220px}#mgDemoDetail .mg-detail-gallery{height:260px;grid-template-columns:1fr}#mgDemoDetail .mg-detail-gallery .mg-detail-side{display:none}#mgDemoDetail .mg-detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+ @media(max-width:650px){#mgDemoShowcase{padding:12px}#mgDemoShowcase .mg-demo-grid{grid-template-columns:1fr}#mgDemoShowcase .mg-demo-photo{height:220px}#mgDemoShowcase .mg-family-feature{grid-template-columns:1fr;padding:9px}#mgDemoShowcase .mg-family-feature img{max-height:260px}#mgDemoDetail .mg-detail-gallery{height:260px;grid-template-columns:1fr}#mgDemoDetail .mg-detail-gallery .mg-detail-side{display:none}#mgDemoDetail .mg-detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
  /* Live Firestore properties: align cards with the demo showcase while retaining existing controls. */
  #properties .property{overflow:hidden;border:1px solid #c9ad65!important;border-radius:17px!important;background:linear-gradient(145deg,#123b31,#0b2b25)!important;box-shadow:0 5px 0 #071c17,0 10px 22px #0004,inset 0 1px 1px #ffffff20!important}
@@ -110,8 +120,8 @@
  function init(){
   const listing=document.getElementById('listings');if(!listing)return;
   const existing=document.getElementById('mgDemoShowcase');
-  if(existing){const grid=existing.querySelector('.mg-demo-grid');if(grid&&grid.children.length===samples.length)return;existing.remove();}
-  const section=document.createElement('section');section.id='mgDemoShowcase';section.innerHTML='<div class="mg-demo-head"><h2>પસંદગીની પ્રોપર્ટી — ડેમો</h2><span class="mg-demo-note">કુલ 10 ડેમો નમૂનાઓ · ફક્ત પ્રદર્શન માટે, વાસ્તવિક લિસ્ટિંગ નથી</span></div><div class="mg-demo-grid">'+samples.map(card).join('')+'</div>';
+  if(existing){const grid=existing.querySelector('.mg-demo-grid');if(grid&&grid.children.length===samples.length&&existing.querySelector('.mg-family-feature'))return;existing.remove();}
+  const section=document.createElement('section');section.id='mgDemoShowcase';section.innerHTML='<div class="mg-demo-head"><h2>પસંદગીની પ્રોપર્ટી — ડેમો</h2><span class="mg-demo-note">કુલ 10 ડેમો નમૂનાઓ · ફક્ત પ્રદર્શન માટે, વાસ્તવિક લિસ્ટિંગ નથી</span></div><div class="mg-family-feature"><img src="https://images.pexels.com/photos/7414927/pexels-photo-7414927.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="પરિવાર રિયલ એસ્ટેટ એજન્ટ સાથે નવું ઘર જોઈ રહ્યો છે" loading="lazy"><div class="mg-family-copy"><h3>પરિવાર સાથે નવું ઘર જોવા આવો</h3><p>ઘર પસંદ કરતી વખતે પરિવાર સાથે દરેક રૂમ, જગ્યા અને સુવિધા નિહાળો. મારું ઘર પર તમારી પસંદગીનું ઘર શોધો.</p><small>ફોટો: <a href="https://www.pexels.com/photo/a-real-estate-agent-showing-the-house-interior-7414927/" target="_blank" rel="noopener noreferrer">Pexels</a></small></div></div><div class="mg-demo-grid">'+samples.map(card).join('')+'</div>'
   listing.parentNode.insertBefore(section,listing);
   const timers=new Map(),indices=new Map(),paused=new Set();
   function show(card,idx){const p=samples.find(x=>x.id===card.dataset.demoId);idx=(idx+p.photos.length)%p.photos.length;indices.set(p.id,idx);const im=card.querySelector('img');im.style.opacity='.25';const next=new Image();next.onload=()=>{im.src=next.src;im.style.opacity='1'};next.onerror=()=>im.style.opacity='1';next.src=p.photos[idx];card.querySelector('.mg-demo-counter').textContent=(idx+1)+' / '+p.photos.length;}
