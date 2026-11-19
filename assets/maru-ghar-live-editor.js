@@ -5,7 +5,7 @@ const frame=$('mgCmsLivePreview'),page=$('mgCmsPreviewPage'),reload=$('mgCmsPrev
 if(!frame||!page||!reload)return;
 let attachTimer=null;
 function say(message){if(status)status.textContent=message;}
-function pageUrl(){return page.value==='download'?'download.html?mgAdminPreview=1':'index.html?mgAdminPreview=1';}
+function pageUrl(){return ({download:'download.html?mgAdminPreview=1',privacy:'privacy.html?mgAdminPreview=1'})[page.value]||'index.html?mgAdminPreview=1';}
 function refresh(){say('વેબસાઇટ Preview લોડ થઈ રહ્યું છે…');frame.src=pageUrl();}
 function attach(){try{
  const doc=frame.contentDocument;if(!doc||!doc.body){say('Preview ફરી લોડ કરો.');return;}
