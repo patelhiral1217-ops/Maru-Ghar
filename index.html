@@ -4485,21 +4485,29 @@ body #mgTrust,body .mg-trust{display:none!important}
 }
 </style>
 
-<style id="mg-banner-full-photo-metal-title-fix-20261119">
-/* Preserve the existing banner height. Show every source photo in full without cropping. */
-.top.mg-top-banner{height:auto!important;min-height:214px!important;padding:0!important;background:#102b28!important}
-.top.mg-top-banner .mg-tagline{height:auto!important;min-height:214px!important;aspect-ratio:auto!important;padding:0!important}
+<style id="mg-banner-responsive-fullbleed-20261119">
+/* Fixed compact banner: photos fill the full background; no letterboxing or smaller centered image. */
+.top.mg-top-banner{
+ height:214px!important;min-height:214px!important;max-height:214px!important;
+ padding:0!important;overflow:hidden!important;background:#102b28!important;
+}
+.top.mg-top-banner .mg-tagline{
+ height:214px!important;min-height:214px!important;max-height:214px!important;
+ aspect-ratio:auto!important;padding:0!important;overflow:hidden!important;
+}
 .top.mg-top-banner .mg-tagline-background{
  position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
- background:linear-gradient(135deg,#173b32,#071d20)!important;overflow:hidden!important;
+ background:#102b28!important;overflow:hidden!important;
 }
 .top.mg-top-banner .mg-tagline-background img{
  position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
- object-fit:contain!important;object-position:center center!important;
- background:transparent!important;
+ object-fit:cover!important;object-position:center 48%!important;
+ background:#102b28!important;
 }
 .top.mg-top-banner .mg-tagline-copy{display:none!important}
 @media(max-width:600px){
- .top.mg-top-banner,.top.mg-top-banner .mg-tagline{min-height:184px!important}
+ .top.mg-top-banner{height:184px!important;min-height:184px!important;max-height:184px!important}
+ .top.mg-top-banner .mg-tagline{height:184px!important;min-height:184px!important;max-height:184px!important}
+ .top.mg-top-banner .mg-tagline-background img{object-position:center 48%!important}
 }
 </style>
