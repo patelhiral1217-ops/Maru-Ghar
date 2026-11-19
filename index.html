@@ -984,7 +984,7 @@ header .navlinks > a:not(.admin-link):focus-visible{
 }
 </style>
 <script id="mg-banner-photo-rotation-20261119">
-(()=>{function init(){const box=document.querySelector('.mg-tagline-background');if(!box)return;const pics=[...box.querySelectorAll('img')];if(!pics.length)return;let at=0,timer=null;function show(n){at=(n+pics.length)%pics.length;pics.forEach((p,i)=>p.classList.toggle('mg-bg-active',i===at))}function stop(){if(timer){clearInterval(timer);timer=null}}function start(){stop();if(!document.hidden&&pics.length>1)timer=setInterval(()=>show(at+1),5000)}pics.forEach(p=>{p.loading='eager';p.decoding='async'});show(0);start();document.addEventListener('visibilitychange',start)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init()})();
+(()=>{function init(){const box=document.querySelector('.mg-tagline-background');if(!box)return;const pics=[...box.querySelectorAll('img')];if(!pics.length)return;let at=0,timer=null;function show(n){at=(n+pics.length)%pics.length;pics.forEach((p,i)=>p.classList.toggle('mg-bg-active',i===at))}function stop(){if(timer){clearInterval(timer);timer=null}}function start(){stop();if(!document.hidden&&pics.length>1)timer=setInterval(()=>show(at+1),5000)}pics.forEach((p,i)=>{p.decoding='async';if(i===0){p.loading='eager';p.fetchPriority='high'}else{p.loading='lazy'}});show(0);start();document.addEventListener('visibilitychange',start)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init()})();
 </script>
 
 
