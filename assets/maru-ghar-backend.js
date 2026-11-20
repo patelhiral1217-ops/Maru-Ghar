@@ -307,7 +307,23 @@ async function getPrivateOwnerPhone(listingId){
 function phoneDigits(phone){let d=String(phone||'').replace(/\D/g,'');if(d.length===11&&d.startsWith('0'))d=d.slice(1);if(d.length===12&&d.startsWith('91'))d=d.slice(2);return /^[6-9]\d{9}$/.test(d)?'91'+d:'';}
 async function revealOwnerContact(p){const phone=await getPrivateOwnerPhone(p.id);if(!phone)return;const digits=phoneDigits(phone);if(!digits){alert('માલિકનો મોબાઇલ નંબર યોગ્ય ફોર્મેટમાં ઉપલબ્ધ નથી. Admin દ્વારા તપાસ કરાવો.');return;}const choice=confirm('માલિકનો નંબર: '+phone+'\nOK દબાવો તો ફોન કોલ થશે. Cancel દબાવો તો WhatsApp ખૂલશે.');if(choice){location.href='tel:+'+digits;}else{window.open('https://wa.me/'+digits+'?text='+encodeURIComponent('નમસ્તે, મારું ઘર પર તમારી પ્રોપર્ટી જોઈ. વધુ માહિતી આપશો?'),'_blank','noopener,noreferrer');}}
 window.mgRevealOwnerContact=revealOwnerContact;
+function rememberRecentlyViewed(p){
+  if(!p||!p.id)return;
+  try{const ids=JSON.parse(localStorage.getItem('mg_recently_viewed')||'[]').filter(id=>id!==String(p.id));ids.unshift(String(p.id));localStorage.setItem('mg_recently_viewed',JSON.stringify(ids.slice(0,8)));}catch(_){}
+  renderRecentlyViewed();
+}
+async function renderRecentlyViewed(){
+  const host=document.getElementById('mgRecentlyViewedList');if(!host||!db)return;
+  let ids=[];try{ids=JSON.parse(localStorage.getItem('mg_recently_viewed')||'[]').filter(x=>typeof x==='string').slice(0,8)}catch(_){}
+  if(!ids.length){host.replaceChildren();const section=document.getElementById('mgRecentlyViewed');if(section)section.hidden=true;return;}
+  const section=document.getElementById('mgRecentlyViewed');if(section)section.hidden=false;
+  const found=await Promise.all(ids.map(async id=>{try{if(itemsById.has(id))return itemsById.get(id);const snap=await getDoc(doc(db,'listings',id));if(!snap.exists()||snap.data().status!=='approved')return null;const data=snap.data();const {createdAt,...rest}=data;const item={id:snap.id,...rest,createdMs:createdAt&&createdAt.toMillis?createdAt.toMillis():0};itemsById.set(id,item);return item;}catch(_){return null;}}));
+  host.replaceChildren();
+  found.filter(Boolean).forEach(p=>{const btn=document.createElement('button');btn.type='button';btn.className='mg-recent-item';const title=document.createElement('strong');title.textContent=p.title||p.type||'પ્રોપર્ટી';const meta=document.createElement('span');meta.textContent=[p.city||'ગાંધીનગર',p.location||'',p.price||''].filter(Boolean).join(' · ');btn.append(title,meta);btn.addEventListener('click',()=>openDetails(p));host.appendChild(btn);});
+  if(section)section.hidden=!host.childElementCount;
+}
 function openDetails(p){
+  rememberRecentlyViewed(p);
   const imgs=(Array.isArray(p.photos)?p.photos:[]).filter(x=>x&&isHttps(x.url)).map(x=>cld(x.url,'f_auto,q_auto,w_1000'));
   const spec=[['પ્રકાર',p.type],['હેતુ',p.purpose],['BHK',p.bhk],['ક્ષેત્રફળ',p.areaSqft?p.areaSqft+' ચો.ફૂટ':''],['માળ',p.floor],['ફર્નિચર',p.furnishing],['પાર્કિંગ',p.parking],['ડિપોઝિટ',p.deposit]].filter(x=>x[1]);
   const m=sheet(`${imgs.length?`<div class="mgm-gal">${imgs.map(u=>`<img src="${esc(u)}" alt="" loading="lazy">`).join('')}</div>`:''}${badgesHtml(p)}<h3>${esc(p.title||p.type||'પ્રોપર્ટી')}</h3><div class="loc">📍 ${esc(p.city||'ગાંધીનગર')} · ${esc(p.location||'')}</div><div class="mgm-price">${esc(p.price||'કિંમત માટે સંપર્ક')}</div>${p.offerTitle?`<div class="mg-offer" style="cursor:default">🎉 ${esc(p.offerTitle)}${p.offerText?' — '+esc(p.offerText):''}${p.offerUntil?' (📅 '+esc(p.offerUntil)+' સુધી)':''}</div>`:''}<div class="mgm-spec">${spec.map(([k,v])=>`<div><b>${esc(k)}</b>${esc(v)}</div>`).join('')}</div><div style="margin:14px 0;border-radius:12px;overflow:hidden;border:1px solid #d8dce2"><iframe title="પ્રોપર્ટીનું Google Maps સ્થાન" loading="lazy" referrerpolicy="no-referrer-when-downgrade" width="100%" height="220" style="border:0;display:block" src="https://www.google.com/maps?q=${encodeURIComponent([p.location,p.city||'ગાંધીનગર','ગુજરાત'].filter(Boolean).join(', '))}&output=embed"></iframe></div>${p.description?`<p style="line-height:1.6;white-space:pre-line">${esc(p.description)}</p>`:''}<div class="mgm-act"><button type="button" data-s="contact">📞 માલિકનો સંપર્ક નંબર જુઓ</button><a class="alt" target="_blank" rel="noopener noreferrer" href="${esc(mapHref(p))}">🗺️ નકશો</a><button type="button" class="alt" data-s="enquiry">✉️ પૂછપરછ</button><button type="button" class="alt" data-s="visit">📅 મુલાકાત બુક કરો</button><button type="button" class="alt" data-s="share">↗ શેર કરો</button><button type="button" class="alt" data-s="poster">🖼️ પોસ્ટર</button><button type="button" class="alt" data-s="report">🚩 ફરિયાદ</button></div>`);
@@ -384,6 +400,7 @@ async function init() {
     if(areaEl)areaEl.addEventListener('change',async()=>{while(loadingMore)await new Promise(r=>setTimeout(r,100));if(typeof window.filterProps==='function')window.filterProps();});
     window.addEventListener('mg-language-changed',()=>populateAreaFilter(currentCity));
     await loadApproved(true);
+    renderRecentlyViewed();
     setStatus('',false);
   } catch (e) {
     console.error('Maru Ghar Firebase init/read failed:',e);
