@@ -4,6 +4,7 @@ const rules=fs.readFileSync('firestore.rules','utf8');
 const errors=[];
 if(!admin.includes('name="ownerType"') || !admin.includes("ownerType:String(f.get('ownerType')||'owner')")) errors.push('Admin listing form must capture owner/broker/builder source');
 if(!rules.includes("data.ownerType in ['owner', 'broker', 'builder']") || !rules.includes("'closed', 'ownerType'")) errors.push('Firestore must validate optional ownerType enum');
+if(!admin.includes('data-action="editexpiry"') || !admin.includes("updateDoc(doc(db,'listings',id),{expiresOn:date})")) errors.push('Admin listing expiry editor missing');
 for(const marker of [
   "if(action==='toggle_verified')",
   'શું તમે માલિકની ઓળખ, પ્રોપર્ટી પરનો અધિકાર/માલિકી સંબંધિત દસ્તાવેજો',
