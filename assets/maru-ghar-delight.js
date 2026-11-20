@@ -348,7 +348,9 @@
 
   function init() {
     addGujaratiTypingHelp();
-    showSkeleton();
+    // Do not show the three temporary skeleton cards on the public home page.
+    // They looked like unwanted yellow boxes during the initial listing load.
+    hideSkeleton();
     wireClicks();
     patchFilter();
     watchGrid();
