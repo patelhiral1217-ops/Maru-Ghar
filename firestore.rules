@@ -25,6 +25,7 @@ service cloud.firestore {
     // 2. LISTING VALIDATION
     // ownerPhone is deliberately NOT allowed in public listings.
     // It belongs only in listingContacts/{listingId}.
+    // ownerType is optional for legacy listings; new forms use owner, broker, or builder.
     // ---------------------------------------------------------
     function validCommon(data) {
       return data.keys().hasAll([
