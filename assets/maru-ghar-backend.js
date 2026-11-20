@@ -432,7 +432,7 @@ if(form) form.addEventListener('submit', async ev=>{
       ownerName:String(fd.get('ownerName')||'').trim(), ownerType:String(fd.get('ownerType')||'owner'),
       type:String(fd.get('type')||''), purpose:String(fd.get('purpose')||''), location:String(fd.get('location')||'').trim(),
       city:String(fd.get('city')||'ગાંધીનગર').trim(), price:String(fd.get('price')||'').trim(), description:String(fd.get('description')||'').trim(), ownerConsent:fd.get('ownerConsent')==='on', photos:uploaded, videos:uploadedVideos,
-      status:'pending', createdAt:serverTimestamp(), submitterUid:auth.currentUser.uid
+      status:'pending', expiresOn:new Date(Date.now()+90*86400000).toISOString().slice(0,10), createdAt:serverTimestamp(), submitterUid:auth.currentUser.uid
     };
     ['bhk','areaSqft','floor','furnishing','parking','deposit','offerTitle','offerText','offerUntil'].forEach(k=>{const v=String(fd.get(k)||'').trim();if(v)payload[k]=v;});
     { const pn=Number(String(fd.get('priceNum')||'').replace(/,/g,'')); if(isFinite(pn)&&pn>0) payload.priceNum=Math.round(pn); }
