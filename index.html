@@ -1170,6 +1170,33 @@ header .navlinks > a:not(.admin-link):focus-visible{
 .mg-showcase-controls{z-index:4!important}
 @media(max-width:600px){.mg-showcase-frame{min-height:260px!important;background-color:#0b2928!important}.mg-showcase-copy{display:block!important;padding-bottom:64px!important}}
 </style>
+
+<style id="mg-fix-empty-hero-panels-20261120">
+/* Keep the top hero image layer visible even if the optional rotation script does not run. */
+.top.mg-top-banner,
+.top.mg-top-banner .mg-tagline-background{
+  background:linear-gradient(120deg,#071d20 0%,#0d493b 48%,#071d20 100%)!important;
+}
+.top.mg-top-banner .mg-tagline-background img{
+  animation:none!important;
+}
+.top.mg-top-banner .mg-tagline-background img:first-child{
+  opacity:1!important;
+  display:block!important;
+}
+.top.mg-top-banner .mg-tagline-background img:not(:first-child){
+  opacity:0!important;
+}
+/* The featured-property panel must retain a designed surface when remote photos fail. */
+.mg-showcase-frame{
+  background:radial-gradient(ellipse at 78% 18%,rgba(230,189,98,.24),transparent 36%),linear-gradient(125deg,#123f35 0%,#071d20 58%,#174b3b 100%)!important;
+}
+.mg-showcase-slide{
+  background-color:#123f35!important;
+  background-image:linear-gradient(110deg,rgba(3,20,19,.84),rgba(3,20,19,.22))!important;
+}
+.mg-showcase-slide.active{opacity:1!important}
+</style>
 </head>
 <body>
 <div id="mgLocalFileWarning" hidden role="status" style="max-width:1220px;margin:10px auto;padding:12px 16px;border:1px solid #d8b45d;border-radius:10px;background:#fff4cf;color:#49370a;font:600 13px/1.6 Arial,sans-serif">આ index.html ફાઇલ સીધી ફોન/કમ્પ્યુટરમાંથી ખોલેલી છે. ભાષા અને સામાન્ય પેજ દેખાઈ શકે છે, પરંતુ Firebase Login, લાઇવ લિસ્ટિંગ, ફોટો/વિડિયો અપલોડ અને એકાઉન્ટ Sync માટે વેબસાઇટની HTTPS લિંક અથવા ઇન્સ્ટોલ કરેલી APK ખોલો.</div>
