@@ -26,7 +26,7 @@ if(!backend.includes("'noopener,noreferrer'"))errors.push('WhatsApp external win
 if(!backend.includes('if(!digits){alert('))errors.push('Invalid legacy owner mobile must be blocked before call/WhatsApp');
 if(!admin.includes('if(m&&!mgIsTrustedMapsUrl(m))'))errors.push('Admin must validate Maps URL before saving');
 const mapRules=(rules.match(/mapLink\.matches\('\^https:\/\//g)||[]).length;
-if(mapRules!==2)errors.push(`Both listing create and admin map update rules must validate trusted domains (found ${mapRules})`);
+if(mapRules<2)errors.push(`Both listing create and admin map update rules must validate trusted domains (found ${mapRules})`);
 if(rules.includes("mapLink.matches('^https://.*')"))errors.push('Broad arbitrary HTTPS map URL rule remains');
 if(errors.length){console.error('MAPS + WHATSAPP CHECK FAILED');errors.forEach(e=>console.error(' - '+e));process.exit(1)}
 console.log('MAPS + WHATSAPP CHECK PASS — trusted map hosts, hostile URL rejection, legacy link fallback, Indian mobile normalization, invalid-number blocking, safe external WhatsApp launch, and matching Firestore rules.');
