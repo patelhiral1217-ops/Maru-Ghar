@@ -1033,6 +1033,67 @@ header .navlinks > a:not(.admin-link):focus-visible{
 #submit.mg-submit-collapsed>.mg-submit-content[hidden]{display:none!important}
 @media(max-width:600px){#submit.mg-submit-collapsed{padding:7px 8px!important;margin-top:12px!important;margin-bottom:8px!important}#submit.mg-submit-collapsed>.mg-submit-toggle{min-height:50px!important;padding:11px 13px!important}}
 </style>
+
+<style id="mg-mobile-home-search-layout-fix-20261120">
+/* Prevent the home search panel and its controls from stretching into blank blocks in Android WebView. */
+@media (max-width: 600px) {
+  header { padding-bottom: 18px !important; }
+  #home.hero {
+    display: block !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin: 12px auto 0 !important;
+    padding: 0 12px !important;
+  }
+  #home > .searchbox {
+    display: grid !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    align-content: start !important;
+    gap: 9px !important;
+    padding: 13px !important;
+    margin: 0 !important;
+  }
+  #home > .searchbox h3 {
+    display: block !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 0 2px !important;
+  }
+  #home > .searchbox .row {
+    display: grid !important;
+    grid-template-columns: minmax(0,1fr) minmax(0,1fr) !important;
+    align-items: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+  }
+  #home > .searchbox .row > input,
+  #home > .searchbox .row > select,
+  #home > .searchbox .row > button {
+    box-sizing: border-box !important;
+    flex: initial !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 48px !important;
+    min-height: 48px !important;
+    max-height: 48px !important;
+    margin: 0 !important;
+  }
+  #home > .searchbox .row > select[hidden] {
+    display: none !important;
+  }
+  #home > .searchbox .row:last-child {
+    grid-template-columns: minmax(0,1fr) 92px !important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div id="mgLocalFileWarning" hidden role="status" style="max-width:1220px;margin:10px auto;padding:12px 16px;border:1px solid #d8b45d;border-radius:10px;background:#fff4cf;color:#49370a;font:600 13px/1.6 Arial,sans-serif">આ index.html ફાઇલ સીધી ફોન/કમ્પ્યુટરમાંથી ખોલેલી છે. ભાષા અને સામાન્ય પેજ દેખાઈ શકે છે, પરંતુ Firebase Login, લાઇવ લિસ્ટિંગ, ફોટો/વિડિયો અપલોડ અને એકાઉન્ટ Sync માટે વેબસાઇટની HTTPS લિંક અથવા ઇન્સ્ટોલ કરેલી APK ખોલો.</div>
