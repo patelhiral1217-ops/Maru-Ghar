@@ -12,7 +12,17 @@ const checks = [
   [!((rules.match(/function validCommon\(data\)\s*\{([\s\S]*?)\n    \}/)?.[1] || '').includes('ownerPhone')), 'Public listing must not accept ownerPhone'],
   [rules.includes('query rules are not filters') && rules.includes('run the Admin'), 'Legacy phone migration prerequisite comment missing'],
 ];
-checks.push([rules.includes("request.resource.data.kind == 'site_visit'") && rules.includes("request.resource.data.visitDate.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}
+checks.push([rules.includes("request.resource.data.kind == 'site_visit'") && rules.includes("request.resource.data.visitDate is string") && rules.includes("request.resource.data.visitTime is string") && rules.includes("request.resource.data.visitTime.matches('^([01][0-9]|2[0-3]):[0-5][0-9]
+if (failed.length) { console.error('FINAL FIRESTORE RULES CHECK FAILED'); failed.forEach(([, msg]) => console.error(' - ' + msg)); process.exit(1); }
+console.log(`FINAL FIRESTORE RULES STATIC CHECK PASS — ${checks.length}/${checks.length}`);
+)") && rules.includes("request.resource.data.visitTime.matches('^([01][0-9]|2[0-3]):[0-5][0-9]
+if (failed.length) { console.error('FINAL FIRESTORE RULES CHECK FAILED'); failed.forEach(([, msg]) => console.error(' - ' + msg)); process.exit(1); }
+console.log(`FINAL FIRESTORE RULES STATIC CHECK PASS — ${checks.length}/${checks.length}`);
+)"), 'Site visit request validation missing']);
+const failed = checks.filter(([ok]) => !ok);
+if (failed.length) { console.error('FINAL FIRESTORE RULES CHECK FAILED'); failed.forEach(([, msg]) => console.error(' - ' + msg)); process.exit(1); }
+console.log(`FINAL FIRESTORE RULES STATIC CHECK PASS — ${checks.length}/${checks.length}`);
+)"), 'Site visit request validation missing']);
 if (failed.length) { console.error('FINAL FIRESTORE RULES CHECK FAILED'); failed.forEach(([, msg]) => console.error(' - ' + msg)); process.exit(1); }
 console.log(`FINAL FIRESTORE RULES STATIC CHECK PASS — ${checks.length}/${checks.length}`);
 )") && rules.includes("request.resource.data.visitTime.matches('^([01][0-9]|2[0-3]):[0-5][0-9]
