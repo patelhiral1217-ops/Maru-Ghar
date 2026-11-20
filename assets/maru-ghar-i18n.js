@@ -1,5 +1,6 @@
 /* Central Gujarati/Hindi/English interface dictionary. User-entered listing content is never translated. */
 window.MG_I18N_DICTIONARY={
+  "🕘 તાજેતરમાં જોયેલી પ્રોપર્ટી":{"hi":"🕘 हाल ही में देखी गई प्रॉपर्टी","en":"🕘 Recently Viewed Properties"},
   "કન્ટેન્ટ Publish/Edit/Delete/Restore અને ગ્રાહક Block/Unblock જેવા ફેરફારોનો રેકોર્ડ.":{"hi":"कंटेंट Publish/Edit/Delete/Restore और ग्राहक Block/Unblock जैसे बदलावों का रिकॉर्ड।","en":"History of content publish/edit/delete/restore and customer block/unblock actions."},
   "ફેરફારનો ઇતિહાસ જુઓ":{"hi":"बदलावों का इतिहास देखें","en":"View Activity History"},
   "ઇતિહાસ જોવા બટન દબાવો.":{"hi":"इतिहास देखने के लिए बटन दबाएँ।","en":"Press the button to view history."},
