@@ -24,6 +24,8 @@
  #mgDemoShowcase .mg-demo-card{min-width:0;overflow:hidden;border:1px solid #d8d8c9;border-radius:16px;background:#fff;box-shadow:0 4px 13px #203b2c12} #mgDemoShowcase .mg-demo-card{container-type:inline-size}
  #mgDemoShowcase .mg-demo-photo{position:relative;height:190px;overflow:hidden;background:#e7ece7;touch-action:pan-y;user-select:none}
  #mgDemoShowcase .mg-demo-photo img{width:100%;height:100%;display:block;object-fit:contain;background:#e7ece7;transition:opacity .3s ease}
+  #mgDemoShowcase .mg-demo-photo-unavailable{display:grid;place-items:center;background:radial-gradient(ellipse at 75% 25%,#d9c17c55,transparent 42%),linear-gradient(145deg,#17483b,#0a2925)!important}
+  #mgDemoShowcase .mg-demo-photo-unavailable:after{content:'⌂';color:#f2d995;font-size:92px;font-weight:900;text-shadow:0 5px 18px #0005}
  #mgDemoShowcase .mg-family-feature{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(220px,.75fr);gap:18px;align-items:center;margin:8px 0 18px;padding:12px;border:1px solid #d8c58d;border-radius:16px;background:linear-gradient(145deg,#fffdf7,#edf2ed)}
  #mgDemoShowcase .mg-family-feature img{display:block;width:100%;height:auto;max-height:330px;object-fit:contain;background:#e7ece7;border-radius:12px}
  #mgDemoShowcase .mg-family-copy h3{margin:0 0 8px;color:#173d32;font-size:clamp(18px,2.5vw,24px)}
@@ -126,7 +128,7 @@
   if(existing){const grid=existing.querySelector('.mg-demo-grid');existing.querySelectorAll('.mg-family-feature').forEach(node=>node.remove());if(grid&&grid.children.length===samples.length)return;existing.remove();}
   const section=document.createElement('section');section.id='mgDemoShowcase';section.innerHTML='<div class="mg-demo-head"><h2>પસંદગીની પ્રોપર્ટી — ડેમો</h2><span class="mg-demo-note">કુલ 10 ડેમો નમૂનાઓ · ફક્ત પ્રદર્શન માટે, વાસ્તવિક લિસ્ટિંગ નથી</span></div><div class="mg-demo-grid">'+samples.map(card).join('')+'</div>'
   listing.parentNode.insertBefore(section,listing);
-  section.querySelectorAll('.mg-demo-photo img').forEach(img=>{img.onerror=()=>{if(img.dataset.mgFallbackTried==='1'){img.onerror=null;img.src='assets/maru-ghar-approved-app-icon.png';img.style.objectFit='contain';img.style.background='#e7ece7';return;}img.dataset.mgFallbackTried='1';img.src='https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&h=900&q=88';};});
+  section.querySelectorAll('.mg-demo-photo img').forEach(img=>{img.onerror=()=>{img.onerror=null;img.style.display='none';const frame=img.closest('.mg-demo-photo');if(frame){frame.classList.add('mg-demo-photo-unavailable');frame.setAttribute('aria-label','પ્રોપર્ટીનો ફોટો હાલમાં ઉપલબ્ધ નથી');}};});
   /* Normalize each demo card to exactly one visible price label if an older page instance left duplicates. */ section.querySelectorAll('.mg-demo-card').forEach(card=>{const prices=card.querySelectorAll('.mg-demo-price');prices.forEach((node,i)=>{if(i>0)node.remove();});});
   const timers=new Map(),indices=new Map(),paused=new Set(),visibleCards=new Set();
   /* Do not download rotating photos for cards the visitor has not scrolled to. */
