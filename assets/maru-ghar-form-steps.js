@@ -8,6 +8,7 @@
   const byName=name=>nodes.find(n=>n.matches?.(`[name="${name}"]`)||n.querySelector?.(`[name="${name}"]`));
   const configs=[
    {title:'તમારું નામ',names:['ownerName']},
+   {title:'લિસ્ટિંગ કોણ કરે છે?',names:['ownerType']},
    {title:'મોબાઇલ નંબર',names:['ownerPhone']},
    {title:'વિસ્તાર / સેક્ટર',names:['location']},
    {title:'શહેર પસંદ કરો',names:['city']},
