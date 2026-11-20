@@ -15,4 +15,4 @@ const checks = [
 ];
 const failed = checks.filter(([ok]) => !ok);
 if (failed.length) { console.error('FINAL FIRESTORE RULES CHECK FAILED'); failed.forEach(([, msg]) => console.error(' - ' + msg)); process.exit(1); }
-console.log(\`FINAL FIRESTORE RULES STATIC CHECK PASS — \${checks.length}/\${checks.length}\`);
+console.log('FINAL FIRESTORE RULES STATIC CHECK PASS — ' + checks.length + '/' + checks.length);
