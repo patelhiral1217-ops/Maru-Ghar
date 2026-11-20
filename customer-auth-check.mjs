@@ -31,7 +31,6 @@ if(!fileMode.includes("protocol==='file:'||protocol==='content:'") || !fileMode.
 if(!html.includes("location.protocol==='content:'") || !html.includes('File Managerમાંથી સીધી ખોલેલી છે')) errors.push('Android content:// warning banner is missing');
 if(!html.includes('autocomplete="email"') || !html.includes('autocomplete="current-password"')) errors.push('Email/password autocomplete hints missing');
 if(!html.includes('minlength="6"') || !html.includes('type="email"')) errors.push('Email/password basic input constraints missing');
-const extras=fs.readFileSync('assets/maru-ghar-extras.js','utf8');
 const admin=fs.readFileSync('admin.html','utf8');
 const rules=fs.readFileSync('firestore.rules','utf8');
 if(!extras.includes('const dateMatch=/^(\\d{4})-(\\d{2})-(\\d{2})$/') || !extras.includes('/^(?:[01]\\d|2[0-3]):[0-5]\\d$/')) errors.push('Site visit date/time validation must match numeric date and 24-hour time');
