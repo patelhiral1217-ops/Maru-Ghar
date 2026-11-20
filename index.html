@@ -1197,6 +1197,14 @@ header .navlinks > a:not(.admin-link):focus-visible{
 }
 .mg-showcase-slide.active{opacity:1!important}
 </style>
+<style id="mg-hide-empty-slots-final-20261120">
+/* Empty CMS/ad placeholders must never flash during page load. */
+.mg-cms-slot:not(:has(*)),.mg-cms-slot[hidden],.mg-ad-slot[hidden]{
+ display:none!important;visibility:hidden!important;min-height:0!important;height:0!important;
+ margin:0!important;padding:0!important;border:0!important;background:transparent!important;
+ box-shadow:none!important;overflow:hidden!important
+}
+</style>
 </head>
 <body>
 <div id="mgLocalFileWarning" hidden role="status" style="max-width:1220px;margin:10px auto;padding:12px 16px;border:1px solid #d8b45d;border-radius:10px;background:#fff4cf;color:#49370a;font:600 13px/1.6 Arial,sans-serif">આ index.html ફાઇલ સીધી ફોન/કમ્પ્યુટરમાંથી ખોલેલી છે. ભાષા અને સામાન્ય પેજ દેખાઈ શકે છે, પરંતુ Firebase Login, લાઇવ લિસ્ટિંગ, ફોટો/વિડિયો અપલોડ અને એકાઉન્ટ Sync માટે વેબસાઇટની HTTPS લિંક અથવા ઇન્સ્ટોલ કરેલી APK ખોલો.</div>
