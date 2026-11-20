@@ -329,7 +329,8 @@ service cloud.firestore {
       allow create: if isRegisteredCustomer()
         && request.resource.data.keys().hasOnly([
           'uid', 'listingId', 'listingTitle', 'customerName',
-          'customerPhone', 'message', 'status', 'createdAt'
+          'customerPhone', 'message', 'status', 'createdAt',
+          'kind', 'visitDate', 'visitTime'
         ])
         && request.resource.data.uid == request.auth.uid
         && request.resource.data.listingId is string
@@ -344,6 +345,93 @@ service cloud.firestore {
         && request.resource.data.message is string
         && request.resource.data.message.size() <= 500
         && request.resource.data.status == 'pending'
+        && (!('kind' in request.resource.data) || request.resource.data.kind == 'site_visit')
+        && (!('visitDate' in request.resource.data) || (request.resource.data.visitDate is string && request.resource.data.visitDate.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}
+      allow read: if isAdmin()
+        || (request.auth != null && resource.data.uid == request.auth.uid);
+      allow update, delete: if isAdmin();
+    }
+
+    // ---------------------------------------------------------
+    // 11. ADMIN DIAGNOSTIC LOGS
+    // ---------------------------------------------------------
+    match /adminLogs/{logId} {
+      allow read, create, update, delete: if isAdmin();
+    }
+
+    // ---------------------------------------------------------
+    // 12. IMMUTABLE PROPERTY VERIFICATION AUDIT
+    // Admin confirms documents manually; records cannot be changed/deleted.
+    // ---------------------------------------------------------
+    match /listingVerifications/{verificationId} {
+      allow read: if isAdmin();
+      allow create: if isAdmin()
+        && request.resource.data.keys().hasOnly(['listingId', 'action', 'note', 'checkedBy', 'checkedAt'])
+        && request.resource.data.keys().hasAll(['listingId', 'action', 'note', 'checkedBy', 'checkedAt'])
+        && request.resource.data.listingId is string
+        && request.resource.data.listingId.size() >= 1
+        && request.resource.data.listingId.size() <= 128
+        && request.resource.data.action in ['verified', 'unverified']
+        && request.resource.data.note is string
+        && request.resource.data.note.size() <= 500
+        && (request.resource.data.action != 'verified' || request.resource.data.note.size() >= 8)
+        && request.resource.data.checkedBy == request.auth.uid
+        && request.resource.data.checkedAt == request.time;
+      allow update, delete: if false;
+    }
+
+    // ---------------------------------------------------------
+    // 13. ADMIN PUSH TOKENS
+    // ---------------------------------------------------------
+    match /adminTokens/{token} {
+      allow read, write: if isAdmin();
+    }
+  }
+})))
+        && (!('visitTime' in request.resource.data) || (request.resource.data.visitTime is string && request.resource.data.visitTime.matches('^([01][0-9]|2[0-3]):[0-5][0-9]
+      allow read: if isAdmin()
+        || (request.auth != null && resource.data.uid == request.auth.uid);
+      allow update, delete: if isAdmin();
+    }
+
+    // ---------------------------------------------------------
+    // 11. ADMIN DIAGNOSTIC LOGS
+    // ---------------------------------------------------------
+    match /adminLogs/{logId} {
+      allow read, create, update, delete: if isAdmin();
+    }
+
+    // ---------------------------------------------------------
+    // 12. IMMUTABLE PROPERTY VERIFICATION AUDIT
+    // Admin confirms documents manually; records cannot be changed/deleted.
+    // ---------------------------------------------------------
+    match /listingVerifications/{verificationId} {
+      allow read: if isAdmin();
+      allow create: if isAdmin()
+        && request.resource.data.keys().hasOnly(['listingId', 'action', 'note', 'checkedBy', 'checkedAt'])
+        && request.resource.data.keys().hasAll(['listingId', 'action', 'note', 'checkedBy', 'checkedAt'])
+        && request.resource.data.listingId is string
+        && request.resource.data.listingId.size() >= 1
+        && request.resource.data.listingId.size() <= 128
+        && request.resource.data.action in ['verified', 'unverified']
+        && request.resource.data.note is string
+        && request.resource.data.note.size() <= 500
+        && (request.resource.data.action != 'verified' || request.resource.data.note.size() >= 8)
+        && request.resource.data.checkedBy == request.auth.uid
+        && request.resource.data.checkedAt == request.time;
+      allow update, delete: if false;
+    }
+
+    // ---------------------------------------------------------
+    // 13. ADMIN PUSH TOKENS
+    // ---------------------------------------------------------
+    match /adminTokens/{token} {
+      allow read, write: if isAdmin();
+    }
+  }
+})))
+        && (('kind' in request.resource.data) == ('visitDate' in request.resource.data))
+        && (('kind' in request.resource.data) == ('visitTime' in request.resource.data))
         && request.resource.data.createdAt == request.time;
       allow read: if isAdmin()
         || (request.auth != null && resource.data.uid == request.auth.uid);
