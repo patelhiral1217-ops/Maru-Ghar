@@ -43,7 +43,7 @@ service cloud.firestore {
           'verified', 'featured', 'closed', 'ownerType', 'expiresOn'
         ])
         && (!('ownerType' in data) || data.ownerType in ['owner', 'broker', 'builder'])
-        && (!('expiresOn' in data) || (data.expiresOn is string && data.expiresOn.matches('^\\\\d{4}-\\\\d{2}-\\\\d{2}
+        && (!('expiresOn' in data) || (data.expiresOn is string && data.expiresOn.matches('^\\\d{4}-\\\d{2}-\\\d{2}
         && data.ownerName is string
         && data.ownerName.size() >= 2
         && data.ownerName.size() <= 80
@@ -177,7 +177,7 @@ service cloud.firestore {
           && (!('verified' in request.resource.data) || request.resource.data.verified is bool)
           && (!('featured' in request.resource.data) || request.resource.data.featured is bool)
           && (!('closed' in request.resource.data) || request.resource.data.closed is bool)
-          && (!('expiresOn' in request.resource.data) || (request.resource.data.expiresOn is string && request.resource.data.expiresOn.matches('^\\\\d{4}-\\\\d{2}-\\\\d{2}
+          && (!('expiresOn' in request.resource.data) || (request.resource.data.expiresOn is string && request.resource.data.expiresOn.matches('^\\\d{4}-\\\d{2}-\\\d{2}
         )
         // Admin price update; price-drop Cloud Function reacts to priceNum decrease.
         || (
