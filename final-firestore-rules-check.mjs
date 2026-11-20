@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 const rules = fs.readFileSync('firestore.rules', 'utf8');
 const checks = [
+  [rules.includes("'expiresOn'") && rules.includes("request.resource.data.expiresOn.matches") , 'Listing expiry date validation missing'],
   [rules.includes("request.auth.uid == 'yJYiuaUE3KXVLVuWqLyLRH5owQJ3'"), 'Fixed admin UID rule missing'],
   [rules.includes("match /listingVerifications/{verificationId}") && rules.includes('allow update, delete: if false;') && rules.includes('request.resource.data.note.size() >= 8'), 'Immutable verification audit rule missing'],
   [rules.includes("'createdAt', 'restoredAt'") && rules.includes('request.resource.data.restoredAt is timestamp'), 'Favorites backup-restore timestamp rule missing'],
