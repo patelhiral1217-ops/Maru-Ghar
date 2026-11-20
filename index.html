@@ -1094,6 +1094,71 @@ header .navlinks > a:not(.admin-link):focus-visible{
 }
 </style>
 
+
+<style id="mg-android-first-screen-layout-guard-20261120">
+/* Android WebView: keep the home search panel content-sized; never stretch it to fill a tall hero row. */
+@media (max-width: 700px) {
+  header { padding-bottom: 18px !important; }
+  header > .hero,
+  header .hero#home,
+  #home.hero {
+    display: block !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    grid-template-columns: minmax(0,1fr) !important;
+    align-items: start !important;
+    margin: 12px auto 0 !important;
+    padding: 0 12px !important;
+  }
+  #home.hero > div:first-child { display: none !important; }
+  #home.hero > .searchbox {
+    display: grid !important;
+    align-self: start !important;
+    justify-self: stretch !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    grid-template-columns: minmax(0,1fr) !important;
+    grid-auto-rows: max-content !important;
+    align-content: start !important;
+    gap: 9px !important;
+    padding: 13px !important;
+    margin: 0 !important;
+  }
+  #home.hero > .searchbox h3 { height:auto!important;min-height:0!important;margin:0 0 2px!important; }
+  #home.hero > .searchbox .row {
+    display: grid !important;
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+    align-items: center !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    gap: 8px !important;
+  }
+  #home.hero > .searchbox .row > input,
+  #home.hero > .searchbox .row > select,
+  #home.hero > .searchbox .row > button {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 46px !important;
+    min-height: 46px !important;
+    max-height: 46px !important;
+    margin: 0 !important;
+    flex: none !important;
+  }
+  #home.hero > .searchbox .row > select[hidden] { display:none!important; }
+  #home.hero > .searchbox .row:last-child { grid-template-columns:minmax(0,1fr) 92px!important; }
+}
+</style>
+
 </head>
 <body>
 <div id="mgLocalFileWarning" hidden role="status" style="max-width:1220px;margin:10px auto;padding:12px 16px;border:1px solid #d8b45d;border-radius:10px;background:#fff4cf;color:#49370a;font:600 13px/1.6 Arial,sans-serif">આ index.html ફાઇલ સીધી ફોન/કમ્પ્યુટરમાંથી ખોલેલી છે. ભાષા અને સામાન્ય પેજ દેખાઈ શકે છે, પરંતુ Firebase Login, લાઇવ લિસ્ટિંગ, ફોટો/વિડિયો અપલોડ અને એકાઉન્ટ Sync માટે વેબસાઇટની HTTPS લિંક અથવા ઇન્સ્ટોલ કરેલી APK ખોલો.</div>
@@ -1224,8 +1289,8 @@ function filterProps(){
 (function(){const b=document.getElementById('favOnly');if(b)b.addEventListener('click',()=>{window.__favOnly=!window.__favOnly;b.classList.toggle('active',window.__favOnly);b.setAttribute('aria-pressed',String(window.__favOnly));filterProps()})})();
 // Column buttons call the independent controller directly; no competing delegated handler here.
 </script>
-<script type="module" src="assets/maru-ghar-backend.js?v=20261119cityadmin1"></script>
-<script type="module" src="assets/maru-ghar-extras.js"></script>
+<script type="module" src="assets/maru-ghar-backend.js?v=20261120launchfix2"></script>
+<script type="module" src="assets/maru-ghar-extras.js?v=20261120launchfix2"></script>
 
 
 <script>
