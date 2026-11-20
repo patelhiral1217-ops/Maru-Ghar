@@ -88,11 +88,11 @@ import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/
    const name=prompt('તમારું નામ લખો:');if(!name||name.trim().length<2)return;
    const phone=prompt('તમારો મોબાઇલ નંબર લખો:');if(!phone||!/^[0-9+() -]{10,16}$/.test(phone.trim())){alert('યોગ્ય મોબાઇલ નંબર લખો.');return;}
    const date=prompt('મુલાકાતની તારીખ લખો (YYYY-MM-DD):');if(date===null)return;
-   const dateMatch=/^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(date.trim());if(!dateMatch){alert('યોગ્ય ભવિષ્યની તારીખ લખો.');return;}
+   const dateMatch=/^(\d{4})-(\d{2})-(\d{2})$/.exec(date.trim());if(!dateMatch){alert('યોગ્ય ભવિષ્યની તારીખ લખો.');return;}
    const visitDay=new Date(Number(dateMatch[1]),Number(dateMatch[2])-1,Number(dateMatch[3]));const today=new Date();today.setHours(0,0,0,0);
    if(visitDay.getFullYear()!==Number(dateMatch[1])||visitDay.getMonth()!==Number(dateMatch[2])-1||visitDay.getDate()!==Number(dateMatch[3])||visitDay<today){alert('યોગ્ય ભવિષ્યની તારીખ લખો.');return;}
    const time=prompt('મુલાકાતનો સમય લખો (24 કલાક, HH:MM):');if(time===null)return;
-   if(!/^(?:[01]\\d|2[0-3]):[0-5]\\d$/.test(time.trim())){alert('યોગ્ય સમય લખો (ઉદાહરણ: 10:30 અથવા 16:00).');return;}
+   if(!/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(time.trim())){alert('યોગ્ય સમય લખો (ઉદાહરણ: 10:30 અથવા 16:00).');return;}
    const message=(prompt('મુલાકાત માટે વૈકલ્પિક સંદેશ લખો:')||'').trim().slice(0,500);
    try{await addDoc(collection(db,'enquiries'),{uid:currentUser.uid,listingId:String(listing.id),listingTitle:String(listing.title||listing.type||'પ્રોપર્ટી').slice(0,120),customerName:name.trim().slice(0,80),customerPhone:phone.trim(),message,status:'pending',kind:'site_visit',visitDate:date.trim(),visitTime:time.trim(),createdAt:serverTimestamp()});alert('મુલાકાતની વિનંતી મોકલાઈ. એડમિન સમયની પુષ્ટિ માટે સંપર્ક કરશે.');}
    catch(err){console.error('site visit request failed',err);alert('મુલાકાતની વિનંતી મોકલી શકાઈ નથી: '+(err.code||err.message));}
