@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 const admin=fs.readFileSync('admin.html','utf8');
+const backend=fs.readFileSync('assets/maru-ghar-backend.js','utf8');
 const rules=fs.readFileSync('firestore.rules','utf8');
 const errors=[];
 if(!admin.includes('name="ownerType"') || !admin.includes("ownerType:String(f.get('ownerType')||'owner')")) errors.push('Admin listing form must capture owner/broker/builder source');
