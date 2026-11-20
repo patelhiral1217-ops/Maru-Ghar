@@ -23,6 +23,7 @@ if(!android.includes('@capacitor/push-notifications@^7'))errors.push('Android bu
 if(!admin.includes("doc(db,'adminTokens',t.value)"))errors.push('Admin FCM token registration missing');
 if(!admin.includes("PN.addListener('registration'"))errors.push('Android FCM registration listener missing');
 if(!admin.includes("PN.requestPermissions()"))errors.push('Android notification permission request missing');
+if(!worker.includes('async function processNewEnquiries(cursor)')||!worker.includes("collection('enquiries')")||!worker.includes('admin_enquiry_'))errors.push('New customer enquiries and site visits must trigger idempotent admin push notifications');
 if(!worker.includes("collection('adminTokens')")||!worker.includes('sendEachForMulticast'))errors.push('Free scheduled worker must send admin FCM notifications');
 if(!worker.includes("collectionGroup('favorites')")||!worker.includes("collection('pushTokens')"))errors.push('Free scheduled worker must notify saved-property customers');
 if(!worker.includes('notificationWorkerState')||!worker.includes('lastCheckedAt'))errors.push('Free worker cursor state missing');
