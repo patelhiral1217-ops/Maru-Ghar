@@ -25,6 +25,7 @@ for(const marker of [
   "if(!status)return;"
 ]) if(!extras.includes(marker)) errors.push(`Customer auth flow marker missing: ${marker}`);
 if(!fs.readFileSync('firestore.rules','utf8').includes("resource.data.submitterUid == request.auth.uid")) errors.push('Owner-only listing read rule is missing');
+if(!extras.includes('window.mgCreateSiteVisit=async listing=>') || !extras.includes("kind:'site_visit'") || !html.includes('assets/maru-ghar-backend.js')) errors.push('Site visit request flow is missing');
 if(!html.includes('<script type="module" src="assets/maru-ghar-extras.js"></script>')) errors.push('Customer auth module is not loaded on home page');
 if(!fileMode.includes("protocol==='file:'||protocol==='content:'") || !fileMode.includes("href.startsWith('content:')") || !fileMode.includes('Firebase Login')) errors.push('file:// and Android content:// modes must clearly explain that Firebase login is unavailable');
 if(!html.includes("location.protocol==='content:'") || !html.includes('File Managerમાંથી સીધી ખોલેલી છે')) errors.push('Android content:// warning banner is missing');
