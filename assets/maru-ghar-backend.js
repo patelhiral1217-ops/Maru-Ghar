@@ -257,13 +257,35 @@ function siteUrl(){if(/^https:\/\//i.test(siteUrlSetting))return siteUrlSetting;
 const getFavs=()=>{try{return JSON.parse(localStorage.getItem('mg_favs')||'[]')}catch(_){return[]}};
 const isFav=id=>getFavs().includes(id);
 function toggleFav(id){let f=getFavs();f=f.includes(id)?f.filter(x=>x!==id):[...f,id];try{localStorage.setItem('mg_favs',JSON.stringify(f))}catch(_){}const on=f.includes(id);if(typeof window.mgSyncFavorite==='function')window.mgSyncFavorite(id,on);return on;}
-function timeAgo(ms){if(!ms)return '';const m=Math.floor((Date.now()-ms)/60000);if(m<60)return 'હમણાં જ';const h=Math.floor(m/60);if(h<24)return h+' કલાક પહેલાં';const d=Math.floor(h/24);return d+' દિવસ પહેલાં';}
+function timeAgo(ms){
+  if(!ms)return '';
+  const m=Math.max(0,Math.floor((Date.now()-ms)/60000));
+  if(m<1)return 'હમણાં જ';
+  if(m<60)return m+' મિનિટ પહેલાં';
+  const h=Math.floor(m/60);
+  if(h<24)return h+' કલાક પહેલાં';
+  const d=Math.floor(h/24);
+  if(d<30)return d+' દિવસ પહેલાં';
+  const months=Math.floor(d/30);
+  if(months<12)return months+' મહિના પહેલાં';
+  return Math.floor(months/12)+' વર્ષ પહેલાં';
+}
+function uploadDateTime(ms){
+  if(!ms)return '';
+  return new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Kolkata',day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true}).format(new Date(ms));
+}
+function refreshListingTimes(){
+  document.querySelectorAll('[data-mg-created-ms]').forEach(el=>{
+    const ms=Number(el.dataset.mgCreatedMs||0);
+    if(ms)el.textContent='🕒 '+timeAgo(ms)+' · '+uploadDateTime(ms);
+  });
+}
 function badgesHtml(p){const a=[];
   if(p.closed)a.push(`<span class="mg-b sold">🔴 ${p.purpose==='ભાડે'?'ભાડે અપાઈ ગયું':'વેચાઈ ગયું'}</span>`);
   if(p.verified)a.push('<span class="mg-b ver">✔ વેરિફાઇડ</span>');
   if(p.featured)a.push('<span class="mg-b feat">⭐ ફીચર્ડ</span>');
   if(p.offerTitle)a.push(`<span class="mg-b off">🎉 ${esc(p.offerTitle)}</span>`);
-  const t=timeAgo(p.createdMs);if(t)a.push(`<span class="mg-b">🕒 ${t}</span>`);
+  if(p.createdMs)a.push(`<span class="mg-b" data-mg-created-ms="${Number(p.createdMs)||0}">🕒 ${timeAgo(p.createdMs)} · ${uploadDateTime(p.createdMs)}</span>`);
   return `<div class="mg-badges">${a.join('')}</div>`;}
 function specsHtml(p){const a=[p.type||'પ્રોપર્ટી'];if(p.bhk)a.push(p.bhk);if(p.areaSqft)a.push(p.areaSqft+' ચો.ફૂટ');if(p.floor)a.push('માળ '+p.floor);if(p.furnishing)a.push(p.furnishing);if(p.parking)a.push(p.parking);return a.map(x=>`<span>${esc(x)}</span>`).join('');}
 function shareText(p){return `${p.type||'પ્રોપર્ટી'} (${p.purpose||''}) — ${p.city||'ગાંધીનગર'}, ${p.location||''}\n${p.price?'💰 '+p.price+'\n':''}${p.offerTitle?'🎉 '+p.offerTitle+(p.offerText?': '+p.offerText:'')+'\n':''}${siteUrl()?'🔗 '+siteUrl()+'\n':''}— મારું ઘર`;}
@@ -428,3 +450,6 @@ if(photoInput){photoInput.addEventListener('change',()=>{const status=document.g
 init();
 
 const moreButton=document.getElementById('loadMoreListings'); if(moreButton) moreButton.addEventListener('click',()=>loadApproved(false));
+
+// Keep relative upload labels current while preserving the original Firestore upload timestamp.
+if(!window.__mgListingTimeRefresh){window.__mgListingTimeRefresh=true;setInterval(refreshListingTimes,60000);}
