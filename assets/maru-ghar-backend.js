@@ -196,11 +196,14 @@ if(grid){
   grid.addEventListener('touchend',e=>{if(!tsl||tx==null||+tsl.dataset.n<2)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>40){goTo(tsl,+tsl.dataset.cur+(dx<0?1:-1));}tx=null},{passive:true});
 }
 
+function mgIsListingExpired(p){const v=String(p.expiresOn||'').trim();if(!/^\\d{4}-\\d{2}-\\d{2}$/.test(v))return false;const now=new Date();const today=[now.getFullYear(),String(now.getMonth()+1).padStart(2,'0'),String(now.getDate()).padStart(2,'0')].join('-');return v<today;}
+
 function renderLiveProperties(items) {
   if (!grid) return;
   // Only live approved items are rendered in configured mode; demo sample cards are removed.
   if (!items.length && !lastListingDoc) { grid.innerHTML=currentCity==='all'?'<div class="empty">હાલ મંજૂર થયેલી પ્રોપર્ટી ઉપલબ્ધ નથી. માલિકની લિસ્ટિંગ એડમિન મંજૂરી પછી અહીં દેખાશે.</div>':'<div class="empty">આ શહેરમાં હાલ મંજૂર પ્રોપર્ટી ઉપલબ્ધ નથી. બીજું શહેર કે "આખું ગુજરાત" પસંદ કરો.</div>'; }
   for (const p of items) {
+    if(p.closed||mgIsListingExpired(p))continue;
     const article=document.createElement('article'); article.className='property';
     article.dataset.type=p.type||''; article.dataset.purpose=p.purpose==='ભાડે'?'rent':'sale';
     article.dataset.city=p.city||'ગાંધીનગર'; article.dataset.location=String(p.location||p.area||'').toLowerCase(); article.dataset.id=p.id||''; article.dataset.verified=p.verified?'1':'0'; article.dataset.bhk=p.bhk||''; article.dataset.furn=p.furnishing||''; article.dataset.pricenum=p.priceNum||''; const sqft=Number(String(p.areaSqft||'').replace(/,/g,'')); article.dataset.areasqm=Number.isFinite(sqft)&&sqft>0?String(Math.round(sqft*0.092903)):''; article.dataset.hasphotos=Array.isArray(p.photos)&&p.photos.length?'1':'0'; article.dataset.hasvideos=Array.isArray(p.videos)&&p.videos.length?'1':'0'; article.dataset.ts=p.createdMs||0; article.dataset.featured=p.featured?'1':''; if(p.closed) article.classList.add('closed'); itemsById.set(p.id,p); article.dataset.search=[p.location,p.city,(DEFAULT_CITIES.find(c=>c[0]===p.city)||[])[1],p.type,p.title,p.description].join(' ').toLowerCase();
