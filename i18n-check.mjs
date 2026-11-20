@@ -51,7 +51,7 @@ console.log('I18N STRUCTURE CHECK PASS — selectors, persisted language, page l
 
 for(const marker of ['Select City','Property Type','Owner Name','Mobile Number','Submit Property for Approval','Gandhinagar','Ahmedabad','Surat'])assert.ok(complete.includes(marker),`supplemental language coverage missing: ${marker}`);
 for(const marker of ['data-mg-i18n-inline="engine"','assets/maru-ghar-form-steps.js'])assert.ok(home.includes(marker),`customer page script missing: ${marker}`);
-const wizard=read('assets/maru-ghar-form-steps.js');for(const marker of ["names:['ownerName']","names:['ownerPhone']","names:['location']","names:['city']","names:['type']","names:['purpose']","names:['bhk']","names:['price']",'mg-form-step','આગળ વધો'])assert.ok(wizard.includes(marker),`property wizard step missing: ${marker}`);
+const wizard=read('assets/maru-ghar-form-steps.js');for(const marker of ["names:['ownerName']","names:['ownerType']","names:['ownerPhone']","names:['location']","names:['city']","names:['type']","names:['purpose']","names:['bhk']","names:['price']",'mg-form-step','આગળ વધો'])assert.ok(wizard.includes(marker),`property wizard step missing: ${marker}`);
 for(const page of pages)assert.ok(read(page).includes('data-mg-i18n-inline="engine"'),`${page}: inline supplemental translator not loaded`);
 
 const submitToggle=read('assets/maru-ghar-submit-toggle.js');
