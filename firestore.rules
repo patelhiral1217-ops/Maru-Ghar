@@ -323,7 +323,7 @@ service cloud.firestore {
     }
 
     // ---------------------------------------------------------
-    // 10. CUSTOMER ENQUIRIES
+    // 10. CUSTOMER ENQUIRIES — supports private customer enquiries and site-visit requests
     // ---------------------------------------------------------
     match /enquiries/{enquiryId} {
       allow create: if isRegisteredCustomer()
