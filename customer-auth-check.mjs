@@ -33,3 +33,6 @@ if(!html.includes('autocomplete="email"') || !html.includes('autocomplete="curre
 if(!html.includes('minlength="6"') || !html.includes('type="email"')) errors.push('Email/password basic input constraints missing');
 if(errors.length){console.error('CUSTOMER AUTH CHECK FAILED');errors.forEach(x=>console.error(' - '+x));process.exit(1)}
 console.log('CUSTOMER AUTH STATIC CHECK PASS — registration, login, logout, auth-state listener, account data hooks, owner property status view, owner-only listing read rule, error mappings and file:// guard are present. Live Firebase credentials/device test is not covered.');
+
+const extras=fs.readFileSync('assets/maru-ghar-extras.js','utf8');
+if(!extras.includes("/^(\\d{4})-(\\d{2})-(\\d{2})$/") || !extras.includes("/^(?:[01]\\d|2[0-3]):[0-5]\\d$/")) errors.push('Site visit date/time validation must match numeric date and 24-hour time');
