@@ -39,8 +39,9 @@ service cloud.firestore {
           'reviewNote', 'videos', 'city', 'mapLink', 'bhk',
           'areaSqft', 'floor', 'furnishing', 'parking', 'deposit',
           'priceNum', 'offerTitle', 'offerText', 'offerUntil',
-          'verified', 'featured', 'closed'
+          'verified', 'featured', 'closed', 'ownerType'
         ])
+        && (!('ownerType' in data) || data.ownerType in ['owner', 'broker', 'builder'])
         && data.ownerName is string
         && data.ownerName.size() >= 2
         && data.ownerName.size() <= 80
