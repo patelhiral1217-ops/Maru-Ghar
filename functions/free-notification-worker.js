@@ -54,6 +54,31 @@ async function processNewListings(cursor) {
   return processed;
 }
 
+async function processNewEnquiries(cursor) {
+  const snap = await db.collection('enquiries').where('createdAt', '>=', cursor).get();
+  const tokens = await db.collection('adminTokens').get();
+  let processed = 0;
+  for (const doc of snap.docs) {
+    const d = doc.data() || {};
+    if (!d.uid || d.uid === ADMIN_UID) continue;
+    const marker = db.collection('notificationWorkerEvents').doc('admin_enquiry_' + doc.id);
+    const existing = await marker.get();
+    if (existing.exists || tokens.empty) continue;
+    const isVisit = d.kind === 'site_visit';
+    const body = isVisit
+      ? 'ગ્રાહકની નવી સાઇટ વિઝિટ વિનંતી આવી છે. Admin માં વિગતો તપાસો.'
+      : 'ગ્રાહકની નવી પૂછપરછ આવી છે. Admin માં વિગતો તપાસો.';
+    const delivered = await sendTokens(tokens.docs,
+      { title: isVisit ? 'મારું ઘર — નવી સાઇટ વિઝિટ વિનંતી' : 'મારું ઘર — નવી ગ્રાહક પૂછપરછ', body },
+      { enquiryId: doc.id, kind: isVisit ? 'site_visit' : 'new_enquiry' });
+    if (delivered > 0) {
+      await marker.set({ kind: 'admin_new_enquiry', enquiryId: doc.id, enquiryKind: isVisit ? 'site_visit' : 'enquiry', sentAt: admin.firestore.FieldValue.serverTimestamp() });
+      processed++;
+    }
+  }
+  return processed;
+}
+
 async function processPriceDrops(cursor) {
   const snap = await db.collection('listings').where('priceUpdatedAt', '>=', cursor).get();
   let processed = 0;
@@ -112,10 +137,11 @@ async function processPriceDrops(cursor) {
   }
   // A one-hour overlap protects against delayed schedules; event markers prevent repeats.
   const cursor = admin.firestore.Timestamp.fromMillis(Math.max(0, previous - 60 * 60 * 1000));
-  const [newListings, priceDrops] = await Promise.all([
+  const [newListings, newEnquiries, priceDrops] = await Promise.all([
     processNewListings(cursor),
+    processNewEnquiries(cursor),
     processPriceDrops(cursor)
   ]);
-  await stateRef.set({ lastCheckedAt: now, lastRunAt: admin.firestore.FieldValue.serverTimestamp(), newListings, priceDrops }, { merge: true });
-  console.log(`Free notification worker completed: ${newListings} new listings, ${priceDrops} price-drop listings.`);
+  await stateRef.set({ lastCheckedAt: now, lastRunAt: admin.firestore.FieldValue.serverTimestamp(), newListings, newEnquiries, priceDrops }, { merge: true });
+  console.log(`Free notification worker completed: ${newListings} new listings, ${newEnquiries} new enquiries, ${priceDrops} price-drop listings.`);
 })().catch(error => { console.error('Free notification worker failed:', error); process.exitCode = 1; });
