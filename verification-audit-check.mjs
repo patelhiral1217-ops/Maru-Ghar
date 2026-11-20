@@ -4,6 +4,7 @@ const rules=fs.readFileSync('firestore.rules','utf8');
 const errors=[];
 if(!admin.includes('name="ownerType"') || !admin.includes("ownerType:String(f.get('ownerType')||'owner')")) errors.push('Admin listing form must capture owner/broker/builder source');
 if(!rules.includes("data.ownerType in ['owner', 'broker', 'builder']") || !rules.includes("'closed', 'ownerType'")) errors.push('Firestore must validate optional ownerType enum');
+if(!admin.includes('expiresOn:new Date(Date.now()+90*86400000).toISOString().slice(0,10)') || !backend.includes('expiresOn:new Date(Date.now()+90*86400000).toISOString().slice(0,10)')) errors.push('New listings must receive a 90-day expiry date');
 if(!admin.includes('data-action="editexpiry"') || !admin.includes("updateDoc(doc(db,'listings',id),{expiresOn:date})")) errors.push('Admin listing expiry editor missing');
 for(const marker of [
   "if(action==='toggle_verified')",
