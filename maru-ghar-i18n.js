@@ -1,5 +1,6 @@
 /* Central Gujarati/Hindi/English interface dictionary. User-entered listing content is never translated. */
 window.MG_I18N_DICTIONARY={
+  "તાજેતરમાં જોયેલી પ્રોપર્ટી":{"hi":"हाल ही में देखी गई प्रॉपर्टी","en":"Recently Viewed Properties"},
   "🕘 તાજેતરમાં જોયેલી પ્રોપર્ટી":{"hi":"🕘 हाल ही में देखी गई प्रॉपर्टी","en":"🕘 Recently Viewed Properties"},
   "EMI કેલ્ક્યુલેટર":{"hi":"EMI कैलकुलेटर","en":"EMI Calculator"},
   "લોનની રકમ (₹)":{"hi":"लोन की राशि (₹)","en":"Loan amount (₹)"},
