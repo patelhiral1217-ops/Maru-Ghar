@@ -189,15 +189,16 @@ async function main() {
 
     /* ---------- 2. Live property gallery ---------- */
     const injectFixture = () => page.evaluate((html) => {
-      const grid = document.getElementById('properties');
-      if (!grid) return false;
       const old = document.getElementById('mgSwipeTestHolder');
       if (old) old.remove();
+      /* Fixed overlay: deterministic geometry, independent of the page's
+         scroll-snap grid, so synthetic touch coordinates always land. */
       const holder = document.createElement('div');
       holder.id = 'mgSwipeTestHolder';
-      holder.style.cssText = 'grid-column:1/-1;width:100%;min-width:0';
+      holder.style.cssText =
+        'position:fixed;left:0;top:0;width:360px;height:220px;z-index:2147483000;background:#111';
       holder.innerHTML = html;
-      grid.appendChild(holder);
+      document.body.appendChild(holder);
       /* Count how often the gallery's own controls are used, so a swipe can be
          verified independently of whether Firestore is reachable here. */
       window.__mgSpy = window.__mgSpy || { next: 0, prev: 0 };
@@ -232,7 +233,7 @@ async function main() {
       return { x: r.left, y: r.top, width: r.width, height: r.height };
     }, selector);
 
-    /* The app renders #properties asynchronously; inject only after that settles. */
+    /* The app renders #properties asynchronously; wait so the page is settled. */
     await page.waitForFunction(() => {
       const g = document.getElementById('properties');
       return !!g && g.children.length > 0;
@@ -241,12 +242,7 @@ async function main() {
 
     const ensure = async () => {
       if (!(await liveState())) await injectFixture();
-      /* Touch coordinates are viewport-relative: the fixture must be on screen. */
-      await page.evaluate(() => {
-        const el = document.querySelector('#mgSwipeTestHolder .mg-slider');
-        if (el) el.scrollIntoView({ block: 'center' });
-      });
-      await sleep(250);
+      await sleep(150);
     };
 
     check('live gallery fixture is present', !!(await liveState()));
@@ -259,12 +255,14 @@ async function main() {
         return [Math.round(r.left), Math.round(r.top), Math.round(r.width), Math.round(r.height)];
       };
       const next = el.querySelector('.mg-next');
+      const at = next ? box(next) : null;
+      const top = at ? document.elementFromPoint(at[0] + at[2] / 2, at[1] + at[3] / 2) : null;
       return {
         sliderPosition: getComputedStyle(el).position,
         slider: box(el),
-        next: next ? box(next) : null,
-        viewportWidth: window.innerWidth,
-        gridChildren: document.getElementById('properties').children.length
+        next: at,
+        topmostOnNext: top ? (top.className || top.tagName) : null,
+        viewportWidth: window.innerWidth
       };
     });
     console.log('INFO live layout ' + JSON.stringify(layout));
