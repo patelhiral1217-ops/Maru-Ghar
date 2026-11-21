@@ -5156,3 +5156,18 @@ html,body{max-width:100%;overflow-x:hidden}
 }
 @media(max-width:360px){.mg-footer-actions .mg-download-app{font-size:8.5px!important}.mg-footer-actions .mg-download-app span{font-size:8px!important}}
 </style>
+
+<style id="mg-vertical-page-scroll-horizontal-photo-swipe-20261122">
+/* Let the browser own vertical page scrolling; reserve horizontal gestures for photo galleries. */
+.mg-slider:not([data-direction="vertical"]),
+.mg-slider:not([data-direction="vertical"]) .mg-track,
+.mg-slider:not([data-direction="vertical"]) .mg-slide,
+#mgDemoShowcase .mg-demo-photo,
+#mgDemoShowcase .mg-demo-photo img{
+  touch-action:pan-y pinch-zoom!important;
+  -webkit-user-select:none!important;
+  user-select:none!important;
+  -webkit-user-drag:none!important;
+}
+#mgDemoShowcase .mg-demo-photo img{pointer-events:none!important}
+</style>
