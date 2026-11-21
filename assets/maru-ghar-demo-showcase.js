@@ -163,11 +163,28 @@
   const visibilityObserver=('IntersectionObserver' in window)?new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting)visibleCards.add(entry.target);else visibleCards.delete(entry.target)}),{rootMargin:'120px'}):null;
   function show(card,idx){const p=samples.find(x=>x.id===card.dataset.demoId);idx=(idx+p.photos.length)%p.photos.length;indices.set(p.id,idx);const im=card.querySelector('img');im.style.opacity='.25';const next=new Image();next.decoding='async';next.onload=()=>{im.src=next.src;im.style.opacity='1'};next.onerror=()=>im.style.opacity='1';next.src=p.photos[idx];card.querySelector('.mg-demo-counter').textContent=(idx+1)+' / '+p.photos.length;}
   section.querySelectorAll('.mg-demo-card').forEach(card=>{const id=card.dataset.demoId;if(visibilityObserver)visibilityObserver.observe(card);else visibleCards.add(card);timers.set(id,setInterval(()=>{if(visibleCards.has(card)&&!paused.has(id)&&!document.hidden)show(card,(indices.get(id)||0)+1)},6500));});
-  /* Touch swipe replaces all on-photo arrow and pause controls. */
+  /* Pointer Events handle horizontal AND vertical swipes consistently in Android Chrome/WebView. */
   section.querySelectorAll('.mg-demo-photo').forEach(photo=>{
-   let startX=0,startY=0;
-   photo.addEventListener('touchstart',e=>{if(!e.changedTouches.length)return;startX=e.changedTouches[0].clientX;startY=e.changedTouches[0].clientY;},{passive:true});
-   photo.addEventListener('touchend',e=>{if(!e.changedTouches.length)return;const dx=e.changedTouches[0].clientX-startX,dy=e.changedTouches[0].clientY-startY;const delta=Math.abs(dx)>Math.abs(dy)?dx:dy;if(Math.abs(delta)>38){const card=photo.closest('.mg-demo-card');const id=card.dataset.demoId;show(card,(indices.get(id)||0)+(delta<0?1:-1));}},{passive:true});
+   let startX=null,startY=null,pointerId=null;
+   const finishSwipe=e=>{
+    if(startX===null||startY===null||(pointerId!==null&&e.pointerId!==pointerId))return;
+    const dx=e.clientX-startX,dy=e.clientY-startY;
+    const delta=Math.abs(dx)>=Math.abs(dy)?dx:dy;
+    if(Math.abs(delta)>28){
+     const card=photo.closest('.mg-demo-card'),id=card.dataset.demoId;
+     paused.add(id);
+     show(card,(indices.get(id)||0)+(delta<0?1:-1));
+     setTimeout(()=>paused.delete(id),900);
+    }
+    startX=null;startY=null;pointerId=null;
+   };
+   photo.addEventListener('pointerdown',e=>{
+    if(e.pointerType==='mouse'&&e.button!==0)return;
+    startX=e.clientX;startY=e.clientY;pointerId=e.pointerId;
+    try{photo.setPointerCapture(e.pointerId)}catch(_){}
+   });
+   photo.addEventListener('pointerup',finishSwipe);
+   photo.addEventListener('pointercancel',()=>{startX=null;startY=null;pointerId=null});
    photo.querySelector('img').draggable=false;
   });
   /* Measure actual rendered Gujarati text and shrink only as much as each card needs. */
