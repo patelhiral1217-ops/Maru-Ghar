@@ -79,6 +79,14 @@ footer{position:relative!important;z-index:1!important;background:linear-gradien
 .mg-lb-x{position:absolute;top:14px;right:14px;z-index:4;border:0;border-radius:50%;width:40px;height:40px;background:#fff3;color:#fff;font-size:20px;cursor:pointer}
 .mg-lb .mg-count{top:20px;left:50%;right:auto;transform:translateX(-50%)}
 
+/* Android swipe reliability: horizontal gesture belongs to the gallery JS, vertical to the page.
+   touch-action is set on the elements that are actually touched (.mg-slide / demo img), not only
+   on their parent, otherwise Chrome hands the gesture to the scroll container and cancels it. */
+.mg-slider .mg-track,.mg-slider .mg-slide,#mgDemoShowcase .mg-demo-photo,#mgDemoShowcase .mg-demo-photo img{touch-action:pan-y!important;-webkit-user-drag:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+#mgDemoShowcase .mg-demo-photo img{pointer-events:none}
+.mg-lb,.mg-lb-stage{touch-action:pan-y pinch-zoom}
+.mg-slider,#mgDemoShowcase .mg-demo-grid{overscroll-behavior-x:contain}
+
 /* Search extras: favourites, BHK/price filters, offline notice (added; existing design unchanged) */
 .x-bar{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}
 .x-bar select,.x-bar input{flex:1 1 150px;min-width:0;padding:11px 12px;border:1px solid #d5dce5;border-radius:10px;background:#fff;color:#1b2635;font:inherit;font-size:14px}
@@ -4539,6 +4547,7 @@ Object.assign(window.MG_I18N_DICTIONARY,{
 </style>
 
 <script src="assets/maru-ghar-demo-showcase.js?v=20261120fix1"></script>
+<script src="assets/maru-ghar-swipe.js?v=20261121swipe1"></script>
 <script defer src="assets/maru-ghar-admin-content.js?v=20261118a"></script>
 <style id="mg-final-search-metal-and-range-apply-20261117">
 /* Exact same champagne-gold/silver 3D finish for the home dropdowns and every category chip. */
