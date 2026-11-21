@@ -10,7 +10,10 @@
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
-import { chromium } from '/opt/appjet/browser/node_modules/playwright/index.js';
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
+const { chromium } = require('/opt/appjet/browser/node_modules/playwright/index.js');
 
 const root = process.cwd();
 const www = path.join(root, 'www');
