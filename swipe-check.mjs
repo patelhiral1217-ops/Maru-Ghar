@@ -316,13 +316,18 @@ async function main() {
        Tapped through real touch events (not a synthetic mouse click) because
        that is what an Android finger does. */
     await sleep(800);
-    await swipe(hcdp, await hBox('.mg-slider .mg-next'), 0, 0);
+    const tapAt = async (sel) => {
+      const b = await hBox(sel);
+      await hp.touchscreen.tap(b.x + b.width / 2, b.y + b.height / 2);
+      await sleep(350);
+    };
+    await tapAt('.mg-slider .mg-next');
     st = await hState();
     check('live Next button still advances the photo', st.cur === '1', 'cur=' + st.cur);
     check('live counter follows the Next button', st.count === '2 / 3', st.count);
 
     await sleep(400);
-    await swipe(hcdp, await hBox('.mg-slider .mg-prev'), 0, 0);
+    await tapAt('.mg-slider .mg-prev');
     st = await hState();
     check('live Previous button still goes back', st.cur === '0', 'cur=' + st.cur);
   } finally {
