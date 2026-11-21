@@ -4944,7 +4944,8 @@ html,body{max-width:100%;overflow-x:hidden}
 .mg-customer-login-top span{color:#173b30!important;font-weight:900!important}
 .mg-customer-login-top:active{transform:translateY(2px)!important;box-shadow:0 2px 0 #806024,0 4px 8px rgba(0,0,0,.2),inset 0 1px 2px #fff!important}
 @media(max-width:600px){.mg-customer-login-top{min-height:39px!important;padding:7px 10px!important;font-size:11px!important}}
-/* Keep the complete app-download label on one line on narrow phones too. */
+/* Give the two footer actions half-width each, so the download label fits on one line. */
+.mg-footer-actions{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 .mg-footer-actions .mg-download-app{
   display:flex!important;flex-wrap:nowrap!important;align-items:center!important;justify-content:center!important;
   white-space:nowrap!important;overflow:visible!important;gap:4px!important;
