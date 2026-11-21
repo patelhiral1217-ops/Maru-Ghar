@@ -194,7 +194,31 @@ button:active,.primary:active,.approve:active,.reject:active{transform:translate
 
 </div></details>
 <details class="mg-cms-items-fold"><summary>📚 બનાવેલા વિભાગો — ખેંચીને ક્રમ અથવા જગ્યા બદલો</summary><div id="mgCmsList" class="mg-cms-list">લોડ થઈ રહ્યા છે…</div></details>
-<details class="mg-cms-items-fold"><summary>🗑️ કચરાપેટી — Delete થયેલું પાછું લાવો</summary><p class="muted">અહીંથી Restore કરશો તો સામગ્રી ફરી વેબસાઇટ પર ઉપલબ્ધ થશે.</p><div id="mgCmsTrashList" class="mg-cms-list">લોડ થઈ રહ્યું છે…</div></details></section><section class="panel"><h2>વેબસાઇટ લિંક (શેર કરવા માટે)</h2><p class="muted">તમારી વેબસાઇટની લિંક અહીં એકવાર લખો. લોકો લિસ્ટિંગ શેર કરશે ત્યારે અને પોસ્ટરમાં આ લિંક આવશે.</p><div class="formgrid"><label class="wide">વેબસાઇટ લિંક<input id="siteUrlInput" type="url" placeholder="https://..." maxlength="200"></label><button class="primary wide" id="saveSiteUrl" type="button">લિંક સેવ કરો</button></div><div id="siteStatus" class="status" role="status"></div></section><section class="panel"><h2>🚩 ફરિયાદો</h2><div id="reportList" class="muted">લોડ થઈ રહ્યું છે…</div></section>
+<details class="mg-cms-items-fold"><summary>🗑️ કચરાપેટી — Delete થયેલું પાછું લાવો</summary><p class="muted">અહીંથી Restore કરશો તો સામગ્રી ફરી વેબસાઇટ પર ઉપલબ્ધ થશે.</p><div id="mgCmsTrashList" class="mg-cms-list">લોડ થઈ રહ્યું છે…</div></details></section><section class="panel mg-hero-admin" id="mgHeroSlideManager" hidden>
+<h2>🖼️ Home Page — મુખ્ય ફોટા / સ્લાઇડર કંટ્રોલ</h2>
+<p class="mg-hero-note">અહીંથી Home Page પર ફરતા મોટા ફોટા ઉમેરો, બદલો, છુપાવો અને ક્રમ બદલો. કોઈ કસ્ટમ ફોટો Publish ન હોય તો હાલના જૂના 7 ફોટા આપમેળે ચાલુ રહેશે. જૂના મૂળ ફોટા ડિલીટ થતા નથી.</p>
+<div class="mg-hero-row-actions"><button class="primary" id="mgHeroNew" type="button">＋ નવો ફોટો ઉમેરો</button></div>
+<details class="mg-cms-editor" id="mgHeroEditor"><summary>ફોટો ઉમેરો / Edit કરો</summary><div class="mg-cms-editor-body">
+<div class="mg-hero-form">
+<label class="wide">ફોટો પસંદ કરો (JPG / PNG / WEBP, મહત્તમ 8 MB)<input id="mgHeroImage" type="file" accept="image/jpeg,image/png,image/webp"></label>
+<label>શીર્ષક — ગુજરાતી<input id="mgHeroTitleGu" maxlength="120" placeholder="આપનું સપનાનું ઘર"></label>
+<label>શીર્ષક — હિન્દી<input id="mgHeroTitleHi" maxlength="120"></label>
+<label class="wide">Title — English<input id="mgHeroTitleEn" maxlength="120"></label>
+<label>વર્ણન — ગુજરાતી<input id="mgHeroSubGu" maxlength="240"></label>
+<label>વર્ણન — હિન્દી<input id="mgHeroSubHi" maxlength="240"></label>
+<label class="wide">Description — English<input id="mgHeroSubEn" maxlength="240"></label>
+<label class="wide">ફોટાનું વૈકલ્પિક વર્ણન (Accessibility)<input id="mgHeroAlt" maxlength="160"></label>
+<label class="wide"><span><input id="mgHeroVisible" type="checkbox" checked style="width:auto"> Home Page પર Publish કરવો</span></label>
+</div>
+<div class="mg-hero-preview" id="mgHeroPreview"></div>
+<div class="mg-hero-row-actions"><button class="primary" id="mgHeroSave" type="button">ફોટો ઉમેરો અને સેવ કરો</button><button class="primary" id="mgHeroCancel" type="button">નવું ફોર્મ</button></div>
+</div></details>
+<div id="mgHeroStatus" class="mg-hero-status" role="status" aria-live="polite"></div>
+<h3>હાલના Home Page ફોટા</h3><p class="mg-hero-note">મોબાઇલમાં ઉપર / નીચે બટનથી ક્રમ બદલો. ફેરફાર સેવ થયા પછી Home Page ફરી ખોલો.</p>
+<div id="mgHeroSlidesList">લોડ થઈ રહ્યા છે…</div>
+<details class="mg-hero-trash"><summary>🗑️ કચરાપેટી — ફોટા પાછા લાવો</summary><div id="mgHeroSlidesTrash">લોડ થઈ રહ્યું છે…</div></details>
+</section>
+<section class="panel"><h2>વેબસાઇટ લિંક (શેર કરવા માટે)</h2><p class="muted">તમારી વેબસાઇટની લિંક અહીં એકવાર લખો. લોકો લિસ્ટિંગ શેર કરશે ત્યારે અને પોસ્ટરમાં આ લિંક આવશે.</p><div class="formgrid"><label class="wide">વેબસાઇટ લિંક<input id="siteUrlInput" type="url" placeholder="https://..." maxlength="200"></label><button class="primary wide" id="saveSiteUrl" type="button">લિંક સેવ કરો</button></div><div id="siteStatus" class="status" role="status"></div></section><section class="panel"><h2>🚩 ફરિયાદો</h2><div id="reportList" class="muted">લોડ થઈ રહ્યું છે…</div></section>
 <section class="panel"><h2>શહેરો અને વિસ્તારો</h2><p class="muted">શરૂઆતમાં અમદાવાદ અને ગાંધીનગર રહેશે. અહીંથી નવા શહેરો અને દરેક શહેરના વિસ્તારો ઉમેરો અથવા કાઢી શકો છો. ફેરફાર વેબસાઇટ અને APK બંનેમાં લાગુ થશે.</p><div class="formgrid"><label>શહેરનું નામ (ગુજરાતીમાં)<input id="newCityName" maxlength="60"></label><label>અંગ્રેજી નામ (વૈકલ્પિક)<input id="newCityEn" maxlength="60" placeholder="Surat"></label><button class="primary wide" id="addCityBtn" type="button">શહેર ઉમેરો</button></div><div id="cityList" class="muted" style="margin-top:10px"></div><hr style="opacity:.2;margin:14px 0"><div class="formgrid"><label>વિસ્તાર ઉમેરવા માટે શહેર પસંદ કરો<select id="cityAreaCity"></select></label><label>નવા વિસ્તારનું નામ<input id="newAreaName" maxlength="80" placeholder="જેમ કે કુડાસણ / સેક્ટર 21"></label><button class="primary wide" id="addAreaBtn" type="button">વિસ્તાર ઉમેરો</button></div><div id="cityAreaList" class="muted" style="margin-top:10px"></div><div id="cityStatus" class="status" role="status"></div><hr style="opacity:.2;margin:14px 0"><p class="muted">જૂની લિસ્ટિંગમાં શહેર લખેલું ન હોય તો એકવાર આ બટન દબાવો:</p><button class="primary" id="fixCityBtn" type="button">જૂની લિસ્ટિંગમાં શહેર = ગાંધીનગર સેટ કરો</button></section>
 <section class="panel backup-panel" id="dataBackupSettings"><div class="backup-heading"><div class="backup-icon" aria-hidden="true">🗄️</div><div><div class="backup-eyebrow">DATA SAFETY CENTER</div><h2>ડેટા બેકઅપ અને રીસ્ટોર</h2><p class="muted">તમારી પ્રોપર્ટી લિસ્ટિંગનો બેકઅપ ડાઉનલોડ કરો અથવા અગાઉની બેકઅપ ફાઇલમાંથી રેકોર્ડ પાછા ઉમેરો.</p></div></div><div class="backup-actions"><button id="backupListings" class="primary backup-main" type="button">⬇️ ડેટાનો બેકઅપ લો (JSON)</button><button id="restoreListings" class="backup-restore" type="button">↻ બેકઅપ રીસ્ટોર કરો</button><input id="restoreFile" type="file" accept="application/json,.json" hidden></div><div class="backup-note"><strong>ધ્યાન આપો:</strong> રીસ્ટોર કરતી વખતે હાલના ID ધરાવતા રેકોર્ડ overwrite નહીં થાય; ફક્ત નવા રેકોર્ડ ઉમેરાશે.</div><div id="exportStatus" class="status" role="status"></div></section>
 <section class="panel"><h2>🔐 માલિકના મોબાઇલ નંબરની ખાનગી સુરક્ષા</h2><p class="muted">જૂની લિસ્ટિંગમાં રહેલા માલિકના મોબાઇલ નંબરને અલગ ખાનગી રેકોર્ડમાં ખસેડો. પહેલાં ખાનગી રેકોર્ડ સાચવાશે, ત્યારબાદ જાહેર લિસ્ટિંગમાંથી નંબર દૂર થશે.</p><button id="migrateOwnerContacts" class="primary" type="button">જૂના મોબાઇલ નંબર સુરક્ષિત કરો</button><div id="contactMigrationStatus" class="status" role="status"></div></section><section class="panel"><h2>🛠️ સિસ્ટમ Error Log</h2><p class="muted">એડમિન પેનલમાં થયેલી JavaScript ભૂલોનો મર્યાદિત રેકોર્ડ. કોઈ પાસવર્ડ કે ફોર્મનું ખાનગી લખાણ સાચવાતું નથી.</p><button id="refreshErrorLog" class="primary" type="button">Error Log લોડ કરો</button> <button id="exportErrorLog" class="primary" type="button">Error Log JSON ડાઉનલોડ</button><div id="errorLogList" class="muted"></div></section>
@@ -3630,7 +3654,8 @@ document.addEventListener('reset',function(){setTimeout(render,0)},true)})();
 @media(prefers-reduced-motion:reduce){:where(button,input[type="button"],input[type="submit"],input[type="reset"],a[role="button"],[role="button"],[role="tab"]){transition:none!important}}
 </style>
 <link rel="stylesheet" href="assets/maru-ghar-site-content.css?v=20261118a">
-<script type="module" src="assets/maru-ghar-content-admin.js?v=20261119b"></script><script src="assets/maru-ghar-live-editor.js?v=20261119b" defer></script><script type="module" src="assets/maru-ghar-customer-admin.js?v=20261119a"></script><script type="module" src="assets/maru-ghar-activity-admin.js?v=20261119a"></script>
+<link rel="stylesheet" href="assets/maru-ghar-master-admin.css?v=20261121a">
+<script type="module" src="assets/maru-ghar-content-admin.js?v=20261119b"></script><script type="module" src="assets/maru-ghar-master-hero-admin.js?v=20261121a"></script><script src="assets/maru-ghar-live-editor.js?v=20261119b" defer></script><script type="module" src="assets/maru-ghar-customer-admin.js?v=20261119a"></script><script type="module" src="assets/maru-ghar-activity-admin.js?v=20261119a"></script>
 <link rel="stylesheet" href="assets/maru-ghar-admin-compact.css?v=20261118f">
 <script src="assets/maru-ghar-admin-compact.js?v=20261118g" defer></script>
 </body></html>
