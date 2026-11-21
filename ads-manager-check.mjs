@@ -123,17 +123,26 @@ ok(AD_MAX_BYTES.video === 25 * 1024 * 1024, 'Video cap must be 25 MB');
 
 const file = (type, size) => ({ type, size });
 
-ok(validateAdMedia('image', file('image/jpeg', 2 * 1024 * 1024)), 'JPG upload must be accepted');
-ok(validateAdMedia('image', file('image/png', 1 * 1024 * 1024)), 'PNG upload must be accepted');
-ok(validateAdMedia('image', file('image/webp', 3 * 1024 * 1024)), 'WebP upload must be accepted');
-ok(validateAdMedia('video', file('video/mp4', 12 * 1024 * 1024)), 'MP4 upload must be accepted');
+/* validateAdMedia returns { ok, error } — an object is always truthy, so the
+ * result must be read through .ok, never through the value itself. */
+const accepts = (mediaType, f) => validateAdMedia(mediaType, f).ok === true;
+const rejects = (mediaType, f) => validateAdMedia(mediaType, f).ok === false;
 
-ok(!validateAdMedia('image', file('image/gif', 1024)), 'GIF must be rejected (not a supported image type)');
-ok(!validateAdMedia('image', file('image/jpeg', 9 * 1024 * 1024)), 'Oversized image must be rejected');
-ok(!validateAdMedia('video', file('video/mp4', 26 * 1024 * 1024)), 'Oversized video must be rejected');
-ok(!validateAdMedia('video', file('image/png', 1024)), 'Image offered as video must be rejected');
-ok(!validateAdMedia('image', file('video/mp4', 1024)), 'Video offered as image must be rejected');
-ok(!validateAdMedia('image', null), 'Missing file must be rejected');
+ok(accepts('image', file('image/jpeg', 2 * 1024 * 1024)), 'JPG upload must be accepted');
+ok(accepts('image', file('image/png', 1 * 1024 * 1024)), 'PNG upload must be accepted');
+ok(accepts('image', file('image/webp', 3 * 1024 * 1024)), 'WebP upload must be accepted');
+ok(accepts('video', file('video/mp4', 12 * 1024 * 1024)), 'MP4 upload must be accepted');
+
+ok(rejects('image', file('image/gif', 1024)), 'GIF must be rejected (only JPG/PNG/WebP are supported)');
+ok(rejects('image', file('image/jpeg', 9 * 1024 * 1024)), 'Oversized image must be rejected');
+ok(rejects('video', file('video/mp4', 26 * 1024 * 1024)), 'Oversized video must be rejected');
+ok(rejects('video', file('image/png', 1024)), 'Image offered as video must be rejected');
+ok(rejects('image', file('video/mp4', 1024)), 'Video offered as image must be rejected');
+ok(rejects('image', null), 'Missing file must be rejected');
+ok(
+  validateAdMedia('image', file('image/gif', 1024)).error.length > 0,
+  'A rejected upload must explain why, so the admin is not left guessing'
+);
 
 /* ------------------------------------------------------------------ *
  * 4. Click-through URL safety
@@ -141,7 +150,9 @@ ok(!validateAdMedia('image', null), 'Missing file must be rejected');
 ok(isSafeClickUrl('https://example.com/offer'), 'HTTPS click URL must be allowed');
 ok(!isSafeClickUrl('javascript:alert(1)'), 'javascript: click URL must be rejected');
 ok(!isSafeClickUrl('data:text/html,<script>alert(1)</script>'), 'data: click URL must be rejected');
-ok(!isSafeClickUrl(''), 'Empty click URL must be rejected');
+/* The click-through URL is optional: no URL simply means a non-clickable ad. */
+ok(isSafeClickUrl(''), 'An empty click URL is allowed (optional field)');
+ok(isSafeClickUrl('   '), 'A whitespace-only click URL means "no link", not an error');
 
 /* ------------------------------------------------------------------ *
  * 5. Scheduling: disabled / scheduled / expired ads never render
@@ -156,23 +167,37 @@ const base = {
   durationSeconds: 10
 };
 
-ok(isAdLive({ ...base, enabled: true }, now), 'Enabled ad with no dates must be live');
-ok(!isAdLive({ ...base, enabled: false }, now), 'Disabled ad must never render');
+/* isAdLive requires BOTH dates (the rules mandate startAt/expiryAt), so an ad
+ * without a schedule is treated as not live rather than "always on". */
+const schedule = (over) => ({
+  ...base,
+  enabled: true,
+  startAt: new Date(now - day),
+  expiryAt: new Date(now + day),
+  ...over
+});
+
+ok(isAdLive(schedule({}), now), 'Ad inside its date window must be live');
+ok(!isAdLive(schedule({ enabled: false }), now), 'Disabled ad must never render');
 ok(
-  isAdLive({ ...base, enabled: true, startAt: new Date(now - day), expiryAt: new Date(now + day) }, now),
-  'Ad inside its date window must be live'
-);
-ok(
-  !isAdLive({ ...base, enabled: true, startAt: new Date(now + day) }, now),
+  !isAdLive(schedule({ startAt: new Date(now + day), expiryAt: new Date(now + 2 * day) }), now),
   'Ad that has not started yet must not render'
 );
 ok(
-  !isAdLive({ ...base, enabled: true, expiryAt: new Date(now - day) }, now),
+  !isAdLive(schedule({ startAt: new Date(now - 2 * day), expiryAt: new Date(now - day) }), now),
   'Expired ad must not render'
 );
 ok(
-  isAdLive({ ...base, enabled: true, startAt: new Date(now - day) }, now),
-  'Ad started in the past with no expiry must stay live'
+  isAdLive(schedule({ startAt: new Date(now), expiryAt: new Date(now + 1) }), now),
+  'The start instant itself counts as live'
+);
+ok(
+  !isAdLive(schedule({ startAt: new Date(now - day), expiryAt: new Date(now) }), now),
+  'The expiry instant itself is already off (no lingering ad)'
+);
+ok(
+  !isAdLive({ ...base, enabled: true }, now),
+  'Ad with no schedule must not render, because the rules require both dates'
 );
 
 /* ------------------------------------------------------------------ *
