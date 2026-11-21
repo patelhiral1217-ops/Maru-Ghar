@@ -110,13 +110,14 @@
       x: e.clientX,
       y: e.clientY,
       t0: Date.now(),
-      axis: 0,
-      captured: false
+      axis: 0
     };
-    /* Pointer capture is deliberately NOT taken here. Capturing on pointerdown
-       retargets the follow-up `click` to the captured element, which silently
-       broke taps on the gallery's own Next/Previous buttons. Capture is taken
-       only once the gesture is confirmed horizontal (see onMove). */
+    /* No setPointerCapture() anywhere in this module, on purpose. The move/up
+       listeners already live on `document` (capture phase), so the whole page
+       feeds the gesture without it. Capturing instead retargets later events to
+       the captured element: on Android WebView a dropped pointerup then left the
+       capture in place for good, which silently killed every tap on the
+       gallery's own Next/Previous buttons afterwards. */
   }
 
   function onMove(e) {
@@ -128,12 +129,6 @@
     if (!active.axis) {
       if (Math.abs(dx) >= LOCK_PX && Math.abs(dx) >= Math.abs(dy) * 1.1) {
         active.axis = 1; // horizontal: our gesture
-        /* Now that this is a real drag, keep the pointer stream on the gallery
-           even if the finger leaves it. Taps are unaffected because a tap never
-           reaches this branch. */
-        if (!active.captured) {
-          try { active.surface.el.setPointerCapture(active.id); active.captured = true; } catch (_) {}
-        }
       } else if (Math.abs(dy) >= LOCK_PX) {
         active.axis = -1; // vertical: leave it to the page
       }
@@ -146,7 +141,6 @@
     if (!active || (e && e.pointerId !== active.id)) return;
     var a = active;
     active = null;
-    if (a.captured) { try { a.surface.el.releasePointerCapture(a.id); } catch (_) {} }
     if (cancelled || a.axis !== 1) return;
     var dx = a.x - a.x0;
     var dt = Math.max(1, Date.now() - a.t0);
