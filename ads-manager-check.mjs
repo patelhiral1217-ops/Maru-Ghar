@@ -262,11 +262,15 @@ ok(rendererJs.includes('sponsored'), 'Ad links must be marked sponsored');
 /* ------------------------------------------------------------------ *
  * 8. Stylesheet: inline flow, no overlay, swipe-safe
  * ------------------------------------------------------------------ */
-ok(/touch-action\s*:\s*pan-y/.test(rendererCss), 'Ad container must declare touch-action: pan-y');
-ok(!/position\s*:\s*fixed/.test(rendererCss), 'Ad styles must never use position: fixed (no overlay)');
-ok(!/z-index\s*:\s*9{3,}/.test(rendererCss), 'Ad styles must not float above site chrome');
-ok(/@media/.test(rendererCss), 'Ad styles must be responsive');
-ok(/prefers-reduced-motion/.test(rendererCss), 'Ads must respect reduced-motion preference');
+/* Assert against declarations only: the header comment legitimately says the
+ * words "position:fixed" and "overlay" while documenting that they are banned. */
+const cssBody = rendererCss.replace(/\/\*[\s\S]*?\*\//g, '');
+
+ok(/touch-action\s*:\s*pan-y/.test(cssBody), 'Ad container must declare touch-action: pan-y');
+ok(!/position\s*:\s*fixed/.test(cssBody), 'Ad styles must never use position: fixed (no overlay)');
+ok(!/z-index\s*:\s*9{3,}/.test(cssBody), 'Ad styles must not float above site chrome');
+ok(/@media/.test(cssBody), 'Ad styles must be responsive');
+ok(/prefers-reduced-motion/.test(cssBody), 'Ads must respect reduced-motion preference');
 
 /* ------------------------------------------------------------------ *
  * 9. Admin panel wiring and authorization surface
