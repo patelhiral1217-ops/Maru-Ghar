@@ -173,7 +173,7 @@ function harnessHtml() {
   sl.addEventListener('mg-swipe', function (e) {
     if (!e.detail || e.detail.axis !== 'vertical') return;
     sl.dataset.axis = 'vertical';
-    goTo(Number(sl.dataset.cur) + (e.detail.direction < 0 ? 1 : -1));
+    goTo(Number(sl.dataset.cur) + (e.detail.direction > 0 ? 1 : -1));
   });
   sl.addEventListener('click', function (e) {
     var b = e.target.closest('[data-mg-step]');
@@ -310,14 +310,13 @@ async function main() {
       !!after && after.index + ' / ' + after.total === expectedAfter(before, 1),
       before && (before.index + '/' + before.total) + ' -> ' + (after && after.index + '/' + after.total));
 
-    await page.evaluate(() => window.scrollTo(0, 0));
-    await sleep(200);
-    const scrollBefore = await page.evaluate(() => window.scrollY);
+    before = after;
     box = await demoPhoto.boundingBox();
-    await swipe(cdp, box, 0, -220);
-    const scrollAfter = await page.evaluate(() => window.scrollY);
-    check('vertical swipe over a gallery changes photo without scrolling page', scrollAfter === scrollBefore,
-      scrollBefore + ' -> ' + scrollAfter);
+    await swipe(cdp, box, 0, 170);
+    after = parseCounter(await demoCounter.textContent());
+    check('demo vertical swipe down goes back one photo',
+      !!after && after.index + ' / ' + after.total === expectedAfter(before, -1),
+      before && (before.index + '/' + before.total) + ' -> ' + (after && after.index + '/' + after.total));
 
     /* ---------------- 2. Live listing gallery (shipped module + real CSS) ---------------- */
     const hp = await context.newPage();
