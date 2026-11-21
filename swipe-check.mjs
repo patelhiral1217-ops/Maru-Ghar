@@ -146,7 +146,11 @@ async function swipe(cdp, box, dx, dy, steps = 12) {
   const y0 = box.y + box.height / 2 - dy / 2;
   const point = (x, y) => [{ x, y, radiusX: 9, radiusY: 9, force: 1, id: 1 }];
   await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: point(x0, y0) });
-  for (let i = 1; i <= steps; i++) {
+  /* A tap must not emit touchMove at all: Chrome's gesture recogniser treats a
+     zero-length "drag" as a scroll and never synthesises the click, so button
+     taps have to be a clean down/up pair like a real finger. */
+  const moves = (dx === 0 && dy === 0) ? 0 : steps;
+  for (let i = 1; i <= moves; i++) {
     await cdp.send('Input.dispatchTouchEvent', {
       type: 'touchMove',
       touchPoints: point(x0 + (dx * i) / steps, y0 + (dy * i) / steps)
