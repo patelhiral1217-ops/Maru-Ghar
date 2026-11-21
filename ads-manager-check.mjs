@@ -226,12 +226,22 @@ ok(rendererJs.includes('durationSeconds'), 'Renderer must honour each ad\'s own 
 ok(/AD_MAX_CYCLES/.test(rendererJs), 'Rotation must be bounded so ads cannot flash forever');
 ok(rendererJs.includes('data-mg-ad-manager'), 'Renderer must bind to the documented mount attribute');
 
-for (const forbidden of ['touchstart', 'touchmove', 'pointerdown', 'setPointerCapture']) {
+/* The renderer documents that it attaches no gesture listeners; assert on real
+ * listener registration, not on the word appearing in the header comment. */
+for (const forbidden of ['touchstart', 'touchmove', 'pointerdown', 'pointermove', 'pointerup']) {
   ok(
-    !rendererJs.includes(forbidden),
-    `Renderer must not attach ${forbidden} — property photo swipes must stay untouched`
+    !new RegExp(`addEventListener\\(\\s*['"]${forbidden}['"]`).test(rendererJs),
+    `Renderer must not register a ${forbidden} listener — property photo swipes must stay untouched`
   );
 }
+ok(
+  !/\.on(pointer|touch)(down|move|start|up)\s*=/.test(rendererJs),
+  'Renderer must not assign inline gesture handler properties'
+);
+ok(
+  !/setPointerCapture|releasePointerCapture/.test(rendererJs),
+  'Renderer must not capture the pointer (that is what steals gallery swipes)'
+);
 
 /* Video: muted autoplay with a real fallback and visible controls. */
 ok(/media\.muted\s*=\s*true/.test(rendererJs), 'Video ads must start muted');
