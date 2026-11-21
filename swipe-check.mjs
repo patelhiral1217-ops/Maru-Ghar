@@ -140,7 +140,7 @@ function harnessHtml() {
 </head><body>
 <div id="harness">
   <div class="property">
-    <div class="photo mg-slider" data-n="3" data-cur="0">
+    <div class="photo mg-slider" data-direction="both" data-n="3" data-cur="0">
       <div class="mg-track">
         <div class="mg-slide" data-i="0" data-mg-open="1" role="button" aria-label="photo 1"></div>
         <div class="mg-slide" data-i="1" data-mg-open="1" role="button" aria-label="photo 2"></div>
@@ -164,10 +164,17 @@ function harnessHtml() {
   function goTo(i) {
     i = ((i % n) + n) % n;
     sl.dataset.cur = String(i);
-    track.style.transform = 'translateX(' + (-i * 100) + '%)';
+    const axis = sl.dataset.axis || 'horizontal';
+    track.style.flexDirection = axis === 'vertical' ? 'column' : 'row';
+    track.style.transform = axis === 'vertical' ? 'translateY(' + (-i * 100) + '%)' : 'translateX(' + (-i * 100) + '%)';
     count.textContent = (i + 1) + ' / ' + n;
   }
   /* Same delegation shape as assets/maru-ghar-backend.js. */
+  sl.addEventListener('mg-swipe', function (e) {
+    if (!e.detail || e.detail.axis !== 'vertical') return;
+    sl.dataset.axis = 'vertical';
+    goTo(Number(sl.dataset.cur) + (e.detail.direction < 0 ? 1 : -1));
+  });
   sl.addEventListener('click', function (e) {
     var b = e.target.closest('[data-mg-step]');
     if (!b) { window.__taps++; return; }
@@ -274,7 +281,7 @@ async function main() {
     const demoCounter = card.locator('.mg-demo-counter');
 
     const touchAction = await demoPhoto.evaluate((el) => getComputedStyle(el).touchAction);
-    check('demo photo touch-action is pan-y', touchAction === 'pan-y', 'got ' + touchAction);
+    check('demo photo touch-action owns both swipe axes', touchAction === 'none', 'got ' + touchAction);
 
     let before = parseCounter(await demoCounter.textContent());
     check('demo counter is readable', !!before && before.total > 1, JSON.stringify(before));
@@ -299,8 +306,8 @@ async function main() {
     box = await demoPhoto.boundingBox();
     await swipe(cdp, box, 0, -170);
     after = parseCounter(await demoCounter.textContent());
-    check('demo vertical swipe keeps the photo (page scroll preserved)',
-      !!after && after.index === before.index,
+    check('demo vertical swipe advances one photo',
+      !!after && after.index + ' / ' + after.total === expectedAfter(before, 1),
       before && (before.index + '/' + before.total) + ' -> ' + (after && after.index + '/' + after.total));
 
     await page.evaluate(() => window.scrollTo(0, 0));
@@ -309,7 +316,7 @@ async function main() {
     box = await demoPhoto.boundingBox();
     await swipe(cdp, box, 0, -220);
     const scrollAfter = await page.evaluate(() => window.scrollY);
-    check('vertical swipe over a gallery scrolls the page', scrollAfter > scrollBefore,
+    check('vertical swipe over a gallery changes photo without scrolling page', scrollAfter === scrollBefore,
       scrollBefore + ' -> ' + scrollAfter);
 
     /* ---------------- 2. Live listing gallery (shipped module + real CSS) ---------------- */
@@ -338,7 +345,7 @@ async function main() {
 
     const slideTouchAction = await hp.evaluate(() =>
       getComputedStyle(document.querySelector('.mg-slide')).touchAction);
-    check('live slide touch-action is pan-y', slideTouchAction === 'pan-y', 'got ' + slideTouchAction);
+    check('live slide touch-action owns both swipe axes', slideTouchAction === 'none', 'got ' + slideTouchAction);
 
     const harnessInfo = await hp.evaluate(() => {
       const sl = document.querySelector('.mg-slider');
