@@ -1,0 +1,15 @@
+/* Maru Ghar Admin Controller — compact content workspace and visual drag placement */
+.mg-cms-placement-targets{display:grid;gap:12px;margin:12px 0 16px;padding:13px;border:1px solid #d9bd7266;border-radius:15px;background:rgba(3,24,19,.5)}
+.mg-cms-target-group{display:grid;gap:8px}.mg-cms-target-group>strong{color:#ffe6a1;font-size:14px}
+.mg-cms-target-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.mg-cms-drop-target{min-width:0;min-height:42px;padding:8px!important;border:1px dashed #d9bd72!important;border-radius:10px!important;background:linear-gradient(145deg,#174a3b,#0a2b22)!important;color:#f9e8b1!important;font-size:12px!important;line-height:1.35!important;white-space:normal!important;box-shadow:inset 0 1px 3px #ffffff18!important}
+.mg-cms-drop-target.active,.mg-cms-drop-target.drag-over{background:linear-gradient(145deg,#ffedaa,#d5aa40)!important;color:#18392d!important;border-style:solid!important;box-shadow:0 4px 0 #806024,0 7px 12px #0004!important}
+.mg-cms-admin-item{position:relative;cursor:grab}.mg-cms-admin-item.is-dragging{opacity:.45}.mg-cms-admin-item.drag-over{outline:2px dashed #ffdd00;outline-offset:2px}
+.mg-cms-drag-grip{flex:0 0 28px;display:grid;place-items:center;width:28px;height:34px;border:1px solid #d9bd72;border-radius:8px;color:#ffdf75;font-size:22px;cursor:grab;user-select:none}
+.mg-cms-editor,.mg-cms-items-fold{margin:12px 0;border:1px solid rgba(255,221,0,.4);border-radius:14px;overflow:hidden;background:rgba(4,35,27,.45)}
+.mg-cms-editor>summary,.mg-cms-items-fold>summary{cursor:pointer;list-style:none;padding:13px 15px;color:#ffe6a1;font-weight:900;background:linear-gradient(120deg,#164b3a,#09271f)}
+.mg-cms-editor>summary::-webkit-details-marker,.mg-cms-items-fold>summary::-webkit-details-marker{display:none}
+.mg-cms-editor>summary:after,.mg-cms-items-fold>summary:after{content:'＋';float:right}.mg-cms-editor[open]>summary:after,.mg-cms-items-fold[open]>summary:after{content:'−'}
+.mg-cms-editor-body{padding:12px}
+#mgSiteContentManager .actions button,#mgSiteContentManager .mg-cms-drop-target{font-weight:900}
+@media(max-width:700px){.mg-cms-target-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.mg-cms-placement-targets{padding:9px}.mg-cms-drop-target{font-size:11px!important;min-height:45px}.mg-cms-drag-grip{display:none}}
