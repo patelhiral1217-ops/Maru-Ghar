@@ -443,3 +443,46 @@
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply,{once:true});else apply();
 })();
+
+
+/* Master Admin homepage slideshow labels. */
+Object.assign(window.MG_I18N_DICTIONARY,{
+"🖼️ Home Page — મુખ્ય ફોટા / સ્લાઇડર કંટ્રોલ":{"hi":"🖼️ Home Page — मुख्य फोटो / स्लाइडर नियंत्रण","en":"🖼️ Home Page — Main Photos / Slideshow Controls"},
+"અહીંથી Home Page પર ફરતા મોટા ફોટા ઉમેરો, બદલો, છુપાવો અને ક્રમ બદલો. કોઈ કસ્ટમ ફોટો Publish ન હોય તો હાલના જૂના 7 ફોટા આપમેળે ચાલુ રહેશે. જૂના મૂળ ફોટા ડિલીટ થતા નથી.":{"hi":"यहाँ से Home Page के बड़े स्लाइडर फोटो जोड़ें, बदलें, छिपाएँ और क्रम बदलें। कोई कस्टम फोटो Publish न हो तो मौजूदा 7 फोटो अपने आप चालू रहेंगे। पुराने मूल फोटो Delete नहीं होंगे।","en":"Add, replace, hide and reorder the large Home Page slideshow photos here. If no custom photos are published, the existing 7 photos remain active. Original photos are not deleted."},
+"＋ નવો ફોટો ઉમેરો":{"hi":"＋ नया फोटो जोड़ें","en":"＋ Add New Photo"},
+"ફોટો ઉમેરો / Edit કરો":{"hi":"फोटो जोड़ें / Edit करें","en":"Add / Edit Photo"},
+"ફોટો પસંદ કરો (JPG / PNG / WEBP, મહત્તમ 8 MB)":{"hi":"फोटो चुनें (JPG / PNG / WEBP, अधिकतम 8 MB)","en":"Choose Photo (JPG / PNG / WEBP, max 8 MB)"},
+"વર્ણન — ગુજરાતી":{"hi":"विवरण — गुजराती","en":"Description — Gujarati"},
+"વર્ણન — હિન્દી":{"hi":"विवरण — हिंदी","en":"Description — Hindi"},
+"ફોટાનું વૈકલ્પિક વર્ણન (Accessibility)":{"hi":"फोटो का वैकल्पिक विवरण (Accessibility)","en":"Optional Photo Description (Accessibility)"},
+"Home Page પર Publish કરવો":{"hi":"Home Page पर Publish करें","en":"Publish on Home Page"},
+"હાલના મૂળ 7 ફોટા પણ ચાલુ રાખો (આ વિકલ્પ ચાલુ રાખશો તો નવા ફોટા તેની સાથે ઉમેરાશે)":{"hi":"मौजूदा 7 मूल फोटो भी चालू रखें (यह विकल्प चालू रखने पर नए फोटो उनके साथ जुड़ेंगे)","en":"Keep the original 7 photos too (when enabled, new photos are added alongside them)"},
+"ફોટો ઉમેરો અને સેવ કરો":{"hi":"फोटो जोड़ें और सेव करें","en":"Add Photo and Save"},
+"નવું ફોર્મ":{"hi":"नया फ़ॉर्म","en":"New Form"},
+"હાલના Home Page ફોટા":{"hi":"मौजूदा Home Page फोटो","en":"Current Home Page Photos"},
+"મોબાઇલમાં ઉપર / નીચે બટનથી ક્રમ બદલો. ફેરફાર સેવ થયા પછી Home Page ફરી ખોલો.":{"hi":"मोबाइल में ऊपर / नीचे बटन से क्रम बदलें। बदलाव सेव होने के बाद Home Page फिर खोलें।","en":"Use the up/down buttons on mobile to change the order. Reopen the Home Page after saving."},
+"🗑️ કચરાપેટી — ફોટા પાછા લાવો":{"hi":"🗑️ कूड़ेदान — फोटो वापस लाएँ","en":"🗑️ Trash — Restore Photos"},
+"હાલ કોઈ કસ્ટમ ફોટો નથી. જૂના 7 ફોટા ચાલુ રહેશે.":{"hi":"अभी कोई कस्टम फोटो नहीं है। पुराने 7 फोटो चालू रहेंगे।","en":"No custom photos yet. The original 7 photos remain active."},
+"કચરાપેટી ખાલી છે.":{"hi":"कूड़ेदान खाली है।","en":"Trash is empty."},
+"શીર્ષક વગર":{"hi":"बिना शीर्षक","en":"Untitled"},
+"પ્રકાશિત":{"hi":"प्रकाशित","en":"Published"},
+"છુપાવેલો":{"hi":"छिपाया गया","en":"Hidden"},
+"ક્રમ":{"hi":"क्रम","en":"Order"},
+"↶ પાછો લાવો":{"hi":"↶ वापस लाएँ","en":"↶ Restore"},
+"છુપાવો":{"hi":"छिपाएँ","en":"Hide"},
+"દેખાડો":{"hi":"दिखाएँ","en":"Show"},
+"↑ ઉપર":{"hi":"↑ ऊपर","en":"↑ Move Up"},
+"↓ નીચે":{"hi":"↓ नीचे","en":"↓ Move Down"},
+"કચરાપેટીમાં મૂકો":{"hi":"कूड़ेदान में डालें","en":"Move to Trash"},
+"ફોટો સેવ થઈ રહ્યો છે…":{"hi":"फोटो सेव हो रहा है…","en":"Saving photo…"},
+"ફોટો સેવ થયો. Home Page ફરી ખોલશો ત્યારે નવો સ્લાઇડ દેખાશે.":{"hi":"फोटो सेव हो गया। Home Page फिर खोलने पर नया स्लाइड दिखेगा।","en":"Photo saved. Reopen the Home Page to see the new slide."},
+"આ ફોટો સ્લાઇડમાંથી દૂર કરીને કચરાપેટીમાં મૂકવો છે? તેને પાછો લાવી શકશો.":{"hi":"क्या इस फोटो को स्लाइड से हटाकर कूड़ेदान में डालना है? आप इसे वापस ला सकेंगे।","en":"Move this photo out of the slideshow and into Trash? You can restore it later."},
+"ફોટો કચરાપેટીમાં મૂક્યો. જૂના ફોટા બેકઅપ તરીકે યથાવત છે.":{"hi":"फोटो कूड़ेदान में डाल दिया गया। पुराने फोटो बैकअप के रूप में सुरक्षित हैं।","en":"Photo moved to Trash. Original photos remain safely preserved."},
+"ફોટો પાછો લાવવામાં આવ્યો.":{"hi":"फोटो वापस ला दिया गया।","en":"Photo restored."},
+"નવો ફોટો ઉમેરવા પહેલાં ફોટો પસંદ કરો.":{"hi":"नया फोटो जोड़ने से पहले फोटो चुनें।","en":"Choose a photo before adding a new slide."},
+"ઓછામાં ઓછું એક ભાષામાં ફોટાનું શીર્ષક લખો.":{"hi":"कम से कम एक भाषा में फोटो का शीर्षक लिखें।","en":"Enter a photo title in at least one language."},
+"ફોટો ઉપલબ્ધ નથી.":{"hi":"फोटो उपलब्ध नहीं है।","en":"Photo is unavailable."},
+"Cloudinary સેટિંગ ઉપલબ્ધ નથી.":{"hi":"Cloudinary सेटिंग उपलब्ध नहीं है।","en":"Cloudinary configuration is unavailable."},
+"ફોટો અપલોડ માટે Cloudinary preset ઉપલબ્ધ નથી.":{"hi":"फोटो अपलोड के लिए Cloudinary preset उपलब्ध नहीं है।","en":"Cloudinary upload preset is unavailable."},
+"JPG, PNG અથવા WEBP ફોટો પસંદ કરો. મહત્તમ સાઇઝ 8 MB છે.":{"hi":"JPG, PNG या WEBP फोटो चुनें। अधिकतम आकार 8 MB है।","en":"Choose a JPG, PNG or WEBP photo. Maximum size is 8 MB."}
+});
