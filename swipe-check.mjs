@@ -378,7 +378,7 @@ async function main() {
     await sleep(250);
     const beforeVertical = (await hState()).cur;
     const pageYBeforeLive = await hp.evaluate(() => window.scrollY);
-    await swipe(hcdp, await hBox('.mg-slider'), 0, -160);
+    await swipe(hcdp, await hBox('.mg-slider .mg-slide'), 0, -160);
     st = await hState();
     const pageYAfterLive = await hp.evaluate(() => window.scrollY);
     check('live vertical gesture scrolls page, not photo',
@@ -407,15 +407,15 @@ async function main() {
     const nextTopmost = await activate('.mg-slider .mg-next');
     check('live Next button is not covered by the slider', nextTopmost === true, String(nextTopmost));
     st = await hState();
-    /* Re-baselined: the vertical swipe above left the gallery on photo 2. */
-    check('live Next button still advances the photo', st.cur === '2', 'cur=' + st.cur);
-    check('live counter follows the Next button', st.count === '3 / 3', st.count);
+    /* The vertical swipe must leave the gallery on photo 1 (index 0). */
+    check('live Next button still advances the photo', st.cur === '1', 'cur=' + st.cur);
+    check('live counter follows the Next button', st.count === '2 / 3', st.count);
 
     await sleep(400);
     await activate('.mg-slider .mg-prev');
     st = await hState();
-    check('live Previous button still goes back', st.cur === '1', 'cur=' + st.cur);
-    check('live counter follows the Previous button', st.count === '2 / 3', st.count);
+    check('live Previous button still goes back', st.cur === '0', 'cur=' + st.cur);
+    check('live counter follows the Previous button', st.count === '1 / 3', st.count);
   } finally {
     await browser.close().catch(() => {});
     await new Promise((r) => server.close(r));
