@@ -187,10 +187,13 @@
     document.addEventListener('touchcancel', function () { endTouch(true); }, { passive: true });
   }
 
-  /* A swipe must not also count as a tap (which would open the full-size viewer). */
+  /* A swipe must not also count as a tap (which would open the full-size viewer).
+     The gallery's own controls are always allowed through, so a quick Next/Previous
+     tap straight after a swipe is never swallowed. */
   document.addEventListener('click', function (e) {
     if (!suppress) return;
     if (Date.now() > suppress.until) { suppress = null; return; }
+    if (closest(e.target, '[data-mg-step],[data-lb]')) return;
     if (suppress.el && suppress.el.contains(e.target)) {
       e.preventDefault();
       e.stopPropagation();
