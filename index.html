@@ -993,7 +993,7 @@ header .navlinks > a:not(.admin-link):focus-visible{
 }
 </style>
 <script id="mg-banner-photo-rotation-20261120">
-(()=>{function init(){const box=document.querySelector('.mg-tagline-background');if(!box||box.dataset.mgReliableRotation==='1')return;box.dataset.mgReliableRotation='1';const pics=[...box.querySelectorAll('img')];if(!pics.length)return;let good=[],at=0,timer=null,fallbackTimer=null;const fallback='assets/maru-ghar-approved-app-icon.png';function show(n){if(!good.length)return;at=(n+good.length)%good.length;pics.forEach(p=>p.classList.remove('mg-bg-active'));good[at].classList.add('mg-bg-active')}function start(){if(timer)clearInterval(timer);if(!document.hidden&&good.length>1)timer=setInterval(()=>show(at+1),7000)}function showFallback(){if(good.length)return;const f=document.createElement('img');f.alt='';f.decoding='async';f.src=fallback;f.style.objectFit='contain';f.style.background='#102a25';box.appendChild(f);pics.push(f);good.push(f);show(0);start()}fallbackTimer=setTimeout(showFallback,1800);pics.forEach((p,i)=>{p.loading=i===0?'eager':'lazy';p.decoding='async';try{p.fetchPriority=i===0?'high':'auto'}catch(e){}const settle=ok=>{if(p.dataset.mgSettled==='1')return;p.dataset.mgSettled='1';if(ok){good.push(p);if(good.length===1){clearTimeout(fallbackTimer);show(0);start()}}};p.addEventListener('load',()=>settle(true),{once:true});p.addEventListener('error',()=>settle(false),{once:true});if(p.complete){if(p.naturalWidth>0)settle(true);else if(p.currentSrc||p.src)settle(false)}});document.addEventListener('visibilitychange',start)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init()})();
+(()=>{function init(){const box=document.querySelector('.mg-tagline-background');if(!box||box.dataset.mgReliableRotation==='1')return;box.dataset.mgReliableRotation='1';const pics=[...box.querySelectorAll('img')];if(!pics.length)return;let good=[],at=0,timer=null,fallbackTimer=null;const fallback='assets/maru-ghar-approved-app-icon.png';function show(n){if(!good.length)return;at=(n+good.length)%good.length;pics.forEach(p=>p.classList.remove('mg-bg-active'));good[at].classList.add('mg-bg-active')}function start(){if(timer)clearInterval(timer);if(!document.hidden&&good.length>1)timer=setInterval(()=>show(at+1),3000)}function showFallback(){if(good.length)return;const f=document.createElement('img');f.alt='';f.decoding='async';f.src=fallback;f.style.objectFit='contain';f.style.background='#102a25';box.appendChild(f);pics.push(f);good.push(f);show(0);start()}fallbackTimer=setTimeout(showFallback,1800);pics.forEach((p,i)=>{p.loading=i===0?'eager':'lazy';p.decoding='async';try{p.fetchPriority=i===0?'high':'auto'}catch(e){}const settle=ok=>{if(p.dataset.mgSettled==='1')return;p.dataset.mgSettled='1';if(ok){good.push(p);if(good.length===1){clearTimeout(fallbackTimer);show(0);start()}}};p.addEventListener('load',()=>settle(true),{once:true});p.addEventListener('error',()=>settle(false),{once:true});if(p.complete){if(p.naturalWidth>0)settle(true);else if(p.currentSrc||p.src)settle(false)}});document.addEventListener('visibilitychange',start)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init()})();
 </script>
 
 
@@ -1226,6 +1226,21 @@ header .navlinks > a:not(.admin-link):focus-visible{
  display:none!important;visibility:hidden!important;height:0!important;min-height:0!important;
  margin:0!important;padding:0!important;border:0!important;background:transparent!important;
  box-shadow:none!important;overflow:hidden!important
+}
+</style>
+
+<style id="mg-restore-top-banner-photo-rotation-20261121">
+/* Restore JS-controlled banner rotation: only the active image is visible. */
+.top.mg-top-banner .mg-tagline-background img,
+.top.mg-top-banner .mg-tagline-background img:first-child,
+.top.mg-top-banner .mg-tagline-background img:not(:first-child){
+  opacity:0!important;
+  visibility:hidden!important;
+  animation:none!important;
+}
+.top.mg-top-banner .mg-tagline-background img.mg-bg-active{
+  opacity:1!important;
+  visibility:visible!important;
 }
 </style>
 </head>
