@@ -18,6 +18,7 @@ const checks = [
   [admin.includes('mgHeaderBannerManager') && admin.includes('mgHeaderBannerImage'), 'Top header background controls are missing from Admin Panel'],
   [manager.includes("settings','homeHeader") && manager.includes('async function saveHeaderBanner') && manager.includes('async function resetHeaderBanner'), 'Top header background admin save/restore flow is missing'],
   [publicLoader.includes("settings','homeHeader") && publicLoader.includes("setProperty('background-image'"), 'Public homepage does not load the Admin-managed header background'],
+  [(() => { const start=admin.indexOf('async function loadCityAdmin()'); const end=admin.indexOf('function renderCityAreas()',start); const block=admin.slice(start,end); return start>=0 && block.includes("if(!catalog.exists())") && !block.includes('deleteDoc(d.ref)') && block.includes("setDoc(doc(db,'cities',cityDocId(name))"); })(), 'First-time city catalog setup must preserve existing custom cities'],
 ];
 const failed = checks.filter(([ok]) => !ok);
 if (failed.length) { console.error('MASTER ADMIN CHECK FAILED'); failed.forEach(([,msg]) => console.error(' - '+msg)); process.exit(1); }
