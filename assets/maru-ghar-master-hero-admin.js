@@ -232,9 +232,9 @@ import { getFirestore, collection, getDocs, getDoc, query, orderBy, addDoc, setD
     } catch (error) { say('Restore નિષ્ફળ: ' + error.message); }
   }
 
-  function renderHeaderPreview(url) {
-    if (headerPreviewUrl) URL.revokeObjectURL(headerPreviewUrl);
-    headerPreviewUrl = '';
+  function renderHeaderPreview(url, keepObjectUrl = false) {
+    if (headerPreviewUrl && headerPreviewUrl !== url) URL.revokeObjectURL(headerPreviewUrl);
+    headerPreviewUrl = keepObjectUrl ? url : '';
     const host = $('mgHeaderBannerPreview');
     host.replaceChildren();
     if (!url) {
@@ -291,9 +291,7 @@ import { getFirestore, collection, getDocs, getDoc, query, orderBy, addDoc, setD
   $('mgHeaderBannerImage').addEventListener('change',() => {
     const file = $('mgHeaderBannerImage').files?.[0];
     if (!file) return;
-    if (headerPreviewUrl) URL.revokeObjectURL(headerPreviewUrl);
-    headerPreviewUrl = URL.createObjectURL(file);
-    renderHeaderPreview(headerPreviewUrl);
+    renderHeaderPreview(URL.createObjectURL(file),true);
   });
   $('mgHeroImage').addEventListener('change',() => {
     const file = $('mgHeroImage').files?.[0];
