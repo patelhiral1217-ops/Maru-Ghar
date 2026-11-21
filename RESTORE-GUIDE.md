@@ -1,7 +1,8 @@
 # Maru Ghar — Restore & Continuation Guide
 
 **Snapshot:** `MARU-GHAR-MASTER-BACKUP-21-NOV-2026.zip`
-**Commit:** `2271058bf8cabfb9ed497089212b9da18b7e1fc3` (branch `appjet`)
+**Last application-code commit:** `2271058bf8cabfb9ed497089212b9da18b7e1fc3` (branch `appjet`)
+**Exact HEAD:** `git log -1 --format=%H` — documentation commits sit on top of `2271058`
 **Repository:** https://github.com/patelhiral1217-ops/Maru-Ghar
 
 This guide gets you from the ZIP to a working, test-passing copy — and tells you
@@ -40,7 +41,8 @@ cd Maru-Ghar          # or whatever the top folder is named
 
 # 2. Confirm you are on the right commit
 git log -1 --format='%H %s'
-# expect: 2271058bf8cabfb9ed497089212b9da18b7e1fc3 ...
+# 2271058bf8cabfb9ed497089212b9da18b7e1fc3 is the last application-code commit;
+# any commits above it only add MASTER-PROJECT-STATUS.md / RESTORE-GUIDE.md
 
 git status --short        # should be clean
 
