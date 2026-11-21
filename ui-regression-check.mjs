@@ -101,3 +101,13 @@ if(!home.includes('.photo-gallery{display:flex;gap:7px;overflow-x:auto'))throw n
 console.log('TWO-DIRECTION PROPERTY LAYOUT PASS — live/demo cards wrap into 1–2 vertical columns while each property photo gallery retains horizontal swipe.');
 
 
+
+const adminHtml=fs.readFileSync('admin.html','utf8');
+const backend=fs.readFileSync('assets/maru-ghar-backend.js','utf8');
+if(!adminHtml.includes('data-action="photo_vertical"')||!adminHtml.includes('data-action="photo_horizontal"')||!adminHtml.includes('photoDirection:direction'))throw new Error('Admin property photo direction controls are missing');
+if(!adminHtml.includes("p.photoDirection==='vertical'?'નીચેથી ઉપર':'સાઇડમાં'"))throw new Error('Admin listing does not show the saved photo direction');
+if(!backend.includes("p.photoDirection==='vertical'?'vertical':'horizontal'")||!backend.includes("sl.dataset.direction==='vertical'?"))throw new Error('Property photo slider does not honor the saved vertical/horizontal direction');
+if(!backend.includes("const vertical=tsl.dataset.direction==='vertical'")||!backend.includes('const delta=vertical?dy:dx'))throw new Error('Property photo swipe does not follow the configured direction');
+if(!home.includes('assets/maru-ghar-backend.js?v=20261121photodirection1'))throw new Error('Updated property photo direction controller cache version is missing');
+if(!home.includes('.mg-slider[data-direction="vertical"] .mg-track{flex-direction:column;touch-action:pan-x}'))throw new Error('Vertical photo slider layout CSS is missing');
+console.log('PROPERTY PHOTO DIRECTION PASS — Admin can choose vertical bottom-to-top or horizontal swipe; website and Android WebView use the saved setting.');
