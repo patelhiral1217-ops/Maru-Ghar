@@ -3,8 +3,8 @@
 **Snapshot date:** 21 November 2026
 **Repository:** https://github.com/patelhiral1217-ops/Maru-Ghar
 **Branch:** `appjet`
-**Last application-code commit:** `2271058bf8cabfb9ed497089212b9da18b7e1fc3`
-**Exact branch HEAD:** run `git log -1 --format=%H` inside this ZIP. Documentation-only commits adding `MASTER-PROJECT-STATUS.md` and `RESTORE-GUIDE.md` sit on top of `2271058` and change no application code.
+**Latest reported application-code commit:** `a54d9527ad1fe5c39c9324a33ed1831296421ccb`
+**Latest reported branch HEAD:** `a54d9527ad1fe5c39c9324a33ed1831296421ccb`. See the current-state addendum at the end; older sections are historical baseline notes.
 **Firebase project:** `maru-ghar-gandhinagar-8dbe4`
 **Purpose of this file:** authoritative handoff so any future session (ChatGPT, AppJet or a human developer) can resume without re-discovering the project.
 
@@ -512,3 +512,57 @@ no pull request was created or merged and no Firebase/Hosting deployment ran.
 3. The `advertisements` rules block is only deployed when the owner deploys
    `firestore.rules` (pending work item 11).
 4. The feature is present on `appjet` only; `main` and PR #99 are untouched.
+
+
+---
+
+## 15. Current-state addendum — 21 November 2026, 20:17 IST
+
+This section supersedes older commit counts, feature-status statements and
+backup references above wherever they conflict.
+
+### Live GitHub state checked during handoff
+
+- Repository: `patelhiral1217-ops/Maru-Ghar`
+- Branch: `appjet`
+- Latest reported HEAD: `a54d9527ad1fe5c39c9324a33ed1831296421ccb`
+- GitHub compare API: `appjet` is **63 commits ahead and 0 behind** `main`.
+- The merge base is the current `main` tip `5066dfc3077c560402a0a15b7b966b38a59afc89`.
+- PR #99 is still the existing open PR from `appjet` into `main`; it is
+  unmerged. Its scope now includes the Advertisement Manager as well as swipe
+  work. Do not assume the PR description has been updated.
+- GitHub Actions for HEAD `a54d9527`: both latest PR workflows completed with
+  conclusion `success`: Quality Checks run `44915091402` and Validate run
+  `44915091335`.
+
+### Advertisement Manager — current reported implementation
+
+The feature is reported complete on `appjet`: 7 placements; JPG/PNG/WebP
+images up to 8 MB; MP4 videos up to 25 MB; per-ad duration presets plus custom
+3–300 seconds; start/expiry window; enabled flag; priority/order; optional
+HTTP(S) click URL; admin preview/edit/delete/replace; responsive layout;
+muted video playback with controls/fallback; rotation capped at three cycles;
+visibility/IntersectionObserver pausing. It registers no touch/pointer
+listeners, preserving the property-photo swipe handlers.
+
+The reported feature test passed 174 assertions and `npm test` passed all 17
+chained checks, including the Android-emulated swipe suite (26 assertions).
+These are reported automated checks, not a physical-device or live-service
+verification.
+
+### Current outstanding owner/deployment steps
+
+1. Review and merge PR #99 only after owner approval.
+2. Deploy updated `firestore.rules` to Firebase project
+   `maru-ghar-gandhinagar-8dbe4`; until then production Firestore does not have
+   the new `advertisements` rules.
+3. Confirm Cloudinary unsigned upload presets and test a real admin image/video
+   upload against live services.
+4. Deploy Firebase Hosting only after merge and approval.
+5. Test on a physical Android phone and verify the actual deployed website.
+6. Rebuild a fresh Master Backup ZIP from this exact HEAD, then verify ZIP
+   integrity and SHA-256. The previously supplied 21-Nov backup is an older
+   snapshot and must not be represented as containing commit `a54d9527`.
+
+No PR merge, Firestore deployment, Hosting deployment, or fresh backup archive
+was performed as part of this status update.
