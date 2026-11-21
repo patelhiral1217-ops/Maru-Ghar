@@ -4444,6 +4444,33 @@ Object.assign(window.MG_I18N_DICTIONARY,{
 })();
 </script>
 
+<script id="mg-customer-login-return-home">
+(function(){
+  function init(){
+    const status=document.getElementById('customerStatus');
+    const overlay=document.getElementById('mgLoginOverlay');
+    const password=document.getElementById('customerPassword');
+    if(!status || !overlay || status.dataset.mgReturnHomeBound==='1') return;
+    status.dataset.mgReturnHomeBound='1';
+    const successMessages=['લોગિન સફળ.','लॉगिन सफल।','Login successful.'];
+    let handled=false;
+    const closeAfterSuccessfulLogin=()=>{
+      const message=(status.textContent||'').trim();
+      if(handled || !successMessages.some(x=>message.includes(x))) return;
+      handled=true;
+      if(password) password.value='';
+      window.setTimeout(()=>{
+        overlay.classList.remove('open');
+        const home=document.getElementById('home') || document.querySelector('header');
+        if(home && typeof home.scrollIntoView==='function') home.scrollIntoView({behavior:'smooth',block:'start'});
+      },650);
+    };
+    new MutationObserver(closeAfterSuccessfulLogin).observe(status,{childList:true,subtree:true,characterData:true});
+    closeAfterSuccessfulLogin();
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+})();
+</script>
 
 <style id="mg-premium-3d-buttons-v1">
 /* MARU GHAR: unified premium 3D button finish. Keeps existing colors, labels, sizes and actions. */
