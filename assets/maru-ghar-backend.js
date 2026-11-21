@@ -149,12 +149,15 @@ function sliderHtml(p,media){
   const pill=`<span class="pill">${esc(p.purpose||'પ્રોપર્ટી')}</span>`;
   if(!media.length) return `<div class="photo">${pill}</div>`;
   const nav=media.length>1?`<button type="button" class="mg-nav mg-prev" data-mg-step="-1" aria-label="પાછળનો">‹</button><button type="button" class="mg-nav mg-next" data-mg-step="1" aria-label="આગળનો">›</button><span class="mg-count">1 / ${media.length}</span>`:'';
-  return `<div class="photo mg-slider" data-n="${media.length}" data-cur="0"><div class="mg-track">${media.map((m,i)=>slideHtml(m,i,alt)).join('')}</div>${pill}${nav}</div>`;
+  const direction=p.photoDirection==='vertical'?'vertical':'horizontal';
+  const vertical=direction==='vertical';
+  const controls=media.length>1?(vertical?`<button type="button" class="mg-nav mg-prev" data-mg-step="-1" aria-label="પહેલાનો ફોટો">↑</button><button type="button" class="mg-nav mg-next" data-mg-step="1" aria-label="આગળનો ફોટો">↓</button><span class="mg-count">1 / ${media.length}</span>`:`<button type="button" class="mg-nav mg-prev" data-mg-step="-1" aria-label="પહેલાનો ફોટો">‹</button><button type="button" class="mg-nav mg-next" data-mg-step="1" aria-label="આગળનો ફોટો">›</button><span class="mg-count">1 / ${media.length}</span>`):'';
+  return `<div class="photo mg-slider" data-direction="${direction}" data-n="${media.length}" data-cur="0"><div class="mg-track">${media.map((m,i)=>slideHtml(m,i,alt)).join('')}</div>${pill}${controls}</div>`;
 }
 const sliderData=new WeakMap();
 function goTo(sl,idx){
   const n=+sl.dataset.n; idx=(idx+n)%n; sl.dataset.cur=idx;
-  sl.querySelector('.mg-track').style.transform=`translateX(-${idx*100}%)`;
+  sl.querySelector('.mg-track').style.transform=sl.dataset.direction==='vertical'?`translateY(-${idx*100}%)`:`translateX(-${idx*100}%)`;
   const c=sl.querySelector('.mg-count'); if(c)c.textContent=`${idx+1} / ${n}`;
   [idx,(idx+1)%n].forEach(k=>{const s=sl.querySelector(`.mg-slide[data-i="${k}"][data-bg]`);if(s&&!s.style.backgroundImage)s.style.backgroundImage=`url('${s.dataset.bg}')`;});
   sl.querySelectorAll('video').forEach(v=>{try{v.pause()}catch(_){}});
@@ -191,9 +194,9 @@ if(grid){
     if(step){goTo(sl,+sl.dataset.cur + +step.dataset.mgStep);return;}
     if(e.target.closest('[data-mg-open]')){const m=sliderData.get(sl);if(m)openLb(m,+sl.dataset.cur);}
   });
-  let tx=null,tsl=null;
-  grid.addEventListener('touchstart',e=>{const t=e.target.closest('.mg-track');if(!t||e.target.closest('video')){tsl=null;return;}tsl=t.closest('.mg-slider');tx=e.touches[0].clientX},{passive:true});
-  grid.addEventListener('touchend',e=>{if(!tsl||tx==null||+tsl.dataset.n<2)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>40){goTo(tsl,+tsl.dataset.cur+(dx<0?1:-1));}tx=null},{passive:true});
+  let tx=null,ty=null,tsl=null;
+  grid.addEventListener('touchstart',e=>{const t=e.target.closest('.mg-track');if(!t||e.target.closest('video')){tsl=null;return;}tsl=t.closest('.mg-slider');tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});
+  grid.addEventListener('touchend',e=>{if(!tsl||tx==null||ty==null||+tsl.dataset.n<2)return;const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;const vertical=tsl.dataset.direction==='vertical';const delta=vertical?dy:dx;if(Math.abs(delta)>40&&Math.abs(delta)>(vertical?Math.abs(dx):Math.abs(dy))){goTo(tsl,+tsl.dataset.cur+(delta<(0)?1:-1));}tx=null;ty=null;tsl=null},{passive:true});
 }
 
 function mgIsListingExpired(p){const v=String(p.expiresOn||'').trim();if(!/^\d{4}-\d{2}-\d{2}$/.test(v))return false;const now=new Date();const today=[now.getFullYear(),String(now.getMonth()+1).padStart(2,'0'),String(now.getDate()).padStart(2,'0')].join('-');return v<today;}
