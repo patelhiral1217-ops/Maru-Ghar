@@ -27,11 +27,10 @@ window.__mgHeroSlidesReady = (async () => {
     if (!items.length) return false;
     const keepBuiltIns = config.exists() ? config.data().keepBuiltIns !== false : true;
     const root = document.getElementById('mgShowcase');
-    const dotsRoot = document.getElementById('mgShowcaseDots');
-    if (!root || !dotsRoot) return false;
+    
+    if (!root) return false;
     if (!keepBuiltIns) {
       root.querySelectorAll('.mg-showcase-slide').forEach(el => el.remove());
-      dotsRoot.replaceChildren();
     }
     items.forEach((item,index) => {
       const slide = document.createElement('div');
@@ -50,11 +49,6 @@ window.__mgHeroSlidesReady = (async () => {
       img.decoding = 'async';
       slide.append(img);
       root.insertBefore(slide,root.querySelector('.mg-showcase-copy'));
-      const dot = document.createElement('button');
-      dot.type = 'button';
-      dot.setAttribute('aria-label','Slide ' + (index+1));
-      if (index === 0) dot.className = 'active';
-      dotsRoot.append(dot);
     });
     return true;
   } catch (error) {
