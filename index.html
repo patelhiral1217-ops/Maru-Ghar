@@ -4915,6 +4915,64 @@ html,body{max-width:100%;overflow-x:hidden}
  body{padding-bottom:66px!important}
 }
 </style><style id="mg-recent-viewed-style-20261120">.mg-recently-viewed{margin:18px 0;padding:14px;border:1px solid #d4b56b;border-radius:16px;background:linear-gradient(135deg,#fffdf5,#f4efe1);box-shadow:0 5px 16px rgba(50,40,15,.08)}.mg-recently-viewed h3{margin:0 0 10px;color:#74551a;font-size:16px}.mg-recent-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:9px}.mg-recent-item{display:flex;flex-direction:column;gap:5px;text-align:left;padding:11px;border:1px solid #c6a65d;border-radius:12px;background:linear-gradient(145deg,#fff,#eee3c7);color:#263b37;box-shadow:0 3px 7px rgba(35,30,10,.1);cursor:pointer}.mg-recent-item strong{font-size:14px}.mg-recent-item span{font-size:12px;line-height:1.4}.mg-recently-viewed[hidden]{display:none!important}</style><script type="module" src="assets/maru-ghar-ota.bundle.js?v=1"></script>
+
+<!-- MARU GHAR HEADER PHOTO ROTATION HARD FIX 2026-11-21 -->
+<style id="mg-header-rotation-hardfix-20261121">
+.top.mg-top-banner .mg-tagline-background img{display:none!important;opacity:0!important;visibility:hidden!important}
+.top.mg-top-banner .mg-tagline-background img.mg-bg-active{display:block!important;opacity:1!important;visibility:visible!important}
+</style>
+<script id="mg-header-rotation-hardfix-20261121">
+(function(){
+ function run(){
+  var box=document.querySelector('.top.mg-top-banner .mg-tagline-background');
+  if(!box || box.dataset.mgReliableRotation==='3') return;
+  box.dataset.mgReliableRotation='3';
+  var pics=Array.prototype.slice.call(box.querySelectorAll('img'));
+  if(pics.length<2) return;
+  if(window.__mgHeaderRotationTimer){clearInterval(window.__mgHeaderRotationTimer);window.__mgHeaderRotationTimer=null;}
+  var good=[],at=0;
+  function show(n){
+   if(!good.length)return;
+   at=(n+good.length)%good.length;
+   pics.forEach(function(p){p.classList.remove('mg-bg-active');p.style.setProperty('display','none','important');p.style.setProperty('opacity','0','important');p.style.setProperty('visibility','hidden','important');});
+   var active=good[at];
+   active.classList.add('mg-bg-active');
+   active.style.setProperty('display','block','important');
+   active.style.setProperty('opacity','1','important');
+   active.style.setProperty('visibility','visible','important');
+  }
+  function addIfLoaded(img){
+   if(img.complete && img.naturalWidth>0 && good.indexOf(img)===-1){
+    good.push(img);
+    if(good.length===1)show(0);
+   }
+  }
+  pics.forEach(function(img){
+   img.loading='eager';
+   img.decoding='async';
+   img.addEventListener('load',function(){addIfLoaded(img);},{once:true});
+   img.addEventListener('error',function(){}, {once:true});
+   addIfLoaded(img);
+  });
+  function start(){
+   if(window.__mgHeaderRotationTimer)clearInterval(window.__mgHeaderRotationTimer);
+   if(!document.hidden && good.length>1){
+    window.__mgHeaderRotationTimer=setInterval(function(){show(at+1);},3000);
+   }
+  }
+  document.addEventListener('visibilitychange',start);
+  var tries=0;
+  var scan=setInterval(function(){
+   pics.forEach(addIfLoaded);
+   if(good.length>1 || tries++>12){clearInterval(scan);start();}
+  },500);
+  start();
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run,{once:true});
+ else run();
+})();
+</script>
+
 </body></html>
 
 <style id="mg-city-and-four-column-fix-20261118">
