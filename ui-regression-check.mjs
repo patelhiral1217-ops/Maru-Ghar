@@ -70,7 +70,7 @@ const demoIds=[...demo.matchAll(/\{id:'([^']+)'/g)].map(x=>x[1]);
 if(demoIds.length!==10||new Set(demoIds).size!==10)throw new Error('Demo showcase must contain exactly ten unique demo properties');
 if(!home.includes('mg-settings-only-trust-actions-20261118')||!home.includes('new MutationObserver(clean)'))throw new Error('Trust strip must be removed outside Settings, including dynamically inserted duplicates');
 if(!home.includes('data-cols="1" onclick=')||!home.includes('data-cols="2" onclick=')||home.includes('data-cols="3" onclick=')||home.includes('data-cols="4" onclick='))throw new Error('Only 1 and 2 column buttons must call the direct grid controller');
-if(!demo.includes('કુલ 10 ડેમો નમૂનાઓ')||!demo.includes('rootObserver.observe'))throw new Error('Demo showcase must expose all ten samples and initialize when listing root is delayed');
+if(!demo.includes('ડેમો નમૂનાઓ')||!demo.includes('demoShowcase')||!demo.includes('rootObserver.observe'))throw new Error('Demo showcase must load admin-managed visibility and initialize when listing root is delayed');
 console.log('MARU GHAR DEMO / GRID / SETTINGS REGRESSION PASS — ten unique demo samples, direct 1–2 column controls, trust buttons restricted to Settings.');
 const discovery=fs.readFileSync('assets/maru-ghar-discovery.js','utf8');
 if(!discovery.includes("const applyRangeButton=$('mgApplyRangeFilters')")||!discovery.includes("if(applyRangeButton)applyRangeButton.addEventListener('click'"))throw new Error('Apply range filters button is not connected to an action');
