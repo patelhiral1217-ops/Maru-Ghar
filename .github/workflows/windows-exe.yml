@@ -21,6 +21,8 @@ jobs:
         run: npm install --no-package-lock --no-audit --no-fund
       - name: Build website files
         run: npm run copy-web
+      - name: Install Chromium for Playwright swipe checks
+        run: npx playwright install chromium
       - name: Run project checks
         run: npm test
       - name: Build Windows installer
