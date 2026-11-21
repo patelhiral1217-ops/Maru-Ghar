@@ -49,7 +49,7 @@
  #mgDemoShowcase .mg-demo-note{font-size:12px;color:#795d25;font-weight:800}
  #mgDemoShowcase .mg-demo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:15px}
  #mgDemoShowcase .mg-demo-card{min-width:0;overflow:hidden;border:1px solid #d8d8c9;border-radius:16px;background:#fff;box-shadow:0 4px 13px #203b2c12} #mgDemoShowcase .mg-demo-card{container-type:inline-size}
- #mgDemoShowcase .mg-demo-photo{position:relative;height:190px;overflow:hidden;background:#e7ece7;touch-action:pan-y;user-select:none}
+ #mgDemoShowcase .mg-demo-photo{position:relative;height:190px;overflow:hidden;background:#e7ece7;touch-action:none;user-select:none}
  #mgDemoShowcase .mg-demo-photo img{width:100%;height:100%;display:block;object-fit:contain;background:#e7ece7;transition:opacity .3s ease}
   #mgDemoShowcase .mg-demo-photo-unavailable{display:grid;place-items:center;background:radial-gradient(ellipse at 75% 25%,#d9c17c55,transparent 42%),linear-gradient(145deg,#17483b,#0a2925)!important}
   #mgDemoShowcase .mg-demo-photo-unavailable:after{content:'⌂';color:#f2d995;font-size:92px;font-weight:900;text-shadow:0 5px 18px #0005}
@@ -167,7 +167,7 @@
   section.querySelectorAll('.mg-demo-photo').forEach(photo=>{
    let startX=0,startY=0;
    photo.addEventListener('touchstart',e=>{if(!e.changedTouches.length)return;startX=e.changedTouches[0].clientX;startY=e.changedTouches[0].clientY;},{passive:true});
-   photo.addEventListener('touchend',e=>{if(!e.changedTouches.length)return;const dx=e.changedTouches[0].clientX-startX,dy=e.changedTouches[0].clientY-startY;if(Math.abs(dx)>38&&Math.abs(dx)>Math.abs(dy)*1.25){const card=photo.closest('.mg-demo-card');const id=card.dataset.demoId;show(card,(indices.get(id)||0)+(dx<0?1:-1));}},{passive:true});
+   photo.addEventListener('touchend',e=>{if(!e.changedTouches.length)return;const dx=e.changedTouches[0].clientX-startX,dy=e.changedTouches[0].clientY-startY;const delta=Math.abs(dx)>Math.abs(dy)?dx:dy;if(Math.abs(delta)>38){const card=photo.closest('.mg-demo-card');const id=card.dataset.demoId;show(card,(indices.get(id)||0)+(delta<0?1:-1));}},{passive:true});
    photo.querySelector('img').draggable=false;
   });
   /* Measure actual rendered Gujarati text and shrink only as much as each card needs. */
