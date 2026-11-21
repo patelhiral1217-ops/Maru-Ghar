@@ -147,12 +147,11 @@
   const visibilityObserver=('IntersectionObserver' in window)?new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting)visibleCards.add(entry.target);else visibleCards.delete(entry.target)}),{rootMargin:'120px'}):null;
   function show(card,idx){const p=samples.find(x=>x.id===card.dataset.demoId);idx=(idx+p.photos.length)%p.photos.length;indices.set(p.id,idx);const im=card.querySelector('img');im.style.opacity='.25';const next=new Image();next.decoding='async';next.onload=()=>{im.src=next.src;im.style.opacity='1'};next.onerror=()=>im.style.opacity='1';next.src=p.photos[idx];card.querySelector('.mg-demo-counter').textContent=(idx+1)+' / '+p.photos.length;}
   section.querySelectorAll('.mg-demo-card').forEach(card=>{const id=card.dataset.demoId;if(visibilityObserver)visibilityObserver.observe(card);else visibleCards.add(card);timers.set(id,setInterval(()=>{if(visibleCards.has(card)&&!paused.has(id)&&!document.hidden)show(card,(indices.get(id)||0)+1)},6500));});
-  /* Touch swipe replaces all on-photo arrow and pause controls. */
+  /* Horizontal swipe is detected by assets/maru-ghar-swipe.js (pointer capture +
+     direction lock + touchcancel recovery) and reported here as an mg-swipe event. */
   section.querySelectorAll('.mg-demo-photo').forEach(photo=>{
-   let startX=0,startY=0;
-   photo.addEventListener('touchstart',e=>{if(!e.changedTouches.length)return;startX=e.changedTouches[0].clientX;startY=e.changedTouches[0].clientY;},{passive:true});
-   photo.addEventListener('touchend',e=>{if(!e.changedTouches.length)return;const dx=e.changedTouches[0].clientX-startX,dy=e.changedTouches[0].clientY-startY;if(Math.abs(dx)>38&&Math.abs(dx)>Math.abs(dy)*1.25){const card=photo.closest('.mg-demo-card');const id=card.dataset.demoId;show(card,(indices.get(id)||0)+(dx<0?1:-1));}},{passive:true});
-   photo.querySelector('img').draggable=false;
+   photo.addEventListener('mg-swipe',e=>{const card=photo.closest('.mg-demo-card');if(!card)return;const id=card.dataset.demoId;const dir=(e.detail&&e.detail.direction===-1)?-1:1;show(card,(indices.get(id)||0)+dir);});
+   const img=photo.querySelector('img'); if(img)img.draggable=false;
   });
   /* Measure actual rendered Gujarati text and shrink only as much as each card needs. */
   const fitPrice=el=>{const span=el.querySelector('span');if(!span)return;span.style.fontSize='16px';const available=Math.max(1,el.clientWidth);const natural=Math.max(1,span.scrollWidth);span.style.fontSize=Math.max(8,Math.min(16,16*available/natural))+'px';};
