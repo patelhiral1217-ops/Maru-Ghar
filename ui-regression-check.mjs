@@ -125,3 +125,8 @@ console.log('BIDIRECTIONAL PHOTO SWIPE PASS — Demo and live listings accept ho
 if(!demo.includes("addEventListener('pointerdown'")||!demo.includes("addEventListener('pointerup'")||!demo.includes('Math.abs(dx)>=Math.abs(dy)?dx:dy'))throw new Error('Demo photo gallery must process both horizontal and vertical pointer swipes');
 if(!backend.includes("grid.addEventListener('pointerdown'")||!backend.includes("grid.addEventListener('pointerup'")||!backend.includes('Math.abs(dx)>=Math.abs(dy)?dx:dy'))throw new Error('Live property gallery must process both horizontal and vertical pointer swipes');
 console.log('ANDROID POINTER SWIPE PASS — Demo and live property photos handle horizontal and vertical gestures through Pointer Events.');
+
+
+const mobileScrollFix=home.match(/<style id="mg-vertical-page-scroll-horizontal-photo-swipe-20261122">([\\s\\S]*?)<\\/style>/);
+if(!mobileScrollFix||!mobileScrollFix[1].includes('touch-action:pan-y pinch-zoom!important')||!mobileScrollFix[1].includes('.mg-slider:not([data-direction="vertical"]) .mg-track')||!mobileScrollFix[1].includes('#mgDemoShowcase .mg-demo-photo'))throw new Error('Mobile page must keep vertical scrolling while live/demo photo galleries handle horizontal swipes');
+console.log('MOBILE SCROLL + PHOTO SWIPE PASS — vertical page scroll is preserved; live/demo photo surfaces reserve horizontal swipes.');
