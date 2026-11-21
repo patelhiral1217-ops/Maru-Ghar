@@ -105,6 +105,24 @@ const lightboxOpen = (page) => page.evaluate(() => {
   return !!lb && !lb.hidden;
 });
 
+/* Touch-tap a control the way a phone does, and report what is on top of it. */
+async function tapButton(page, cdp, locator) {
+  await locator.scrollIntoViewIfNeeded();
+  const box = await locator.boundingBox();
+  if (!box) {
+    console.log('INFO tap target has no box');
+    return;
+  }
+  const info = await locator.evaluate((el) => {
+    const r = el.getBoundingClientRect();
+    const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+    const label = (n) => (n ? n.tagName.toLowerCase() + '.' + String(n.className || '').split(' ')[0] : 'none');
+    return { target: label(el), topmost: label(hit) };
+  });
+  console.log('INFO tap ' + info.target + ' -> topmost: ' + info.topmost);
+  await tap(cdp, box);
+}
+
 async function main() {
   if (!fs.existsSync(path.join(www, 'assets', 'maru-ghar-swipe.js'))) {
     console.log('FAIL www/assets/maru-ghar-swipe.js missing -> run: npm run copy-web');
@@ -181,6 +199,7 @@ async function main() {
       const holder = document.createElement('div');
       holder.id = 'mgSwipeTestHolder';
       holder.innerHTML = `
+        <div class="property">
         <div class="photo mg-slider" data-n="3" data-cur="0">
           <div class="mg-track">
             <div class="mg-slide" data-i="0" data-mg-open="1" role="button" data-bg="assets/images/house.jpg"></div>
@@ -190,6 +209,7 @@ async function main() {
           <button type="button" class="mg-nav mg-prev" data-mg-step="-1" aria-label="પાછળનો">‹</button>
           <button type="button" class="mg-nav mg-next" data-mg-step="1" aria-label="આગળનો">›</button>
           <span class="mg-count">1 / 3</span>
+        </div>
         </div>`;
       grid.appendChild(holder);
     });
@@ -206,11 +226,12 @@ async function main() {
     const cur = () => slider.evaluate((el) => el.dataset.cur);
 
     /* Existing buttons must keep working. */
-    await slider.locator('.mg-next').click();
+    await tapButton(page, cdp, slider.locator('.mg-next'));
     check('live Next button advances the photo', (await cur()) === '1', 'cur=' + (await cur()));
     check('live counter follows Next button', (await count.textContent()).trim() === '2 / 3',
       await count.textContent());
-    await slider.locator('.mg-prev').click();
+    await sleep(200);
+    await tapButton(page, cdp, slider.locator('.mg-prev'));
     check('live Previous button goes back', (await cur()) === '0', 'cur=' + (await cur()));
     check('live counter follows Previous button', (await count.textContent()).trim() === '1 / 3',
       await count.textContent());
