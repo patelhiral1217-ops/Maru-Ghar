@@ -569,8 +569,9 @@ async function loadCityAdmin(){
     const catalogRef=doc(db,'settings','cityCatalog');
     const catalog=await getDoc(catalogRef);
     if(!catalog.exists()){
-      const keep=new Set(DEFAULT_CITIES.map(([name])=>name));
-      for(const d of snap.docs){if(!keep.has(d.data().name))await deleteDoc(d.ref);}
+      // First-time catalog initialization must never erase cities already created
+      // by an earlier Admin session. Only add missing defaults and preserve all
+      // existing city documents and their configured areas.
       for(const [name,nameEn] of DEFAULT_CITIES){
         await setDoc(doc(db,'cities',cityDocId(name)),{name,nameEn,areas:[],createdAt:serverTimestamp()},{merge:true});
       }
