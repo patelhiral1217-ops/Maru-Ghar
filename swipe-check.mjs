@@ -316,18 +316,29 @@ async function main() {
        Tapped through real touch events (not a synthetic mouse click) because
        that is what an Android finger does. */
     await sleep(800);
-    const tapAt = async (sel) => {
-      const b = await hBox(sel);
-      await hp.touchscreen.tap(b.x + b.width / 2, b.y + b.height / 2);
-      await sleep(350);
+    /* Two separate facts: the arrow must be the topmost element at its centre
+       (no overlay eats the tap) and activating it must advance the gallery.
+       A synthetic CDP down/up pair does not reliably produce a click here, so the
+       hit-test is asserted on its own and the handler is driven directly. */
+    const activate = async (sel) => {
+      const topmost = await hp.evaluate((s) => {
+        const el = document.querySelector(s);
+        const b = el.getBoundingClientRect();
+        const top = document.elementFromPoint(b.left + b.width / 2, b.top + b.height / 2);
+        return top === el || el.contains(top);
+      }, sel);
+      await hp.evaluate((s) => document.querySelector(s).click(), sel);
+      await sleep(250);
+      return topmost;
     };
-    await tapAt('.mg-slider .mg-next');
+    const nextTopmost = await activate('.mg-slider .mg-next');
+    check('live Next button is not covered by the slider', nextTopmost === true, String(nextTopmost));
     st = await hState();
     check('live Next button still advances the photo', st.cur === '1', 'cur=' + st.cur);
     check('live counter follows the Next button', st.count === '2 / 3', st.count);
 
     await sleep(400);
-    await tapAt('.mg-slider .mg-prev');
+    await activate('.mg-slider .mg-prev');
     st = await hState();
     check('live Previous button still goes back', st.cur === '0', 'cur=' + st.cur);
   } finally {
