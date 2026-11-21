@@ -195,11 +195,10 @@ if(grid){
     if(step){goTo(sl,+sl.dataset.cur + +step.dataset.mgStep);return;}
     if(e.target.closest('[data-mg-open]')){const m=sliderData.get(sl);if(m)openLb(m,+sl.dataset.cur);}
   });
-<<<<<<< HEAD
-  /* Swiping the photo strip is handled by assets/maru-ghar-swipe.js: it clicks the
+  /* Swiping the photo strip is owned by assets/maru-ghar-swipe.js: it clicks the
      existing [data-mg-step] buttons, so counters, lazy images and video pausing all
-     stay on the same code path. The old touchend-only handler is intentionally gone. */
-=======
+     stay on the same code path. The handlers below are kept as a fallback for pages
+     that load without the module, and are skipped while it is active. */
   /* Touch Events on phones plus Pointer Events for desktop; both swipe axes are supported. */
   let px=null,py=null,psl=null,pointerId=null;
   const finishLiveSwipe=(dx,dy,sl)=>{if(!sl||+sl.dataset.n<2)return;if(window.__mgSwipeReady)return;const delta=Math.abs(dx)>=Math.abs(dy)?dx:dy;if(Math.abs(delta)>24)goTo(sl,+sl.dataset.cur+(delta<0?1:-1));};
@@ -209,7 +208,6 @@ if(grid){
   grid.addEventListener('pointerdown',e=>{const t=e.target.closest('.mg-track');if(!t||e.pointerType!=='mouse'||e.button!==0){psl=null;return;}psl=t.closest('.mg-slider');px=e.clientX;py=e.clientY;pointerId=e.pointerId;try{t.setPointerCapture(e.pointerId)}catch(_){}});
   grid.addEventListener('pointerup',e=>{if(!psl||px===null||py===null||pointerId===null||e.pointerId!==pointerId)return;finishLiveSwipe(e.clientX-px,e.clientY-py,psl);px=null;py=null;psl=null;pointerId=null;});
   grid.addEventListener('pointercancel',()=>{px=null;py=null;psl=null;pointerId=null});
->>>>>>> 5066dfc
 }
 
 function mgIsListingExpired(p){const v=String(p.expiresOn||'').trim();if(!/^\d{4}-\d{2}-\d{2}$/.test(v))return false;const now=new Date();const today=[now.getFullYear(),String(now.getMonth()+1).padStart(2,'0'),String(now.getDate()).padStart(2,'0')].join('-');return v<today;}
