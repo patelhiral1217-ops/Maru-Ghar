@@ -4448,25 +4448,42 @@ Object.assign(window.MG_I18N_DICTIONARY,{
 (function(){
   function init(){
     const status=document.getElementById('customerStatus');
-    const overlay=document.getElementById('mgLoginOverlay');
+    const loginButton=document.getElementById('customerLogin');
     const password=document.getElementById('customerPassword');
-    if(!status || !overlay || status.dataset.mgReturnHomeBound==='1') return;
+    if(!status || status.dataset.mgReturnHomeBound==='1') return;
     status.dataset.mgReturnHomeBound='1';
-    const successMessages=['લોગિન સફળ.','लॉगिन सफल।','Login successful.'];
     let handled=false;
-    const closeAfterSuccessfulLogin=()=>{
+    function isSuccess(){
       const message=(status.textContent||'').trim();
-      if(handled || !successMessages.some(x=>message.includes(x))) return;
+      return /લોગિન સફળ|लॉगिन सफल|Login successful/i.test(message);
+    }
+    function returnHome(){
+      if(handled || !isSuccess()) return;
       handled=true;
       if(password) password.value='';
-      window.setTimeout(()=>{
-        overlay.classList.remove('open');
-        const home=document.getElementById('home') || document.querySelector('header');
-        if(home && typeof home.scrollIntoView==='function') home.scrollIntoView({behavior:'smooth',block:'start'});
-      },650);
-    };
-    new MutationObserver(closeAfterSuccessfulLogin).observe(status,{childList:true,subtree:true,characterData:true});
-    closeAfterSuccessfulLogin();
+      window.setTimeout(function(){
+        const overlay=document.getElementById('mgLoginOverlay');
+        if(overlay){
+          overlay.classList.remove('open');
+          overlay.setAttribute('aria-hidden','true');
+        }
+        document.querySelectorAll('.mg-overlay.open').forEach(function(el){
+          if(el.id==='mgLoginOverlay') el.classList.remove('open');
+        });
+        const home=document.getElementById('home') || document.querySelector('main') || document.body;
+        window.scrollTo({top:0,behavior:'smooth'});
+        if(home && home.id==='home' && home.scrollIntoView) home.scrollIntoView({behavior:'smooth',block:'start'});
+      },500);
+    }
+    new MutationObserver(returnHome).observe(status,{childList:true,subtree:true,characterData:true});
+    if(loginButton) loginButton.addEventListener('click',function(){
+      handled=false;
+      window.setTimeout(returnHome,100);
+      window.setTimeout(returnHome,500);
+      window.setTimeout(returnHome,1200);
+      window.setTimeout(returnHome,2500);
+    });
+    returnHome();
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
 })();
