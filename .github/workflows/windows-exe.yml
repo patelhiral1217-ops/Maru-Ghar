@@ -22,7 +22,7 @@ jobs:
       - name: Build website files
         run: npm run copy-web
       - name: Install Chromium for Playwright swipe checks
-        run: npx playwright install chromium
+        run: npx playwright install chromium --only-shell
       - name: Run project checks
         run: npm test
       - name: Build Windows installer
