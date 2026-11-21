@@ -147,6 +147,7 @@ async function main() {
         'Chrome/122.0.0.0 Mobile Safari/537.36'
     });
     const page = await context.newPage();
+    page.on('pageerror', (e) => console.log('INFO pageerror: ' + e.message));
     const cdp = await context.newCDPSession(page);
 
     await page.goto(base, { waitUntil: 'domcontentloaded' });
@@ -179,7 +180,7 @@ async function main() {
     await swipe(cdp, box, 150, 0); // swipe right -> previous photo
     after = parseCounter(await demoCounter.textContent());
     check('demo swipe right goes back one photo',
-      !!after && after.index === before.index,
+      !!after && after.index + ' / ' + after.total === expectedAfter(before, -1),
       before && (before.index + '/' + before.total) + ' -> ' + (after && after.index + '/' + after.total));
 
     before = after;
@@ -217,6 +218,22 @@ async function main() {
     const slider = page.locator('#mgSwipeTestHolder .mg-slider');
     check('live gallery fixture is present', (await slider.count()) === 1);
     await slider.scrollIntoViewIfNeeded();
+
+    const layout = await slider.evaluate((el) => {
+      const box = (n) => {
+        const r = n.getBoundingClientRect();
+        return [Math.round(r.left), Math.round(r.top), Math.round(r.width), Math.round(r.height)];
+      };
+      const next = el.querySelector('.mg-next');
+      return {
+        sliderPosition: getComputedStyle(el).position,
+        slider: box(el),
+        next: box(next),
+        nextOffsetParent: next.offsetParent ? next.offsetParent.className || next.offsetParent.tagName : 'none',
+        gridChildren: document.getElementById('properties').children.length
+      };
+    });
+    console.log('INFO live layout ' + JSON.stringify(layout));
 
     const slideTouchAction = await slider.locator('.mg-slide').first()
       .evaluate((el) => getComputedStyle(el).touchAction);
