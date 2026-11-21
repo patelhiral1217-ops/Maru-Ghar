@@ -202,7 +202,7 @@ if(grid){
 =======
   /* Touch Events on phones plus Pointer Events for desktop; both swipe axes are supported. */
   let px=null,py=null,psl=null,pointerId=null;
-  const finishLiveSwipe=(dx,dy,sl)=>{if(!sl||+sl.dataset.n<2)return;const delta=Math.abs(dx)>=Math.abs(dy)?dx:dy;if(Math.abs(delta)>24)goTo(sl,+sl.dataset.cur+(delta<0?1:-1));};
+  const finishLiveSwipe=(dx,dy,sl)=>{if(!sl||+sl.dataset.n<2)return;if(window.__mgSwipeReady)return;const delta=Math.abs(dx)>=Math.abs(dy)?dx:dy;if(Math.abs(delta)>24)goTo(sl,+sl.dataset.cur+(delta<0?1:-1));};
   grid.addEventListener('touchstart',e=>{const t=e.target.closest('.mg-track');if(!t||e.target.closest('video')||!e.touches.length){psl=null;return;}psl=t.closest('.mg-slider');px=e.touches[0].clientX;py=e.touches[0].clientY;},{passive:true});
   grid.addEventListener('touchend',e=>{if(!psl||px===null||py===null||!e.changedTouches.length)return;finishLiveSwipe(e.changedTouches[0].clientX-px,e.changedTouches[0].clientY-py,psl);px=null;py=null;psl=null;},{passive:true});
   grid.addEventListener('touchcancel',()=>{px=null;py=null;psl=null},{passive:true});
