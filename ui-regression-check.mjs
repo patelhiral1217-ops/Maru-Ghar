@@ -119,3 +119,8 @@ if(!bidirDemo.includes('touch-action:none')||!bidirDemo.includes('Math.abs(dx)>M
 if(!bidirBackend.includes("p.photoDirection==='vertical'?'vertical':p.photoDirection==='horizontal'?'horizontal':'both'")||!bidirBackend.includes('const delta=Math.abs(dx)>Math.abs(dy)?dx:dy'))throw new Error('Live property galleries must default to and support both swipe directions');
 if(!bidirAdmin.includes('data-action="photo_both"')||!bidirAdmin.includes("action==='photo_vertical'||action==='photo_horizontal'||action==='photo_both'"))throw new Error('Admin must provide a bidirectional photo setting');
 console.log('BIDIRECTIONAL PHOTO SWIPE PASS — Demo and live listings accept horizontal/vertical swipes; Admin can select both.');
+
+// Regression: Android Pointer Events must process dominant-axis swipes for demo and live photo galleries.
+if(!demo.includes("addEventListener('pointerdown'")||!demo.includes("addEventListener('pointerup'")||!demo.includes('Math.abs(dx)>=Math.abs(dy)?dx:dy'))throw new Error('Demo photo gallery must process both horizontal and vertical pointer swipes');
+if(!backend.includes("grid.addEventListener('pointerdown'")||!backend.includes("grid.addEventListener('pointerup'")||!backend.includes('Math.abs(dx)>=Math.abs(dy)?dx:dy'))throw new Error('Live property gallery must process both horizontal and vertical pointer swipes');
+console.log('ANDROID POINTER SWIPE PASS — Demo and live property photos handle horizontal and vertical gestures through Pointer Events.');
