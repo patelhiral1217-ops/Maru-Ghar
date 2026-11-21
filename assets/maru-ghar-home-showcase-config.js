@@ -16,9 +16,11 @@ window.__mgHeroSlidesReady = (async () => {
     if (/^https:\/\//i.test(headerImage || '')) {
       const header = document.querySelector('body > header');
       if (header) {
-        header.style.backgroundImage = 'linear-gradient(90deg,rgba(3,17,18,.97) 0%,rgba(5,31,31,.88) 52%,rgba(6,23,25,.66) 100%),url(' + JSON.stringify(headerImage) + ')';
-        header.style.backgroundPosition = 'center';
-        header.style.backgroundSize = 'cover';
+        const background = 'linear-gradient(90deg,rgba(3,17,18,.97) 0%,rgba(5,31,31,.88) 52%,rgba(6,23,25,.66) 100%),url(' + JSON.stringify(headerImage) + ')';
+        header.style.setProperty('background-image',background,'important');
+        header.style.setProperty('background-position','center','important');
+        header.style.setProperty('background-size','cover','important');
+        header.style.setProperty('background-repeat','no-repeat','important');
       }
     }
     const items = snap.docs.map(d => d.data()).filter(x => x.visible === true && !x.deletedAt && /^https:\/\//i.test(x.imageUrl || ''));
