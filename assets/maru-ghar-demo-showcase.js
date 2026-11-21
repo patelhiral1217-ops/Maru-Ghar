@@ -163,29 +163,24 @@
   const visibilityObserver=('IntersectionObserver' in window)?new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting)visibleCards.add(entry.target);else visibleCards.delete(entry.target)}),{rootMargin:'120px'}):null;
   function show(card,idx){const p=samples.find(x=>x.id===card.dataset.demoId);idx=(idx+p.photos.length)%p.photos.length;indices.set(p.id,idx);const im=card.querySelector('img');im.style.opacity='.25';const next=new Image();next.decoding='async';next.onload=()=>{im.src=next.src;im.style.opacity='1'};next.onerror=()=>im.style.opacity='1';next.src=p.photos[idx];card.querySelector('.mg-demo-counter').textContent=(idx+1)+' / '+p.photos.length;}
   section.querySelectorAll('.mg-demo-card').forEach(card=>{const id=card.dataset.demoId;if(visibilityObserver)visibilityObserver.observe(card);else visibleCards.add(card);timers.set(id,setInterval(()=>{if(visibleCards.has(card)&&!paused.has(id)&&!document.hidden)show(card,(indices.get(id)||0)+1)},6500));});
-  /* Pointer Events handle horizontal AND vertical swipes consistently in Android Chrome/WebView. */
+  /* Native touch fallback is used on phones; Pointer Events remain for mouse/trackpad. */
   section.querySelectorAll('.mg-demo-photo').forEach(photo=>{
    let startX=null,startY=null,pointerId=null;
-   const finishSwipe=e=>{
-    if(startX===null||startY===null||(pointerId!==null&&e.pointerId!==pointerId))return;
-    const dx=e.clientX-startX,dy=e.clientY-startY;
+   const advance=(dx,dy)=>{
     const delta=Math.abs(dx)>=Math.abs(dy)?dx:dy;
-    if(Math.abs(delta)>28){
+    if(Math.abs(delta)>24){
      const card=photo.closest('.mg-demo-card'),id=card.dataset.demoId;
-     paused.add(id);
-     show(card,(indices.get(id)||0)+(delta<0?1:-1));
+     paused.add(id);show(card,(indices.get(id)||0)+(delta<0?1:-1));
      setTimeout(()=>paused.delete(id),900);
     }
-    startX=null;startY=null;pointerId=null;
    };
-   photo.addEventListener('pointerdown',e=>{
-    if(e.pointerType==='mouse'&&e.button!==0)return;
-    startX=e.clientX;startY=e.clientY;pointerId=e.pointerId;
-    try{photo.setPointerCapture(e.pointerId)}catch(_){}
-   });
-   photo.addEventListener('pointerup',finishSwipe);
+   photo.addEventListener('touchstart',e=>{if(e.touches.length){startX=e.touches[0].clientX;startY=e.touches[0].clientY;}},{passive:true});
+   photo.addEventListener('touchend',e=>{if(startX!==null&&e.changedTouches.length)advance(e.changedTouches[0].clientX-startX,e.changedTouches[0].clientY-startY);startX=null;startY=null;},{passive:true});
+   photo.addEventListener('touchcancel',()=>{startX=null;startY=null},{passive:true});
+   photo.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse'||e.button!==0)return;startX=e.clientX;startY=e.clientY;pointerId=e.pointerId;try{photo.setPointerCapture(e.pointerId)}catch(_){}});
+   photo.addEventListener('pointerup',e=>{if(pointerId===null||e.pointerId!==pointerId)return;advance(e.clientX-startX,e.clientY-startY);startX=null;startY=null;pointerId=null;});
    photo.addEventListener('pointercancel',()=>{startX=null;startY=null;pointerId=null});
-   photo.querySelector('img').draggable=false;
+   const img=photo.querySelector('img');if(img)img.draggable=false;
   });
   /* Measure actual rendered Gujarati text and shrink only as much as each card needs. */
   const fitPrice=el=>{const span=el.querySelector('span');if(!span)return;span.style.fontSize='16px';const available=Math.max(1,el.clientWidth);const natural=Math.max(1,span.scrollWidth);span.style.fontSize=Math.max(8,Math.min(16,16*available/natural))+'px';};

@@ -194,20 +194,14 @@ if(grid){
     if(step){goTo(sl,+sl.dataset.cur + +step.dataset.mgStep);return;}
     if(e.target.closest('[data-mg-open]')){const m=sliderData.get(sl);if(m)openLb(m,+sl.dataset.cur);}
   });
-  /* Pointer Events avoid Android WebView touch-axis inconsistencies for live listing photos. */
+  /* Touch Events on phones plus Pointer Events for desktop; both swipe axes are supported. */
   let px=null,py=null,psl=null,pointerId=null;
-  grid.addEventListener('pointerdown',e=>{
-    const t=e.target.closest('.mg-track');
-    if(!t||e.target.closest('video')||(e.pointerType==='mouse'&&e.button!==0)){psl=null;return;}
-    psl=t.closest('.mg-slider');px=e.clientX;py=e.clientY;pointerId=e.pointerId;
-  });
-  grid.addEventListener('pointerup',e=>{
-    if(!psl||px===null||py===null||(pointerId!==null&&e.pointerId!==pointerId)||+psl.dataset.n<2)return;
-    const dx=e.clientX-px,dy=e.clientY-py;
-    const delta=Math.abs(dx)>=Math.abs(dy)?dx:dy;
-    if(Math.abs(delta)>28)goTo(psl,+psl.dataset.cur+(delta<0?1:-1));
-    px=null;py=null;psl=null;pointerId=null;
-  });
+  const finishLiveSwipe=(dx,dy,sl)=>{if(!sl||+sl.dataset.n<2)return;const delta=Math.abs(dx)>=Math.abs(dy)?dx:dy;if(Math.abs(delta)>24)goTo(sl,+sl.dataset.cur+(delta<0?1:-1));};
+  grid.addEventListener('touchstart',e=>{const t=e.target.closest('.mg-track');if(!t||e.target.closest('video')||!e.touches.length){psl=null;return;}psl=t.closest('.mg-slider');px=e.touches[0].clientX;py=e.touches[0].clientY;},{passive:true});
+  grid.addEventListener('touchend',e=>{if(!psl||px===null||py===null||!e.changedTouches.length)return;finishLiveSwipe(e.changedTouches[0].clientX-px,e.changedTouches[0].clientY-py,psl);px=null;py=null;psl=null;},{passive:true});
+  grid.addEventListener('touchcancel',()=>{px=null;py=null;psl=null},{passive:true});
+  grid.addEventListener('pointerdown',e=>{const t=e.target.closest('.mg-track');if(!t||e.pointerType!=='mouse'||e.button!==0){psl=null;return;}psl=t.closest('.mg-slider');px=e.clientX;py=e.clientY;pointerId=e.pointerId;try{t.setPointerCapture(e.pointerId)}catch(_){}});
+  grid.addEventListener('pointerup',e=>{if(!psl||px===null||py===null||pointerId===null||e.pointerId!==pointerId)return;finishLiveSwipe(e.clientX-px,e.clientY-py,psl);px=null;py=null;psl=null;pointerId=null;});
   grid.addEventListener('pointercancel',()=>{px=null;py=null;psl=null;pointerId=null});
 }
 
