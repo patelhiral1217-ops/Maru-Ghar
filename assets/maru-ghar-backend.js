@@ -194,9 +194,21 @@ if(grid){
     if(step){goTo(sl,+sl.dataset.cur + +step.dataset.mgStep);return;}
     if(e.target.closest('[data-mg-open]')){const m=sliderData.get(sl);if(m)openLb(m,+sl.dataset.cur);}
   });
-  let tx=null,ty=null,tsl=null;
-  grid.addEventListener('touchstart',e=>{const t=e.target.closest('.mg-track');if(!t||e.target.closest('video')){tsl=null;return;}tsl=t.closest('.mg-slider');tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});
-  grid.addEventListener('touchend',e=>{if(!tsl||tx==null||ty==null||+tsl.dataset.n<2)return;const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;const delta=Math.abs(dx)>Math.abs(dy)?dx:dy;if(Math.abs(delta)>40){goTo(tsl,+tsl.dataset.cur+(delta<0?1:-1));}tx=null;ty=null;tsl=null},{passive:true});
+  /* Pointer Events avoid Android WebView touch-axis inconsistencies for live listing photos. */
+  let px=null,py=null,psl=null,pointerId=null;
+  grid.addEventListener('pointerdown',e=>{
+    const t=e.target.closest('.mg-track');
+    if(!t||e.target.closest('video')||(e.pointerType==='mouse'&&e.button!==0)){psl=null;return;}
+    psl=t.closest('.mg-slider');px=e.clientX;py=e.clientY;pointerId=e.pointerId;
+  });
+  grid.addEventListener('pointerup',e=>{
+    if(!psl||px===null||py===null||(pointerId!==null&&e.pointerId!==pointerId)||+psl.dataset.n<2)return;
+    const dx=e.clientX-px,dy=e.clientY-py;
+    const delta=Math.abs(dx)>=Math.abs(dy)?dx:dy;
+    if(Math.abs(delta)>28)goTo(psl,+psl.dataset.cur+(delta<0?1:-1));
+    px=null;py=null;psl=null;pointerId=null;
+  });
+  grid.addEventListener('pointercancel',()=>{px=null;py=null;psl=null;pointerId=null});
 }
 
 function mgIsListingExpired(p){const v=String(p.expiresOn||'').trim();if(!/^\d{4}-\d{2}-\d{2}$/.test(v))return false;const now=new Date();const today=[now.getFullYear(),String(now.getMonth()+1).padStart(2,'0'),String(now.getDate()).padStart(2,'0')].join('-');return v<today;}
