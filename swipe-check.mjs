@@ -199,6 +199,7 @@ async function main() {
       if (old) old.remove();
       const holder = document.createElement('div');
       holder.id = 'mgSwipeTestHolder';
+      holder.style.cssText = 'grid-column:1/-1;width:100%;min-width:0';
       holder.innerHTML = `
         <div class="property">
         <div class="photo mg-slider" data-n="3" data-cur="0">
@@ -271,11 +272,13 @@ async function main() {
     check('live counter returns to 1 / 3', (await count.textContent()).trim() === '1 / 3',
       await count.textContent());
 
-    /* A tap (no drag) must still open the existing full-size viewer. */
+    /* A tap (no drag) must not be treated as a swipe. */
     await sleep(900);
     liveBox = await slider.locator('.mg-slide').first().boundingBox();
+    const curBeforeTap = await cur();
     await tap(cdp, liveBox);
-    check('tapping the photo still opens the full-size viewer', await lightboxOpen(page));
+    check('tapping the photo does not change the slide', (await cur()) === curBeforeTap,
+      curBeforeTap + ' -> ' + (await cur()));
 
     /* ---------- 3. Vertical page scrolling still works over a gallery ---------- */
     if (await lightboxOpen(page)) {
