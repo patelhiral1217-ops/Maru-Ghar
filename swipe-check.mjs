@@ -52,9 +52,33 @@ function loadPlaywright() {
 function chromeExecutable() {
   const override = process.env.MG_CHROME_PATH;
   if (override && fs.existsSync(override)) return override;
+
+  /* Playwright's own build matches the installed version exactly. */
+  try {
+    const bundled = chromium.executablePath();
+    if (bundled && fs.existsSync(bundled)) return bundled;
+  } catch (err) {
+    /* browser not downloaded for this Playwright version: keep looking */
+  }
+
+  /* Any cached Playwright chromium, whatever revision number it uses. */
+  for (const dir of ['/root/.cache/ms-playwright', '/ms-playwright']) {
+    try {
+      for (const entry of fs.readdirSync(dir)) {
+        if (!/^chromium-\d+$/.test(entry)) continue;
+        for (const layout of ['chrome-linux64', 'chrome-linux']) {
+          const candidate = path.join(dir, entry, layout, 'chrome');
+          if (fs.existsSync(candidate)) return candidate;
+        }
+      }
+    } catch (err) {
+      /* directory absent */
+    }
+  }
+
+  /* The AppJet development sandbox browser, then a system Chrome. */
   const candidates = [
     '/opt/appjet/browser-binaries/chromium-1234/chrome-linux64/chrome',
-    '/root/.cache/ms-playwright/chromium-1234/chrome-linux64/chrome',
     '/usr/bin/google-chrome',
     '/usr/bin/google-chrome-stable',
     '/usr/bin/chromium',
@@ -62,12 +86,6 @@ function chromeExecutable() {
   ];
   for (const candidate of candidates) {
     if (fs.existsSync(candidate)) return candidate;
-  }
-  try {
-    const bundled = chromium.executablePath();
-    if (bundled && fs.existsSync(bundled)) return bundled;
-  } catch (err) {
-    /* browser not downloaded: fall through to Playwright's own default */
   }
   return undefined;
 }
