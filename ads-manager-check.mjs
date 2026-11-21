@@ -53,13 +53,23 @@ ok(
   !/allow\s+write\s*:\s*if\s+true/.test(adRules),
   'Advertisements must never be world-writable'
 );
+/* Rules are not filters: a request.time comparison in the READ rule would
+ * reject the entire list query, so the date window must be evaluated client
+ * side. request.time in create/update (createdAt/updatedAt) is legitimate. */
+const adReadRule = (adRules.match(/allow\s+read[^;]*;/) || [''])[0];
+ok(adReadRule.length > 0, 'Advertisements must declare a read rule');
 ok(
-  !/request\.time/.test(adRules),
-  'Ad rule must not compare request.time (rules are not filters: it would reject the whole list query)'
+  !/request\.time/.test(adReadRule),
+  'Ad READ rule must not compare request.time (rules are not filters: it would reject the whole list query)'
 );
 ok(
-  /enabled\s*==\s*true/.test(adRules),
+  /enabled\s*==\s*true/.test(adReadRule),
   'Public visitors may only read enabled advertisements'
+);
+ok(
+  /createdAt\s*==\s*request\.time/.test(adRules) &&
+    /updatedAt\s*==\s*request\.time/.test(adRules),
+  'Writes must stamp createdAt/updatedAt from request.time so timestamps cannot be spoofed'
 );
 ok(
   adRules.includes("'image'") && adRules.includes("'video'"),
