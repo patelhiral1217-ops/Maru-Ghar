@@ -107,7 +107,7 @@ const backend=fs.readFileSync('assets/maru-ghar-backend.js','utf8');
 if(!adminHtml.includes('data-action="photo_vertical"')||!adminHtml.includes('data-action="photo_horizontal"')||!adminHtml.includes('data-action="photo_both"')||!adminHtml.includes('photoDirection:direction'))throw new Error('Admin property photo direction controls are missing');
 if(!adminHtml.includes("p.photoDirection==='vertical'?'નીચેથી ઉપર':p.photoDirection==='horizontal'?'સાઇડમાં':'બંને દિશામાં'"))throw new Error('Admin listing does not show the saved photo direction');
 if(!backend.includes("p.photoDirection==='vertical'?'vertical':p.photoDirection==='horizontal'?'horizontal':'both'"))throw new Error('Property photo slider does not default to both directions');
-if(!backend.includes('const delta=Math.abs(dx)>Math.abs(dy)?dx:dy'))throw new Error('Property photo swipe must detect both horizontal and vertical gestures');
+if(!backend.includes("grid.addEventListener('pointerdown'")||!backend.includes("grid.addEventListener('pointerup'")||!backend.includes('Math.abs(dx)>=Math.abs(dy)?dx:dy'))throw new Error('Property photo swipe must detect both horizontal and vertical pointer gestures');
 if(!home.includes('assets/maru-ghar-backend.js?v=20261121photodirection1'))throw new Error('Updated property photo direction controller cache version is missing');
 if(!home.includes('.mg-slider[data-direction="vertical"] .mg-track{flex-direction:column;touch-action:pan-x}'))throw new Error('Vertical photo slider layout CSS is missing');
 console.log('PROPERTY PHOTO DIRECTION PASS — Admin can choose vertical bottom-to-top or horizontal swipe; website and Android WebView use the saved setting.');
@@ -115,8 +115,8 @@ console.log('PROPERTY PHOTO DIRECTION PASS — Admin can choose vertical bottom-
 const bidirDemo=fs.readFileSync('assets/maru-ghar-demo-showcase.js','utf8');
 const bidirBackend=fs.readFileSync('assets/maru-ghar-backend.js','utf8');
 const bidirAdmin=fs.readFileSync('admin.html','utf8');
-if(!bidirDemo.includes('touch-action:none')||!bidirDemo.includes('Math.abs(dx)>Math.abs(dy)?dx:dy'))throw new Error('Demo photo gallery must accept both horizontal and vertical swipe gestures');
-if(!bidirBackend.includes("p.photoDirection==='vertical'?'vertical':p.photoDirection==='horizontal'?'horizontal':'both'")||!bidirBackend.includes('const delta=Math.abs(dx)>Math.abs(dy)?dx:dy'))throw new Error('Live property galleries must default to and support both swipe directions');
+if(!bidirDemo.includes('touch-action:none')||!bidirDemo.includes("addEventListener('pointerdown'")||!bidirDemo.includes("addEventListener('pointerup'")||!bidirDemo.includes('Math.abs(dx)>=Math.abs(dy)?dx:dy'))throw new Error('Demo photo gallery must accept both horizontal and vertical pointer gestures');
+if(!bidirBackend.includes("p.photoDirection==='vertical'?'vertical':p.photoDirection==='horizontal'?'horizontal':'both'")||!bidirBackend.includes("grid.addEventListener('pointerdown'")||!bidirBackend.includes("grid.addEventListener('pointerup'")||!bidirBackend.includes('Math.abs(dx)>=Math.abs(dy)?dx:dy'))throw new Error('Live property galleries must default to and support both pointer swipe directions');
 if(!bidirAdmin.includes('data-action="photo_both"')||!bidirAdmin.includes("action==='photo_vertical'||action==='photo_horizontal'||action==='photo_both'"))throw new Error('Admin must provide a bidirectional photo setting');
 console.log('BIDIRECTIONAL PHOTO SWIPE PASS — Demo and live listings accept horizontal/vertical swipes; Admin can select both.');
 
