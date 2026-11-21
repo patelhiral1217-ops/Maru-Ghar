@@ -127,6 +127,8 @@ if(!backend.includes("grid.addEventListener('pointerdown'")||!backend.includes("
 console.log('ANDROID POINTER SWIPE PASS — Demo and live property photos handle horizontal and vertical gestures through Pointer Events.');
 
 
-const mobileScrollFix=home.match(/<style id="mg-vertical-page-scroll-horizontal-photo-swipe-20261122">([\\s\\S]*?)<\\/style>/);
-if(!mobileScrollFix||!mobileScrollFix[1].includes('touch-action:pan-y pinch-zoom!important')||!mobileScrollFix[1].includes('.mg-slider:not([data-direction="vertical"]) .mg-track')||!mobileScrollFix[1].includes('#mgDemoShowcase .mg-demo-photo'))throw new Error('Mobile page must keep vertical scrolling while live/demo photo galleries handle horizontal swipes');
+const mobileScrollStart=home.indexOf('<style id="mg-vertical-page-scroll-horizontal-photo-swipe-20261122">');
+const mobileScrollEnd=home.indexOf('</style>',mobileScrollStart);
+const mobileScrollFix=mobileScrollStart>=0&&mobileScrollEnd>mobileScrollStart?home.slice(mobileScrollStart,mobileScrollEnd):'';
+if(!mobileScrollFix.includes('touch-action:pan-y pinch-zoom!important')||!mobileScrollFix.includes('.mg-slider:not([data-direction="vertical"]) .mg-track')||!mobileScrollFix.includes('#mgDemoShowcase .mg-demo-photo'))throw new Error('Mobile page must keep vertical scrolling while live/demo photo galleries handle horizontal swipes');
 console.log('MOBILE SCROLL + PHOTO SWIPE PASS — vertical page scroll is preserved; live/demo photo surfaces reserve horizontal swipes.');
