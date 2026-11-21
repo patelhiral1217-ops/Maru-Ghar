@@ -5,13 +5,8 @@
   "type": "module",
   "scripts": {
     "copy-web": "node scripts/copy-web.mjs",
-<<<<<<< HEAD
-    "test:swipe": "node swipe-check.mjs",
-    "test": "node scripts/copy-web.mjs && node smoke-check.mjs && node i18n-check.mjs && node i18n-coverage-check.mjs && node i18n-dom-regression-check.mjs && node ui-regression-check.mjs && node discovery-check.mjs && node ads-check.mjs && node customer-auth-check.mjs && node verification-audit-check.mjs && node maps-whatsapp-check.mjs && node notifications-audit-check.mjs && node final-firestore-rules-check.mjs && node firebase-deploy-preflight.mjs && node ota-check.mjs && node swipe-check.mjs"
-=======
     "test": "node smoke-check.mjs && node i18n-check.mjs && node i18n-coverage-check.mjs && node i18n-dom-regression-check.mjs && node ui-regression-check.mjs && node discovery-check.mjs && node ads-check.mjs && node customer-auth-check.mjs && node verification-audit-check.mjs && node maps-whatsapp-check.mjs && node notifications-audit-check.mjs && node final-firestore-rules-check.mjs && node firebase-deploy-preflight.mjs && node ota-check.mjs && node master-admin-check.mjs",
     "desktop:win": "electron-builder --win nsis --x64 --publish never"
->>>>>>> 5066dfc
   },
   "devDependencies": {
     "@capacitor/core": "^7.6.10",
