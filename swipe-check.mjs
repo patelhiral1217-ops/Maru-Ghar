@@ -202,12 +202,14 @@ async function main() {
       /* Count how often the gallery's own controls are used, so a swipe can be
          verified independently of whether Firestore is reachable here. */
       window.__mgSpy = window.__mgSpy || { next: 0, prev: 0 };
-      holder.addEventListener('click', (e) => {
-        const btn = e.target.closest('[data-mg-step]');
-        if (!btn) return;
-        if (btn.getAttribute('data-mg-step') === '1') window.__mgSpy.next++;
-        else window.__mgSpy.prev++;
-      }, true);
+      /* Listen on the buttons themselves: the swipe controller drives these
+         exact elements, so this records real gallery navigation. */
+      holder.querySelectorAll('[data-mg-step]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          if (btn.getAttribute('data-mg-step') === '1') window.__mgSpy.next++;
+          else window.__mgSpy.prev++;
+        });
+      });
       return true;
     }, FIXTURE);
 
@@ -278,17 +280,13 @@ async function main() {
     let state;
 
     await ensure();
-    const nextBox = await liveBox('.mg-next');
-    if (!visible(nextBox)) console.log('INFO Next button not in viewport: ' + JSON.stringify(nextBox));
-    if (nextBox) await tap(cdp, nextBox);
+    await page.locator('#mgSwipeTestHolder .mg-next').tap();
     let s = await spy();
     check('tapping Next reaches the gallery control', !!s && s.next === 1, JSON.stringify(s));
 
     await sleep(900);
     await ensure();
-    const prevBox = await liveBox('.mg-prev');
-    if (!visible(prevBox)) console.log('INFO Previous button not in viewport: ' + JSON.stringify(prevBox));
-    if (prevBox) await tap(cdp, prevBox);
+    await page.locator('#mgSwipeTestHolder .mg-prev').tap();
     s = await spy();
     check('tapping Previous reaches the gallery control', !!s && s.prev === 1, JSON.stringify(s));
 
