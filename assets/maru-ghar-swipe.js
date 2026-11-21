@@ -167,7 +167,7 @@
     /* Some Android WebViews send pointercancel even after a clear horizontal drag.
        Keep that already-classified horizontal swipe; vertical cancellation remains
        native page scrolling and must never change the demo photo. */
-    if ((cancelled && a.axis !== 1) || (a.axis !== 1 && a.axis !== 2)) return;
+    if ((cancelled && a.axis !== 1 && a.axis !== 2) || (a.axis !== 1 && a.axis !== 2)) return;
     var delta = a.axis === 1 ? a.x - a.x0 : a.y - a.y0;
     var dt = Math.max(1, Date.now() - a.t0);
     var box = a.surface.el.getBoundingClientRect();
