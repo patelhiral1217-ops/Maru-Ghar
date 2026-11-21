@@ -155,9 +155,14 @@ function sliderHtml(p,media){
   return `<div class="photo mg-slider" data-direction="${direction}" data-n="${media.length}" data-cur="0"><div class="mg-track">${media.map((m,i)=>slideHtml(m,i,alt)).join('')}</div>${pill}${controls}</div>`;
 }
 const sliderData=new WeakMap();
-function goTo(sl,idx){
+function goTo(sl,idx,gestureAxis){
   const n=+sl.dataset.n; idx=(idx+n)%n; sl.dataset.cur=idx;
-  sl.querySelector('.mg-track').style.transform=sl.dataset.direction==='vertical'?`translateY(-${idx*100}%)`:`translateX(-${idx*100}%)`;
+  const axis=gestureAxis||sl.dataset.axis||(sl.dataset.direction==='vertical'?'vertical':'horizontal');
+  sl.dataset.axis=axis;
+  const track=sl.querySelector('.mg-track');
+  track.style.flexDirection=axis==='vertical'?'column':'row';
+  track.querySelectorAll('.mg-slide').forEach(el=>{el.style.flex='0 0 100%';el.style.width='100%';el.style.height='100%';});
+  track.style.transform=axis==='vertical'?'translateY(-'+(idx*100)+'%)':'translateX(-'+(idx*100)+'%)';
   const c=sl.querySelector('.mg-count'); if(c)c.textContent=`${idx+1} / ${n}`;
   [idx,(idx+1)%n].forEach(k=>{const s=sl.querySelector(`.mg-slide[data-i="${k}"][data-bg]`);if(s&&!s.style.backgroundImage)s.style.backgroundImage=`url('${s.dataset.bg}')`;});
   sl.querySelectorAll('video').forEach(v=>{try{v.pause()}catch(_){}});
@@ -189,10 +194,15 @@ function showLb(i){
 function openLb(media,i){ensureLb();lbMedia=media;lb.hidden=false;document.body.style.overflow='hidden';showLb(i);}
 function closeLb(){if(!lb)return;lb.hidden=true;lb.querySelector('.mg-lb-stage').replaceChildren();document.body.style.overflow='';}
 if(grid){
+  grid.addEventListener('mg-swipe',e=>{
+    const sl=e.target.closest('.mg-slider');
+    if(!sl||!e.detail||e.detail.axis!=='vertical')return;
+    goTo(sl,+sl.dataset.cur+(e.detail.direction<0?-1:1),'vertical');
+  });
   grid.addEventListener('click',e=>{
     const sl=e.target.closest('.mg-slider'); if(!sl)return;
     const step=e.target.closest('[data-mg-step]');
-    if(step){goTo(sl,+sl.dataset.cur + +step.dataset.mgStep);return;}
+    if(step){goTo(sl,+sl.dataset.cur + +step.dataset.mgStep,'horizontal');return;}
     if(e.target.closest('[data-mg-open]')){const m=sliderData.get(sl);if(m)openLb(m,+sl.dataset.cur);}
   });
   /* Swiping the photo strip is owned by assets/maru-ghar-swipe.js: it clicks the
