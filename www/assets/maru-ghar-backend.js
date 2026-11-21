@@ -149,12 +149,15 @@ function sliderHtml(p,media){
   const pill=`<span class="pill">${esc(p.purpose||'પ્રોપર્ટી')}</span>`;
   if(!media.length) return `<div class="photo">${pill}</div>`;
   const nav=media.length>1?`<button type="button" class="mg-nav mg-prev" data-mg-step="-1" aria-label="પાછળનો">‹</button><button type="button" class="mg-nav mg-next" data-mg-step="1" aria-label="આગળનો">›</button><span class="mg-count">1 / ${media.length}</span>`:'';
-  return `<div class="photo mg-slider" data-n="${media.length}" data-cur="0"><div class="mg-track">${media.map((m,i)=>slideHtml(m,i,alt)).join('')}</div>${pill}${nav}</div>`;
+  const direction=p.photoDirection==='vertical'?'vertical':p.photoDirection==='horizontal'?'horizontal':'both';
+  const vertical=direction==='vertical';
+  const controls=media.length>1?(vertical?`<button type="button" class="mg-nav mg-prev" data-mg-step="-1" aria-label="પહેલાનો ફોટો">↑</button><button type="button" class="mg-nav mg-next" data-mg-step="1" aria-label="આગળનો ફોટો">↓</button><span class="mg-count">1 / ${media.length}</span>`:`<button type="button" class="mg-nav mg-prev" data-mg-step="-1" aria-label="પહેલાનો ફોટો">‹</button><button type="button" class="mg-nav mg-next" data-mg-step="1" aria-label="આગળનો ફોટો">›</button><span class="mg-count">1 / ${media.length}</span>`):'';
+  return `<div class="photo mg-slider" data-direction="${direction}" data-n="${media.length}" data-cur="0"><div class="mg-track">${media.map((m,i)=>slideHtml(m,i,alt)).join('')}</div>${pill}${controls}</div>`;
 }
 const sliderData=new WeakMap();
 function goTo(sl,idx){
   const n=+sl.dataset.n; idx=(idx+n)%n; sl.dataset.cur=idx;
-  sl.querySelector('.mg-track').style.transform=`translateX(-${idx*100}%)`;
+  sl.querySelector('.mg-track').style.transform=sl.dataset.direction==='vertical'?`translateY(-${idx*100}%)`:`translateX(-${idx*100}%)`;
   const c=sl.querySelector('.mg-count'); if(c)c.textContent=`${idx+1} / ${n}`;
   [idx,(idx+1)%n].forEach(k=>{const s=sl.querySelector(`.mg-slide[data-i="${k}"][data-bg]`);if(s&&!s.style.backgroundImage)s.style.backgroundImage=`url('${s.dataset.bg}')`;});
   sl.querySelectorAll('video').forEach(v=>{try{v.pause()}catch(_){}});
@@ -169,8 +172,9 @@ function ensureLb(){
     if(e.target.closest('.mg-lb-x')||e.target===lb||e.target.classList.contains('mg-lb-stage')){closeLb();return;}
     const s=e.target.closest('[data-lb]'); if(s)showLb(lbIdx+ +s.dataset.lb);
   });
-  let sx=null; lb.addEventListener('touchstart',e=>{sx=e.touches[0].clientX},{passive:true});
-  lb.addEventListener('touchend',e=>{if(sx==null||lbMedia.length<2)return;const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>40)showLb(lbIdx+(dx<0?1:-1));sx=null},{passive:true});
+  /* Horizontal swipe is handled by assets/maru-ghar-swipe.js, which recovers from
+     Android touchcancel and triggers the [data-lb] buttons above. End-only touch
+     handlers were removed because Chrome cancels that gesture without touchend. */
   document.addEventListener('keydown',e=>{if(lb.hidden)return;if(e.key==='Escape')closeLb();if(e.key==='ArrowRight')showLb(lbIdx+1);if(e.key==='ArrowLeft')showLb(lbIdx-1);});
   return lb;
 }
@@ -191,9 +195,19 @@ if(grid){
     if(step){goTo(sl,+sl.dataset.cur + +step.dataset.mgStep);return;}
     if(e.target.closest('[data-mg-open]')){const m=sliderData.get(sl);if(m)openLb(m,+sl.dataset.cur);}
   });
-  let tx=null,tsl=null;
-  grid.addEventListener('touchstart',e=>{const t=e.target.closest('.mg-track');if(!t||e.target.closest('video')){tsl=null;return;}tsl=t.closest('.mg-slider');tx=e.touches[0].clientX},{passive:true});
-  grid.addEventListener('touchend',e=>{if(!tsl||tx==null||+tsl.dataset.n<2)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>40){goTo(tsl,+tsl.dataset.cur+(dx<0?1:-1));}tx=null},{passive:true});
+  /* Swiping the photo strip is owned by assets/maru-ghar-swipe.js: it clicks the
+     existing [data-mg-step] buttons, so counters, lazy images and video pausing all
+     stay on the same code path. The handlers below are kept as a fallback for pages
+     that load without the module, and are skipped while it is active. */
+  /* Touch Events on phones plus Pointer Events for desktop; both swipe axes are supported. */
+  let px=null,py=null,psl=null,pointerId=null;
+  const finishLiveSwipe=(dx,dy,sl)=>{if(!sl||+sl.dataset.n<2)return;if(window.__mgSwipeReady)return;const delta=Math.abs(dx)>=Math.abs(dy)?dx:dy;if(Math.abs(delta)>24)goTo(sl,+sl.dataset.cur+(delta<0?1:-1));};
+  grid.addEventListener('touchstart',e=>{const t=e.target.closest('.mg-track');if(!t||e.target.closest('video')||!e.touches.length){psl=null;return;}psl=t.closest('.mg-slider');px=e.touches[0].clientX;py=e.touches[0].clientY;},{passive:true});
+  grid.addEventListener('touchend',e=>{if(!psl||px===null||py===null||!e.changedTouches.length)return;finishLiveSwipe(e.changedTouches[0].clientX-px,e.changedTouches[0].clientY-py,psl);px=null;py=null;psl=null;},{passive:true});
+  grid.addEventListener('touchcancel',()=>{px=null;py=null;psl=null},{passive:true});
+  grid.addEventListener('pointerdown',e=>{const t=e.target.closest('.mg-track');if(!t||e.pointerType!=='mouse'||e.button!==0){psl=null;return;}psl=t.closest('.mg-slider');px=e.clientX;py=e.clientY;pointerId=e.pointerId;try{t.setPointerCapture(e.pointerId)}catch(_){}});
+  grid.addEventListener('pointerup',e=>{if(!psl||px===null||py===null||pointerId===null||e.pointerId!==pointerId)return;finishLiveSwipe(e.clientX-px,e.clientY-py,psl);px=null;py=null;psl=null;pointerId=null;});
+  grid.addEventListener('pointercancel',()=>{px=null;py=null;psl=null;pointerId=null});
 }
 
 function mgIsListingExpired(p){const v=String(p.expiresOn||'').trim();if(!/^\d{4}-\d{2}-\d{2}$/.test(v))return false;const now=new Date();const today=[now.getFullYear(),String(now.getMonth()+1).padStart(2,'0'),String(now.getDate()).padStart(2,'0')].join('-');return v<today;}

@@ -27,6 +27,21 @@
   'કોમર્શિયલ પ્રોપર્ટી':['assets/images/commercial.jpg','assets/images/shop.jpg','assets/images/office.jpg']
  };
  samples.forEach(p=>{const local=LOCAL_PHOTOS[p.type];if(local&&local.length)p.photos=local.slice();});
+ /* Admin-managed soft deletion: public visitors receive the same shared Firestore setting. */
+ let demoConfigReady=Promise.resolve();
+ demoConfigReady=(async()=>{try{
+  if(location.protocol==='file:'||location.protocol==='content:')return;
+  const [{firebaseConfig},{initializeApp,getApps,getApp}]=await Promise.all([
+   import('../firebase-config.js'),
+   import('https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js')
+  ]);
+  const [{getFirestore,doc,getDoc}]=await import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js');
+  const app=getApps().length?getApp():initializeApp(firebaseConfig);
+  const snap=await getDoc(doc(getFirestore(app),'settings','demoShowcase'));
+  const hidden=snap.exists()&&Array.isArray(snap.data().hiddenIds)?snap.data().hiddenIds:[];
+  if(hidden.length)for(let i=samples.length-1;i>=0;i--)if(hidden.includes(samples[i].id))samples.splice(i,1);
+ }catch(e){console.warn('Demo visibility settings unavailable; showing built-in demo samples.',e)}})();
+
  const css=`
  #mgDemoShowcase{margin:22px 0 28px;padding:18px;border:1px solid #d8c58d;border-radius:20px;background:linear-gradient(145deg,#fffdf7,#edf2ed);box-shadow:0 8px 24px #203b2c12}
  #mgDemoShowcase .mg-demo-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
@@ -34,7 +49,7 @@
  #mgDemoShowcase .mg-demo-note{font-size:12px;color:#795d25;font-weight:800}
  #mgDemoShowcase .mg-demo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:15px}
  #mgDemoShowcase .mg-demo-card{min-width:0;overflow:hidden;border:1px solid #d8d8c9;border-radius:16px;background:#fff;box-shadow:0 4px 13px #203b2c12} #mgDemoShowcase .mg-demo-card{container-type:inline-size}
- #mgDemoShowcase .mg-demo-photo{position:relative;height:190px;overflow:hidden;background:#e7ece7;touch-action:pan-y;user-select:none}
+ #mgDemoShowcase .mg-demo-photo{position:relative;height:190px;overflow:hidden;background:#e7ece7;touch-action:none;user-select:none}
  #mgDemoShowcase .mg-demo-photo img{width:100%;height:100%;display:block;object-fit:contain;background:#e7ece7;transition:opacity .3s ease}
   #mgDemoShowcase .mg-demo-photo-unavailable{display:grid;place-items:center;background:radial-gradient(ellipse at 75% 25%,#d9c17c55,transparent 42%),linear-gradient(145deg,#17483b,#0a2925)!important}
   #mgDemoShowcase .mg-demo-photo-unavailable:after{content:'⌂';color:#f2d995;font-size:92px;font-weight:900;text-shadow:0 5px 18px #0005}
@@ -134,11 +149,12 @@
  const params=new URLSearchParams(location.search),sample=params.get('demo-property');
  if(sample){const p=samples.find(x=>x.id===sample);if(p){detail(p);return}}
  function card(p,i){return '<article class="mg-demo-card" data-demo-id="'+p.id+'"><div class="mg-demo-photo"><img src="'+esc(p.photos[0])+'" alt="'+esc(p.title)+'" loading="lazy"><span class="mg-demo-tag">ડેમો નમૂનો</span><span class="mg-demo-counter">1 / '+p.photos.length+'</span></div><div class="mg-demo-body"><h3>'+esc(p.title)+'</h3><div class="mg-demo-location">📍 '+esc(p.area)+', '+esc(p.city)+'</div><div class="mg-demo-price"><span>'+esc(p.price)+'</span></div><div class="mg-demo-spec">'+esc(p.bhk)+' · '+esc(p.size)+' · '+esc(p.purpose)+'</div><button class="mg-demo-open" type="button" data-demo-open="'+p.id+'">સંપૂર્ણ વિગત જુઓ →</button></div></article>'}
- function init(){
+ async function init(){
+  await demoConfigReady;
   const listing=document.getElementById('listings');if(!listing)return;
   const existing=document.getElementById('mgDemoShowcase');
   if(existing){const grid=existing.querySelector('.mg-demo-grid');existing.querySelectorAll('.mg-family-feature').forEach(node=>node.remove());if(grid&&grid.children.length===samples.length)return;existing.remove();}
-  const section=document.createElement('section');section.id='mgDemoShowcase';section.innerHTML='<div class="mg-demo-head"><h2>પસંદગીની પ્રોપર્ટી — ડેમો</h2><span class="mg-demo-note">કુલ 10 ડેમો નમૂનાઓ · ફક્ત પ્રદર્શન માટે, વાસ્તવિક લિસ્ટિંગ નથી</span></div><div class="mg-demo-grid">'+samples.map(card).join('')+'</div>'
+  const section=document.createElement('section');section.id='mgDemoShowcase';section.innerHTML='<div class="mg-demo-head"><h2>પસંદગીની પ્રોપર્ટી — ડેમો</h2><span class="mg-demo-note">કુલ '+samples.length+' ડેમો નમૂનાઓ · ફક્ત પ્રદર્શન માટે, વાસ્તવિક લિસ્ટિંગ નથી</span></div><div class="mg-demo-grid">'+samples.map(card).join('')+'</div>'
   listing.parentNode.insertBefore(section,listing);
   section.querySelectorAll('.mg-demo-photo img').forEach(img=>{img.onerror=()=>{img.onerror=null;img.style.display='none';const frame=img.closest('.mg-demo-photo');if(frame){frame.classList.add('mg-demo-photo-unavailable');frame.setAttribute('aria-label','પ્રોપર્ટીનો ફોટો હાલમાં ઉપલબ્ધ નથી');}};});
   /* Normalize each demo card to exactly one visible price label if an older page instance left duplicates. */ section.querySelectorAll('.mg-demo-card').forEach(card=>{const prices=card.querySelectorAll('.mg-demo-price');prices.forEach((node,i)=>{if(i>0)node.remove();});});
@@ -147,12 +163,28 @@
   const visibilityObserver=('IntersectionObserver' in window)?new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting)visibleCards.add(entry.target);else visibleCards.delete(entry.target)}),{rootMargin:'120px'}):null;
   function show(card,idx){const p=samples.find(x=>x.id===card.dataset.demoId);idx=(idx+p.photos.length)%p.photos.length;indices.set(p.id,idx);const im=card.querySelector('img');im.style.opacity='.25';const next=new Image();next.decoding='async';next.onload=()=>{im.src=next.src;im.style.opacity='1'};next.onerror=()=>im.style.opacity='1';next.src=p.photos[idx];card.querySelector('.mg-demo-counter').textContent=(idx+1)+' / '+p.photos.length;}
   section.querySelectorAll('.mg-demo-card').forEach(card=>{const id=card.dataset.demoId;if(visibilityObserver)visibilityObserver.observe(card);else visibleCards.add(card);timers.set(id,setInterval(()=>{if(visibleCards.has(card)&&!paused.has(id)&&!document.hidden)show(card,(indices.get(id)||0)+1)},6500));});
-  /* Touch swipe replaces all on-photo arrow and pause controls. */
+  /* Swipe gestures are owned by assets/maru-ghar-swipe.js (pointer capture +
+     direction lock + touchcancel recovery) and reported here as an mg-swipe event. */
   section.querySelectorAll('.mg-demo-photo').forEach(photo=>{
-   let startX=0,startY=0;
-   photo.addEventListener('touchstart',e=>{if(!e.changedTouches.length)return;startX=e.changedTouches[0].clientX;startY=e.changedTouches[0].clientY;},{passive:true});
-   photo.addEventListener('touchend',e=>{if(!e.changedTouches.length)return;const dx=e.changedTouches[0].clientX-startX,dy=e.changedTouches[0].clientY-startY;if(Math.abs(dx)>38&&Math.abs(dx)>Math.abs(dy)*1.25){const card=photo.closest('.mg-demo-card');const id=card.dataset.demoId;show(card,(indices.get(id)||0)+(dx<0?1:-1));}},{passive:true});
-   photo.querySelector('img').draggable=false;
+   photo.addEventListener('mg-swipe',e=>{const card=photo.closest('.mg-demo-card');if(!card)return;const id=card.dataset.demoId;const dir=(e.detail&&e.detail.direction===-1)?-1:1;show(card,(indices.get(id)||0)+dir);});
+   /* Native touch fallback is used on phones; Pointer Events remain for mouse/trackpad. */
+   let startX=null,startY=null,pointerId=null;
+   const advance=(dx,dy)=>{
+    if(window.__mgSwipeReady)return;
+    const delta=Math.abs(dx)>=Math.abs(dy)?dx:dy;
+    if(Math.abs(delta)>24){
+     const card=photo.closest('.mg-demo-card'),id=card.dataset.demoId;
+     paused.add(id);show(card,(indices.get(id)||0)+(delta<0?1:-1));
+     setTimeout(()=>paused.delete(id),900);
+    }
+   };
+   photo.addEventListener('touchstart',e=>{if(e.touches.length){startX=e.touches[0].clientX;startY=e.touches[0].clientY;}},{passive:true});
+   photo.addEventListener('touchend',e=>{if(startX!==null&&e.changedTouches.length)advance(e.changedTouches[0].clientX-startX,e.changedTouches[0].clientY-startY);startX=null;startY=null;},{passive:true});
+   photo.addEventListener('touchcancel',()=>{startX=null;startY=null},{passive:true});
+   photo.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse'||e.button!==0)return;startX=e.clientX;startY=e.clientY;pointerId=e.pointerId;try{photo.setPointerCapture(e.pointerId)}catch(_){}});
+   photo.addEventListener('pointerup',e=>{if(pointerId===null||e.pointerId!==pointerId)return;advance(e.clientX-startX,e.clientY-startY);startX=null;startY=null;pointerId=null;});
+   photo.addEventListener('pointercancel',()=>{startX=null;startY=null;pointerId=null});
+   const img=photo.querySelector('img');if(img)img.draggable=false;
   });
   /* Measure actual rendered Gujarati text and shrink only as much as each card needs. */
   const fitPrice=el=>{const span=el.querySelector('span');if(!span)return;span.style.fontSize='16px';const available=Math.max(1,el.clientWidth);const natural=Math.max(1,span.scrollWidth);span.style.fontSize=Math.max(8,Math.min(16,16*available/natural))+'px';};

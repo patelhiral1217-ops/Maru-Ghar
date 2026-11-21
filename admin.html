@@ -112,6 +112,32 @@ button:active,.primary:active,.approve:active,.reject:active{transform:translate
 <section id="dashboard" class="hidden"><div id="pendingBar" class="status hidden" role="alert"></div>
 <nav class="admin-shortcuts" aria-label="એડમિન વિભાગો"><a href="#listings">🏠 પ્રોપર્ટી મેનેજમેન્ટ</a><a href="#mgSiteContentManager">🧩 એપ કન્ટેન્ટ</a><a href="#adminSettings">⚙️ સેટિંગ્સ / બેકઅપ</a></nav>
 <section id="adminMain">
+<details class="panel" id="mgAdManagerPanel">
+<summary>📢 જાહેરાત મેનેજર — Advertisement Manager</summary>
+<p class="muted">ફોટો (JPG / PNG / WebP) અથવા વિડિયો (MP4) જાહેરાત ઉમેરો, સંપાદિત કરો અને પ્રકાશિત કરો. આ વિભાગ ફક્ત પ્રમાણિત એડમિન માટે છે.</p>
+<form id="mgAdForm">
+<div class="formgrid">
+<label>શીર્ષક<input id="mgAdTitle" name="title" maxlength="80" required placeholder="જાહેરાતનું શીર્ષક"></label>
+<label>મીડિયા પ્રકાર<select id="mgAdMediaType"><option value="image">ફોટો</option><option value="video">વિડિયો</option></select></label>
+<label>ફાઇલ<input id="mgAdFile" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,video/quicktime"></label>
+<label>સ્થાન<select id="mgAdPlacement"><option value="homeTop">હોમપેજ ટોચ</option><option value="homeMiddle">હોમપેજ મધ્ય</option><option value="listingsInline">લિસ્ટિંગ વચ્ચે</option><option value="searchResults">શોધ પરિણામ</option><option value="propertyDetails">પ્રોપર્ટી વિગત પૃષ્ઠ</option><option value="cityPage">શહેર પૃષ્ઠ</option><option value="offers">ઓફર / સ્કીમ વિભાગ</option></select></label>
+<label>દર્શાવવાનો સમય (સેકન્ડ)<select id="mgAdDuration"><option value="5">5 સેકન્ડ</option><option value="10">10 સેકન્ડ</option><option value="15">15 સેકન્ડ</option><option value="30">30 સેકન્ડ</option><option value="60">60 સેકન્ડ</option><option value="custom">કસ્ટમ…</option></select></label>
+<label>કસ્ટમ સેકન્ડ<input id="mgAdDurationCustom" type="number" min="3" max="300" step="1" placeholder="3 – 300" hidden></label>
+<label>શરૂ તારીખ<input id="mgAdStart" type="datetime-local"></label>
+<label>અંતિમ તારીખ<input id="mgAdExpiry" type="datetime-local"></label>
+<label>પ્રાયોરિટી<input id="mgAdPriority" type="number" min="0" max="9999" step="1" value="0"></label>
+<label>ક્રમ<input id="mgAdOrder" type="number" min="0" max="9999" step="1" value="0"></label>
+<label>ક્લિક URL (વૈકલ્પિક)<input id="mgAdClickUrl" type="url" placeholder="https://"></label>
+<label style="display:flex;align-items:center;gap:8px"><input id="mgAdEnabled" type="checkbox" checked> સક્રિય કરો</label>
+</div>
+<p id="mgAdFileHint" class="muted"></p>
+<div class="mg-adv-actions"><button type="submit" id="mgAdSave">સેવ કરો</button><button type="button" id="mgAdPreviewBtn">પ્રિવ્યૂ</button><button type="button" id="mgAdReset">રીસેટ</button></div>
+<p id="mgAdStatus" role="status" aria-live="polite"></p>
+</form>
+<div id="mgAdPreview" class="mg-adv-preview" hidden></div>
+<div id="mgAdList" class="mg-adv-list"></div>
+<input type="file" id="mgAdReplaceFile" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,video/quicktime" hidden>
+</details>
 <section class="panel"><h2>નવી પ્રોપર્ટી ઉમેરો</h2><p class="muted">અહીંથી ઉમેરેલી પ્રોપર્ટી સીધી જાહેર કરવી કે પહેલા પેન્ડિંગ રાખવી તે પસંદ કરો.</p><form id="adminAddForm"><div class="formgrid"><label>માલિકનું નામ<input name="ownerName" required minlength="2" maxlength="80"></label><label>લિસ્ટિંગ આપનાર<select name="ownerType"><option value="owner">માલિક</option><option value="broker">બ્રોકર</option><option value="builder">બિલ્ડર</option></select></label><label>મોબાઇલ નંબર<input name="ownerPhone" required pattern="[0-9+ ()-]{10,16}" maxlength="16" inputmode="tel"></label><label>પ્રોપર્ટીનો પ્રકાર<select name="type" required><option value="">પસંદ કરો</option><option>ઘર</option><option>ફ્લેટ</option><option>દુકાન</option><option>રેસિડેન્શિયલ પ્લોટ</option><option>કોમર્શિયલ પ્લોટ</option><option>ઓફિસ</option><option>વેરહાઉસ</option><option>પી.જી. (PG)</option></select></label><label>ભાડે કે વેચાણ<select name="purpose" required><option value="">પસંદ કરો</option><option>ભાડે</option><option>વેચાણ</option></select></label><label>શહેર<select name="city" id="adminCityField" required><option value="ગાંધીનગર">ગાંધીનગર</option></select></label><label>વિસ્તાર / સેક્ટર<input name="location" required minlength="2" maxlength="120"></label><label>કિંમત / ભાડું<input name="price" maxlength="60" placeholder="જેમ કે ₹15,000 / મહિનો"></label><label>નકશાની લિંક (Google Maps, વૈકલ્પિક)<input name="mapLink" type="url" maxlength="500" pattern="https://.*" placeholder="https://maps.app.goo.gl/..."></label><label>BHK<select name="bhk"><option value="">—</option><option>1 RK</option><option>1 BHK</option><option>2 BHK</option><option>3 BHK</option><option>4+ BHK</option></select></label><label>ક્ષેત્રફળ (ચો. ફૂટ)<input name="areaSqft" maxlength="20"></label><label>માળ<input name="floor" maxlength="30"></label><label>ફર્નિચર<select name="furnishing"><option value="">—</option><option>ફર્નિશ્ડ</option><option>સેમી ફર્નિશ્ડ</option><option>અનફર્નિશ્ડ</option></select></label><label>પાર્કિંગ<select name="parking"><option value="">—</option><option>પાર્કિંગ છે</option><option>પાર્કિંગ નથી</option></select></label><label>ડિપોઝિટ<input name="deposit" maxlength="60"></label><label>ભાવ ફક્ત આંકડામાં ₹ (ફિલ્ટર માટે)<input name="priceNum" type="number" inputmode="numeric" min="0"></label><label>સ્કીમનું નામ (દિવાળી ધમાકો)<input name="offerTitle" maxlength="60"></label><label>સ્કીમ ક્યાં સુધી<input name="offerUntil" type="date"></label><label class="wide">સ્કીમની વિગત<textarea name="offerText" maxlength="200"></textarea></label><label class="wide">વધુ માહિતી<textarea name="description" maxlength="1200"></textarea></label><label class="wide">ફોટા (JPG/PNG/WEBP, દરેક 8 MB સુધી; ફોટાની સંખ્યા પર કોઈ નક્કી મર્યાદા નથી)<input id="adminPhotos" type="file" accept="image/jpeg,image/png,image/webp" multiple></label><label class="wide">વિડિયો (વૈકલ્પિક; MP4/WEBM/MOV, દરેક 25 MB સુધી)<input id="adminVideos" type="file" accept="video/mp4,video/webm,video/quicktime" multiple></label><div id="adminMediaPreview" class="wide" style="display:flex;flex-wrap:wrap;gap:8px"></div><label class="wide">પ્રકાશન<select name="publishStatus"><option value="approved">ઉમેરતાં જ જાહેર કરો</option><option value="pending">પહેલા પેન્ડિંગ રાખો</option></select></label><label class="wide"><input name="ownerConsent" type="checkbox" required style="width:auto"> આ પ્રોપર્ટી પ્રકાશિત કરવાની અને સંપર્ક નંબર ખાનગી રીતે સાચવવાની પરવાનગી છે.</label><button class="primary wide" id="adminAddBtn" type="submit">પ્રોપર્ટી ઉમેરો</button></div></form><div id="addStatus" class="status" role="status"></div></section>
 <section class="panel" id="mgCloudinaryTest">
   <h2>🧪 ફોટો/વિડિયો અપલોડ ટેસ્ટ</h2>
@@ -3202,10 +3228,43 @@ Object.assign(window.MG_I18N_DICTIONARY,{
 });
 
 </script>
-<script data-mg-i18n-inline="engine">/* Supplemental complete UI translation layer. It only translates known interface phrases;
+<script data-mg-i18n-inline="engine">
+/* Supplemental complete UI translation layer. It only translates known interface phrases;
    user-entered property/customer content is intentionally excluded. */
 (()=>{
   const dict={
+    /* Advertisement Manager (admin panel) — added with the ads feature so the
+       i18n coverage gate keeps every static interface string translated. */
+    '📢 જાહેરાત મેનેજર — Advertisement Manager':'📢 विज्ञापन मैनेजर — Advertisement Manager|📢 Advertisement Manager',
+    'ફોટો (JPG / PNG / WebP) અથવા વિડિયો (MP4) જાહેરાત ઉમેરો, સંપાદિત કરો અને પ્રકાશિત કરો. આ વિભાગ ફક્ત પ્રમાણિત એડમિન માટે છે.':'फोटो (JPG / PNG / WebP) या वीडियो (MP4) विज्ञापन जोड़ें, संपादित करें और प्रकाशित करें। यह अनुभाग केवल प्रमाणित एडमिन के लिए है।|Add, edit and publish photo (JPG / PNG / WebP) or video (MP4) advertisements. This section is for authenticated admins only.',
+    'જાહેરાતનું શીર્ષક':'विज्ञापन का शीर्षक|Advertisement title',
+    'શીર્ષક':'शीर्षक|Title',
+    'મીડિયા પ્રકાર':'मीडिया प्रकार|Media type',
+    'ફાઇલ':'फ़ाइल|File',
+    'સ્થાન':'स्थान|Placement',
+    'હોમપેજ ટોચ':'होमपेज शीर्ष|Homepage top',
+    'હોમપેજ મધ્ય':'होमपेज मध्य|Homepage middle',
+    'લિસ્ટિંગ વચ્ચે':'लिस्टिंग के बीच|Between listings',
+    'શોધ પરિણામ':'खोज परिणाम|Search results',
+    'પ્રોપર્ટી વિગત પૃષ્ઠ':'प्रॉपर्टी विवरण पृष्ठ|Property details page',
+    'શહેર પૃષ્ઠ':'शहर पृष्ठ|City page',
+    'ઓફર / સ્કીમ વિભાગ':'ऑफ़र / स्कीम अनुभाग|Offers / schemes section',
+    'દર્શાવવાનો સમય (સેકન્ડ)':'प्रदर्शन अवधि (सेकंड)|Display duration (seconds)',
+    '5 સેકન્ડ':'5 सेकंड|5 seconds',
+    '10 સેકન્ડ':'10 सेकंड|10 seconds',
+    '15 સેકન્ડ':'15 सेकंड|15 seconds',
+    '30 સેકન્ડ':'30 सेकंड|30 seconds',
+    '60 સેકન્ડ':'60 सेकंड|60 seconds',
+    'કસ્ટમ…':'कस्टम…|Custom…',
+    'કસ્ટમ સેકન્ડ':'कस्टम सेकंड|Custom seconds',
+    'શરૂ તારીખ':'प्रारंभ तिथि|Start date',
+    'અંતિમ તારીખ':'समाप्ति तिथि|Expiry date',
+    'પ્રાયોરિટી':'प्राथमिकता|Priority',
+    'ક્લિક URL (વૈકલ્પિક)':'क्लिक URL (वैकल्पिक)|Click URL (optional)',
+    'સક્રિય કરો':'सक्रिय करें|Enable',
+    'સેવ કરો':'सेव करें|Save',
+    'પ્રિવ્યૂ':'प्रीव्यू|Preview',
+    'રીસેટ':'रीसेट|Reset',
     'અહીંથી નોંધાયેલા એકાઉન્ટ જુઓ અને શંકાસ્પદ એકાઉન્ટને કારણ સાથે Block / Unblock કરો. બ્લોક કરવાથી તે એકાઉન્ટ Firebaseમાં લોગિન કરી શકશે નહીં. કાયમી ડિલીટ માટે સર્વર સુવિધા જરૂરી છે; Firebase Blaze પ્લાન સક્રિય ન હોવાથી આ વિકલ્પ હાલ બંધ છે. કોઈ એકાઉન્ટ ભૂલથી ડિલીટ ન થાય તે માટે આ બટન સક્રિય નથી.':'यहाँ पंजीकृत ग्राहक खाते देखें और संदिग्ध खाते को कारण सहित Block / Unblock करें। Block करने पर वह खाता Firebase में Log In नहीं कर सकेगा। स्थायी Delete के लिए सर्वर सुविधा आवश्यक है; Firebase Blaze प्लान सक्रिय न होने के कारण यह विकल्प अभी बंद है। गलती से कोई खाता Delete न हो, इसलिए यह बटन सक्रिय नहीं है।|View registered customer accounts and Block / Unblock suspicious accounts with a reason. A blocked account cannot log in to Firebase. Permanent deletion requires a server feature; this option is currently disabled because the Firebase Blaze plan is not active. This button stays disabled to prevent accidental account deletion.',
     
     'લોડ થઈ રહ્યા છે…':'लोड हो रहे हैं…|Loading…',
@@ -3687,7 +3746,8 @@ Object.assign(window.MG_I18N_DICTIONARY,{
     window.__mgI18nObserver.observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['placeholder','title','aria-label']});
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply,{once:true});else apply();
-})();</script>
+})();
+</script>
 <!-- MG_I18N_INLINE_BUNDLE_END -->
 <script src="assets/maru-ghar-file-mode.js?v=20261102r5"></script>
 <script>
@@ -3719,5 +3779,5 @@ document.addEventListener('reset',function(){setTimeout(render,0)},true)})();
 <script type="module" src="assets/maru-ghar-content-admin.js?v=20261119b"></script><script type="module" src="assets/maru-ghar-master-hero-admin.js?v=20261121b"></script><script src="assets/maru-ghar-live-editor.js?v=20261119b" defer></script><script type="module" src="assets/maru-ghar-customer-admin.js?v=20261119a"></script><script type="module" src="assets/maru-ghar-activity-admin.js?v=20261119a"></script>
 <link rel="stylesheet" href="assets/maru-ghar-admin-compact.css?v=20261118f">
 <script src="assets/maru-ghar-admin-compact.js?v=20261118g" defer></script>
-<script type="module" src="assets/maru-ghar-demo-admin.js?v=20261121a"></script></body></html>
+<link rel="stylesheet" href="assets/maru-ghar-ad-manager-admin.css?v=20261121adv"><script type="module" src="assets/maru-ghar-ad-manager-admin.js?v=20261121adv"></script><script type="module" src="assets/maru-ghar-demo-admin.js?v=20261121a"></script></body></html>
 <!-- MG follow-up date validation regression fix -->

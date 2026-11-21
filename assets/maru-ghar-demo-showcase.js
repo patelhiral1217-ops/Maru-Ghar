@@ -163,10 +163,14 @@
   const visibilityObserver=('IntersectionObserver' in window)?new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting)visibleCards.add(entry.target);else visibleCards.delete(entry.target)}),{rootMargin:'120px'}):null;
   function show(card,idx){const p=samples.find(x=>x.id===card.dataset.demoId);idx=(idx+p.photos.length)%p.photos.length;indices.set(p.id,idx);const im=card.querySelector('img');im.style.opacity='.25';const next=new Image();next.decoding='async';next.onload=()=>{im.src=next.src;im.style.opacity='1'};next.onerror=()=>im.style.opacity='1';next.src=p.photos[idx];card.querySelector('.mg-demo-counter').textContent=(idx+1)+' / '+p.photos.length;}
   section.querySelectorAll('.mg-demo-card').forEach(card=>{const id=card.dataset.demoId;if(visibilityObserver)visibilityObserver.observe(card);else visibleCards.add(card);timers.set(id,setInterval(()=>{if(visibleCards.has(card)&&!paused.has(id)&&!document.hidden)show(card,(indices.get(id)||0)+1)},6500));});
-  /* Native touch fallback is used on phones; Pointer Events remain for mouse/trackpad. */
+  /* Swipe gestures are owned by assets/maru-ghar-swipe.js (pointer capture +
+     direction lock + touchcancel recovery) and reported here as an mg-swipe event. */
   section.querySelectorAll('.mg-demo-photo').forEach(photo=>{
+   photo.addEventListener('mg-swipe',e=>{const card=photo.closest('.mg-demo-card');if(!card)return;const id=card.dataset.demoId;const dir=(e.detail&&e.detail.direction===-1)?-1:1;show(card,(indices.get(id)||0)+dir);});
+   /* Native touch fallback is used on phones; Pointer Events remain for mouse/trackpad. */
    let startX=null,startY=null,pointerId=null;
    const advance=(dx,dy)=>{
+    if(window.__mgSwipeReady)return;
     const delta=Math.abs(dx)>=Math.abs(dy)?dx:dy;
     if(Math.abs(delta)>24){
      const card=photo.closest('.mg-demo-card'),id=card.dataset.demoId;

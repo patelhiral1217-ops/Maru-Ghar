@@ -407,5 +407,82 @@ service cloud.firestore {
     match /adminTokens/{token} {
       allow read, write: if isAdmin();
     }
+
+    // ---------------------------------------------------------
+    // 14. ADVERTISEMENTS (admin-managed marketing banners)
+    // Public visitors may read enabled advertisements only.
+    // IMPORTANT: Firestore rules are not filters. The public query is a
+    // plain list on `enabled == true` and deliberately avoids orderBy and
+    // request.time comparisons, because either would reject the whole
+    // result set instead of filtering it. The renderer therefore evaluates
+    // the start/expiry window and priority ordering on the client.
+    // Only the designated admin may create, edit or delete an advertisement.
+    // ---------------------------------------------------------
+    match /advertisements/{adId} {
+      function validAd(data) {
+        return data.keys().hasAll([
+            'title', 'mediaType', 'url', 'publicId', 'format', 'bytes',
+            'placement', 'durationSeconds', 'startAt', 'expiryAt',
+            'enabled', 'priority', 'order', 'clickUrl',
+            'createdAt', 'updatedAt', 'createdBy'
+          ])
+          && data.keys().hasOnly([
+            'title', 'mediaType', 'url', 'publicId', 'format', 'bytes',
+            'placement', 'durationSeconds', 'startAt', 'expiryAt',
+            'enabled', 'priority', 'order', 'clickUrl',
+            'createdAt', 'updatedAt', 'createdBy'
+          ])
+          && data.title is string
+          && data.title.size() >= 2
+          && data.title.size() <= 80
+          && data.mediaType in ['image', 'video']
+          && data.url is string
+          && data.url.size() <= 500
+          && data.url.matches('^https://.*$')
+          && data.publicId is string
+          && data.publicId.size() <= 200
+          && data.format is string
+          && data.format.size() <= 20
+          && data.bytes is number
+          && data.bytes >= 0
+          && data.bytes <= 50000000
+          && data.placement in [
+            'homeTop', 'homeMiddle', 'listingsInline',
+            'searchResults', 'propertyDetails', 'cityPage', 'offers'
+          ]
+          && data.durationSeconds is number
+          && data.durationSeconds >= 3
+          && data.durationSeconds <= 300
+          && data.startAt is timestamp
+          && data.expiryAt is timestamp
+          && data.expiryAt > data.startAt
+          && data.enabled is bool
+          && data.priority is number
+          && data.priority >= 0
+          && data.priority <= 9999
+          && data.order is number
+          && data.order >= 0
+          && data.order <= 9999
+          && data.clickUrl is string
+          && data.clickUrl.size() <= 500
+          && (data.clickUrl == '' || data.clickUrl.matches('^https://.*$'))
+          && data.createdAt is timestamp
+          && data.updatedAt is timestamp
+          && data.createdBy == request.auth.uid;
+      }
+
+      allow read: if isAdmin() || resource.data.enabled == true;
+
+      allow create: if isAdmin()
+        && validAd(request.resource.data)
+        && request.resource.data.createdAt == request.time;
+
+      allow update: if isAdmin()
+        && validAd(request.resource.data)
+        && request.resource.data.createdBy == resource.data.createdBy
+        && request.resource.data.updatedAt == request.time;
+
+      allow delete: if isAdmin();
+    }
   }
 }

@@ -72,6 +72,12 @@ for (const required of [
   'assets/maru-ghar-site-content.css',
   'assets/maru-ghar-admin-compact.js',
   'assets/maru-ghar-admin-compact.css',
+  'assets/maru-ghar-swipe.js',
+  'assets/maru-ghar-ad-constants.js',
+  'assets/maru-ghar-ad-manager.js',
+  'assets/maru-ghar-ad-manager.css',
+  'assets/maru-ghar-ad-manager-admin.js',
+  'assets/maru-ghar-ad-manager-admin.css',
   ...(otaBuilt ? ['assets/maru-ghar-ota.bundle.js'] : [])
 ]) {
   if (!fs.existsSync(path.join(out, required))) {
