@@ -281,7 +281,7 @@ async function main() {
     const demoCounter = card.locator('.mg-demo-counter');
 
     const touchAction = await demoPhoto.evaluate((el) => getComputedStyle(el).touchAction);
-    check('demo photo touch-action owns both swipe axes', touchAction === 'none', 'got ' + touchAction);
+    check('demo photo allows native vertical scrolling', touchAction.includes('pan-y'), 'got ' + touchAction);
 
     let before = parseCounter(await demoCounter.textContent());
     check('demo counter is readable', !!before && before.total > 1, JSON.stringify(before));
@@ -304,19 +304,13 @@ async function main() {
 
     before = after;
     box = await demoPhoto.boundingBox();
+    const pageYBefore = await page.evaluate(() => window.scrollY);
     await swipe(cdp, box, 0, -170);
     after = parseCounter(await demoCounter.textContent());
-    check('demo vertical swipe advances one photo',
-      !!after && after.index + ' / ' + after.total === expectedAfter(before, 1),
-      before && (before.index + '/' + before.total) + ' -> ' + (after && after.index + '/' + after.total));
-
-    before = after;
-    box = await demoPhoto.boundingBox();
-    await swipe(cdp, box, 0, 170);
-    after = parseCounter(await demoCounter.textContent());
-    check('demo vertical swipe down goes back one photo',
-      !!after && after.index + ' / ' + after.total === expectedAfter(before, -1),
-      before && (before.index + '/' + before.total) + ' -> ' + (after && after.index + '/' + after.total));
+    const pageYAfter = await page.evaluate(() => window.scrollY);
+    check('vertical finger movement scrolls the page, not the demo photo',
+      !!after && after.index === before.index && pageYAfter > pageYBefore,
+      'photo ' + (before && before.index) + ' -> ' + (after && after.index) + ', pageY ' + pageYBefore + ' -> ' + pageYAfter);
 
     /* ---------------- 2. Live listing gallery (shipped module + real CSS) ---------------- */
     const hp = await context.newPage();
@@ -344,7 +338,7 @@ async function main() {
 
     const slideTouchAction = await hp.evaluate(() =>
       getComputedStyle(document.querySelector('.mg-slide')).touchAction);
-    check('live slide touch-action owns both swipe axes', slideTouchAction === 'none', 'got ' + slideTouchAction);
+    check('live slide allows native vertical scrolling', slideTouchAction.includes('pan-y'), 'got ' + slideTouchAction);
 
     const harnessInfo = await hp.evaluate(() => {
       const sl = document.querySelector('.mg-slider');
@@ -378,16 +372,18 @@ async function main() {
     check('live swipe used the existing Previous control once', st.clicks.prev === 1,
       JSON.stringify(st.clicks));
 
-    /* Main supports vertical photo navigation (Admin can choose vertical,
-       horizontal or both). A vertical swipe must advance the photo and keep the
-       counter in sync, exactly like the horizontal gesture. */
-    await sleep(800);
+    /* Vertical finger movement must remain native page scrolling on Android,
+       including when the gesture starts over a live photo. */
+    await hp.evaluate(() => { document.body.style.minHeight = '1600px'; window.scrollTo(0, 0); });
+    await sleep(250);
     const beforeVertical = (await hState()).cur;
+    const pageYBeforeLive = await hp.evaluate(() => window.scrollY);
     await swipe(hcdp, await hBox('.mg-slider'), 0, -160);
     st = await hState();
-    check('live vertical swipe advances the photo (both-axis navigation)',
-      st.cur === String(+beforeVertical + 1), beforeVertical + ' -> ' + st.cur);
-    check('live counter follows the vertical swipe', st.count === '2 / 3', st.count);
+    const pageYAfterLive = await hp.evaluate(() => window.scrollY);
+    check('live vertical gesture scrolls page, not photo',
+      st.cur === beforeVertical && pageYAfterLive > pageYBeforeLive,
+      'photo ' + beforeVertical + ' -> ' + st.cur + ', pageY ' + pageYBeforeLive + ' -> ' + pageYAfterLive);
 
     /* The existing buttons must still work, including right after a swipe.
        Tapped through real touch events (not a synthetic mouse click) because
