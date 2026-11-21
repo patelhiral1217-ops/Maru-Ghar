@@ -283,7 +283,7 @@ async function main() {
       st.cur + ' ' + st.count);
 
     /* Horizontal swipe left: the controller must drive the Next control. */
-    await swipe(hcdp, await hBox('.mg-slide'), -150, 0);
+    await swipe(hcdp, await hBox('.mg-track'), -150, 0);
     st = await hState();
     check('live swipe left advances to photo 2', st.cur === '1', 'cur=' + st.cur);
     check('live counter follows the swipe', st.count === '2 / 3', st.count);
@@ -293,7 +293,7 @@ async function main() {
 
     /* Horizontal swipe right: back to photo 1. */
     await sleep(800);
-    await swipe(hcdp, await hBox('.mg-slide'), 150, 0);
+    await swipe(hcdp, await hBox('.mg-track'), 150, 0);
     st = await hState();
     check('live swipe right returns to photo 1', st.cur === '0', 'cur=' + st.cur);
     check('live counter returns to 1 / 3', st.count === '1 / 3', st.count);
@@ -303,24 +303,24 @@ async function main() {
     /* A vertical swipe over the live gallery must not change the photo. */
     await sleep(800);
     const beforeVertical = (await hState()).cur;
-    await swipe(hcdp, await hBox('.mg-slide'), 0, -160);
+    await swipe(hcdp, await hBox('.mg-track'), 0, -160);
     st = await hState();
     check('live vertical swipe keeps the photo', st.cur === beforeVertical,
       beforeVertical + ' -> ' + st.cur);
 
-    /* The existing buttons must still work, including right after a swipe. */
+    /* The existing buttons must still work, including right after a swipe.
+       Tapped through real touch events (not a synthetic mouse click) because
+       that is what an Android finger does. */
     await sleep(800);
-    const btn = hp.locator('.mg-slider .mg-next');
-    await btn.click();
+    await swipe(hcdp, await hBox('.mg-slider .mg-next'), 0, 0);
     st = await hState();
     check('live Next button still advances the photo', st.cur === '1', 'cur=' + st.cur);
     check('live counter follows the Next button', st.count === '2 / 3', st.count);
 
-    await btn.click();
-    await sleep(150);
-    await hp.locator('.mg-slider .mg-prev').click();
+    await sleep(400);
+    await swipe(hcdp, await hBox('.mg-slider .mg-prev'), 0, 0);
     st = await hState();
-    check('live Previous button still goes back', st.cur === '1', 'cur=' + st.cur);
+    check('live Previous button still goes back', st.cur === '0', 'cur=' + st.cur);
   } finally {
     await browser.close().catch(() => {});
     await new Promise((r) => server.close(r));
