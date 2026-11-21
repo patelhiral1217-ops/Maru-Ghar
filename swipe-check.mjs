@@ -91,9 +91,7 @@ async function swipe(cdp, box, dx, dy, steps = 12) {
 }
 
 async function tap(cdp, box) {
-  const x = box.x + box.width / 2;
-  const y = box.y + box.height / 2;
-  const point = [{ x, y, radiusX: 9, radiusY: 9, force: 1, id: 1 }];
+  const point = [{ x: box.x + box.width / 2, y: box.y + box.height / 2, radiusX: 9, radiusY: 9, force: 1, id: 1 }];
   await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: point });
   await sleep(40);
   await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
@@ -105,23 +103,21 @@ const lightboxOpen = (page) => page.evaluate(() => {
   return !!lb && !lb.hidden;
 });
 
-/* Touch-tap a control the way a phone does, and report what is on top of it. */
-async function tapButton(page, cdp, locator) {
-  await locator.scrollIntoViewIfNeeded();
-  const box = await locator.boundingBox();
-  if (!box) {
-    console.log('INFO tap target has no box');
-    return;
-  }
-  const info = await locator.evaluate((el) => {
-    const r = el.getBoundingClientRect();
-    const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
-    const label = (n) => (n ? n.tagName.toLowerCase() + '.' + String(n.className || '').split(' ')[0] : 'none');
-    return { target: label(el), topmost: label(hit) };
-  });
-  console.log('INFO tap ' + info.target + ' -> topmost: ' + info.topmost);
-  await tap(cdp, box);
-}
+/* The live gallery markup is exactly what assets/maru-ghar-backend.js sliderHtml()
+   emits for a listing with three photos, so the real delegated handlers apply. */
+const FIXTURE = `
+  <div class="property">
+    <div class="photo mg-slider" data-n="3" data-cur="0">
+      <div class="mg-track">
+        <div class="mg-slide" data-i="0" data-mg-open="1" role="button" aria-label="photo 1"></div>
+        <div class="mg-slide" data-i="1" data-mg-open="1" role="button" aria-label="photo 2"></div>
+        <div class="mg-slide" data-i="2" data-mg-open="1" role="button" aria-label="photo 3"></div>
+      </div>
+      <button type="button" class="mg-nav mg-prev" data-mg-step="-1" aria-label="prev">‹</button>
+      <button type="button" class="mg-nav mg-next" data-mg-step="1" aria-label="next">›</button>
+      <span class="mg-count">1 / 3</span>
+    </div>
+  </div>`;
 
 async function main() {
   if (!fs.existsSync(path.join(www, 'assets', 'maru-ghar-swipe.js'))) {
@@ -147,6 +143,7 @@ async function main() {
         'Chrome/122.0.0.0 Mobile Safari/537.36'
     });
     const page = await context.newPage();
+    page.setDefaultTimeout(8000);
     page.on('pageerror', (e) => console.log('INFO pageerror: ' + e.message));
     const cdp = await context.newCDPSession(page);
 
@@ -167,17 +164,16 @@ async function main() {
     check('demo counter is readable', !!before && before.total > 1, JSON.stringify(before));
 
     let box = await demoPhoto.boundingBox();
-    await swipe(cdp, box, -150, 0); // swipe left -> next photo
+    await swipe(cdp, box, -150, 0);
     let after = parseCounter(await demoCounter.textContent());
     check('demo swipe left advances one photo',
-      !!after && after.index === ((before.index % before.total) + 1),
+      !!after && after.index + ' / ' + after.total === expectedAfter(before, 1),
       before && (before.index + '/' + before.total) + ' -> ' + (after && after.index + '/' + after.total));
-
     check('demo swipe does not open the full-size viewer', !(await lightboxOpen(page)));
 
     before = after;
     box = await demoPhoto.boundingBox();
-    await swipe(cdp, box, 150, 0); // swipe right -> previous photo
+    await swipe(cdp, box, 150, 0);
     after = parseCounter(await demoCounter.textContent());
     check('demo swipe right goes back one photo',
       !!after && after.index + ' / ' + after.total === expectedAfter(before, -1),
@@ -185,42 +181,69 @@ async function main() {
 
     before = after;
     box = await demoPhoto.boundingBox();
-    await swipe(cdp, box, 0, -170); // vertical -> page scroll, not photo change
+    await swipe(cdp, box, 0, -170);
     after = parseCounter(await demoCounter.textContent());
     check('demo vertical swipe keeps the photo (page scroll preserved)',
       !!after && after.index === before.index,
       before && (before.index + '/' + before.total) + ' -> ' + (after && after.index + '/' + after.total));
 
-    /* ---------- 2. Live property gallery (same markup the renderer emits) ---------- */
-    await page.evaluate(() => {
+    /* ---------- 2. Live property gallery ---------- */
+    const injectFixture = () => page.evaluate((html) => {
       const grid = document.getElementById('properties');
-      if (!grid) return;
+      if (!grid) return false;
       const old = document.getElementById('mgSwipeTestHolder');
       if (old) old.remove();
       const holder = document.createElement('div');
       holder.id = 'mgSwipeTestHolder';
       holder.style.cssText = 'grid-column:1/-1;width:100%;min-width:0';
-      holder.innerHTML = `
-        <div class="property">
-        <div class="photo mg-slider" data-n="3" data-cur="0">
-          <div class="mg-track">
-            <div class="mg-slide" data-i="0" data-mg-open="1" role="button" data-bg="assets/images/house.jpg"></div>
-            <div class="mg-slide" data-i="1" data-mg-open="1" role="button" data-bg="assets/images/flat.jpg"></div>
-            <div class="mg-slide" data-i="2" data-mg-open="1" role="button" data-bg="assets/images/shop.jpg"></div>
-          </div>
-          <button type="button" class="mg-nav mg-prev" data-mg-step="-1" aria-label="પાછળનો">‹</button>
-          <button type="button" class="mg-nav mg-next" data-mg-step="1" aria-label="આગળનો">›</button>
-          <span class="mg-count">1 / 3</span>
-        </div>
-        </div>`;
+      holder.innerHTML = html;
       grid.appendChild(holder);
+      return true;
+    }, FIXTURE);
+
+    /* One round-trip for state, so a detached node can never block on a locator. */
+    const liveState = () => page.evaluate(() => {
+      const el = document.querySelector('#mgSwipeTestHolder .mg-slider');
+      if (!el) return null;
+      const track = el.querySelector('.mg-track');
+      const count = el.querySelector('.mg-count');
+      return {
+        cur: el.dataset.cur,
+        count: count ? count.textContent.trim() : null,
+        transform: track ? getComputedStyle(track).transform : null
+      };
     });
 
-    const slider = page.locator('#mgSwipeTestHolder .mg-slider');
-    check('live gallery fixture is present', (await slider.count()) === 1);
-    await slider.scrollIntoViewIfNeeded();
+    const liveBox = (selector) => page.evaluate((sel) => {
+      const el = document.querySelector('#mgSwipeTestHolder ' + sel);
+      if (!el) return null;
+      const r = el.getBoundingClientRect();
+      return { x: r.left, y: r.top, width: r.width, height: r.height };
+    }, selector);
 
-    const layout = await slider.evaluate((el) => {
+    /* The app renders #properties asynchronously; inject only after that settles. */
+    await page.waitForFunction(() => {
+      const g = document.getElementById('properties');
+      return !!g && g.children.length > 0;
+    }, null, { timeout: 15000 }).catch(() => console.log('INFO #properties still empty; injecting anyway'));
+    await injectFixture();
+
+    const ensure = async () => {
+      if (!(await liveState())) {
+        await injectFixture();
+        await page.evaluate(() => {
+          const el = document.querySelector('#mgSwipeTestHolder .mg-slider');
+          if (el) el.scrollIntoView({ block: 'center' });
+        });
+        await sleep(250);
+      }
+    };
+
+    check('live gallery fixture is present', !!(await liveState()));
+
+    const layout = await page.evaluate(() => {
+      const el = document.querySelector('#mgSwipeTestHolder .mg-slider');
+      if (!el) return null;
       const box = (n) => {
         const r = n.getBoundingClientRect();
         return [Math.round(r.left), Math.round(r.top), Math.round(r.width), Math.round(r.height)];
@@ -229,67 +252,78 @@ async function main() {
       return {
         sliderPosition: getComputedStyle(el).position,
         slider: box(el),
-        next: box(next),
-        nextOffsetParent: next.offsetParent ? next.offsetParent.className || next.offsetParent.tagName : 'none',
+        next: next ? box(next) : null,
+        viewportWidth: window.innerWidth,
         gridChildren: document.getElementById('properties').children.length
       };
     });
     console.log('INFO live layout ' + JSON.stringify(layout));
 
-    const slideTouchAction = await slider.locator('.mg-slide').first()
-      .evaluate((el) => getComputedStyle(el).touchAction);
+    const slideTouchAction = await page.evaluate(() => {
+      const el = document.querySelector('#mgSwipeTestHolder .mg-slide');
+      return el ? getComputedStyle(el).touchAction : null;
+    });
     check('live slide touch-action is pan-y', slideTouchAction === 'pan-y', 'got ' + slideTouchAction);
 
-    const count = slider.locator('.mg-count');
-    const cur = () => slider.evaluate((el) => el.dataset.cur);
+    /* Existing Next / Previous buttons must keep working. */
+    await ensure();
+    let nextBox = await liveBox('.mg-next');
+    if (nextBox) await tap(cdp, nextBox);
+    let state = await liveState();
+    check('live Next button advances the photo', !!state && state.cur === '1', 'cur=' + (state && state.cur));
+    check('live counter follows Next button', !!state && state.count === '2 / 3', state && state.count);
 
-    /* Existing buttons must keep working. */
-    await tapButton(page, cdp, slider.locator('.mg-next'));
-    check('live Next button advances the photo', (await cur()) === '1', 'cur=' + (await cur()));
-    check('live counter follows Next button', (await count.textContent()).trim() === '2 / 3',
-      await count.textContent());
     await sleep(200);
-    await tapButton(page, cdp, slider.locator('.mg-prev'));
-    check('live Previous button goes back', (await cur()) === '0', 'cur=' + (await cur()));
-    check('live counter follows Previous button', (await count.textContent()).trim() === '1 / 3',
-      await count.textContent());
+    await ensure();
+    const prevBox = await liveBox('.mg-prev');
+    if (prevBox) await tap(cdp, prevBox);
+    state = await liveState();
+    check('live Previous button goes back', !!state && state.cur === '0', 'cur=' + (state && state.cur));
+    check('live counter follows Previous button', !!state && state.count === '1 / 3', state && state.count);
 
     /* Horizontal swipes on the live gallery. */
-    let liveBox = await slider.locator('.mg-slide').first().boundingBox();
-    await swipe(cdp, liveBox, -150, 0);
-    check('live swipe left advances to photo 2', (await cur()) === '1', 'cur=' + (await cur()));
-    check('live counter updates on swipe', (await count.textContent()).trim() === '2 / 3',
-      await count.textContent());
-    const trackShift = await slider.locator('.mg-track')
-      .evaluate((el) => getComputedStyle(el).transform);
-    check('live slider transform follows the swipe', trackShift !== 'none', trackShift);
+    await sleep(900); // let the post-swipe click guard from the button taps expire
+    await ensure();
+    let slideBox = await liveBox('.mg-slide');
+    if (slideBox) await swipe(cdp, slideBox, -150, 0);
+    state = await liveState();
+    check('live swipe left advances to photo 2', !!state && state.cur === '1', 'cur=' + (state && state.cur));
+    check('live counter updates on swipe', !!state && state.count === '2 / 3', state && state.count);
+    check('live slider transform follows the swipe', !!state && state.transform && state.transform !== 'none',
+      state && state.transform);
     check('live swipe does not open the full-size viewer', !(await lightboxOpen(page)));
 
-    await sleep(900); // let the post-swipe click guard expire
-    liveBox = await slider.locator('.mg-slide').first().boundingBox();
-    await swipe(cdp, liveBox, 150, 0);
-    check('live swipe right returns to photo 1', (await cur()) === '0', 'cur=' + (await cur()));
-    check('live counter returns to 1 / 3', (await count.textContent()).trim() === '1 / 3',
-      await count.textContent());
+    await sleep(900);
+    await ensure();
+    slideBox = await liveBox('.mg-slide');
+    if (slideBox) await swipe(cdp, slideBox, 150, 0);
+    state = await liveState();
+    check('live swipe right returns to photo 1', !!state && state.cur === '0', 'cur=' + (state && state.cur));
+    check('live counter returns to 1 / 3', !!state && state.count === '1 / 3', state && state.count);
 
     /* A tap (no drag) must not be treated as a swipe. */
     await sleep(900);
-    liveBox = await slider.locator('.mg-slide').first().boundingBox();
-    const curBeforeTap = await cur();
-    await tap(cdp, liveBox);
-    check('tapping the photo does not change the slide', (await cur()) === curBeforeTap,
-      curBeforeTap + ' -> ' + (await cur()));
+    await ensure();
+    slideBox = await liveBox('.mg-slide');
+    const curBeforeTap = (await liveState() || {}).cur;
+    if (slideBox) await tap(cdp, slideBox);
+    state = await liveState();
+    check('tapping the photo does not change the slide', !!state && state.cur === curBeforeTap,
+      curBeforeTap + ' -> ' + (state && state.cur));
 
     /* ---------- 3. Vertical page scrolling still works over a gallery ---------- */
     if (await lightboxOpen(page)) {
-      await page.locator('.mg-lb-x').click().catch(() => {});
+      await page.evaluate(() => {
+        const x = document.querySelector('.mg-lb-x');
+        if (x) x.click();
+      });
       await sleep(200);
     }
     await page.evaluate(() => window.scrollTo(0, 0));
     await sleep(200);
     const scrollBefore = await page.evaluate(() => window.scrollY);
     const photoBox = await demoPhoto.boundingBox();
-    await swipe(cdp, photoBox, 0, -220);
+    if (photoBox) await swipe(cdp, photoBox, 0, -220);
     const scrollAfter = await page.evaluate(() => window.scrollY);
     check('vertical swipe over a gallery scrolls the page', scrollAfter > scrollBefore,
       scrollBefore + ' -> ' + scrollAfter);
