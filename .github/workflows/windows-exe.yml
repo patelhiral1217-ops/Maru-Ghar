@@ -1,0 +1,33 @@
+name: Build Maru Ghar Windows EXE
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'desktop/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'icon.ico'
+      - '.github/workflows/windows-exe.yml'
+jobs:
+  exe:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install dependencies
+        run: npm install
+      - name: Build website files
+        run: npm run copy-web
+      - name: Run project checks
+        run: npm test
+      - name: Build Windows installer
+        run: npm run desktop:win
+      - name: Upload Windows installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: maru-ghar-windows-setup
+          path: dist-desktop/*.exe
+          if-no-files-found: error

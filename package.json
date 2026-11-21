@@ -5,11 +5,44 @@
   "type": "module",
   "scripts": {
     "copy-web": "node scripts/copy-web.mjs",
-    "test": "node smoke-check.mjs && node i18n-check.mjs && node i18n-coverage-check.mjs && node i18n-dom-regression-check.mjs && node ui-regression-check.mjs && node discovery-check.mjs && node ads-check.mjs && node customer-auth-check.mjs && node verification-audit-check.mjs && node maps-whatsapp-check.mjs && node notifications-audit-check.mjs && node final-firestore-rules-check.mjs && node firebase-deploy-preflight.mjs && node ota-check.mjs && node master-admin-check.mjs"
+    "test": "node smoke-check.mjs && node i18n-check.mjs && node i18n-coverage-check.mjs && node i18n-dom-regression-check.mjs && node ui-regression-check.mjs && node discovery-check.mjs && node ads-check.mjs && node customer-auth-check.mjs && node verification-audit-check.mjs && node maps-whatsapp-check.mjs && node notifications-audit-check.mjs && node final-firestore-rules-check.mjs && node firebase-deploy-preflight.mjs && node ota-check.mjs && node master-admin-check.mjs",
+    "desktop:win": "electron-builder --win nsis --x64"
   },
   "devDependencies": {
     "@capacitor/core": "^7.6.10",
     "@capgo/capacitor-updater": "^7.53.0",
-    "esbuild": "^0.28.2"
+    "esbuild": "^0.28.2",
+    "electron": "^39.2.7",
+    "electron-builder": "^26.0.12"
+  },
+  "main": "desktop/main.cjs",
+  "build": {
+    "appId": "in.marughar.gandhinagar.desktop",
+    "productName": "Maru Ghar",
+    "directories": {
+      "output": "dist-desktop"
+    },
+    "files": [
+      "desktop/**/*",
+      "icon.ico",
+      "package.json"
+    ],
+    "win": {
+      "icon": "icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
   }
 }
