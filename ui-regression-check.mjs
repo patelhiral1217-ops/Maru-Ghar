@@ -105,7 +105,7 @@ console.log('TWO-DIRECTION PROPERTY LAYOUT PASS — live/demo cards wrap into 1�
 const adminHtml=fs.readFileSync('admin.html','utf8');
 const backend=fs.readFileSync('assets/maru-ghar-backend.js','utf8');
 if(!adminHtml.includes('data-action="photo_vertical"')||!adminHtml.includes('data-action="photo_horizontal"')||!adminHtml.includes('photoDirection:direction'))throw new Error('Admin property photo direction controls are missing');
-if(!adminHtml.includes("p.photoDirection==='vertical'?'નીચેથી ઉપર':'સાઇડમાં'"))throw new Error('Admin listing does not show the saved photo direction');
+if(!adminHtml.includes("p.photoDirection==='vertical'?'નીચેથી ઉપર':p.photoDirection==='horizontal'?'સાઇડમાં':'બંને દિશામાં'"))throw new Error('Admin listing does not show the saved photo direction');
 if(!backend.includes("p.photoDirection==='vertical'?'vertical':'horizontal'")||!backend.includes("sl.dataset.direction==='vertical'?"))throw new Error('Property photo slider does not honor the saved vertical/horizontal direction');
 if(!backend.includes("const vertical=tsl.dataset.direction==='vertical'")||!backend.includes('const delta=vertical?dy:dx'))throw new Error('Property photo swipe does not follow the configured direction');
 if(!home.includes('assets/maru-ghar-backend.js?v=20261121photodirection1'))throw new Error('Updated property photo direction controller cache version is missing');
