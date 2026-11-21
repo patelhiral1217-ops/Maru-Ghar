@@ -72,25 +72,19 @@ jobs:
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         run: |
-          if git diff --name-only HEAD^ HEAD | grep -Eq "^(firestore.rules|.github/workflows/deploy-firebase.yml)$"; then
-            printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/firebase-service-account.json"
-            export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-service-account.json"
-            firebase deploy --only firestore:rules --project maru-ghar-gandhinagar-8dbe4 --non-interactive
-          else
-            echo "No Firestore rules change; deployment skipped."
-          fi
-      - name: Deploy Firestore indexes only when changed
+          test -n "$FIREBASE_SERVICE_ACCOUNT" || (echo "Missing FIREBASE_SERVICE_ACCOUNT repository secret" && exit 1)
+          printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/firebase-service-account.json"
+          export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-service-account.json"
+          firebase deploy --only firestore:rules --project maru-ghar-gandhinagar-8dbe4 --non-interactive
+      - name: Deploy Firestore indexes
         if: github.event_name == 'push'
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         run: |
-          if git diff --name-only HEAD^ HEAD | grep -q '^firestore.indexes.json$'; then
-            printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/firebase-service-account.json"
-            export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-service-account.json"
-            firebase deploy --only firestore:indexes --project maru-ghar-gandhinagar-8dbe4 --non-interactive
-          else
-            echo "No Firestore index change; deployment skipped."
-          fi
+          test -n "$FIREBASE_SERVICE_ACCOUNT" || (echo "Missing FIREBASE_SERVICE_ACCOUNT repository secret" && exit 1)
+          printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/firebase-service-account.json"
+          export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-service-account.json"
+          firebase deploy --only firestore:indexes --project maru-ghar-gandhinagar-8dbe4 --non-interactive
       - name: Deploy Cloud Functions when changed
         if: github.event_name == 'push' && vars.DEPLOY_CLOUD_FUNCTIONS == 'true'
         env:

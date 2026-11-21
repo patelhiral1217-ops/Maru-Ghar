@@ -15,6 +15,18 @@
  {id:'sample-vavol-shop-sale',title:'રોડ ટચ દુકાન',type:'દુકાન',purpose:'વેચાણ',city:'ગાંધીનગર',area:'વાવોલ',price:'₹42 લાખ',deposit:'લાગુ પડતું નથી',bhk:'NA',size:'430 ચો.ફૂટ',floor:'ગ્રાઉન્ડ ફ્લોર',furn:'અનફર્નિશ્ડ',parking:'ગ્રાહક પાર્કિંગ',facing:'રોડ ફેસિંગ',amenities:['ગ્રાઉન્ડ ફ્લોર','રોલિંગ શટર','પાણી','મેઇન રોડ'],desc:'વાવોલ વિસ્તારમાં દુકાનનું ડેમો ઉદાહરણ. આ વાસ્તવિક વેચાણ લિસ્ટિંગ નથી.',photos:['https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&h=900&q=88','https://assets.architecturaldigest.in/photos/600843cfcce5700439e126cd/16:9/w_2560,c_limit/Ahmedabad-home-interior-design-home-decor-photos-1366x768.jpg','https://assets.architecturaldigest.in/photos/600843cfcce5700439e126cd/16:9/w_2560,c_limit/Ahmedabad-home-interior-design-home-decor-photos-1366x768.jpg']}
 
  ];
+ /* Local category photos: demo cards and the detail gallery load from assets/images, so the showcase works offline. */
+ const LOCAL_PHOTOS={
+  'ઘર':['assets/images/house.jpg','assets/images/bungalow.jpg','assets/images/house.jpg'],
+  'બંગલો':['assets/images/bungalow.jpg','assets/images/house.jpg','assets/images/bungalow.jpg'],
+  'ફ્લેટ':['assets/images/flat.jpg','assets/images/flat.jpg','assets/images/house.jpg'],
+  'દુકાન':['assets/images/shop.jpg','assets/images/commercial.jpg','assets/images/shop.jpg'],
+  'ઓફિસ':['assets/images/office.jpg','assets/images/commercial.jpg','assets/images/office.jpg'],
+  'રેસિડેન્શિયલ પ્લોટ':['assets/images/plot.jpg','assets/images/plot.jpg','assets/images/house.jpg'],
+  'કોમર્શિયલ પ્લોટ':['assets/images/plot.jpg','assets/images/commercial.jpg','assets/images/plot.jpg'],
+  'કોમર્શિયલ પ્રોપર્ટી':['assets/images/commercial.jpg','assets/images/shop.jpg','assets/images/office.jpg']
+ };
+ samples.forEach(p=>{const local=LOCAL_PHOTOS[p.type];if(local&&local.length)p.photos=local.slice();});
  const css=`
  #mgDemoShowcase{margin:22px 0 28px;padding:18px;border:1px solid #d8c58d;border-radius:20px;background:linear-gradient(145deg,#fffdf7,#edf2ed);box-shadow:0 8px 24px #203b2c12}
  #mgDemoShowcase .mg-demo-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
