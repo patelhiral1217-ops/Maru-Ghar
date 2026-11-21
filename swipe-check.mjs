@@ -223,6 +223,8 @@ async function main() {
       };
     });
 
+    const visible = (b) => !!b && b.y > -b.height && b.y < 844 && b.x > -b.width && b.x < 390;
+
     const liveBox = (selector) => page.evaluate((sel) => {
       const el = document.querySelector('#mgSwipeTestHolder ' + sel);
       if (!el) return null;
@@ -238,14 +240,13 @@ async function main() {
     await injectFixture();
 
     const ensure = async () => {
-      if (!(await liveState())) {
-        await injectFixture();
-        await page.evaluate(() => {
-          const el = document.querySelector('#mgSwipeTestHolder .mg-slider');
-          if (el) el.scrollIntoView({ block: 'center' });
-        });
-        await sleep(250);
-      }
+      if (!(await liveState())) await injectFixture();
+      /* Touch coordinates are viewport-relative: the fixture must be on screen. */
+      await page.evaluate(() => {
+        const el = document.querySelector('#mgSwipeTestHolder .mg-slider');
+        if (el) el.scrollIntoView({ block: 'center' });
+      });
+      await sleep(250);
     };
 
     check('live gallery fixture is present', !!(await liveState()));
@@ -280,6 +281,7 @@ async function main() {
 
     await ensure();
     const nextBox = await liveBox('.mg-next');
+    if (!visible(nextBox)) console.log('INFO Next button not in viewport: ' + JSON.stringify(nextBox));
     if (nextBox) await tap(cdp, nextBox);
     let s = await spy();
     check('tapping Next reaches the gallery control', !!s && s.next === 1, JSON.stringify(s));
@@ -287,6 +289,7 @@ async function main() {
     await sleep(900);
     await ensure();
     const prevBox = await liveBox('.mg-prev');
+    if (!visible(prevBox)) console.log('INFO Previous button not in viewport: ' + JSON.stringify(prevBox));
     if (prevBox) await tap(cdp, prevBox);
     s = await spy();
     check('tapping Previous reaches the gallery control', !!s && s.prev === 1, JSON.stringify(s));
