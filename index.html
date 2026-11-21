@@ -1357,7 +1357,7 @@ function filterProps(){
 
 <script type="module" src="assets/maru-ghar-home-showcase-config.js?v=20261121b"></script>
 <script>
-(()=>{function init(){const root=document.getElementById('mgShowcase');if(!root||root.dataset.mgRotationReady==='1')return;const slides=[...root.querySelectorAll('.mg-showcase-slide')];if(!slides.length)return;root.dataset.mgRotationReady='1';let index=0,timer=null;function show(n){index=(n+slides.length)%slides.length;slides.forEach((el,i)=>el.classList.toggle('active',i===index))}function start(){if(timer)clearInterval(timer);if(slides.length>1)timer=setInterval(()=>{if(!document.hidden)show(index+1)},4000)}document.addEventListener('visibilitychange',()=>{if(!document.hidden)start()});show(0);start()}function start(){const ready=window.__mgHeroSlidesReady;if(ready&&typeof ready.then==='function')ready.then(init).catch(init);else init()}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start()}})();</script>
+(()=>{function init(){const root=document.getElementById('mgShowcase');if(!root||root.dataset.mgRotationReady==='1')return;root.dataset.mgRotationReady='1';function advance(){const slides=[...root.querySelectorAll('.mg-showcase-slide')];if(slides.length<2)return;const current=slides.findIndex(el=>el.classList.contains('active'));const next=(current+1+slides.length)%slides.length;slides.forEach((el,i)=>el.classList.toggle('active',i===next));}let timer=setInterval(()=>{if(!document.hidden)advance()},4000);document.addEventListener('visibilitychange',()=>{if(timer)clearInterval(timer);timer=setInterval(()=>{if(!document.hidden)advance()},4000)});}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init()})();</script>
 <script src="assets/maru-ghar-form-steps.js"></script>
 <script defer src="assets/maru-ghar-polish.js?v=20261117b"></script>
 <style id="mg-hide-temporary-listing-skeleton">#mgSkel,.mg-skel,.mg-skel-card{display:none!important;visibility:hidden!important;}</style>
@@ -4929,4 +4929,33 @@ html,body{max-width:100%;overflow-x:hidden}
 .mg-customer-login-top{min-height:38px;padding:8px 12px;font-size:12px;white-space:nowrap}
 @media(max-width:850px){.mg-customer-login-top{padding:7px 10px;font-size:11px}}
 @media(max-width:600px){.mg-customer-login-top{min-height:36px;padding:6px 9px;font-size:10px}}
+</style>
+<style id="mg-requested-login-gold-and-download-single-line-20261121">
+/* Customer login: coordinated champagne-gold/silver 3D button. */
+.mg-customer-login-top{
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  min-height:42px!important;height:auto!important;padding:8px 13px!important;
+  border:1px solid #d5b45f!important;border-radius:12px!important;
+  background:linear-gradient(145deg,#fff5d6 0%,#e3e8e9 43%,#c5ced1 66%,#f1d48d 100%)!important;
+  color:#173b30!important;font-size:12px!important;font-weight:900!important;
+  line-height:1.15!important;white-space:nowrap!important;
+  box-shadow:0 4px 0 #806024,0 8px 14px rgba(0,0,0,.22),inset 0 2px 3px rgba(255,255,255,.95)!important;
+}
+.mg-customer-login-top span{color:#173b30!important;font-weight:900!important}
+.mg-customer-login-top:active{transform:translateY(2px)!important;box-shadow:0 2px 0 #806024,0 4px 8px rgba(0,0,0,.2),inset 0 1px 2px #fff!important}
+@media(max-width:600px){.mg-customer-login-top{min-height:39px!important;padding:7px 10px!important;font-size:11px!important}}
+/* Give the two footer actions half-width each, so the download label fits on one line. */
+.mg-footer-actions{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.mg-footer-actions .mg-download-app{
+  display:flex!important;flex-wrap:nowrap!important;align-items:center!important;justify-content:center!important;
+  white-space:nowrap!important;overflow:visible!important;gap:4px!important;
+  padding-left:4px!important;padding-right:4px!important;
+  font-size:clamp(9px,2.65vw,12px)!important;line-height:1.1!important;
+}
+.mg-footer-actions .mg-download-app span{
+  display:inline!important;white-space:nowrap!important;word-break:normal!important;
+  overflow-wrap:normal!important;font-size:clamp(8.5px,2.45vw,11px)!important;
+  line-height:1.1!important;flex:0 0 auto!important;
+}
+@media(max-width:360px){.mg-footer-actions .mg-download-app{font-size:8.5px!important}.mg-footer-actions .mg-download-app span{font-size:8px!important}}
 </style>
