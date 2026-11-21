@@ -289,6 +289,14 @@ service cloud.firestore {
       allow create, update, delete: if isAdmin();
     }
 
+    // Admin-managed homepage slideshow. Public visitors can read; only admin can edit.
+    // Records are soft-deleted by the admin UI; permanent deletion is intentionally disabled.
+    match /homeShowcaseSlides/{slideId} {
+      allow read: if true;
+      allow create, update: if isAdmin();
+      allow delete: if false;
+    }
+
     // ---------------------------------------------------------
     // 8. CUSTOMER FAVOURITES
     // Normal sync writes createdAt; backup restore writes restoredAt.

@@ -70,17 +70,17 @@ const demoIds=[...demo.matchAll(/\{id:'([^']+)'/g)].map(x=>x[1]);
 if(demoIds.length!==10||new Set(demoIds).size!==10)throw new Error('Demo showcase must contain exactly ten unique demo properties');
 if(!home.includes('mg-settings-only-trust-actions-20261118')||!home.includes('new MutationObserver(clean)'))throw new Error('Trust strip must be removed outside Settings, including dynamically inserted duplicates');
 if(!home.includes('data-cols="1" onclick=')||!home.includes('data-cols="2" onclick=')||home.includes('data-cols="3" onclick=')||home.includes('data-cols="4" onclick='))throw new Error('Only 1 and 2 column buttons must call the direct grid controller');
-if(!demo.includes('કુલ 10 ડેમો નમૂનાઓ')||!demo.includes('rootObserver.observe'))throw new Error('Demo showcase must expose all ten samples and initialize when listing root is delayed');
+if(!demo.includes('ડેમો નમૂનાઓ')||!demo.includes('demoShowcase')||!demo.includes('rootObserver.observe'))throw new Error('Demo showcase must load admin-managed visibility and initialize when listing root is delayed');
 console.log('MARU GHAR DEMO / GRID / SETTINGS REGRESSION PASS — ten unique demo samples, direct 1–2 column controls, trust buttons restricted to Settings.');
 const discovery=fs.readFileSync('assets/maru-ghar-discovery.js','utf8');
 if(!discovery.includes("const applyRangeButton=$('mgApplyRangeFilters')")||!discovery.includes("if(applyRangeButton)applyRangeButton.addEventListener('click'"))throw new Error('Apply range filters button is not connected to an action');
 const gridController=fs.readFileSync('assets/maru-ghar-grid-controller.js','utf8');
-if(!home.includes('assets/maru-ghar-grid-controller.js?v=20261119swipe1'))throw new Error('Independent property column controller is not loaded by the home page');
+if(!home.includes('assets/maru-ghar-grid-controller.js?v=20261121grid2d1'))throw new Error('Independent property column controller is not loaded by the home page');
 for(const n of ['1','2'])if(!new RegExp(`data-cols="${n}" onclick="window\\.mgSetPropertyColumns&&window\\.mgSetPropertyColumns\\('${n}'\\)"`).test(home))throw new Error('Column '+n+' button is not directly connected to the controller');
 if(home.includes('data-cols="3" onclick=')||home.includes('data-cols="4" onclick='))throw new Error('3 and 4 column buttons must be removed');
 if(!gridController.includes("document.querySelector('#mgDemoShowcase .mg-demo-grid')"))throw new Error('Demo showcase grid is not connected to the column controller');
 if(!gridController.includes("observer.observe(document.body, { childList: true, subtree: true })"))throw new Error('Dynamically inserted demo showcase is not observed');
-for(const term of ["grid.style.setProperty('display', 'flex', 'important')","grid.style.setProperty('overflow-x', 'auto', 'important')","grid.style.setProperty('scroll-snap-type', 'x mandatory', 'important')","window.mgSetPropertyColumns = applyColumns","card.classList.contains('mg-demo-card')"])if(!gridController.includes(term))throw new Error('Independent column controller missing behavior: '+term);
+for(const term of ["grid.style.setProperty('display', 'grid', 'important')","grid.style.setProperty('grid-template-columns', 'repeat(' + cols + ', minmax(0, 1fr))', 'important')","grid.style.setProperty('overflow-x', 'visible', 'important')","window.mgSetPropertyColumns = applyColumns","card.classList.contains('mg-demo-card')"])if(!gridController.includes(term))throw new Error('Independent column controller missing behavior: '+term);
 if(gridController.includes("document.addEventListener('click'"))throw new Error('Competing delegated capture handler must not intercept direct column button actions');
 // Execute the actual controller against both real grid types and verify every column choice.
 const makeStyle=()=>({values:{},setProperty(k,v){this.values[k]=v}});
@@ -95,8 +95,32 @@ const fakeLocal={setItem(k,v){this[k]=v},getItem(k){return this[k]||null}};
 vm.runInNewContext(gridController,{window:fakeWindow,document:fakeDoc,localStorage:fakeLocal,MutationObserver:class{observe(){}},requestAnimationFrame:fn=>fn(),Array,Set,String});
 for(const n of ['1','2']){
  const expected='repeat('+n+', minmax(0, 1fr))';
- if(fakeWindow.mgSetPropertyColumns(n)!==true||liveGrid.dataset.cols!==n||demoGrid.dataset.cols!==n||liveGrid.style.values.display!=='flex'||demoGrid.style.values.display!=='flex'||liveGrid.style.values['overflow-x']!=='auto'||demoGrid.style.values['overflow-x']!=='auto'||liveGrid.children[0].style.values.flex!==(n==='1'?'0 0 86%':'0 0 calc(50% - 6px)')||demoGrid.children[0].style.values.flex!==(n==='1'?'0 0 86%':'0 0 calc(50% - 6px)')||fakeLocal.mg_cols!==n)throw new Error('Horizontal swipe controller failed on live/demo grids for '+n);
+ if(fakeWindow.mgSetPropertyColumns(n)!==true||liveGrid.dataset.cols!==n||demoGrid.dataset.cols!==n||liveGrid.style.values.display!=='grid'||demoGrid.style.values.display!=='grid'||liveGrid.style.values['grid-template-columns']!==expected||demoGrid.style.values['grid-template-columns']!==expected||liveGrid.style.values['overflow-x']!=='visible'||demoGrid.style.values['overflow-x']!=='visible'||liveGrid.children[0].style.values.width!=='100%'||demoGrid.children[0].style.values.width!=='100%'||fakeLocal.mg_cols!==n)throw new Error('Responsive vertical-wrap controller failed on live/demo grids for '+n);
 }
-console.log('HORIZONTAL PROPERTY SWIPE CONTROLLER PASS — 1 and 2 visible-card choices update live listings and the visible demo showcase.');
+if(!home.includes('.photo-gallery{display:flex;gap:7px;overflow-x:auto'))throw new Error('Property photo galleries must retain horizontal swipe while property cards wrap vertically');
+console.log('TWO-DIRECTION PROPERTY LAYOUT PASS — live/demo cards wrap into 1–2 vertical columns while each property photo gallery retains horizontal swipe.');
 
 
+
+const adminHtml=fs.readFileSync('admin.html','utf8');
+const backend=fs.readFileSync('assets/maru-ghar-backend.js','utf8');
+if(!adminHtml.includes('data-action="photo_vertical"')||!adminHtml.includes('data-action="photo_horizontal"')||!adminHtml.includes('data-action="photo_both"')||!adminHtml.includes('photoDirection:direction'))throw new Error('Admin property photo direction controls are missing');
+if(!adminHtml.includes("p.photoDirection==='vertical'?'નીચેથી ઉપર':p.photoDirection==='horizontal'?'સાઇડમાં':'બંને દિશામાં'"))throw new Error('Admin listing does not show the saved photo direction');
+if(!backend.includes("p.photoDirection==='vertical'?'vertical':p.photoDirection==='horizontal'?'horizontal':'both'"))throw new Error('Property photo slider does not default to both directions');
+if(!backend.includes("grid.addEventListener('pointerdown'")||!backend.includes("grid.addEventListener('pointerup'")||!backend.includes('Math.abs(dx)>=Math.abs(dy)?dx:dy'))throw new Error('Property photo swipe must detect both horizontal and vertical pointer gestures');
+if(!home.includes('assets/maru-ghar-backend.js?v=20261121touchfallback3'))throw new Error('Updated property photo direction controller cache version is missing');
+if(!home.includes('.mg-slider[data-direction="vertical"] .mg-track{flex-direction:column;touch-action:none!important}'))throw new Error('Vertical photo slider layout CSS is missing');
+console.log('PROPERTY PHOTO DIRECTION PASS — Admin can choose vertical bottom-to-top or horizontal swipe; website and Android WebView use the saved setting.');
+
+const bidirDemo=fs.readFileSync('assets/maru-ghar-demo-showcase.js','utf8');
+const bidirBackend=fs.readFileSync('assets/maru-ghar-backend.js','utf8');
+const bidirAdmin=fs.readFileSync('admin.html','utf8');
+if(!bidirDemo.includes('touch-action:none')||!bidirDemo.includes("addEventListener('pointerdown'")||!bidirDemo.includes("addEventListener('pointerup'")||!bidirDemo.includes('Math.abs(dx)>=Math.abs(dy)?dx:dy'))throw new Error('Demo photo gallery must accept both horizontal and vertical pointer gestures');
+if(!bidirBackend.includes("p.photoDirection==='vertical'?'vertical':p.photoDirection==='horizontal'?'horizontal':'both'")||!bidirBackend.includes("grid.addEventListener('pointerdown'")||!bidirBackend.includes("grid.addEventListener('pointerup'")||!bidirBackend.includes('Math.abs(dx)>=Math.abs(dy)?dx:dy'))throw new Error('Live property galleries must default to and support both pointer swipe directions');
+if(!bidirAdmin.includes('data-action="photo_both"')||!bidirAdmin.includes("action==='photo_vertical'||action==='photo_horizontal'||action==='photo_both'"))throw new Error('Admin must provide a bidirectional photo setting');
+console.log('BIDIRECTIONAL PHOTO SWIPE PASS — Demo and live listings accept horizontal/vertical swipes; Admin can select both.');
+
+// Regression: Android Pointer Events must process dominant-axis swipes for demo and live photo galleries.
+if(!demo.includes("addEventListener('pointerdown'")||!demo.includes("addEventListener('pointerup'")||!demo.includes('Math.abs(dx)>=Math.abs(dy)?dx:dy'))throw new Error('Demo photo gallery must process both horizontal and vertical pointer swipes');
+if(!backend.includes("grid.addEventListener('pointerdown'")||!backend.includes("grid.addEventListener('pointerup'")||!backend.includes('Math.abs(dx)>=Math.abs(dy)?dx:dy'))throw new Error('Live property gallery must process both horizontal and vertical pointer swipes');
+console.log('ANDROID POINTER SWIPE PASS — Demo and live property photos handle horizontal and vertical gestures through Pointer Events.');
