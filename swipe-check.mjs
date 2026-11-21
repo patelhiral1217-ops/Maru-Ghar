@@ -70,7 +70,7 @@ function harnessHtml() {
   return `<!doctype html><html lang="gu"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>${styles}</style>
-<style>body{margin:0;background:#111}#harness{padding:6px}</style>
+<style>body{margin:0;background:#111}#harness{padding:6px}#harness .mg-slider{width:358px;height:220px}</style>
 </head><body>
 <div id="harness">
   <div class="property">
@@ -267,6 +267,16 @@ async function main() {
     const slideTouchAction = await hp.evaluate(() =>
       getComputedStyle(document.querySelector('.mg-slide')).touchAction);
     check('live slide touch-action is pan-y', slideTouchAction === 'pan-y', 'got ' + slideTouchAction);
+
+    const harnessInfo = await hp.evaluate(() => {
+      const sl = document.querySelector('.mg-slider');
+      const r = sl.getBoundingClientRect();
+      return { moduleLoaded: window.__mgSwipeReady === true, width: Math.round(r.width), height: Math.round(r.height) };
+    });
+    check('shipped swipe module is loaded on the page', harnessInfo.moduleLoaded === true,
+      JSON.stringify(harnessInfo));
+    check('live gallery has a real touch surface', harnessInfo.width > 100 && harnessInfo.height > 100,
+      harnessInfo.width + 'x' + harnessInfo.height);
 
     let st = await hState();
     check('live gallery starts on photo 1', st.cur === '0' && st.count === '1 / 3',
