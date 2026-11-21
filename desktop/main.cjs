@@ -1,6 +1,8 @@
+const path = require('node:path');
 const { app, BrowserWindow, shell } = require('electron');
 
 const SITE_URL = 'https://maru-ghar-gandhinagar-8dbe4.web.app/';
+const isHttpUrl = url => url.startsWith('https://') || url.startsWith('http://');
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -10,7 +12,7 @@ function createWindow() {
     minHeight: 620,
     show: false,
     autoHideMenuBar: true,
-    icon: 'icon.ico',
+    icon: path.join(app.getAppPath(), 'icon.ico'),
     backgroundColor: '#12382f',
     webPreferences: {
       nodeIntegration: false,
@@ -20,13 +22,13 @@ function createWindow() {
   });
 
   win.webContents.setWindowOpenHandler(({ url }) => {
-    if (/^https?:\\/\\//i.test(url)) shell.openExternal(url);
+    if (isHttpUrl(url)) shell.openExternal(url);
     return { action: 'deny' };
   });
   win.webContents.on('will-navigate', (event, url) => {
-    if (url !== SITE_URL && !url.startsWith(SITE_URL)) {
+    if (!url.startsWith(SITE_URL)) {
       event.preventDefault();
-      if (/^https?:\\/\\//i.test(url)) shell.openExternal(url);
+      if (isHttpUrl(url)) shell.openExternal(url);
     }
   });
   win.once('ready-to-show', () => win.show());
