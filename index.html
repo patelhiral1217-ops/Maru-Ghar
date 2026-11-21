@@ -1011,6 +1011,7 @@ header .navlinks > a:not(.admin-link):focus-visible{
 .mg-showcase{margin-top:16px!important}
 .mg-showcase-slide{opacity:0!important;visibility:hidden!important;transition:opacity .9s ease!important}
 .mg-showcase-slide.active{opacity:1!important;visibility:visible!important}
+.mg-showcase-slide>img.mg-showcase-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0;pointer-events:none;display:block;border:0}
 @media(max-width:600px){.mg-showcase{margin-top:12px!important}}
 </style>
 
@@ -1225,9 +1226,9 @@ header .navlinks > a:not(.admin-link):focus-visible{
   <div class="mg-tagline" aria-label="Maru Ghar App">
     <div class="mg-tagline-background" aria-hidden="true">
       <img src="https://www.hbs.studio/api/img/7a70ab59c2bc4f80a5fba29292d27730.jpeg?w=1400" alt="" loading="eager" fetchpriority="high" decoding="async">
-      <img src="https://volzero.com/img/article/105348_65272.jpg" alt="" loading="lazy" decoding="async">
-      <img src="https://www.kusharchitects.com/assets/front/images/Luxury_Villa_Design_in_Jaipur_%E2%80%93_Kush_Architects.jpeg" alt="" loading="lazy" decoding="async">
-      <img src="https://cdn.home-designing.com/wp-content/uploads/2014/11/pegasus-lawn-structure.jpg" alt="" loading="lazy" decoding="async">
+      <img src="assets/images/house.jpg" alt="" loading="lazy" decoding="async">
+      <img src="assets/images/bungalow.jpg" alt="" loading="lazy" decoding="async">
+      <img src="assets/images/flat.jpg" alt="" loading="lazy" decoding="async">
     </div>
     <div class="mg-tagline-copy" aria-label="મારૂ ઘર સપનાનું ઘર">
       <strong>મારૂ ઘર સપનાનું ઘર</strong>
@@ -1241,11 +1242,15 @@ header .navlinks > a:not(.admin-link):focus-visible{
 <section class="mg-showcase" aria-label="Featured properties">
  <div class="mg-cms-slot" data-mg-content-slot="home_showcase"></div>
  <div class="mg-showcase-frame" id="mgShowcase" aria-roledescription="carousel">
-  <div class="mg-showcase-slide active" style="background-image:url(https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2000&h=900&q=88)" data-title="આપનું સપનાનું ઘર" data-sub="ઘર અને ફ્લેટ માટે પસંદગીની પ્રોપર્ટી શોધો"></div>
-  <div class="mg-showcase-slide" style="background-image:url(https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2000&h=900&q=88)" data-title="આધુનિક અને સુંદર રહેઠાણ" data-sub="ફોટા, સુવિધાઓ અને લોકેશન સાથે પ્રોપર્ટી જુઓ"></div>
-  <div class="mg-showcase-slide" style="background-image:url(https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=2000&h=900&q=88)" data-title="વ્યવસાય માટે યોગ્ય જગ્યા" data-sub="દુકાન, ઓફિસ અને કોમર્શિયલ પ્રોપર્ટી શોધો"></div>
+  <div class="mg-showcase-slide active" data-title="આપનું સપનાનું ઘર" data-sub="ઘર અને બંગલા માટે પસંદગીની પ્રોપર્ટી શોધો"><img class="mg-showcase-img" src="assets/images/house.jpg" alt="આપનું સપનાનું ઘર" loading="eager" decoding="async"></div>
+  <div class="mg-showcase-slide" data-title="આધુનિક અને સુંદર બંગલો" data-sub="ફોટા, સુવિધાઓ અને લોકેશન સાથે પ્રોપર્ટી જુઓ"><img class="mg-showcase-img" src="assets/images/bungalow.jpg" alt="આધુનિક બંગલો" loading="eager" decoding="async"></div>
+  <div class="mg-showcase-slide" data-title="શહેરમાં આધુનિક ફ્લેટ" data-sub="2 BHK અને 3 BHK ફ્લેટ ભાડે કે વેચાણ માટે"><img class="mg-showcase-img" src="assets/images/flat.jpg" alt="આધુનિક ફ્લેટ" loading="eager" decoding="async"></div>
+  <div class="mg-showcase-slide" data-title="વ્યવસાય માટે યોગ્ય દુકાન" data-sub="મેઇન રોડ પર રિટેલ દુકાન શોધો"><img class="mg-showcase-img" src="assets/images/shop.jpg" alt="વ્યવસાય માટે દુકાન" loading="eager" decoding="async"></div>
+  <div class="mg-showcase-slide" data-title="આધુનિક ઓફિસ સ્પેસ" data-sub="તમારા બિઝનેસ માટે તૈયાર ઓફિસ"><img class="mg-showcase-img" src="assets/images/office.jpg" alt="આધુનિક ઓફિસ" loading="eager" decoding="async"></div>
+  <div class="mg-showcase-slide" data-title="રહેણાંક અને કોમર્શિયલ પ્લોટ" data-sub="ઘર બાંધવા કે વ્યવસાય માટે યોગ્ય જમીન"><img class="mg-showcase-img" src="assets/images/plot.jpg" alt="પ્લોટ" loading="eager" decoding="async"></div>
+  <div class="mg-showcase-slide" data-title="કોમર્શિયલ પ્રોપર્ટી" data-sub="દુકાન, ઓફિસ અને કોમર્શિયલ પ્રોપર્ટી શોધો"><img class="mg-showcase-img" src="assets/images/commercial.jpg" alt="કોમર્શિયલ પ્રોપર્ટી" loading="eager" decoding="async"></div>
   <div class="mg-showcase-copy"><small id="mgShowcaseEyebrow">MARU GHAR · FEATURED</small><h2 id="mgShowcaseTitle">આપનું સપનાનું ઘર</h2><p id="mgShowcaseSub">ઘર અને ફ્લેટ માટે પસંદગીની પ્રોપર્ટી શોધો</p></div>
-  <div class="mg-showcase-controls"><div class="mg-showcase-dots" id="mgShowcaseDots"><button class="active" aria-label="Slide 1"></button><button aria-label="Slide 2"></button><button aria-label="Slide 3"></button></div><button type="button" id="mgShowcasePrev" aria-label="Previous slide">‹</button><button type="button" id="mgShowcaseNext" aria-label="Next slide">›</button></div>
+  <div class="mg-showcase-controls"><div class="mg-showcase-dots" id="mgShowcaseDots"><button class="active" aria-label="Slide 1"></button><button aria-label="Slide 2"></button><button aria-label="Slide 3"></button><button aria-label="Slide 4"></button><button aria-label="Slide 5"></button><button aria-label="Slide 6"></button><button aria-label="Slide 7"></button></div><button type="button" id="mgShowcasePrev" aria-label="Previous slide">‹</button><button type="button" id="mgShowcaseNext" aria-label="Next slide">›</button></div>
  </div>
 </section>
 <div class="mg-cms-slot" data-mg-content-slot="home_after_hero"></div>
