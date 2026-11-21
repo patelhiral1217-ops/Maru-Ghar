@@ -218,6 +218,19 @@ button:active,.primary:active,.approve:active,.reject:active{transform:translate
 <h3>હાલના Home Page ફોટા</h3><p class="mg-hero-note">મોબાઇલમાં ઉપર / નીચે બટનથી ક્રમ બદલો. ફેરફાર સેવ થયા પછી Home Page ફરી ખોલો.</p>
 <div id="mgHeroSlidesList">લોડ થઈ રહ્યા છે…</div>
 <details class="mg-hero-trash"><summary>🗑️ કચરાપેટી — ફોટા પાછા લાવો</summary><div id="mgHeroSlidesTrash">લોડ થઈ રહ્યું છે…</div></details>
+<div class="mg-hero-admin" id="mgHeaderBannerManager">
+  <h3>Top Header — Background Photo Control</h3>
+  <p class="mg-hero-note">Change the large background photo behind the Maru Ghar logo and main heading. If no custom photo is saved, the existing website background remains unchanged.</p>
+  <div class="mg-hero-form">
+    <label class="wide">Choose a background photo (JPG / PNG / WEBP, max 8 MB)<input id="mgHeaderBannerImage" type="file" accept="image/jpeg,image/png,image/webp"></label>
+    <div class="wide mg-hero-preview" id="mgHeaderBannerPreview"></div>
+  </div>
+  <div class="mg-hero-row-actions">
+    <button class="primary" id="mgHeaderBannerSave" type="button">Save Header Photo</button>
+    <button class="primary" id="mgHeaderBannerReset" type="button">Restore Original Background</button>
+  </div>
+  <div class="mg-hero-status" id="mgHeaderBannerStatus" role="status" aria-live="polite"></div>
+</div>
 </section>
 <section class="panel"><h2>વેબસાઇટ લિંક (શેર કરવા માટે)</h2><p class="muted">તમારી વેબસાઇટની લિંક અહીં એકવાર લખો. લોકો લિસ્ટિંગ શેર કરશે ત્યારે અને પોસ્ટરમાં આ લિંક આવશે.</p><div class="formgrid"><label class="wide">વેબસાઇટ લિંક<input id="siteUrlInput" type="url" placeholder="https://..." maxlength="200"></label><button class="primary wide" id="saveSiteUrl" type="button">લિંક સેવ કરો</button></div><div id="siteStatus" class="status" role="status"></div></section><section class="panel"><h2>🚩 ફરિયાદો</h2><div id="reportList" class="muted">લોડ થઈ રહ્યું છે…</div></section>
 <section class="panel"><h2>શહેરો અને વિસ્તારો</h2><p class="muted">શરૂઆતમાં અમદાવાદ અને ગાંધીનગર રહેશે. અહીંથી નવા શહેરો અને દરેક શહેરના વિસ્તારો ઉમેરો અથવા કાઢી શકો છો. ફેરફાર વેબસાઇટ અને APK બંનેમાં લાગુ થશે.</p><div class="formgrid"><label>શહેરનું નામ (ગુજરાતીમાં)<input id="newCityName" maxlength="60"></label><label>અંગ્રેજી નામ (વૈકલ્પિક)<input id="newCityEn" maxlength="60" placeholder="Surat"></label><button class="primary wide" id="addCityBtn" type="button">શહેર ઉમેરો</button></div><div id="cityList" class="muted" style="margin-top:10px"></div><hr style="opacity:.2;margin:14px 0"><div class="formgrid"><label>વિસ્તાર ઉમેરવા માટે શહેર પસંદ કરો<select id="cityAreaCity"></select></label><label>નવા વિસ્તારનું નામ<input id="newAreaName" maxlength="80" placeholder="જેમ કે કુડાસણ / સેક્ટર 21"></label><button class="primary wide" id="addAreaBtn" type="button">વિસ્તાર ઉમેરો</button></div><div id="cityAreaList" class="muted" style="margin-top:10px"></div><div id="cityStatus" class="status" role="status"></div><hr style="opacity:.2;margin:14px 0"><p class="muted">જૂની લિસ્ટિંગમાં શહેર લખેલું ન હોય તો એકવાર આ બટન દબાવો:</p><button class="primary" id="fixCityBtn" type="button">જૂની લિસ્ટિંગમાં શહેર = ગાંધીનગર સેટ કરો</button></section>
