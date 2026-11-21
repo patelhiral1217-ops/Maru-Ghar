@@ -313,7 +313,8 @@ workflow runs.
 
 ```
 Branch:        appjet
-Commit:        2271058bf8cabfb9ed497089212b9da18b7e1fc3
+Code commit:   2271058bf8cabfb9ed497089212b9da18b7e1fc3
+HEAD:          git log -1 (documentation commits only, on top of 2271058)
 Tracked files: 166
 PR:            #99 — open, clean, mergeable, NOT merged
 CI:            Quality Checks = success, Validate = success

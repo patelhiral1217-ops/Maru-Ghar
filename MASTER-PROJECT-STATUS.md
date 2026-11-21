@@ -3,7 +3,8 @@
 **Snapshot date:** 21 November 2026
 **Repository:** https://github.com/patelhiral1217-ops/Maru-Ghar
 **Branch:** `appjet`
-**Snapshot commit:** `2271058bf8cabfb9ed497089212b9da18b7e1fc3`
+**Last application-code commit:** `2271058bf8cabfb9ed497089212b9da18b7e1fc3`
+**Exact branch HEAD:** run `git log -1 --format=%H` inside this ZIP. Documentation-only commits adding `MASTER-PROJECT-STATUS.md` and `RESTORE-GUIDE.md` sit on top of `2271058` and change no application code.
 **Firebase project:** `maru-ghar-gandhinagar-8dbe4`
 **Purpose of this file:** authoritative handoff so any future session (ChatGPT, AppJet or a human developer) can resume without re-discovering the project.
 
@@ -17,12 +18,13 @@
 | Item | Value |
 |---|---|
 | Branch | `appjet` |
-| HEAD commit | `2271058bf8cabfb9ed497089212b9da18b7e1fc3` |
-| HEAD short | `2271058` |
+| Last application-code commit | `2271058bf8cabfb9ed497089212b9da18b7e1fc3` |
+| Last application-code short | `2271058` |
+| Documentation commits on top | `MASTER-PROJECT-STATUS.md`, `RESTORE-GUIDE.md` — no code change |
 | Commits on `appjet` | 163 |
 | Commits on `main` | 51 |
 | Relationship | `main` **is an ancestor** of `appjet` — history is linear, so a pull request shows only the swipe work |
-| Commits after `2271058` | **0** — `2271058` *is* the latest commit on `appjet` (local HEAD and `origin/appjet` matched at snapshot time) |
+| Code commits after `2271058` | **0** — every later commit on `appjet` adds documentation only |
 | Working tree | clean |
 
 ### Latest GitHub Actions results (both green)
@@ -35,6 +37,8 @@ Checked against the GitHub API for commit `2271058b`:
 | Validate Maru Ghar changes | `validate` | completed | **success** |
 
 The previous commit `ce04267d` was also green on both workflows.
+Documentation-only commits on top of `2271058` run the same two workflows and
+change no application code.
 
 > Historical note: both workflows were failing before commit `7e9fdc7`.
 > See section 6 for the root cause and the fix.
@@ -415,7 +419,7 @@ security, authorization correctness, or that Firestore rules were deployed.
 
 `MARU-GHAR-MASTER-BACKUP-21-NOV-2026.zip` contains:
 
-- the complete tracked repository at `2271058` (166 tracked files)
+- the complete tracked repository at `2271058` (166 tracked files), plus this file and `RESTORE-GUIDE.md`
 - all four pages, `www/`, `assets/` including `assets/images/`, and the admin panel
 - Firebase config, `firestore.rules`, `firestore.indexes.json`, `firebase.json`
 - `functions/`, `desktop/` (Electron), `capacitor.config.json` and `google-services.json`
