@@ -226,9 +226,12 @@ import { getFirestore, collection, getDocs, query, orderBy, addDoc, updateDoc, d
   $('mgHeroImage').addEventListener('change',() => {
     const file = $('mgHeroImage').files?.[0];
     if (!file) return;
-    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    clearPreview();
     previewUrl = URL.createObjectURL(file);
-    preview(previewUrl,value('mgHeroAlt'));
+    const img = document.createElement('img');
+    img.src = previewUrl;
+    img.alt = value('mgHeroAlt') || 'Maru Ghar showcase preview';
+    $('mgHeroPreview').append(img);
   });
   onAuthStateChanged(auth,user => {
     if (user?.uid !== ADMIN_UID) {
