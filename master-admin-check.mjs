@@ -15,6 +15,9 @@ const checks = [
   [home.includes('maru-ghar-home-showcase-config.js') && home.includes('window.__mgHeroSlidesReady'), 'Homepage slideshow public loader is not connected to rotation'],
   [publicLoader.includes("if (!items.length) return false") && publicLoader.includes("catch (error)"), 'Legacy homepage slideshow fallback is missing'],
   [rules.includes('match /homeShowcaseSlides/{slideId}') && rules.includes('allow read: if true;') && rules.includes('allow create, update: if isAdmin();') && rules.includes('allow delete: if false;'), 'Homepage slideshow Firestore access rules are missing or unsafe'],
+  [admin.includes('mgHeaderBannerManager') && admin.includes('mgHeaderBannerImage'), 'Top header background controls are missing from Admin Panel'],
+  [manager.includes("settings','homeHeader") && manager.includes('async function saveHeaderBanner') && manager.includes('async function resetHeaderBanner'), 'Top header background admin save/restore flow is missing'],
+  [publicLoader.includes("settings','homeHeader") && publicLoader.includes('header.style.backgroundImage'), 'Public homepage does not load the Admin-managed header background'],
 ];
 const failed = checks.filter(([ok]) => !ok);
 if (failed.length) { console.error('MASTER ADMIN CHECK FAILED'); failed.forEach(([,msg]) => console.error(' - '+msg)); process.exit(1); }
