@@ -3228,10 +3228,43 @@ Object.assign(window.MG_I18N_DICTIONARY,{
 });
 
 </script>
-<script data-mg-i18n-inline="engine">/* Supplemental complete UI translation layer. It only translates known interface phrases;
+<script data-mg-i18n-inline="engine">
+/* Supplemental complete UI translation layer. It only translates known interface phrases;
    user-entered property/customer content is intentionally excluded. */
 (()=>{
   const dict={
+    /* Advertisement Manager (admin panel) — added with the ads feature so the
+       i18n coverage gate keeps every static interface string translated. */
+    '📢 જાહેરાત મેનેજર — Advertisement Manager':'📢 विज्ञापन मैनेजर — Advertisement Manager|📢 Advertisement Manager',
+    'ફોટો (JPG / PNG / WebP) અથવા વિડિયો (MP4) જાહેરાત ઉમેરો, સંપાદિત કરો અને પ્રકાશિત કરો. આ વિભાગ ફક્ત પ્રમાણિત એડમિન માટે છે.':'फोटो (JPG / PNG / WebP) या वीडियो (MP4) विज्ञापन जोड़ें, संपादित करें और प्रकाशित करें। यह अनुभाग केवल प्रमाणित एडमिन के लिए है।|Add, edit and publish photo (JPG / PNG / WebP) or video (MP4) advertisements. This section is for authenticated admins only.',
+    'જાહેરાતનું શીર્ષક':'विज्ञापन का शीर्षक|Advertisement title',
+    'શીર્ષક':'शीर्षक|Title',
+    'મીડિયા પ્રકાર':'मीडिया प्रकार|Media type',
+    'ફાઇલ':'फ़ाइल|File',
+    'સ્થાન':'स्थान|Placement',
+    'હોમપેજ ટોચ':'होमपेज शीर्ष|Homepage top',
+    'હોમપેજ મધ્ય':'होमपेज मध्य|Homepage middle',
+    'લિસ્ટિંગ વચ્ચે':'लिस्टिंग के बीच|Between listings',
+    'શોધ પરિણામ':'खोज परिणाम|Search results',
+    'પ્રોપર્ટી વિગત પૃષ્ઠ':'प्रॉपर्टी विवरण पृष्ठ|Property details page',
+    'શહેર પૃષ્ઠ':'शहर पृष्ठ|City page',
+    'ઓફર / સ્કીમ વિભાગ':'ऑफ़र / स्कीम अनुभाग|Offers / schemes section',
+    'દર્શાવવાનો સમય (સેકન્ડ)':'प्रदर्शन अवधि (सेकंड)|Display duration (seconds)',
+    '5 સેકન્ડ':'5 सेकंड|5 seconds',
+    '10 સેકન્ડ':'10 सेकंड|10 seconds',
+    '15 સેકન્ડ':'15 सेकंड|15 seconds',
+    '30 સેકન્ડ':'30 सेकंड|30 seconds',
+    '60 સેકન્ડ':'60 सेकंड|60 seconds',
+    'કસ્ટમ…':'कस्टम…|Custom…',
+    'કસ્ટમ સેકન્ડ':'कस्टम सेकंड|Custom seconds',
+    'શરૂ તારીખ':'प्रारंभ तिथि|Start date',
+    'અંતિમ તારીખ':'समाप्ति तिथि|Expiry date',
+    'પ્રાયોરિટી':'प्राथमिकता|Priority',
+    'ક્લિક URL (વૈકલ્પિક)':'क्लिक URL (वैकल्पिक)|Click URL (optional)',
+    'સક્રિય કરો':'सक्रिय करें|Enable',
+    'સેવ કરો':'सेव करें|Save',
+    'પ્રિવ્યૂ':'प्रीव्यू|Preview',
+    'રીસેટ':'रीसेट|Reset',
     'અહીંથી નોંધાયેલા એકાઉન્ટ જુઓ અને શંકાસ્પદ એકાઉન્ટને કારણ સાથે Block / Unblock કરો. બ્લોક કરવાથી તે એકાઉન્ટ Firebaseમાં લોગિન કરી શકશે નહીં. કાયમી ડિલીટ માટે સર્વર સુવિધા જરૂરી છે; Firebase Blaze પ્લાન સક્રિય ન હોવાથી આ વિકલ્પ હાલ બંધ છે. કોઈ એકાઉન્ટ ભૂલથી ડિલીટ ન થાય તે માટે આ બટન સક્રિય નથી.':'यहाँ पंजीकृत ग्राहक खाते देखें और संदिग्ध खाते को कारण सहित Block / Unblock करें। Block करने पर वह खाता Firebase में Log In नहीं कर सकेगा। स्थायी Delete के लिए सर्वर सुविधा आवश्यक है; Firebase Blaze प्लान सक्रिय न होने के कारण यह विकल्प अभी बंद है। गलती से कोई खाता Delete न हो, इसलिए यह बटन सक्रिय नहीं है।|View registered customer accounts and Block / Unblock suspicious accounts with a reason. A blocked account cannot log in to Firebase. Permanent deletion requires a server feature; this option is currently disabled because the Firebase Blaze plan is not active. This button stays disabled to prevent accidental account deletion.',
     
     'લોડ થઈ રહ્યા છે…':'लोड हो रहे हैं…|Loading…',
@@ -3713,7 +3746,8 @@ Object.assign(window.MG_I18N_DICTIONARY,{
     window.__mgI18nObserver.observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['placeholder','title','aria-label']});
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply,{once:true});else apply();
-})();</script>
+})();
+</script>
 <!-- MG_I18N_INLINE_BUNDLE_END -->
 <script src="assets/maru-ghar-file-mode.js?v=20261102r5"></script>
 <script>
