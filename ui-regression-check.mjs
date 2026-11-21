@@ -109,7 +109,7 @@ if(!adminHtml.includes("p.photoDirection==='vertical'?'નીચેથી ઉપ
 if(!backend.includes("p.photoDirection==='vertical'?'vertical':p.photoDirection==='horizontal'?'horizontal':'both'"))throw new Error('Property photo slider does not default to both directions');
 if(!backend.includes("grid.addEventListener('pointerdown'")||!backend.includes("grid.addEventListener('pointerup'")||!backend.includes('Math.abs(dx)>=Math.abs(dy)?dx:dy'))throw new Error('Property photo swipe must detect both horizontal and vertical pointer gestures');
 if(!home.includes('assets/maru-ghar-backend.js?v=20261121touchfallback3'))throw new Error('Updated property photo direction controller cache version is missing');
-if(!home.includes('.mg-slider[data-direction="vertical"] .mg-track{flex-direction:column;touch-action:pan-x}'))throw new Error('Vertical photo slider layout CSS is missing');
+if(!home.includes('.mg-slider[data-direction="vertical"] .mg-track{flex-direction:column;touch-action:none!important}'))throw new Error('Vertical photo slider layout CSS is missing');
 console.log('PROPERTY PHOTO DIRECTION PASS — Admin can choose vertical bottom-to-top or horizontal swipe; website and Android WebView use the saved setting.');
 
 const bidirDemo=fs.readFileSync('assets/maru-ghar-demo-showcase.js','utf8');
