@@ -17,6 +17,8 @@ import { getFirestore, collection, getDocs, getDoc, query, orderBy, addDoc, setD
   let editingId = '';
   let oldImage = null;
   let previewUrl = '';
+  let headerImage = null;
+  let headerPreviewUrl = '';
 
   const say = message => { $('mgHeroStatus').textContent = tr(message); };
   const value = id => $(id).value.trim();
@@ -149,12 +151,16 @@ import { getFirestore, collection, getDocs, getDoc, query, orderBy, addDoc, setD
   }
   async function load() {
     $('mgHeroSlidesList').textContent = tr('લોડ થઈ રહ્યું છે…');
-    const [snap,config] = await Promise.all([
+    const [snap,config,headerConfig] = await Promise.all([
       getDocs(query(collection(db,'homeShowcaseSlides'),orderBy('order'))),
-      getDoc(doc(db,'settings','homeShowcase'))
+      getDoc(doc(db,'settings','homeShowcase')),
+      getDoc(doc(db,'settings','homeHeader'))
     ]);
     slides = snap.docs.map(d => ({id:d.id,...d.data()}));
     $('mgHeroKeepBuiltIns').checked = config.exists() ? config.data().keepBuiltIns !== false : true;
+    headerImage = headerConfig.exists() && /^https:\/\//i.test(headerConfig.data().imageUrl || '')
+      ? {url:headerConfig.data().imageUrl,publicId:headerConfig.data().imagePublicId || ''} : null;
+    renderHeaderPreview(headerImage?.url || '');
     renderList();
   }
   async function save() {
@@ -226,9 +232,69 @@ import { getFirestore, collection, getDocs, getDoc, query, orderBy, addDoc, setD
     } catch (error) { say('Restore નિષ્ફળ: ' + error.message); }
   }
 
+  function renderHeaderPreview(url) {
+    if (headerPreviewUrl) URL.revokeObjectURL(headerPreviewUrl);
+    headerPreviewUrl = '';
+    const host = $('mgHeaderBannerPreview');
+    host.replaceChildren();
+    if (!url) {
+      const note = document.createElement('small');
+      note.textContent = 'No custom photo saved — the original header background is active.';
+      host.append(note);
+      return;
+    }
+    const img = document.createElement('img');
+    img.src = url;
+    img.alt = 'Top header background preview';
+    host.append(img);
+  }
+  async function saveHeaderBanner() {
+    const file = $('mgHeaderBannerImage').files?.[0];
+    if (!file && !headerImage?.url) { $('mgHeaderBannerStatus').textContent = 'Choose a photo first.'; return; }
+    const button = $('mgHeaderBannerSave');
+    button.disabled = true;
+    $('mgHeaderBannerStatus').textContent = 'Saving header photo…';
+    try {
+      const image = file ? await upload(file) : headerImage;
+      await setDoc(doc(db,'settings','homeHeader'),{
+        imageUrl:image.url,imagePublicId:image.publicId || '',updatedAt:serverTimestamp()
+      },{merge:true});
+      headerImage = image;
+      $('mgHeaderBannerImage').value = '';
+      renderHeaderPreview(image.url);
+      $('mgHeaderBannerStatus').textContent = 'Header photo saved. Reopen Home Page to see it.';
+      await log('home_header_background_updated','homeHeader','Top header background photo updated');
+    } catch (error) {
+      $('mgHeaderBannerStatus').textContent = 'Save failed: ' + (error.message || 'Check Firebase/Cloudinary.');
+    } finally { button.disabled = false; }
+  }
+  async function resetHeaderBanner() {
+    if (!confirm('Restore the original website header background photo?')) return;
+    const button = $('mgHeaderBannerReset');
+    button.disabled = true;
+    try {
+      await setDoc(doc(db,'settings','homeHeader'),{imageUrl:'',imagePublicId:'',updatedAt:serverTimestamp()},{merge:true});
+      headerImage = null;
+      $('mgHeaderBannerImage').value = '';
+      renderHeaderPreview('');
+      $('mgHeaderBannerStatus').textContent = 'Original header background restored.';
+      await log('home_header_background_reset','homeHeader','Original header background restored');
+    } catch (error) {
+      $('mgHeaderBannerStatus').textContent = 'Restore failed: ' + (error.message || 'Check Firebase.');
+    } finally { button.disabled = false; }
+  }
   $('mgHeroSave').addEventListener('click',save);
   $('mgHeroNew').addEventListener('click',() => { resetForm(); $('mgHeroEditor').open = true; });
   $('mgHeroCancel').addEventListener('click',resetForm);
+  $('mgHeaderBannerSave').addEventListener('click',saveHeaderBanner);
+  $('mgHeaderBannerReset').addEventListener('click',resetHeaderBanner);
+  $('mgHeaderBannerImage').addEventListener('change',() => {
+    const file = $('mgHeaderBannerImage').files?.[0];
+    if (!file) return;
+    if (headerPreviewUrl) URL.revokeObjectURL(headerPreviewUrl);
+    headerPreviewUrl = URL.createObjectURL(file);
+    renderHeaderPreview(headerPreviewUrl);
+  });
   $('mgHeroImage').addEventListener('change',() => {
     const file = $('mgHeroImage').files?.[0];
     if (!file) return;
