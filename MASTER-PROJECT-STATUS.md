@@ -8,6 +8,8 @@
 **Firebase project:** `maru-ghar-gandhinagar-8dbe4`
 **Purpose of this file:** authoritative handoff so any future session (ChatGPT, AppJet or a human developer) can resume without re-discovering the project.
 
+**Advertisement Manager:** a new feature was added on top of the swipe-fix work and the PR #99 branch state — see **section 14**. It is implemented and locally verified but **not merged and not deployed**.
+
 > This snapshot is documentation only. No application code, Firebase
 > configuration, Firestore rules, workflow or test was modified to produce it.
 
@@ -396,6 +398,8 @@ security, authorization correctness, or that Firestore rules were deployed.
 | 8 | Build and verify the Electron 43 Windows EXE | `windows-exe.yml` runs only on push to `main`; not yet exercised with Electron 43 |
 | 9 | Real Android device swipe test | Physical device — automated Chromium is not equivalent |
 | 10 | Optionally resolve the 2 moderate `minimatch` advisories | Risk to the installer build; needs testing |
+| 11 | Deploy the updated `firestore.rules` so the new `advertisements` block exists in `maru-ghar-gandhinagar-8dbe4` | Firebase console / CLI credentials. Until then the Advertisement Manager panel cannot read or write ads in production |
+| 12 | Review and approve the Advertisement Manager (section 14) | Owner approval — nothing was merged or deployed |
 
 ---
 
@@ -423,10 +427,88 @@ security, authorization correctness, or that Firestore rules were deployed.
 - all four pages, `www/`, `assets/` including `assets/images/`, and the admin panel
 - Firebase config, `firestore.rules`, `firestore.indexes.json`, `firebase.json`
 - `functions/`, `desktop/` (Electron), `capacitor.config.json` and `google-services.json`
-- all 16 test scripts and every configuration file
+- all 17 test scripts and every configuration file
+- the Advertisement Manager: `assets/maru-ghar-ad-constants.js`, `maru-ghar-ad-manager.js`, `maru-ghar-ad-manager.css`, `maru-ghar-ad-manager-admin.js`, `maru-ghar-ad-manager-admin.css` and `ads-manager-check.mjs`
 - the full `.git` history, so the repository can be restored with complete history
 - `MASTER-PROJECT-STATUS.md` (this file) and `RESTORE-GUIDE.md`
 
 Deliberately excluded: `node_modules/` (15 MB of installable dependencies —
 restore with `npm ci`), and any file that would contain a secret (none exist in
 the repository).
+
+---
+
+## 14. Advertisement Manager (added 21 November 2026)
+
+**Status: implemented and verified locally. NOT merged into `main`. NOT deployed.**
+
+The user's instruction for this feature was explicit: preserve every existing
+feature and the PR #99 work, and do not merge or deploy. Both were respected —
+no pull request was created or merged and no Firebase/Hosting deployment ran.
+
+### 14.1 Where it lives
+
+| File | Role |
+|---|---|
+| `assets/maru-ghar-ad-constants.js` | Shared contract: 7 placements, 5/10/15/30/60 s presets, 3–300 s bounds, size/type limits, and the pure helpers `parseAdDuration`, `validateAdMedia`, `isSafeClickUrl`, `isAdLive`, `sortAds`, `toMillis`, `localInputToDate`, `dateToLocalInput` |
+| `assets/maru-ghar-ad-manager-admin.js` | Admin panel controller: Cloudinary upload, create/edit/delete/replace, preview, enable/disable |
+| `assets/maru-ghar-ad-manager.js` | Public renderer: reads live ads, rotates them, mounts them in the selected placements |
+| `assets/maru-ghar-ad-manager.css` | Public styles (`touch-action: pan-y`, inline flow, responsive, reduced-motion) |
+| `assets/maru-ghar-ad-manager-admin.css` | Admin panel styles |
+| `admin.html` | New `#mgAdManagerPanel` section inside the existing `#adminMain` dashboard |
+| `index.html` | Five ad mount points plus the module/style tags |
+| `firestore.rules` | New `advertisements` block (section 14 of the rules file) |
+| `scripts/copy-web.mjs` | Ships the five new assets into `www/` |
+| `ads-manager-check.mjs` | 174 assertions covering this feature |
+| `package.json` | `ads-manager-check.mjs` appended to the existing `npm test` chain |
+
+### 14.2 Requirements coverage
+
+| # | Requirement | How it is met |
+|---|---|---|
+| 1 | Image ads (JPG/PNG/WebP) | Cloudinary upload, MIME checked against a whitelist, 8 MB cap |
+| 2 | Video ads (MP4) | Same path with the video preset, 25 MB cap |
+| 3 | Placement selection | 7 predefined placements: homepage top, homepage middle, between listings, search results, property details, city page, offers/schemes |
+| 4 | Independent duration | `durationSeconds` is stored per advertisement |
+| 5 | Custom duration | 5/10/15/30/60 s presets plus a custom field, clamped to 3–300 s and rounded to whole seconds |
+| 6 | Start and expiry dates | `startAt` / `expiryAt` timestamps, validated so expiry is after start |
+| 7 | Enable/disable | `enabled` flag, also enforced by the Firestore rules |
+| 8 | Priority and order | `priority` then `order`, applied by `sortAds` |
+| 9 | Optional click-through URL | `clickUrl`, accepted only for `http(s)`; `javascript:`/`data:` rejected |
+| 10 | Preview before publishing | In-panel preview of the selected media with its placement and duration |
+| 11 | Edit / delete / replace | Firestore `updateDoc` / `deleteDoc`, plus file replacement |
+| 12 | Mobile and desktop | Responsive CSS; a `position: fixed` overlay is explicitly forbidden |
+| 13 | Video autoplay muted + fallback | `muted playsinline controls`; a rejected `play()` falls back to visible controls instead of a silent failure |
+| 14 | Never blocks photo swipes | The renderer registers **no** touch/pointer listeners and the CSS uses `touch-action: pan-y`, so the property galleries keep full ownership of horizontal gestures |
+| 15 | Existing architecture, no secrets | Cloudinary unsigned presets and Firebase, matching the project; no credential is written into source |
+
+### 14.3 Display behaviour
+
+- Only `enabled == true` documents are queried, and the start/expiry window is
+  evaluated on the client. The rules deliberately contain **no** `request.time`
+  comparison in the read rule: rules are not filters, so a date comparison there
+  would reject the whole list query.
+- Multiple ads in one placement rotate by `priority`/`order`, and rotation stops
+  after 3 cycles so the page is not turned into a slideshow.
+- Rotation pauses when the tab is hidden or the slot leaves the viewport.
+- Expired or disabled ads are never rendered.
+
+### 14.4 Verification actually performed
+
+- `node ads-manager-check.mjs` → **PASS, 174 assertions**.
+- `npm test` → **PASS**, all 17 chained checks, including every pre-existing
+  check (smoke, i18n structure/coverage/DOM, UI regression, discovery, AdSense
+  slots, customer auth, verification audit, maps/WhatsApp, notifications,
+  Firestore rules 12/12, Firebase preflight, OTA, master-admin 14/14 and the
+  Android swipe suite).
+- `www/` was regenerated with `node scripts/copy-web.mjs`.
+
+### 14.5 Limitations of this feature's verification
+
+1. Not exercised against live Firestore or Cloudinary, and no ad was uploaded —
+   that needs the deployed rules and real admin credentials.
+2. Not tested on a physical Android device; gesture isolation is proven by the
+   automated Chromium swipe suite.
+3. The `advertisements` rules block is only deployed when the owner deploys
+   `firestore.rules` (pending work item 11).
+4. The feature is present on `appjet` only; `main` and PR #99 are untouched.
