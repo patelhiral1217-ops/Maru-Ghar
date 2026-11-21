@@ -169,8 +169,9 @@ function ensureLb(){
     if(e.target.closest('.mg-lb-x')||e.target===lb||e.target.classList.contains('mg-lb-stage')){closeLb();return;}
     const s=e.target.closest('[data-lb]'); if(s)showLb(lbIdx+ +s.dataset.lb);
   });
-  let sx=null; lb.addEventListener('touchstart',e=>{sx=e.touches[0].clientX},{passive:true});
-  lb.addEventListener('touchend',e=>{if(sx==null||lbMedia.length<2)return;const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>40)showLb(lbIdx+(dx<0?1:-1));sx=null},{passive:true});
+  /* Horizontal swipe is handled by assets/maru-ghar-swipe.js, which recovers from
+     Android touchcancel and triggers the [data-lb] buttons above. End-only touch
+     handlers were removed because Chrome cancels that gesture without touchend. */
   document.addEventListener('keydown',e=>{if(lb.hidden)return;if(e.key==='Escape')closeLb();if(e.key==='ArrowRight')showLb(lbIdx+1);if(e.key==='ArrowLeft')showLb(lbIdx-1);});
   return lb;
 }
@@ -191,9 +192,9 @@ if(grid){
     if(step){goTo(sl,+sl.dataset.cur + +step.dataset.mgStep);return;}
     if(e.target.closest('[data-mg-open]')){const m=sliderData.get(sl);if(m)openLb(m,+sl.dataset.cur);}
   });
-  let tx=null,tsl=null;
-  grid.addEventListener('touchstart',e=>{const t=e.target.closest('.mg-track');if(!t||e.target.closest('video')){tsl=null;return;}tsl=t.closest('.mg-slider');tx=e.touches[0].clientX},{passive:true});
-  grid.addEventListener('touchend',e=>{if(!tsl||tx==null||+tsl.dataset.n<2)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>40){goTo(tsl,+tsl.dataset.cur+(dx<0?1:-1));}tx=null},{passive:true});
+  /* Swiping the photo strip is handled by assets/maru-ghar-swipe.js: it clicks the
+     existing [data-mg-step] buttons, so counters, lazy images and video pausing all
+     stay on the same code path. The old touchend-only handler is intentionally gone. */
 }
 
 function mgIsListingExpired(p){const v=String(p.expiresOn||'').trim();if(!/^\d{4}-\d{2}-\d{2}$/.test(v))return false;const now=new Date();const today=[now.getFullYear(),String(now.getMonth()+1).padStart(2,'0'),String(now.getDate()).padStart(2,'0')].join('-');return v<today;}
