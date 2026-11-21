@@ -12,6 +12,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium for the swipe check
+        run: npx playwright install --with-deps chromium
       - name: Build website folder
         run: npm run copy-web
       - name: Run static and regression checks

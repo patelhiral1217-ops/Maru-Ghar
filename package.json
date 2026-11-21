@@ -14,7 +14,8 @@
     "@capgo/capacitor-updater": "^7.53.0",
     "esbuild": "^0.28.2",
     "electron": "^39.2.7",
-    "electron-builder": "^26.0.12"
+    "electron-builder": "^26.0.12",
+    "playwright": "^1.65.1"
   },
   "main": "desktop/main.cjs",
   "build": {

@@ -24,7 +24,55 @@ import path from 'node:path';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
-const { chromium } = require('/opt/appjet/browser/node_modules/playwright/index.js');
+/* Playwright is a devDependency so GitHub Actions can run this check; the AppJet
+ * development sandbox keeps it outside the repo, so a repo-local install is
+ * preferred and the sandbox copy stays as a fallback. */
+function loadPlaywright() {
+  const ids = [
+    'playwright',
+    'playwright-core',
+    '/opt/appjet/browser/node_modules/playwright/index.js'
+  ];
+  const tried = [];
+  for (const id of ids) {
+    try {
+      return require(id);
+    } catch (err) {
+      tried.push(id + ' [' + ((err && (err.code || err.message)) || 'error') + ']');
+    }
+  }
+  console.log('FAIL Playwright is not installed. Tried: ' + tried.join(', '));
+  console.log('      Fix: npm install && npx playwright install chromium');
+  process.exit(1);
+}
+
+/* Chromium binary: explicit override, the sandbox build, the Playwright browser
+ * cache, then a system Chrome (GitHub's ubuntu runner ships google-chrome).
+ * Returning undefined lets Playwright use its own downloaded build. */
+function chromeExecutable() {
+  const override = process.env.MG_CHROME_PATH;
+  if (override && fs.existsSync(override)) return override;
+  const candidates = [
+    '/opt/appjet/browser-binaries/chromium-1234/chrome-linux64/chrome',
+    '/root/.cache/ms-playwright/chromium-1234/chrome-linux64/chrome',
+    '/usr/bin/google-chrome',
+    '/usr/bin/google-chrome-stable',
+    '/usr/bin/chromium',
+    '/usr/bin/chromium-browser'
+  ];
+  for (const candidate of candidates) {
+    if (fs.existsSync(candidate)) return candidate;
+  }
+  try {
+    const bundled = chromium.executablePath();
+    if (bundled && fs.existsSync(bundled)) return bundled;
+  } catch (err) {
+    /* browser not downloaded: fall through to Playwright's own default */
+  }
+  return undefined;
+}
+
+const { chromium } = loadPlaywright();
 
 const root = process.cwd();
 const www = path.join(root, 'www');
@@ -174,8 +222,10 @@ async function main() {
 
   const server = await startServer();
   const base = 'http://127.0.0.1:' + server.address().port + '/';
+  const executablePath = chromeExecutable();
+  console.log('INFO chromium: ' + (executablePath || 'playwright bundled build'));
   const browser = await chromium.launch({
-    executablePath: '/opt/appjet/browser-binaries/chromium-1234/chrome-linux64/chrome',
+    executablePath,
     args: ['--no-sandbox', '--touch-events=enabled', '--disable-dev-shm-usage']
   });
 
