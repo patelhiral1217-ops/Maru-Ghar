@@ -11,6 +11,7 @@ const checks = [
   [manager.includes('homeShowcaseSlides') && manager.includes('Cloudinary') && manager.includes('8 * 1024 * 1024'), 'Homepage slideshow storage/upload integration is missing'],
   [manager.includes('deletedAt:serverTimestamp()') && manager.includes('async function restore'), 'Homepage slideshow soft-delete/restore is missing'],
   [manager.includes('async function move') && manager.includes('↑ ઉપર') && manager.includes('↓ નીચે'), 'Mobile-friendly slideshow ordering controls are missing'],
+  [admin.includes('mgHeroKeepBuiltIns') && manager.includes("settings','homeShowcase") && publicLoader.includes('keepBuiltIns'), 'Keep-existing-home-photos safety option is missing'],
   [home.includes('maru-ghar-home-showcase-config.js') && home.includes('window.__mgHeroSlidesReady'), 'Homepage slideshow public loader is not connected to rotation'],
   [publicLoader.includes("if (!items.length) return false") && publicLoader.includes("catch (error)"), 'Legacy homepage slideshow fallback is missing'],
   [rules.includes('match /homeShowcaseSlides/{slideId}') && rules.includes('allow read: if true;') && rules.includes('allow create, update: if isAdmin();') && rules.includes('allow delete: if false;'), 'Homepage slideshow Firestore access rules are missing or unsafe'],
