@@ -83,8 +83,9 @@
   }
 
   /* Reuse the existing controls so counters and media state stay in sync. */
-  function step(surface, dir) {
+  function step(surface, dir, axis) {
     if (surface.kind === 'live') {
+      if (axis === 2) { surface.host.dispatchEvent(new CustomEvent('mg-swipe', { bubbles: true, detail: { direction: dir, axis: 'vertical' } })); return; }
       var btn = surface.host.querySelector('[data-mg-step="' + dir + '"]');
       if (btn) btn.click();
       return;
@@ -172,7 +173,7 @@
     var box = a.surface.el.getBoundingClientRect();
     var span = (a.axis === 1 ? box.width : box.height) || 1;
     if (!committed(delta, dt, span)) return;
-    step(a.surface, delta < 0 ? 1 : -1); // advance first, so the button click is not swallowed
+    step(a.surface, delta < 0 ? 1 : -1, a.axis); // advance first, so the button click is not swallowed
     suppress = { el: a.surface.host, until: Date.now() + CLICK_GUARD_MS };
   }
 
@@ -248,20 +249,21 @@
     demoTouch.x = t.clientX; demoTouch.y = t.clientY;
     if (!demoTouch.axis) {
       if (Math.abs(dx) >= LOCK_PX && Math.abs(dx) >= Math.abs(dy) * 1.1) demoTouch.axis = 1;
-      else if (Math.abs(dy) >= LOCK_PX && Math.abs(dy) >= Math.abs(dx) * 1.1) demoTouch.axis = -1;
+      else if (Math.abs(dy) >= LOCK_PX && Math.abs(dy) >= Math.abs(dx) * 1.1) demoTouch.axis = 2;
     }
-    if (demoTouch.axis === 1 && e.cancelable) e.preventDefault();
+    if (demoTouch.axis > 0 && e.cancelable) e.preventDefault();
   }, { capture: true, passive: false });
   function finishDemoTouch(e) {
     if (!demoTouch) return;
     var a = demoTouch; demoTouch = null;
-    if (a.axis !== 1) return;
+    if (a.axis !== 1 && a.axis !== 2) return;
     var t = e && e.changedTouches && e.changedTouches[0];
     if (t) { a.x = t.clientX; a.y = t.clientY; }
-    var delta = a.x - a.x0, dt = Math.max(1, Date.now() - a.t0);
+    var delta = a.axis === 1 ? a.x - a.x0 : a.y - a.y0, dt = Math.max(1, Date.now() - a.t0);
     var box = a.surface.el.getBoundingClientRect();
-    if (!committed(delta, dt, box.width || 1)) return;
-    step(a.surface, delta < 0 ? 1 : -1);
+    var span = (a.axis === 1 ? box.width : box.height) || 1;
+    if (!committed(delta, dt, span)) return;
+    step(a.surface, delta < 0 ? 1 : -1, a.axis);
     suppress = { el: a.surface.host, until: Date.now() + CLICK_GUARD_MS };
   }
   document.addEventListener('touchend', finishDemoTouch, { capture: true, passive: true });
