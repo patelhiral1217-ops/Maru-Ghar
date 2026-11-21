@@ -116,15 +116,16 @@ const bidirDemo=fs.readFileSync('assets/maru-ghar-demo-showcase.js','utf8');
 const bidirBackend=fs.readFileSync('assets/maru-ghar-backend.js','utf8');
 const bidirAdmin=fs.readFileSync('admin.html','utf8');
 const swipeModule=fs.readFileSync('assets/maru-ghar-swipe.js','utf8');
-if(!home.includes('#mgDemoShowcase .mg-demo-photo')||!home.includes('touch-action:pan-y pinch-zoom!important')||!swipeModule.includes('demoTouch.axis = 1')||!swipeModule.includes('if (a.axis !== 1) return;'))throw new Error('Demo gallery must allow native vertical page scrolling and handle horizontal photo swipes');
+if(!home.includes('#mgDemoShowcase .mg-demo-photo')||!home.includes('touch-action:pan-y pinch-zoom!important')||!swipeModule.includes("surface.kind === 'live' || surface.kind === 'demo'")||!swipeModule.includes('document.addEventListener(\'pointerdown\', onDown, true)')||!swipeModule.includes('document.addEventListener(\'pointerup\''))throw new Error('Demo gallery must use Pointer Events for horizontal swipes while preserving native vertical page scrolling');
+if(!bidirDemo.includes('#mgDemoShowcase .mg-demo-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:15px}'))throw new Error('Demo properties must be displayed in one vertical column');
 if(!bidirBackend.includes("p.photoDirection==='vertical'?'vertical':p.photoDirection==='horizontal'?'horizontal':'both'")||!bidirBackend.includes("grid.addEventListener('pointerdown'")||!bidirBackend.includes("grid.addEventListener('pointerup'")||!bidirBackend.includes('Math.abs(dx)>=Math.abs(dy)?dx:dy'))throw new Error('Live property galleries must default to and support both pointer swipe directions');
 if(!bidirAdmin.includes('data-action="photo_both"')||!bidirAdmin.includes("action==='photo_vertical'||action==='photo_horizontal'||action==='photo_both'"))throw new Error('Admin must provide a bidirectional photo setting');
 console.log('BIDIRECTIONAL PHOTO SWIPE PASS — Demo and live listings accept horizontal/vertical swipes; Admin can select both.');
 
 // Regression: Android Pointer Events must process dominant-axis swipes for demo and live photo galleries.
-if(!demo.includes("addEventListener('pointerdown'")||!demo.includes("addEventListener('pointerup'")||!demo.includes('Math.abs(dx)>=Math.abs(dy)?dx:dy'))throw new Error('Demo photo gallery must process both horizontal and vertical pointer swipes');
+if(!swipeModule.includes("surface.kind === 'live' || surface.kind === 'demo'")||!swipeModule.includes('return { h: true, v: false }')||!swipeModule.includes("surface.el.dispatchEvent(new CustomEvent('mg-swipe'"))throw new Error('Demo photos must advance on horizontal Pointer Events only; vertical gestures must scroll the page');
 if(!backend.includes("grid.addEventListener('pointerdown'")||!backend.includes("grid.addEventListener('pointerup'")||!backend.includes('Math.abs(dx)>=Math.abs(dy)?dx:dy'))throw new Error('Live property gallery must process both horizontal and vertical pointer swipes');
-console.log('ANDROID POINTER SWIPE PASS — Demo and live property photos handle horizontal and vertical gestures through Pointer Events.');
+console.log('ANDROID POINTER SWIPE PASS — Demo photos swipe horizontally through Pointer Events; vertical gestures remain native page scrolling.');
 
 
 const mobileScrollStart=home.indexOf('<style id="mg-vertical-page-scroll-horizontal-photo-swipe-20261122">');
