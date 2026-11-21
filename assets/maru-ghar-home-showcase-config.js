@@ -7,10 +7,20 @@ window.__mgHeroSlidesReady = (async () => {
     if (location.protocol === 'file:' || location.protocol === 'content:') return false;
     const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const [snap,config] = await Promise.all([
+    const [snap,config,headerConfig] = await Promise.all([
       getDocs(query(collection(db,'homeShowcaseSlides'),orderBy('order'))),
-      getDoc(doc(db,'settings','homeShowcase'))
+      getDoc(doc(db,'settings','homeShowcase')),
+      getDoc(doc(db,'settings','homeHeader'))
     ]);
+    const headerImage = headerConfig.exists() ? headerConfig.data().imageUrl : '';
+    if (/^https:\/\//i.test(headerImage || '')) {
+      const header = document.querySelector('body > header');
+      if (header) {
+        header.style.backgroundImage = 'linear-gradient(90deg,rgba(3,17,18,.97) 0%,rgba(5,31,31,.88) 52%,rgba(6,23,25,.66) 100%),url(' + JSON.stringify(headerImage) + ')';
+        header.style.backgroundPosition = 'center';
+        header.style.backgroundSize = 'cover';
+      }
+    }
     const items = snap.docs.map(d => d.data()).filter(x => x.visible === true && !x.deletedAt && /^https:\/\//i.test(x.imageUrl || ''));
     if (!items.length) return false;
     const keepBuiltIns = config.exists() ? config.data().keepBuiltIns !== false : true;
