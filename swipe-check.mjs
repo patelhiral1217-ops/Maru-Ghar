@@ -304,13 +304,16 @@ async function main() {
     check('live swipe used the existing Previous control once', st.clicks.prev === 1,
       JSON.stringify(st.clicks));
 
-    /* A vertical swipe over the live gallery must not change the photo. */
+    /* Main supports vertical photo navigation (Admin can choose vertical,
+       horizontal or both). A vertical swipe must advance the photo and keep the
+       counter in sync, exactly like the horizontal gesture. */
     await sleep(800);
     const beforeVertical = (await hState()).cur;
     await swipe(hcdp, await hBox('.mg-slider'), 0, -160);
     st = await hState();
-    check('live vertical swipe keeps the photo', st.cur === beforeVertical,
-      beforeVertical + ' -> ' + st.cur);
+    check('live vertical swipe advances the photo (both-axis navigation)',
+      st.cur === String(+beforeVertical + 1), beforeVertical + ' -> ' + st.cur);
+    check('live counter follows the vertical swipe', st.count === '2 / 3', st.count);
 
     /* The existing buttons must still work, including right after a swipe.
        Tapped through real touch events (not a synthetic mouse click) because
@@ -334,13 +337,15 @@ async function main() {
     const nextTopmost = await activate('.mg-slider .mg-next');
     check('live Next button is not covered by the slider', nextTopmost === true, String(nextTopmost));
     st = await hState();
-    check('live Next button still advances the photo', st.cur === '1', 'cur=' + st.cur);
-    check('live counter follows the Next button', st.count === '2 / 3', st.count);
+    /* Re-baselined: the vertical swipe above left the gallery on photo 2. */
+    check('live Next button still advances the photo', st.cur === '2', 'cur=' + st.cur);
+    check('live counter follows the Next button', st.count === '3 / 3', st.count);
 
     await sleep(400);
     await activate('.mg-slider .mg-prev');
     st = await hState();
-    check('live Previous button still goes back', st.cur === '0', 'cur=' + st.cur);
+    check('live Previous button still goes back', st.cur === '1', 'cur=' + st.cur);
+    check('live counter follows the Previous button', st.count === '2 / 3', st.count);
   } finally {
     await browser.close().catch(() => {});
     await new Promise((r) => server.close(r));
