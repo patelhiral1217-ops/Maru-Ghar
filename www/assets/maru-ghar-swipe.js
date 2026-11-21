@@ -89,8 +89,17 @@
   }
 
   function onDown(e) {
-    if (active) return;
     if (e.pointerType === 'mouse' && e.button !== 0) return;
+    /* A gesture can end without pointerup/pointercancel ever reaching us: Android
+       WebView drops them when the touched node is replaced mid-gesture, and the
+       gallery counter re-render does exactly that. Without this reset a single
+       lost gesture would block every later swipe on the page. A new primary
+       pointer is always a new gesture; a second finger must not disturb the
+       one already running. */
+    if (active) {
+      if (!e.isPrimary) return;
+      active = null;
+    }
     var surface = surfaceFor(e.target);
     if (!surface) return;
     active = {
