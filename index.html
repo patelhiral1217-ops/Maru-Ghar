@@ -4707,7 +4707,7 @@ Object.assign(window.MG_I18N_DICTIONARY,{
 </style>
 
 <script src="assets/maru-ghar-demo-showcase.js?v=20261120fix1"></script>
-<script src="assets/maru-ghar-swipe.js?v=20261121bothaxis3"></script>
+<script src="assets/maru-ghar-swipe.js?v=20261121scrollfix1"></script>
 <script defer src="assets/maru-ghar-admin-content.js?v=20261118a"></script>
 <style id="mg-final-search-metal-and-range-apply-20261117">
 /* Exact same champagne-gold/silver 3D finish for the home dropdowns and every category chip. */
@@ -4973,6 +4973,13 @@ html,body{max-width:100%;overflow-x:hidden}
 })();
 </script>
 
+
+<style id="mg-android-native-scroll-restoration-20261121">
+/* Restore native vertical scrolling on photo surfaces; JS handles horizontal gallery swipes only. */
+.mg-slider,.mg-track,.mg-slider .mg-slide,#mgDemoShowcase .mg-demo-photo,#mgDemoShowcase .mg-demo-photo img{
+  touch-action:pan-y pinch-zoom!important;
+}
+</style>
 </body></html>
 
 <style id="mg-city-and-four-column-fix-20261118">
