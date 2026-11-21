@@ -111,3 +111,11 @@ if(!backend.includes("const vertical=tsl.dataset.direction==='vertical'")||!back
 if(!home.includes('assets/maru-ghar-backend.js?v=20261121photodirection1'))throw new Error('Updated property photo direction controller cache version is missing');
 if(!home.includes('.mg-slider[data-direction="vertical"] .mg-track{flex-direction:column;touch-action:pan-x}'))throw new Error('Vertical photo slider layout CSS is missing');
 console.log('PROPERTY PHOTO DIRECTION PASS — Admin can choose vertical bottom-to-top or horizontal swipe; website and Android WebView use the saved setting.');
+
+const bidirDemo=fs.readFileSync('assets/maru-ghar-demo-showcase.js','utf8');
+const bidirBackend=fs.readFileSync('assets/maru-ghar-backend.js','utf8');
+const bidirAdmin=fs.readFileSync('admin.html','utf8');
+if(!bidirDemo.includes('touch-action:none')||!bidirDemo.includes('Math.abs(dx)>Math.abs(dy)?dx:dy'))throw new Error('Demo photo gallery must accept both horizontal and vertical swipe gestures');
+if(!bidirBackend.includes("p.photoDirection==='vertical'?'vertical':p.photoDirection==='horizontal'?'horizontal':'both'")||!bidirBackend.includes('const delta=Math.abs(dx)>Math.abs(dy)?dx:dy'))throw new Error('Live property galleries must default to and support both swipe directions');
+if(!bidirAdmin.includes('data-action="photo_both"')||!bidirAdmin.includes("action==='photo_vertical'||action==='photo_horizontal'||action==='photo_both'"))throw new Error('Admin must provide a bidirectional photo setting');
+console.log('BIDIRECTIONAL PHOTO SWIPE PASS — Demo and live listings accept horizontal/vertical swipes; Admin can select both.');
