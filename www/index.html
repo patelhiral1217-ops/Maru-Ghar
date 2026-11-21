@@ -1228,6 +1228,20 @@ header .navlinks > a:not(.admin-link):focus-visible{
  box-shadow:none!important;overflow:hidden!important
 }
 </style>
+<style id="mg-restore-top-banner-photo-rotation-20261121">
+/* Restore JS-controlled banner rotation: only the active image is visible. */
+.top.mg-top-banner .mg-tagline-background img,
+.top.mg-top-banner .mg-tagline-background img:first-child,
+.top.mg-top-banner .mg-tagline-background img:not(:first-child){
+  opacity:0!important;
+  visibility:hidden!important;
+  animation:none!important;
+}
+.top.mg-top-banner .mg-tagline-background img.mg-bg-active{
+  opacity:1!important;
+  visibility:visible!important;
+}
+</style>
 </head>
 <body>
 <div id="mgLocalFileWarning" hidden role="status" style="max-width:1220px;margin:10px auto;padding:12px 16px;border:1px solid #d8b45d;border-radius:10px;background:#fff4cf;color:#49370a;font:600 13px/1.6 Arial,sans-serif">આ index.html ફાઇલ સીધી ફોન/કમ્પ્યુટરમાંથી ખોલેલી છે. ભાષા અને સામાન્ય પેજ દેખાઈ શકે છે, પરંતુ Firebase Login, લાઇવ લિસ્ટિંગ, ફોટો/વિડિયો અપલોડ અને એકાઉન્ટ Sync માટે વેબસાઇટની HTTPS લિંક અથવા ઇન્સ્ટોલ કરેલી APK ખોલો.</div>
