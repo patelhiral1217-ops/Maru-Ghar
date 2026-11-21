@@ -260,7 +260,7 @@ async function main() {
       };
     });
     const hBox = (sel) => hp.evaluate((s) => {
-      const r = document.querySelector('.mg-slider ' + s).getBoundingClientRect();
+      const r = document.querySelector(s).getBoundingClientRect();
       return { x: r.left, y: r.top, width: r.width, height: r.height };
     }, sel);
 
@@ -283,7 +283,7 @@ async function main() {
       st.cur + ' ' + st.count);
 
     /* Horizontal swipe left: the controller must drive the Next control. */
-    await swipe(hcdp, await hBox('.mg-track'), -150, 0);
+    await swipe(hcdp, await hBox('.mg-slider'), -150, 0);
     st = await hState();
     check('live swipe left advances to photo 2', st.cur === '1', 'cur=' + st.cur);
     check('live counter follows the swipe', st.count === '2 / 3', st.count);
@@ -293,7 +293,7 @@ async function main() {
 
     /* Horizontal swipe right: back to photo 1. */
     await sleep(800);
-    await swipe(hcdp, await hBox('.mg-track'), 150, 0);
+    await swipe(hcdp, await hBox('.mg-slider'), 150, 0);
     st = await hState();
     check('live swipe right returns to photo 1', st.cur === '0', 'cur=' + st.cur);
     check('live counter returns to 1 / 3', st.count === '1 / 3', st.count);
@@ -303,7 +303,7 @@ async function main() {
     /* A vertical swipe over the live gallery must not change the photo. */
     await sleep(800);
     const beforeVertical = (await hState()).cur;
-    await swipe(hcdp, await hBox('.mg-track'), 0, -160);
+    await swipe(hcdp, await hBox('.mg-slider'), 0, -160);
     st = await hState();
     check('live vertical swipe keeps the photo', st.cur === beforeVertical,
       beforeVertical + ' -> ' + st.cur);
@@ -312,13 +312,13 @@ async function main() {
        Tapped through real touch events (not a synthetic mouse click) because
        that is what an Android finger does. */
     await sleep(800);
-    await swipe(hcdp, await hBox('.mg-next'), 0, 0);
+    await swipe(hcdp, await hBox('.mg-slider .mg-next'), 0, 0);
     st = await hState();
     check('live Next button still advances the photo', st.cur === '1', 'cur=' + st.cur);
     check('live counter follows the Next button', st.count === '2 / 3', st.count);
 
     await sleep(400);
-    await swipe(hcdp, await hBox('.mg-prev'), 0, 0);
+    await swipe(hcdp, await hBox('.mg-slider .mg-prev'), 0, 0);
     st = await hState();
     check('live Previous button still goes back', st.cur === '0', 'cur=' + st.cur);
   } finally {
