@@ -120,7 +120,9 @@
       active = null;
     }
     var surface = surfaceFor(e.target);
-    if (!surface) return;
+    /* Demo cards use the dedicated Touch Events path below on Android; do not
+       start a second, competing Pointer Events gesture for the same finger. */
+    if (!surface || surface.kind === 'demo') return;
     active = {
       surface: surface,
       id: e.pointerId,
@@ -225,6 +227,45 @@
     document.addEventListener('touchend', function () { endTouch(false); }, { passive: true });
     document.addEventListener('touchcancel', function () { endTouch(true); }, { passive: true });
   }
+
+  /* Android demo-card fallback: use the native touch stream directly even on
+     browsers that also expose Pointer Events. Some WebViews cancel pointer streams
+     before pointerup; Touch Events still provide the completed finger coordinates.
+     Only demo cards are handled here, so live galleries and page scrolling retain
+     their existing behavior. */
+  var demoTouch = null;
+  document.addEventListener('touchstart', function (e) {
+    if (demoTouch || !e.touches || e.touches.length !== 1) return;
+    var surface = surfaceFor(e.target);
+    if (!surface || surface.kind !== 'demo') return;
+    var t = e.touches[0];
+    demoTouch = { surface: surface, x0: t.clientX, y0: t.clientY,
+      x: t.clientX, y: t.clientY, t0: Date.now(), axis: 0 };
+  }, { capture: true, passive: true });
+  document.addEventListener('touchmove', function (e) {
+    if (!demoTouch || !e.touches || !e.touches.length) return;
+    var t = e.touches[0], dx = t.clientX - demoTouch.x0, dy = t.clientY - demoTouch.y0;
+    demoTouch.x = t.clientX; demoTouch.y = t.clientY;
+    if (!demoTouch.axis) {
+      if (Math.abs(dx) >= LOCK_PX && Math.abs(dx) >= Math.abs(dy) * 1.1) demoTouch.axis = 1;
+      else if (Math.abs(dy) >= LOCK_PX && Math.abs(dy) >= Math.abs(dx) * 1.1) demoTouch.axis = -1;
+    }
+    if (demoTouch.axis === 1 && e.cancelable) e.preventDefault();
+  }, { capture: true, passive: false });
+  function finishDemoTouch(e) {
+    if (!demoTouch) return;
+    var a = demoTouch; demoTouch = null;
+    if (a.axis !== 1) return;
+    var t = e && e.changedTouches && e.changedTouches[0];
+    if (t) { a.x = t.clientX; a.y = t.clientY; }
+    var delta = a.x - a.x0, dt = Math.max(1, Date.now() - a.t0);
+    var box = a.surface.el.getBoundingClientRect();
+    if (!committed(delta, dt, box.width || 1)) return;
+    step(a.surface, delta < 0 ? 1 : -1);
+    suppress = { el: a.surface.host, until: Date.now() + CLICK_GUARD_MS };
+  }
+  document.addEventListener('touchend', finishDemoTouch, { capture: true, passive: true });
+  document.addEventListener('touchcancel', finishDemoTouch, { capture: true, passive: true });
 
   /* A swipe must not also count as a tap (which would open the full-size viewer).
      The gallery's own controls are always allowed through, so a quick Next/Previous
