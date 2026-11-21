@@ -46,7 +46,13 @@
     if (track) {
       var slider = closest(track, '.mg-slider');
       if (slider && slider.querySelector('[data-mg-step]')) {
-        return { host: slider, kind: 'live', el: track };
+        return {
+          host: slider,
+          kind: 'live',
+          el: track,
+          /* Admin photo-direction setting: vertical, horizontal or both. */
+          dir: slider.getAttribute('data-direction') || 'both'
+        };
       }
       return null;
     }
@@ -61,6 +67,19 @@
       if (card) return { host: card, kind: 'demo', el: photo };
     }
     return null;
+  }
+
+  /* Which axes a surface owns. The full-size viewer is horizontal-only; a live
+     slider follows the Admin photo-direction setting; the demo showcase keeps
+     main's both-axis navigation. */
+  function axesFor(surface) {
+    if (surface.kind === 'lightbox') return { h: true, v: false };
+    if (surface.kind === 'live') {
+      if (surface.dir === 'vertical') return { h: false, v: true };
+      if (surface.dir === 'horizontal') return { h: true, v: false };
+      return { h: true, v: true };
+    }
+    return { h: true, v: true };
   }
 
   /* Reuse the existing controls so counters and media state stay in sync. */
@@ -127,26 +146,28 @@
     active.x = e.clientX;
     active.y = e.clientY;
     if (!active.axis) {
+      var allowed = axesFor(active.surface);
       if (Math.abs(dx) >= LOCK_PX && Math.abs(dx) >= Math.abs(dy) * 1.1) {
-        active.axis = 1; // horizontal: our gesture
-      } else if (Math.abs(dy) >= LOCK_PX) {
-        active.axis = -1; // vertical: leave it to the page
+        active.axis = allowed.h ? 1 : -1; // 1 = horizontal gesture
+      } else if (Math.abs(dy) >= LOCK_PX && Math.abs(dy) >= Math.abs(dx) * 1.1) {
+        active.axis = allowed.v ? 2 : -1; // 2 = vertical gesture, -1 = leave to the page
       }
     }
-    /* Horizontal drags must not start a native image drag or text selection. */
-    if (active.axis === 1 && e.cancelable && e.pointerType === 'mouse') e.preventDefault();
+    /* A drag must not start a native image drag or text selection. */
+    if (active.axis > 0 && e.cancelable && e.pointerType === 'mouse') e.preventDefault();
   }
 
   function finish(e, cancelled) {
     if (!active || (e && e.pointerId !== active.id)) return;
     var a = active;
     active = null;
-    if (cancelled || a.axis !== 1) return;
-    var dx = a.x - a.x0;
+    if (cancelled || (a.axis !== 1 && a.axis !== 2)) return;
+    var delta = a.axis === 1 ? a.x - a.x0 : a.y - a.y0;
     var dt = Math.max(1, Date.now() - a.t0);
-    var width = a.surface.el.getBoundingClientRect().width || 1;
-    if (!committed(dx, dt, width)) return;
-    step(a.surface, dx < 0 ? 1 : -1); // advance first, so the button click is not swallowed
+    var box = a.surface.el.getBoundingClientRect();
+    var span = (a.axis === 1 ? box.width : box.height) || 1;
+    if (!committed(delta, dt, span)) return;
+    step(a.surface, delta < 0 ? 1 : -1); // advance first, so the button click is not swallowed
     suppress = { el: a.surface.host, until: Date.now() + CLICK_GUARD_MS };
   }
 
@@ -179,21 +200,23 @@
       t.x = e.touches[0].clientX;
       t.y = e.touches[0].clientY;
       if (!t.axis) {
-        if (Math.abs(dx) >= LOCK_PX && Math.abs(dx) >= Math.abs(dy) * 1.1) t.axis = 1;
-        else if (Math.abs(dy) >= LOCK_PX) t.axis = -1;
+        var allowed = axesFor(t.surface);
+        if (Math.abs(dx) >= LOCK_PX && Math.abs(dx) >= Math.abs(dy) * 1.1) t.axis = allowed.h ? 1 : -1;
+        else if (Math.abs(dy) >= LOCK_PX && Math.abs(dy) >= Math.abs(dx) * 1.1) t.axis = allowed.v ? 2 : -1;
       }
-      if (t.axis === 1 && e.cancelable) e.preventDefault();
+      if (t.axis > 0 && e.cancelable) e.preventDefault();
     }, { passive: false });
     var endTouch = function (cancelled) {
       if (!t) return;
       var a = t;
       t = null;
-      if (cancelled || a.axis !== 1) return;
-      var dx = a.x - a.x0;
+      if (cancelled || (a.axis !== 1 && a.axis !== 2)) return;
+      var delta = a.axis === 1 ? a.x - a.x0 : a.y - a.y0;
       var dt = Math.max(1, Date.now() - a.t0);
-      var width = a.surface.el.getBoundingClientRect().width || 1;
-      if (!committed(dx, dt, width)) return;
-      step(a.surface, dx < 0 ? 1 : -1);
+      var box = a.surface.el.getBoundingClientRect();
+      var span = (a.axis === 1 ? box.width : box.height) || 1;
+      if (!committed(delta, dt, span)) return;
+      step(a.surface, delta < 0 ? 1 : -1);
       suppress = { el: a.surface.host, until: Date.now() + CLICK_GUARD_MS };
     };
     document.addEventListener('touchend', function () { endTouch(false); }, { passive: true });
