@@ -27,6 +27,21 @@
   'કોમર્શિયલ પ્રોપર્ટી':['assets/images/commercial.jpg','assets/images/shop.jpg','assets/images/office.jpg']
  };
  samples.forEach(p=>{const local=LOCAL_PHOTOS[p.type];if(local&&local.length)p.photos=local.slice();});
+ /* Admin-managed soft deletion: public visitors receive the same shared Firestore setting. */
+ let demoConfigReady=Promise.resolve();
+ demoConfigReady=(async()=>{try{
+  if(location.protocol==='file:'||location.protocol==='content:')return;
+  const [{firebaseConfig},{initializeApp,getApps,getApp}]=await Promise.all([
+   import('../firebase-config.js'),
+   import('https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js')
+  ]);
+  const [{getFirestore,doc,getDoc}]=await import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js');
+  const app=getApps().length?getApp():initializeApp(firebaseConfig);
+  const snap=await getDoc(doc(getFirestore(app),'settings','demoShowcase'));
+  const hidden=snap.exists()&&Array.isArray(snap.data().hiddenIds)?snap.data().hiddenIds:[];
+  if(hidden.length)for(let i=samples.length-1;i>=0;i--)if(hidden.includes(samples[i].id))samples.splice(i,1);
+ }catch(e){console.warn('Demo visibility settings unavailable; showing built-in demo samples.',e)}})();
+
  const css=`
  #mgDemoShowcase{margin:22px 0 28px;padding:18px;border:1px solid #d8c58d;border-radius:20px;background:linear-gradient(145deg,#fffdf7,#edf2ed);box-shadow:0 8px 24px #203b2c12}
  #mgDemoShowcase .mg-demo-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
@@ -134,11 +149,12 @@
  const params=new URLSearchParams(location.search),sample=params.get('demo-property');
  if(sample){const p=samples.find(x=>x.id===sample);if(p){detail(p);return}}
  function card(p,i){return '<article class="mg-demo-card" data-demo-id="'+p.id+'"><div class="mg-demo-photo"><img src="'+esc(p.photos[0])+'" alt="'+esc(p.title)+'" loading="lazy"><span class="mg-demo-tag">ડેમો નમૂનો</span><span class="mg-demo-counter">1 / '+p.photos.length+'</span></div><div class="mg-demo-body"><h3>'+esc(p.title)+'</h3><div class="mg-demo-location">📍 '+esc(p.area)+', '+esc(p.city)+'</div><div class="mg-demo-price"><span>'+esc(p.price)+'</span></div><div class="mg-demo-spec">'+esc(p.bhk)+' · '+esc(p.size)+' · '+esc(p.purpose)+'</div><button class="mg-demo-open" type="button" data-demo-open="'+p.id+'">સંપૂર્ણ વિગત જુઓ →</button></div></article>'}
- function init(){
+ async function init(){
+  await demoConfigReady;
   const listing=document.getElementById('listings');if(!listing)return;
   const existing=document.getElementById('mgDemoShowcase');
   if(existing){const grid=existing.querySelector('.mg-demo-grid');existing.querySelectorAll('.mg-family-feature').forEach(node=>node.remove());if(grid&&grid.children.length===samples.length)return;existing.remove();}
-  const section=document.createElement('section');section.id='mgDemoShowcase';section.innerHTML='<div class="mg-demo-head"><h2>પસંદગીની પ્રોપર્ટી — ડેમો</h2><span class="mg-demo-note">કુલ 10 ડેમો નમૂનાઓ · ફક્ત પ્રદર્શન માટે, વાસ્તવિક લિસ્ટિંગ નથી</span></div><div class="mg-demo-grid">'+samples.map(card).join('')+'</div>'
+  const section=document.createElement('section');section.id='mgDemoShowcase';section.innerHTML='<div class="mg-demo-head"><h2>પસંદગીની પ્રોપર્ટી — ડેમો</h2><span class="mg-demo-note">કુલ '+samples.length+' ડેમો નમૂનાઓ · ફક્ત પ્રદર્શન માટે, વાસ્તવિક લિસ્ટિંગ નથી</span></div><div class="mg-demo-grid">'+samples.map(card).join('')+'</div>'
   listing.parentNode.insertBefore(section,listing);
   section.querySelectorAll('.mg-demo-photo img').forEach(img=>{img.onerror=()=>{img.onerror=null;img.style.display='none';const frame=img.closest('.mg-demo-photo');if(frame){frame.classList.add('mg-demo-photo-unavailable');frame.setAttribute('aria-label','પ્રોપર્ટીનો ફોટો હાલમાં ઉપલબ્ધ નથી');}};});
   /* Normalize each demo card to exactly one visible price label if an older page instance left duplicates. */ section.querySelectorAll('.mg-demo-card').forEach(card=>{const prices=card.querySelectorAll('.mg-demo-price');prices.forEach((node,i)=>{if(i>0)node.remove();});});
