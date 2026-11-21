@@ -110,7 +110,10 @@ ok(parseAdDuration('2') === null, 'Below-minimum duration must be rejected');
 ok(parseAdDuration('301') === null, 'Above-maximum duration must be rejected');
 ok(parseAdDuration('abc') === null, 'Non-numeric duration must be rejected');
 ok(parseAdDuration('') === null, 'Empty duration must be rejected');
-ok(parseAdDuration('10.5') === null || parseAdDuration('10.5') === 10, 'Fractional duration must not crash');
+/* Decimals are rounded to a whole second before the bounds check, so a stored
+ * duration is always an integer number of seconds the renderer can trust. */
+ok(parseAdDuration('10.5') === 11, 'Fractional duration must round to the nearest whole second');
+ok(parseAdDuration('2.5') === 3, 'Rounding happens before the bounds check (2.5s -> 3s)');
 
 /* ------------------------------------------------------------------ *
  * 3. Upload validation (image + video, type and size)
