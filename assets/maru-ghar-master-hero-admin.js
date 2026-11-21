@@ -1,7 +1,7 @@
 import { firebaseConfig, cloudinaryConfig, isCloudinaryConfigured } from '../firebase-config.js';
 import { initializeApp, getApps, getApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
 import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-import { getFirestore, collection, getDocs, query, orderBy, addDoc, updateDoc, doc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import { getFirestore, collection, getDocs, getDoc, query, orderBy, addDoc, setDoc, updateDoc, doc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 (() => {
   const root = document.getElementById('mgHeroSlideManager');
@@ -31,6 +31,7 @@ import { getFirestore, collection, getDocs, query, orderBy, addDoc, updateDoc, d
     fields.forEach(id => { $(id).value = ''; });
     $('mgHeroImage').value = '';
     $('mgHeroVisible').checked = true;
+    $('mgHeroKeepBuiltIns').checked = true;
     clearPreview();
     $('mgHeroSave').textContent = tr('ફોટો ઉમેરો અને સેવ કરો');
   }
@@ -148,8 +149,12 @@ import { getFirestore, collection, getDocs, query, orderBy, addDoc, updateDoc, d
   }
   async function load() {
     $('mgHeroSlidesList').textContent = tr('લોડ થઈ રહ્યું છે…');
-    const snap = await getDocs(query(collection(db,'homeShowcaseSlides'),orderBy('order')));
+    const [snap,config] = await Promise.all([
+      getDocs(query(collection(db,'homeShowcaseSlides'),orderBy('order'))),
+      getDoc(doc(db,'settings','homeShowcase'))
+    ]);
     slides = snap.docs.map(d => ({id:d.id,...d.data()}));
+    $('mgHeroKeepBuiltIns').checked = config.exists() ? config.data().keepBuiltIns !== false : true;
     renderList();
   }
   async function save() {
@@ -167,6 +172,7 @@ import { getFirestore, collection, getDocs, query, orderBy, addDoc, updateDoc, d
       const image = uploaded || oldImage;
       if (!image?.url) throw new Error('ફોટો ઉપલબ્ધ નથી.');
       const data = recordFromForm(image);
+      await setDoc(doc(db,'settings','homeShowcase'),{keepBuiltIns:$('mgHeroKeepBuiltIns').checked,updatedAt:serverTimestamp()},{merge:true});
       if (editingId) {
         await updateDoc(doc(db,'homeShowcaseSlides',editingId),data);
         await log('home_slide_updated',editingId,data.title || data.titleEn);
