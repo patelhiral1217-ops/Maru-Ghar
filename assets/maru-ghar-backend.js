@@ -456,9 +456,15 @@ window.mgSearchProperties=async function(){
   try{
     // Keep the user's current position while result pages are appended.
     // Do not blur the search input: mobile keyboards can otherwise force a viewport jump.
-    let safety=0;
+    let safety=0,waitCycles=0;
     while(liveMode&&hasMoreListings&&safety<30){
-      if(loadingMore){await new Promise(resolve=>setTimeout(resolve,100));continue;}
+      if(loadingMore){
+        // A concurrent page load must not trap Search in an endless wait.
+        if(waitCycles++>=50)break;
+        await new Promise(resolve=>setTimeout(resolve,100));
+        continue;
+      }
+      waitCycles=0;
       await loadApproved(false);
       safety++;
       restorePagePosition();
