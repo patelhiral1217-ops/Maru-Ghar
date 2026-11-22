@@ -992,48 +992,7 @@ header .navlinks > a:not(.admin-link):focus-visible{
  .top.mg-top-banner .mg-tagline-background img{transition:none!important}
 }
 </style>
-<script id="mg-banner-photo-rotation-20261120">
-(()=>{function init(){
- const box=document.querySelector('.mg-tagline-background');
- if(!box||box.dataset.mgReliableRotation==='2')return;
- box.dataset.mgReliableRotation='2';
- const pics=[...box.querySelectorAll('img')];
- if(!pics.length)return;
- let good=[],at=0,timer=null,settled=0,started=false;
- const done=()=>{
-  settled++;
-  if(settled>=pics.length)begin();
- };
- function show(n){
-  if(!good.length)return;
-  at=(n+good.length)%good.length;
-  pics.forEach(p=>p.classList.remove('mg-bg-active'));
-  good[at].classList.add('mg-bg-active');
- }
- function start(){
-  if(timer)clearInterval(timer);
-  if(!document.hidden&&good.length>1)timer=setInterval(()=>show(at+1),3000);
- }
- function begin(){
-  if(started)return;
-  started=true;
-  good=pics.filter(p=>p.complete&&p.naturalWidth>0);
-  if(good.length){show(0);start()}
- }
- pics.forEach(p=>{
-  p.loading='eager';
-  p.decoding='async';
-  p.addEventListener('load',done,{once:true});
-  p.addEventListener('error',done,{once:true});
-  if(p.complete)done();
- });
- setTimeout(begin,8000);
- document.addEventListener('visibilitychange',start);
-}
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
- else init();
-})();
-</script>
+
 
 
 <style id="mg-banner-heading-compact-and-showcase-rotation-fix-20261119">
@@ -4706,7 +4665,7 @@ Object.assign(window.MG_I18N_DICTIONARY,{
 
 </style>
 
-<script src="assets/maru-ghar-demo-showcase.js?v=20261122gandhinagarphotos4"></script>
+<script src="assets/maru-ghar-demo-showcase.js?v=20261122auditfix1"></script>
 <script src="assets/maru-ghar-swipe.js?v=20261122pointergallery1"></script>
 <script defer src="assets/maru-ghar-admin-content.js?v=20261118a"></script>
 <style id="mg-final-search-metal-and-range-apply-20261117">
