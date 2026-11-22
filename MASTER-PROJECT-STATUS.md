@@ -566,3 +566,84 @@ verification.
 
 No PR merge, Firestore deployment, Hosting deployment, or fresh backup archive
 was performed as part of this status update.
+
+
+---
+
+## 16. Current-state audit addendum — 22 November 2026, 09:09 IST
+
+This addendum supersedes conflicting statements in sections 6–15 above.
+
+### Authoritative branch and merged work
+- Active production/source branch: `main`.
+- PR #99 (bidirectional photo swipe + Advertisement Manager) was merged on
+  21 November 2026 at 14:51 UTC; merge commit:
+  `95502140e3c4fcc5064d005a61073d980c21e9c8`.
+- The earlier statement that PR #99 was still open/unmerged is obsolete.
+- Latest audited main HEAD at this snapshot: `117c38ca8a70c6b9ba2fe414189c16406a6b6553`.
+- Firebase project: `maru-ghar-gandhinagar-8dbe4`.
+
+### Verified GitHub Actions on main
+- Quality Checks run `44983683923`: **success** on `117c38ca`.
+- Firebase Hosting Deploy run `44983683931`: **success** on `117c38ca`.
+- The Hosting job rebuilt `www/` from the root source, deployed Hosting, compiled and
+  deployed Firestore rules, and deployed Firestore indexes. Cloud Functions deployment
+  was skipped because no Functions source had changed.
+- The Android APK run `44983683943` was still **in progress** at snapshot time.
+  Earlier run `44982631291` succeeded on `853c4878`; it produced a test APK
+  signed with a generated debug key because a permanent release signing keystore
+  was not available. It is not a Play Store production-signed APK.
+- Latest public site:
+  https://maru-ghar-gandhinagar-8dbe4.web.app/
+- GitHub Actions:
+  https://github.com/patelhiral1217-ops/Maru-Ghar/actions
+
+### Latest code changes in this audit
+- Removed the older duplicate header-photo rotation script that competed with the
+  newer hard-fix controller. The retained controller advances loaded header images
+  every 3 seconds. Regression assertion passed in Quality Checks run
+  `44983683923`.
+- Kept the main demo search integration: five built-in Gandhinagar sample records
+  are present; demo records are labelled and use local category-photo assets
+  (`assets/images/`) where configured.
+- Kept the search scroll-restoration code and its source-level regression assertion.
+- The deployed Hosting version includes the above source because the successful
+  Hosting job rebuilt `www/` from root files.
+
+### Automated checks actually observed passing
+The latest Quality Checks log reported passes for: smoke/file integrity; Gujarati,
+Hindi and English structure/coverage/DOM speed; demo/grid/settings regression;
+two-direction property layout; mobile search source regression; Admin-selected
+photo direction; bidirectional swipe; Android Pointer Events swipe; vertical
+scroll + horizontal photo gesture separation; demo property search source check;
+discovery filters/compare; ads and Advertisement Manager (174 assertions);
+customer-auth static audit; verification audit; maps/WhatsApp; notification audit;
+Firestore rules static checks (12/12); Firebase deploy preflight; OTA checks;
+Master Admin checks (14/14); and Chromium swipe assertions for demo/live galleries.
+
+### Still NOT proven by these checks
+1. The search-scroll test is a source/regression assertion, not a complete live
+   mobile search journey. The user's reported page-jump issue remains pending
+   confirmation on a physical Android phone.
+2. Five Gandhinagar demo records and their local photo mappings are present in
+   source; the actual live phone display of all five cards still needs visual
+   confirmation.
+3. Header rotation has one controller and passes its code-level regression check;
+   visual rotation on the user's phone still needs confirmation.
+4. Swipe tests run in automated Chromium emulating Android gestures, not on the
+   owner's physical phone.
+5. Customer registration/login, owner listing upload, actual Cloudinary photo/video
+   upload, Admin approve/reject/delete, and customer contact must still be exercised
+   against the live Firebase project with real test accounts.
+6. Cloudinary preset names `marughar_images` and `marughar_videos` exist in source
+   configuration; their actual dashboard existence, unsigned-upload permissions,
+   and file limits have not been verified from the Cloudinary console.
+7. Firebase Authentication provider settings and authorized domains, FCM/VAPID
+   configuration, and any required deployed Functions behavior still need live
+   console/service verification.
+8. The APK produced without the permanent signing secrets is a test/debug-signed
+   build, not a release-ready Play Store package.
+
+**Completion rule:** do not mark Maru Ghar fully complete until the above live
+service and physical-device checks are completed. A passing CI run is not equivalent
+to a complete mobile/Firebase end-to-end acceptance test.
