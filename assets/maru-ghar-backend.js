@@ -413,18 +413,60 @@ async function init() {
     loadCities();
     loadSettings();
     const cityEl=document.getElementById('cityFilter');
+    const restoreSearchViewport=(y,gridAnchor,listAnchor)=>{
+      const root=document.documentElement,body=document.body;
+      const oldBehavior=root.style.scrollBehavior;
+      root.style.scrollBehavior='auto';
+      if(grid)grid.style.overflowAnchor='none';
+      const listingHost=document.getElementById('listings');
+      if(listingHost)listingHost.style.overflowAnchor='none';
+      if(body)body.style.overflowAnchor='none';
+      const restore=()=>window.scrollTo(0,y);
+      restore();
+      requestAnimationFrame(()=>{restore();requestAnimationFrame(restore);});
+      [120,320,700].forEach(ms=>setTimeout(()=>{
+        restore();
+        if(ms===700){
+          root.style.scrollBehavior=oldBehavior;
+          if(grid)grid.style.overflowAnchor=gridAnchor;
+          if(listingHost)listingHost.style.overflowAnchor=listAnchor;
+          if(body)body.style.overflowAnchor='';
+        }
+      },ms));
+    };
     window.mgSelectCity=async(nextCity)=>{
+      const savedY=window.scrollY||window.pageYOffset||0;
+      const gridAnchor=grid?grid.style.overflowAnchor:'';
+      const listingHost=document.getElementById('listings');
+      const listAnchor=listingHost?listingHost.style.overflowAnchor:'';
       currentCity=String(nextCity||'all');
       if(cityEl)cityEl.value=currentCity;
       populateAreaFilter(currentCity);
-      while(loadingMore)await new Promise(r=>setTimeout(r,80));
-      await loadApproved(true);
+      let wait=0;
+      while(loadingMore&&wait++<50)await new Promise(r=>setTimeout(r,100));
+      if(loadingMore)throw new Error('પહેલાની લિસ્ટિંગ લોડ થવામાં વિલંબ છે. ફરી પ્રયાસ કરો.');
+      try{await loadApproved(true);}
+      finally{restoreSearchViewport(savedY,gridAnchor,listAnchor);}
       return true;
     };
-    if(cityEl)cityEl.addEventListener('change',()=>{window.mgSelectCity(cityEl.value||'all');});
+    if(cityEl)cityEl.addEventListener('change',()=>{window.mgSelectCity(cityEl.value||'all').catch(e=>console.error('city listing refresh failed',e));});
     populateAreaFilter(currentCity);
     const areaEl=document.getElementById('areaFilter');
-    if(areaEl)areaEl.addEventListener('change',async()=>{while(loadingMore)await new Promise(r=>setTimeout(r,100));if(typeof window.filterProps==='function')window.filterProps();});
+    if(areaEl)areaEl.addEventListener('change',async()=>{
+      const savedY=window.scrollY||window.pageYOffset||0;
+      const root=document.documentElement,oldBehavior=root.style.scrollBehavior;
+      root.style.scrollBehavior='auto';
+      const host=document.getElementById('listings'),oldAnchor=host?host.style.overflowAnchor:'';
+      if(host)host.style.overflowAnchor='none';
+      try{
+        let wait=0;while(loadingMore&&wait++<50)await new Promise(r=>setTimeout(r,100));
+        if(typeof window.filterProps==='function')window.filterProps();
+      }finally{
+        const restore=()=>window.scrollTo(0,savedY);
+        restore();requestAnimationFrame(()=>{restore();requestAnimationFrame(restore);});
+        [120,320,700].forEach(ms=>setTimeout(()=>{restore();if(ms===700){root.style.scrollBehavior=oldBehavior;if(host)host.style.overflowAnchor=oldAnchor;}},ms));
+      }
+    });
     window.addEventListener('mg-language-changed',()=>populateAreaFilter(currentCity));
     await loadApproved(true);
     renderRecentlyViewed();
