@@ -144,3 +144,8 @@ if(!demoFile.includes('function syncDemoSearchCards()')||!demoFile.includes('dat
 if(!home.includes('maru-ghar-demo-showcase.js?v=20261122gandhinagarphotos4'))throw new Error('Searchable demo integration cache version is missing');
 console.log('DEMO PROPERTY SEARCH PASS — demo listings are searchable in the main grid and visibly labelled as test data.');
 
+const headerRotationBlock=home.match(/<script id="mg-header-rotation-hardfix-20261121">([\\s\\S]*?)<\\/script>/)?.[1]||'';
+if(home.includes('mg-banner-photo-rotation-20261120')||!headerRotationBlock.includes('setInterval(function(){show(at+1);},3000)')||!home.includes('maru-ghar-demo-showcase.js?v=20261122auditfix1'))throw new Error('Header photo rotation must use one non-conflicting 3-second controller with the latest cache version');
+console.log('HEADER PHOTO ROTATION PASS — duplicate timer removed; one 3-second loaded-image controller remains.');
+
+
