@@ -1,6 +1,6 @@
 import { firebaseConfig, cloudinaryConfig, isFirebaseConfigured, isCloudinaryConfigured } from '../firebase-config.js';
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-import { getFirestore, collection, getDocs, getDoc, doc, query, where, orderBy, limit, startAfter, addDoc, setDoc, serverTimestamp, Timestamp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import { getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, collection, getDocs, getDoc, doc, query, where, orderBy, limit, startAfter, addDoc, setDoc, serverTimestamp, Timestamp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { getAuth, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 
 const form = document.getElementById('propertyForm');
@@ -406,7 +406,37 @@ async function init() {
     return;
   }
   try {
-    const app=initializeApp(firebaseConfig); db=getFirestore(app); auth=getAuth(app); liveMode=true;
+    const app=initializeApp(firebaseConfig);
+    // Keep previously read listings available offline and queue Firestore writes until reconnection.
+    // If IndexedDB persistence is unavailable (private mode / restricted browser), fall back safely.
+    try {
+      db=initializeFirestore(app,{localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()})});
+      window.__mgOfflineCache='persistent';
+    } catch(cacheError) {
+      console.warn('Persistent Firestore cache unavailable; using memory cache:',cacheError);
+      db=getFirestore(app);
+      window.__mgOfflineCache='memory-fallback';
+    }
+    auth=getAuth(app); liveMode=true;
+    // Visible connectivity state; does not interrupt the page or clear cached listings.
+    let networkNotice=document.getElementById('mgNetworkStatus');
+    if(!networkNotice){
+      networkNotice=document.createElement('div');
+      networkNotice.id='mgNetworkStatus';
+      networkNotice.setAttribute('role','status');
+      networkNotice.setAttribute('aria-live','polite');
+      networkNotice.style.cssText='position:sticky;top:0;z-index:1200;display:none;padding:8px 12px;text-align:center;font-size:13px;font-weight:700;background:#fff1d6;color:#704500;border:1px solid #e0bd70;border-radius:10px;margin:6px 0';
+      const host=document.getElementById('listings')||grid?.parentElement||document.body;
+      host.insertBefore(networkNotice,host.firstChild);
+    }
+    const refreshNetworkNotice=()=>{
+      const offline=!navigator.onLine;
+      networkNotice.textContent=offline?'ઇન્ટરનેટ બંધ છે — અગાઉ લોડ થયેલી મિલકતો દેખાઈ શકે છે. નવી મિલકત મોકલવા માટે ઇન્ટરનેટ જરૂરી છે.':'';
+      networkNotice.style.display=offline?'block':'none';
+    };
+    window.addEventListener('offline',refreshNetworkNotice);
+    window.addEventListener('online',refreshNetworkNotice);
+    refreshNetworkNotice();
     // Admin shortcut buttons exist in the page but stay hidden for everyone except the signed-in admin.
     onAuthStateChanged(auth,u=>{const ok=!!u&&!u.isAnonymous&&u.uid===ADMIN_UID;['adminNavLink','adminQuick'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('hidden',!ok)})});
     // Do not block the first property render on secondary settings/city metadata reads.
