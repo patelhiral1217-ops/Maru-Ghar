@@ -147,7 +147,7 @@ console.log('DEMO PROPERTY SEARCH PASS — demo listings are searchable in the m
 const headerRotationStart=home.indexOf('<script id="mg-header-rotation-hardfix-20261121">');
 const headerRotationEnd=home.indexOf('</script>',headerRotationStart);
 const headerRotationBlock=headerRotationStart>=0&&headerRotationEnd>headerRotationStart?home.slice(headerRotationStart,headerRotationEnd):'';
-if(home.includes('mg-banner-photo-rotation-20261120')||!headerRotationBlock.includes('setInterval(function(){show(at+1);},3000)')||!home.includes('maru-ghar-demo-showcase.js?v=20261122auditfix3'))throw new Error('Header photo rotation must use one non-conflicting 3-second controller with the latest cache version');
+if(home.includes('mg-banner-photo-rotation-20261120')||!headerRotationBlock.includes('setInterval(function(){show(at+1);},3000)')||!['auditfix4','auditfix5'].some(v=>home.includes('maru-ghar-demo-showcase.js?v=20261122'+v)))throw new Error('Header photo rotation must use one non-conflicting 3-second controller with the latest cache version');
 console.log('HEADER PHOTO ROTATION PASS — duplicate timer removed; one 3-second loaded-image controller remains.');
 
 
