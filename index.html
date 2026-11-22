@@ -1419,7 +1419,7 @@ function filterProps(){
 (function(){const b=document.getElementById('favOnly');if(b)b.addEventListener('click',()=>{window.__favOnly=!window.__favOnly;b.classList.toggle('active',window.__favOnly);b.setAttribute('aria-pressed',String(window.__favOnly));filterProps()})})();
 // Column buttons call the independent controller directly; no competing delegated handler here.
 </script>
-<script type="module" src="assets/maru-ghar-backend.js?v=20261121bothaxis3"></script>
+<script type="module" src="assets/maru-ghar-backend.js?v=20261122searchscrollfix1"></script>
 <script type="module" src="assets/maru-ghar-extras.js"></script>
 
 
@@ -5180,8 +5180,12 @@ html,body{max-width:100%;overflow-x:hidden}
  const remember=()=>{savedY=window.scrollY||window.pageYOffset||0;armed=true;};
  document.addEventListener('pointerdown',e=>{if(e.target&&e.target.matches&&e.target.matches(selector))remember();},true);
  document.addEventListener('focusin',e=>{if(e.target&&e.target.matches&&e.target.matches(selector)&&!armed)remember();},true);
- const restore=()=>{if(!armed)return;const y=savedY;[80,220,520].forEach(ms=>setTimeout(()=>{if(Math.abs((window.scrollY||0)-y)>8)window.scrollTo({top:y,left:0,behavior:'instant'});},ms));};
+ const restore=()=>{if(!armed)return;const y=savedY;[80,220,520].forEach(ms=>setTimeout(()=>{if(Math.abs((window.scrollY||0)-y)>8)window.scrollTo({top:y,left:0,behavior:'auto'});},ms));};
  document.addEventListener('change',e=>{if(e.target&&e.target.matches&&e.target.matches(selector))restore();},true);
  document.addEventListener('focusout',e=>{if(e.target&&e.target.matches&&e.target.matches(selector)){restore();armed=false;}},true);
 })();
+</script>
+
+<script id="mg-search-enter-submit-20261122">
+(()=>{const q=document.getElementById('query');if(q&&!q.dataset.mgEnterReady){q.dataset.mgEnterReady='1';q.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();if(window.mgSearchProperties)window.mgSearchProperties();else if(window.filterProps)window.filterProps();}});}})();
 </script>
