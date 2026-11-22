@@ -195,6 +195,36 @@
   window.addEventListener('pagehide',()=>timers.forEach(clearInterval),{once:true});
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+
+ // Add the same demo records to the main searchable property grid as clearly labelled
+ // test listings. They remain local demo data and never enter Firestore.
+ function syncDemoSearchCards(){
+  const grid=document.getElementById('properties');if(!grid)return;
+  grid.querySelectorAll('[data-mg-demo-search-card="1"]').forEach(n=>n.remove());
+  const city=document.getElementById('cityFilter')?.value||'all';
+  const area=document.getElementById('areaFilter')?.value||'all';
+  const purpose=document.getElementById('purpose')?.value||'all';
+  const type=document.getElementById('type')?.value||'all';
+  samples.filter(p=>(city==='all'||p.city===city)&&(area==='all'||p.area===area)&&(purpose==='all'||purpose===(p.purpose==='ભાડે'?'rent':'sale'))&&(type==='all'||type===p.type)).forEach(p=>{
+   const priceNum=Number(String(p.price).replace(/[^0-9]/g,''))||0;
+   const card=document.createElement('article');card.className='property';card.dataset.mgDemoSearchCard='1';
+   card.dataset.type=p.type;card.dataset.purpose=p.purpose==='ભાડે'?'rent':'sale';card.dataset.city=p.city;
+   card.dataset.location=(p.area||'').toLowerCase();card.dataset.id=p.id;card.dataset.verified='0';card.dataset.bhk=p.bhk||'';
+   card.dataset.furn=p.furn||'';card.dataset.pricenum=String(priceNum);card.dataset.areasqm='';
+   card.dataset.hasphotos=p.photos?.length?'1':'0';card.dataset.hasvideos='0';
+   card.dataset.search=[p.title,p.city,p.area,p.type,p.purpose,p.bhk,p.desc].join(' ').toLowerCase();
+   card.innerHTML='<div class="property-body"><div class="mg-demo-tag">ડેમો નમૂનો · ટેસ્ટ મિલકત</div><h3>'+esc(p.title)+'</h3><div class="loc">📍 '+esc(p.city)+' · '+esc(p.area)+'</div><div class="price">'+esc(p.price)+'</div><div class="details">'+esc(p.type)+' · '+esc(p.bhk||'')+' · '+esc(p.size||'')+'</div></div><div class="property-foot"><button class="btn" type="button">ડેમો મિલકતની સંપૂર્ણ વિગત જુઓ</button></div>';
+   card.querySelector('button').addEventListener('click',()=>{location.href='index.html?demo-property='+encodeURIComponent(p.id)});
+   grid.appendChild(card);
+  });
+  if(typeof window.filterProps==='function')window.filterProps();
+ }
+ window.addEventListener('mg-city-listings-loaded',syncDemoSearchCards);
+ window.addEventListener('mg-demo-filters-changed',syncDemoSearchCards);
+ document.addEventListener('change',e=>{if(e.target&&['cityFilter','areaFilter','purpose','type'].includes(e.target.id))setTimeout(syncDemoSearchCards,0);});
+ document.addEventListener('DOMContentLoaded',()=>setTimeout(syncDemoSearchCards,0),{once:true});
+ setTimeout(syncDemoSearchCards,1200);
+
  window.addEventListener('pageshow',init);
  const rootObserver=new MutationObserver(()=>{if(!document.getElementById('mgDemoShowcase')&&document.getElementById('listings'))init()});
  rootObserver.observe(document.documentElement,{childList:true,subtree:true});
