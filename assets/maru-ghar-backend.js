@@ -435,6 +435,28 @@ async function init() {
   }
 }
 
+
+window.mgSearchProperties=async function(){
+  const input=document.getElementById('query');
+  const button=document.querySelector('.searchbox button[onclick*="mgSearchProperties"]');
+  if(button){button.disabled=true;button.dataset.oldLabel=button.textContent;button.textContent='શોધી રહ્યું છે…';}
+  try{
+    if(input) input.blur();
+    // Fetch every remaining page for the selected city before applying a text search,
+    // so a match is not missed merely because it was outside the first page.
+    let safety=0;
+    while(liveMode&&hasMoreListings&&safety<30){
+      if(loadingMore){await new Promise(resolve=>setTimeout(resolve,100));continue;}
+      await loadApproved(false);
+      safety++;
+    }
+    if(typeof window.filterProps==='function')window.filterProps();
+    const countEl=document.getElementById('count');
+    if(countEl&&countEl.textContent.includes('0 '))countEl.textContent='આ શોધ માટે કોઈ પ્રોપર્ટી મળી નથી. શહેર અથવા વિસ્તારનું નામ તપાસો.';
+  }catch(error){console.error('property search failed',error);if(typeof window.filterProps==='function')window.filterProps();}
+  finally{if(button){button.disabled=false;button.textContent=button.dataset.oldLabel||'શોધો';}}
+};
+
 if(form) form.addEventListener('submit', async ev=>{
   ev.preventDefault();
   if(!isFirebaseConfigured() || !db || !auth) { setStatus('લિસ્ટિંગ હમણાં મોકલી શકાતી નથી. થોડી વાર પછી ફરી પ્રયાસ કરો.',true); return; }
