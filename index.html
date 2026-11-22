@@ -1378,7 +1378,7 @@ function filterProps(){
 (function(){const b=document.getElementById('favOnly');if(b)b.addEventListener('click',()=>{window.__favOnly=!window.__favOnly;b.classList.toggle('active',window.__favOnly);b.setAttribute('aria-pressed',String(window.__favOnly));filterProps()})})();
 // Column buttons call the independent controller directly; no competing delegated handler here.
 </script>
-<script type="module" src="assets/maru-ghar-backend.js?v=20261122searchscrollfix6"></script>
+<script type="module" src="assets/maru-ghar-backend.js?v=20261122cityscrollfix1"></script>
 <script type="module" src="assets/maru-ghar-extras.js"></script>
 
 
@@ -5139,7 +5139,14 @@ html,body{max-width:100%;overflow-x:hidden}
  const remember=()=>{savedY=window.scrollY||window.pageYOffset||0;armed=true;};
  document.addEventListener('pointerdown',e=>{if(e.target&&e.target.matches&&e.target.matches(selector))remember();},true);
  document.addEventListener('focusin',e=>{if(e.target&&e.target.matches&&e.target.matches(selector)&&!armed)remember();},true);
- const restore=()=>{if(!armed)return;const y=savedY;[80,220,520].forEach(ms=>setTimeout(()=>{if(Math.abs((window.scrollY||0)-y)>8)window.scrollTo({top:y,left:0,behavior:'auto'});},ms));};
+ const restore=()=>{
+  if(!armed)return;
+  const y=savedY,root=document.documentElement,old=root.style.scrollBehavior;
+  root.style.scrollBehavior='auto';
+  const apply=()=>window.scrollTo(0,y);
+  apply();requestAnimationFrame(()=>{apply();requestAnimationFrame(apply);});
+  [120,320,700].forEach(ms=>setTimeout(()=>{apply();if(ms===700)root.style.scrollBehavior=old;},ms));
+ };
  document.addEventListener('change',e=>{if(e.target&&e.target.matches&&e.target.matches(selector))restore();},true);
  document.addEventListener('focusout',e=>{if(e.target&&e.target.matches&&e.target.matches(selector)){restore();armed=false;}},true);
 })();
