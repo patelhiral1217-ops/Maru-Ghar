@@ -139,7 +139,7 @@ const mobileScrollFix=mobileScrollStart>=0&&mobileScrollEnd>mobileScrollStart?ho
 if(!mobileScrollFix.includes('touch-action:pan-y pinch-zoom!important')||!mobileScrollFix.includes('.mg-slider:not([data-direction="vertical"]) .mg-track')||!mobileScrollFix.includes('#mgDemoShowcase .mg-demo-photo'))throw new Error('Mobile page must keep vertical scrolling while live/demo photo galleries handle horizontal swipes');
 console.log('MOBILE SCROLL + PHOTO SWIPE PASS — vertical page scroll is preserved; live/demo photo surfaces reserve horizontal swipes.');
 
-const demoFile=read('assets/maru-ghar-demo-showcase.js');
+const demoFile=fs.readFileSync('assets/maru-ghar-demo-showcase.js','utf8');
 if(!demoFile.includes('function syncDemoSearchCards()')||!demoFile.includes('data-mg-demo-search-card="1"')||!demoFile.includes('window.addEventListener(\'mg-city-listings-loaded\',syncDemoSearchCards)')||!demoFile.includes('ડેમો નમૂનો · ટેસ્ટ મિલકત'))throw new Error('Demo properties must be inserted into the main searchable property grid and remain labelled as test listings');
 if(!home.includes('maru-ghar-demo-showcase.js?v=20261122searchable1'))throw new Error('Searchable demo integration cache version is missing');
 console.log('DEMO PROPERTY SEARCH PASS — demo listings are searchable in the main grid and visibly labelled as test data.');
