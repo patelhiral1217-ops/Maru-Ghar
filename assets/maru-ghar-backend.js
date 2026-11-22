@@ -439,22 +439,41 @@ async function init() {
 window.mgSearchProperties=async function(){
   const input=document.getElementById('query');
   const button=document.querySelector('.searchbox button[onclick*="mgSearchProperties"]');
+  const grid=document.getElementById('properties');
+  const list=document.getElementById('listings');
+  const savedY=window.scrollY||window.pageYOffset||0;
+  const oldAnchor=grid?grid.style.overflowAnchor:'';
+  const oldListAnchor=list?list.style.overflowAnchor:'';
+  let restoreTimers=[];
+  const restorePagePosition=()=>{
+    if(grid)grid.style.overflowAnchor='none';
+    if(list)list.style.overflowAnchor='none';
+    window.scrollTo({top:savedY,left:0,behavior:'auto'});
+  };
+  if(grid)grid.style.overflowAnchor='none';
+  if(list)list.style.overflowAnchor='none';
   if(button){button.disabled=true;button.dataset.oldLabel=button.textContent;button.textContent='શોધી રહ્યું છે…';}
   try{
-    if(input) input.blur();
-    // Fetch every remaining page for the selected city before applying a text search,
-    // so a match is not missed merely because it was outside the first page.
+    // Keep the user's current position while result pages are appended.
+    // Do not blur the search input: mobile keyboards can otherwise force a viewport jump.
     let safety=0;
     while(liveMode&&hasMoreListings&&safety<30){
       if(loadingMore){await new Promise(resolve=>setTimeout(resolve,100));continue;}
       await loadApproved(false);
       safety++;
+      restorePagePosition();
     }
     if(typeof window.filterProps==='function')window.filterProps();
+    restorePagePosition();
     const countEl=document.getElementById('count');
     if(countEl&&countEl.textContent.includes('0 '))countEl.textContent='આ શોધ માટે કોઈ પ્રોપર્ટી મળી નથી. શહેર અથવા વિસ્તારનું નામ તપાસો.';
   }catch(error){console.error('property search failed',error);if(typeof window.filterProps==='function')window.filterProps();}
-  finally{if(button){button.disabled=false;button.textContent=button.dataset.oldLabel||'શોધો';}}
+  finally{
+    [80,220,520,900].forEach(ms=>restoreTimers.push(setTimeout(()=>window.scrollTo({top:savedY,left:0,behavior:'auto'}),ms)));
+    if(grid)grid.style.overflowAnchor=oldAnchor;
+    if(list)list.style.overflowAnchor=oldListAnchor;
+    if(button){button.disabled=false;button.textContent=button.dataset.oldLabel||'શોધો';}
+  }
 };
 
 if(form) form.addEventListener('submit', async ev=>{
