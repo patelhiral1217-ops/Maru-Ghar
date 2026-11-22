@@ -141,6 +141,6 @@ console.log('MOBILE SCROLL + PHOTO SWIPE PASS — vertical page scroll is preser
 
 const demoFile=fs.readFileSync('assets/maru-ghar-demo-showcase.js','utf8');
 if(!demoFile.includes('function syncDemoSearchCards()')||!demoFile.includes('data-mg-demo-search-card="1"')||!demoFile.includes('window.addEventListener(\'mg-city-listings-loaded\',syncDemoSearchCards)')||!demoFile.includes('ડેમો નમૂનો · ટેસ્ટ મિલકત'))throw new Error('Demo properties must be inserted into the main searchable property grid and remain labelled as test listings');
-if(!home.includes('maru-ghar-demo-showcase.js?v=20261122gandhinagarphotos2'))throw new Error('Searchable demo integration cache version is missing');
+if(!home.includes('maru-ghar-demo-showcase.js?v=20261122gandhinagarphotos3'))throw new Error('Searchable demo integration cache version is missing');
 console.log('DEMO PROPERTY SEARCH PASS — demo listings are searchable in the main grid and visibly labelled as test data.');
 
