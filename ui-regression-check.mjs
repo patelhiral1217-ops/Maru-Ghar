@@ -141,13 +141,13 @@ console.log('MOBILE SCROLL + PHOTO SWIPE PASS — vertical page scroll is preser
 
 const demoFile=fs.readFileSync('assets/maru-ghar-demo-showcase.js','utf8');
 if(!demoFile.includes('function syncDemoSearchCards()')||!demoFile.includes('data-mg-demo-search-card="1"')||!demoFile.includes('window.addEventListener(\'mg-city-listings-loaded\',syncDemoSearchCards)')||!demoFile.includes('ડેમો નમૂનો · ટેસ્ટ મિલકત'))throw new Error('Demo properties must be inserted into the main searchable property grid and remain labelled as test listings');
-if(!['auditfix3','auditfix4'].some(v=>home.includes('maru-ghar-demo-showcase.js?v=20261122'+v)))throw new Error('Searchable demo integration cache version is missing');
+if(!home.includes('maru-ghar-demo-showcase.js?v=20261122auditfix'))throw new Error('Searchable demo integration cache version is missing');
 console.log('DEMO PROPERTY SEARCH PASS — demo listings are searchable in the main grid and visibly labelled as test data.');
 
 const headerRotationStart=home.indexOf('<script id="mg-header-rotation-hardfix-20261121">');
 const headerRotationEnd=home.indexOf('</script>',headerRotationStart);
 const headerRotationBlock=headerRotationStart>=0&&headerRotationEnd>headerRotationStart?home.slice(headerRotationStart,headerRotationEnd):'';
-if(home.includes('mg-banner-photo-rotation-20261120')||!headerRotationBlock.includes('setInterval(function(){show(at+1);},3000)')||!['auditfix4','auditfix5'].some(v=>home.includes('maru-ghar-demo-showcase.js?v=20261122'+v)))throw new Error('Header photo rotation must use one non-conflicting 3-second controller with the latest cache version');
+if(home.includes('mg-banner-photo-rotation-20261120')||!headerRotationBlock.includes('setInterval(function(){show(at+1);},3000)')||!home.includes('maru-ghar-demo-showcase.js?v=20261122auditfix'))throw new Error('Header photo rotation must use one non-conflicting 3-second controller with the latest cache version');
 console.log('HEADER PHOTO ROTATION PASS — duplicate timer removed; one 3-second loaded-image controller remains.');
 
 
