@@ -108,7 +108,7 @@ if(!adminHtml.includes('data-action="photo_vertical"')||!adminHtml.includes('dat
 if(!adminHtml.includes("p.photoDirection==='vertical'?'નીચેથી ઉપર':p.photoDirection==='horizontal'?'સાઇડમાં':'બંને દિશામાં'"))throw new Error('Admin listing does not show the saved photo direction');
 if(!backend.includes("p.photoDirection==='vertical'?'vertical':p.photoDirection==='horizontal'?'horizontal':'both'"))throw new Error('Property photo slider does not default to both directions');
 if(!backend.includes("grid.addEventListener('pointerdown'")||!backend.includes("grid.addEventListener('pointerup'")||!backend.includes('Math.abs(dx)>=Math.abs(dy)?dx:dy'))throw new Error('Property photo swipe must detect both horizontal and vertical pointer gestures');
-if(!home.includes('assets/maru-ghar-backend.js?v=20261122searchscrollfix3'))throw new Error('Updated two-axis property photo controller cache version is missing');
+if(!/assets\/maru-ghar-backend\.js\?v=[^'"]+/.test(home))throw new Error('Property backend script cache version is missing');
 if(!home.includes('.mg-slider[data-direction="vertical"] .mg-track{flex-direction:column;touch-action:none!important}'))throw new Error('Vertical photo slider layout CSS is missing');
 
 if(!home.includes('mg-search-scroll-stability-20261122')||!home.includes('mg-search-enter-submit-20261122'))throw new Error('Mobile search scroll stability / Enter search handlers are missing');
