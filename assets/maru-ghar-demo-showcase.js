@@ -201,11 +201,14 @@
  function syncDemoSearchCards(){
   const grid=document.getElementById('properties');if(!grid)return;
   grid.querySelectorAll('[data-mg-demo-search-card="1"]').forEach(n=>n.remove());
-  const city=document.getElementById('cityFilter')?.value||'all';
+  const cityRaw=document.getElementById('cityFilter')?.value||'all';
+  const cityKey=String(cityRaw).toLowerCase().replace(/[\\s_-]/g,'');
+  const isGandhinagar=cityKey==='ગાંધીનગર'||cityKey==='gandhinagar'||cityKey==='gandhinagardistrict';
   const area=document.getElementById('areaFilter')?.value||'all';
   const purpose=document.getElementById('purpose')?.value||'all';
   const type=document.getElementById('type')?.value||'all';
-  samples.filter(p=>(city==='all'||p.city===city)&&(area==='all'||p.area===area)&&(purpose==='all'||purpose===(p.purpose==='ભાડે'?'rent':'sale'))&&(type==='all'||type===p.type)).forEach(p=>{
+  const matchesCity=p=>cityRaw==='all'||(isGandhinagar&&p.city==='ગાંધીનગર')||String(p.city||'').toLowerCase()===String(cityRaw).toLowerCase();
+  samples.filter(p=>matchesCity(p)&&(area==='all'||p.area===area)&&(purpose==='all'||purpose===(p.purpose==='ભાડે'?'rent':'sale'))&&(type==='all'||type===p.type)).forEach(p=>{
    const priceNum=Number(String(p.price).replace(/[^0-9]/g,''))||0;
    const card=document.createElement('article');card.className='property';card.dataset.mgDemoSearchCard='1';
    card.dataset.type=p.type;card.dataset.purpose=p.purpose==='ભાડે'?'rent':'sale';card.dataset.city=p.city;
@@ -213,7 +216,8 @@
    card.dataset.furn=p.furn||'';card.dataset.pricenum=String(priceNum);card.dataset.areasqm='';
    card.dataset.hasphotos=p.photos?.length?'1':'0';card.dataset.hasvideos='0';
    card.dataset.search=[p.title,p.city,p.area,p.type,p.purpose,p.bhk,p.desc].join(' ').toLowerCase();
-   card.innerHTML='<div class="property-body"><div class="mg-demo-tag">ડેમો નમૂનો · ટેસ્ટ મિલકત</div><h3>'+esc(p.title)+'</h3><div class="loc">📍 '+esc(p.city)+' · '+esc(p.area)+'</div><div class="price">'+esc(p.price)+'</div><div class="details">'+esc(p.type)+' · '+esc(p.bhk||'')+' · '+esc(p.size||'')+'</div></div><div class="property-foot"><button class="btn" type="button">ડેમો મિલકતની સંપૂર્ણ વિગત જુઓ</button></div>';
+   const photo=Array.isArray(p.photos)&&p.photos.length?p.photos[0]:'';
+   card.innerHTML='<div class="photo">'+(photo?'<img src="'+esc(photo)+'" alt="'+esc(p.title)+'" loading="lazy" style="width:100%;height:100%;object-fit:cover">':'<span>🏠</span>')+'<span class="pill">DEMO</span></div><div class="property-body"><div class="mg-demo-tag">ડેમો નમૂનો · ટેસ્ટ મિલકત</div><h3>'+esc(p.title)+'</h3><div class="loc">📍 '+esc(p.city)+' · '+esc(p.area)+'</div><div class="price">'+esc(p.price)+'</div><div class="details">'+esc(p.type)+' · '+esc(p.bhk||'')+' · '+esc(p.size||'')+'</div></div><div class="property-foot"><button class="btn" type="button">ડેમો મિલકતની સંપૂર્ણ વિગત જુઓ</button></div>';
    card.querySelector('button').addEventListener('click',()=>{location.href='index.html?demo-property='+encodeURIComponent(p.id)});
    grid.appendChild(card);
   });
