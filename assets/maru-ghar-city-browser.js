@@ -18,6 +18,7 @@
   document.body.appendChild(modal);
   const content=$('mgCityBrowserContent'),title=$('mgCityBrowserTitle'),back=$('mgCityBrowserBack');
   let step=1,chosenCity=city.value||'all',chosenArea='all',chosenPurpose='all',busy=false;
+  let cityLoadPromise=Promise.resolve();
   const types=[['all','allProps'],['ઘર','house'],['ફ્લેટ','flat'],['દુકાન','shop'],['રેસિડેન્શિયલ પ્લોટ','res'],['કોમર્શિયલ પ્લોટ','com'],['ઓફિસ','office'],['વેરહાઉસ','warehouse'],['પી.જી. (PG)','pg']];
   function close(){modal.hidden=true;document.body.style.overflow='';}
   function button(label,selected,fn,extra=''){const b=document.createElement('button');b.type='button';b.className='mg-city-choice'+(extra?' '+extra:'');b.textContent=label;b.classList.toggle('selected',!!selected);b.addEventListener('click',fn);return b;}
@@ -49,7 +50,8 @@
     }catch(err){console.error('City listing load failed:',err);return;}
     // Move to the area step immediately; the listing query continues in the background.
     show();
-    Promise.resolve(request).then(()=>{
+    cityLoadPromise=Promise.resolve(request);
+    cityLoadPromise.then(()=>{
      if(!modal.hidden&&step===2&&chosenCity===o.value)show();
     }).catch(err=>console.error('City listing load failed:',err));
    })));
@@ -74,11 +76,17 @@
    content.replaceChildren();setProgress();
    if(step===1)showCities();else if(step===2)showAreas();else showTypes();
   }
-  function apply(typeValue){
-   city.value=chosenCity;area.value=chosenArea;purpose.value=chosenPurpose;type.value=typeValue;
-   const run=()=>{if(typeof window.filterProps==='function')window.filterProps();const cat=[...document.querySelectorAll('#listings .cat')].find(b=>b.dataset.cat===(typeValue==='all'?'all':typeValue));if(cat)cat.click();close();$('listings')?.scrollIntoView({behavior:'smooth',block:'start'});};
-   if(city.value!==(window.__mgAppliedCity||city.value)){city.dispatchEvent(new Event('change',{bubbles:true}));}
-   run();
+  async function apply(typeValue){
+   try{
+    if(city.value!==chosenCity){
+     city.value=chosenCity;
+     cityLoadPromise=typeof window.mgSelectCity==='function'?window.mgSelectCity(chosenCity):Promise.resolve(city.dispatchEvent(new Event('change',{bubbles:true})));
+    }
+    await cityLoadPromise;
+    city.value=chosenCity;area.value=chosenArea;purpose.value=chosenPurpose;type.value=typeValue;
+    if(typeof window.filterProps==='function')window.filterProps();
+    close();
+   }catch(err){console.error('City/area filter apply failed:',err);}
   }
   trigger.addEventListener('click',()=>{chosenCity=city.value||'all';chosenArea='all';chosenPurpose='all';step=1;modal.hidden=false;document.body.style.overflow='hidden';show();});
   back.addEventListener('click',()=>{if(step>1){step--;show();}});
