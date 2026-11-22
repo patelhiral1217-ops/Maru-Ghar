@@ -108,8 +108,13 @@ if(!adminHtml.includes('data-action="photo_vertical"')||!adminHtml.includes('dat
 if(!adminHtml.includes("p.photoDirection==='vertical'?'નીચેથી ઉપર':p.photoDirection==='horizontal'?'સાઇડમાં':'બંને દિશામાં'"))throw new Error('Admin listing does not show the saved photo direction');
 if(!backend.includes("p.photoDirection==='vertical'?'vertical':p.photoDirection==='horizontal'?'horizontal':'both'"))throw new Error('Property photo slider does not default to both directions');
 if(!backend.includes("grid.addEventListener('pointerdown'")||!backend.includes("grid.addEventListener('pointerup'")||!backend.includes('Math.abs(dx)>=Math.abs(dy)?dx:dy'))throw new Error('Property photo swipe must detect both horizontal and vertical pointer gestures');
-if(!home.includes('assets/maru-ghar-backend.js?v=20261121bothaxis3'))throw new Error('Updated two-axis property photo controller cache version is missing');
+if(!home.includes('assets/maru-ghar-backend.js?v=20261122searchscrollfix1'))throw new Error('Updated two-axis property photo controller cache version is missing');
 if(!home.includes('.mg-slider[data-direction="vertical"] .mg-track{flex-direction:column;touch-action:none!important}'))throw new Error('Vertical photo slider layout CSS is missing');
+
+if(!home.includes('mg-search-scroll-stability-20261122')||!home.includes('mg-search-enter-submit-20261122'))throw new Error('Mobile search scroll stability / Enter search handlers are missing');
+if(!home.includes('onclick="window.mgSearchProperties?window.mgSearchProperties():filterProps()"')||!backend.includes('window.mgSearchProperties=async function()')||!backend.includes('while(liveMode&&hasMoreListings&&safety<30)'))throw new Error('Search must scan paginated listings before applying text filters');
+console.log('MOBILE SEARCH PASS — control changes restore scroll position; text search scans remaining city pages.');
+
 console.log('PROPERTY PHOTO DIRECTION PASS — Admin can choose vertical bottom-to-top or horizontal swipe; website and Android WebView use the saved setting.');
 
 const bidirDemo=fs.readFileSync('assets/maru-ghar-demo-showcase.js','utf8');
