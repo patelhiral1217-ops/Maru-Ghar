@@ -46,14 +46,20 @@ function populateAreaFilter(city){
   }
 }
 let currentCity='ગાંધીનગર';
+function isSelectableCityName(value){
+  const name=String(value||'').trim().toLowerCase().replace(/\\s+/g,' ');
+  return !!name&&!['all','આખું ગુજરાત','ગુજરાત','શહેર','all gujarat','whole gujarat','gujarat','city'].includes(name);
+}
 function mergeCities(extra){
   const source=Array.isArray(extra)&&extra.length?extra:DEFAULT_CITIES.map(([name,nameEn])=>({name,nameEn}));
-  return [...new Map(source.filter(c=>c&&c.name).map(c=>[c.name,[c.name,c.nameEn||'']])).values()];
+  const valid=source.filter(c=>c&&isSelectableCityName(c.name));
+  const fallback=valid.length?valid:DEFAULT_CITIES.map(([name,nameEn])=>({name,nameEn}));
+  return [...new Map(fallback.map(c=>[c.name,[c.name,c.nameEn||'']])).values()];
 }
 function applyCityOptions(extra){
   const source=Array.isArray(extra)?extra:[];
   Object.keys(CITY_AREAS_REMOTE).forEach(k=>delete CITY_AREAS_REMOTE[k]);
-  source.forEach(c=>{if(c&&c.name&&Array.isArray(c.areas))CITY_AREAS_REMOTE[c.name]=c.areas.filter(a=>typeof a==='string'&&a.trim()).map(a=>a.trim())});
+  source.forEach(c=>{if(c&&isSelectableCityName(c.name)&&Array.isArray(c.areas))CITY_AREAS_REMOTE[c.name]=c.areas.filter(a=>typeof a==='string'&&a.trim()).map(a=>a.trim())});
   const list=mergeCities(source);
   const cf=document.getElementById('cityFilter');
   if(cf){
