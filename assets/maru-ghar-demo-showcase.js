@@ -207,7 +207,7 @@
   const area=document.getElementById('areaFilter')?.value||'all';
   const purpose=document.getElementById('purpose')?.value||'all';
   const type=document.getElementById('type')?.value||'all';
-  const matchesCity=p=>cityRaw==='all'||(isGandhinagar&&p.city==='ગાંધીનગર')||String(p.city||'').toLowerCase()===String(cityRaw).toLowerCase();
+  const matchesCity=p=>cityRaw==='all'?(p.city!=='કલોલ'&&p.area!=='સેક્ટર 21'):(isGandhinagar&&p.city==='ગાંધીનગર')||String(p.city||'').toLowerCase()===String(cityRaw).toLowerCase();
   samples.filter(p=>matchesCity(p)&&(area==='all'||p.area===area)&&(purpose==='all'||purpose===(p.purpose==='ભાડે'?'rent':'sale'))&&(type==='all'||type===p.type)).forEach(p=>{
    const priceNum=Number(String(p.price).replace(/[^0-9]/g,''))||0;
    const card=document.createElement('article');card.className='property';card.dataset.mgDemoSearchCard='1';
