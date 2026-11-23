@@ -58,7 +58,7 @@ function applyCityOptions(extra){
   const cf=document.getElementById('cityFilter');
   if(cf){
     const selected=cf.value||currentCity;
-    cf.replaceChildren(new Option('આખું ગુજરાત','all'));
+    cf.replaceChildren(new Option('શહેર','all'));
     list.forEach(([n,en])=>{const o=new Option(n,n);o.dataset.en=en||'';cf.appendChild(o)});
     cf.value=list.some(([n])=>n===selected)?selected:(list.some(([n])=>n===currentCity)?currentCity:(list[0]?.[0]||'all'));
     currentCity=cf.value;
