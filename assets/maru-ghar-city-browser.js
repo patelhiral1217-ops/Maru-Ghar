@@ -22,7 +22,7 @@
   const types=[['all','allProps'],['ઘર','house'],['ફ્લેટ','flat'],['દુકાન','shop'],['રેસિડેન્શિયલ પ્લોટ','res'],['કોમર્શિયલ પ્લોટ','com'],['ઓફિસ','office'],['વેરહાઉસ','warehouse'],['પી.જી. (PG)','pg']];
   function close(){modal.hidden=true;document.body.style.overflow='';}
   function button(label,selected,fn,extra=''){const b=document.createElement('button');b.type='button';b.className='mg-city-choice'+(extra?' '+extra:'');b.textContent=label;b.classList.toggle('selected',!!selected);b.addEventListener('click',fn);return b;}
-  function setProgress(){modal.querySelectorAll('[data-step]').forEach(x=>x.classList.toggle('active',Number(x.dataset.step)<=step));back.hidden=step===1;back.textContent='‹ '+t('back');$('mgCityBrowserTitle').textContent=step===1?t('chooseCity'):step===2?t('area'):t('type');}
+  function setProgress(){modal.querySelectorAll('[data-step]').forEach(x=>x.classList.toggle('active',Number(x.dataset.step)<=step));back.hidden=step===1;back.textContent='‹ '+t('back');$('mgCityBrowserTitle').textContent=step===1?t('chooseCity'):t('area');}
   function listLiveAreas(){
    const opts=[...area.options].filter(o=>o.value!=='all');
    const seen=new Set(opts.map(o=>o.value.toLowerCase()));
@@ -59,9 +59,9 @@
   }
   function showAreas(){
    const wrap=document.createElement('div');wrap.className='mg-city-browser-grid';
-   wrap.append(button(t('allAreas'),chosenArea==='all',()=>{chosenArea='all';step=3;show()}));
+   wrap.append(button(t('allAreas'),chosenArea==='all',()=>{chosenArea='all';apply(type.value||'all')}));
    const opts=listLiveAreas();
-   opts.forEach(o=>wrap.append(button(o.textContent,chosenArea===o.value,()=>{chosenArea=o.value;step=3;show()})));
+   opts.forEach(o=>wrap.append(button(o.textContent,chosenArea===o.value,()=>{chosenArea=o.value;apply(type.value||'all')})));
    if(!opts.length){const note=document.createElement('p');note.className='mg-city-browser-note';note.textContent=t('emptyArea');content.append(note);}
    content.append(wrap);
   }
@@ -74,7 +74,7 @@
   }
   function show(){
    content.replaceChildren();setProgress();
-   if(step===1)showCities();else if(step===2)showAreas();else showTypes();
+   if(step===1)showCities();else showAreas();
   }
   async function apply(typeValue){
    try{
@@ -86,9 +86,10 @@
     city.value=chosenCity;area.value=chosenArea;purpose.value=chosenPurpose;type.value=typeValue;
     if(typeof window.filterProps==='function')window.filterProps();
     close();
+    document.getElementById('listings')?.scrollIntoView({behavior:'smooth',block:'start'});
    }catch(err){console.error('City/area filter apply failed:',err);}
   }
-  trigger.addEventListener('click',()=>{chosenCity=city.value||'all';chosenArea='all';chosenPurpose='all';step=1;modal.hidden=false;document.body.style.overflow='hidden';show();});
+  trigger.addEventListener('click',()=>{chosenCity=city.value||'all';chosenArea=area.value||'all';chosenPurpose=purpose.value||'all';step=1;modal.hidden=false;document.body.style.overflow='hidden';show();});
   back.addEventListener('click',()=>{if(step>1){step--;show();}});
   $('mgCityBrowserCloseFoot').addEventListener('click',close);
   modal.addEventListener('click',e=>{if(e.target.closest('[data-close]'))close();});
