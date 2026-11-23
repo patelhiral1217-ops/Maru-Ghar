@@ -1,6 +1,6 @@
 import { firebaseConfig, cloudinaryConfig, isFirebaseConfigured, isCloudinaryConfigured } from '../firebase-config.js';
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-import { getFirestore, collection, getDocs, getDoc, doc, query, where, orderBy, limit, startAfter, addDoc, setDoc, serverTimestamp, Timestamp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import { getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, collection, getDocs, getDoc, doc, query, where, orderBy, limit, startAfter, addDoc, setDoc, serverTimestamp, Timestamp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { getAuth, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 
 const form = document.getElementById('propertyForm');
@@ -58,7 +58,7 @@ function applyCityOptions(extra){
   const cf=document.getElementById('cityFilter');
   if(cf){
     const selected=cf.value||currentCity;
-    cf.replaceChildren(new Option('આખું ગુજરાત','all'));
+    cf.replaceChildren(new Option('શહેર','all'));
     list.forEach(([n,en])=>{const o=new Option(n,n);o.dataset.en=en||'';cf.appendChild(o)});
     cf.value=list.some(([n])=>n===selected)?selected:(list.some(([n])=>n===currentCity)?currentCity:(list[0]?.[0]||'all'));
     currentCity=cf.value;
@@ -155,9 +155,14 @@ function sliderHtml(p,media){
   return `<div class="photo mg-slider" data-direction="${direction}" data-n="${media.length}" data-cur="0"><div class="mg-track">${media.map((m,i)=>slideHtml(m,i,alt)).join('')}</div>${pill}${controls}</div>`;
 }
 const sliderData=new WeakMap();
-function goTo(sl,idx){
+function goTo(sl,idx,gestureAxis){
   const n=+sl.dataset.n; idx=(idx+n)%n; sl.dataset.cur=idx;
-  sl.querySelector('.mg-track').style.transform=sl.dataset.direction==='vertical'?`translateY(-${idx*100}%)`:`translateX(-${idx*100}%)`;
+  const axis=gestureAxis||sl.dataset.axis||(sl.dataset.direction==='vertical'?'vertical':'horizontal');
+  sl.dataset.axis=axis;
+  const track=sl.querySelector('.mg-track');
+  track.style.flexDirection=axis==='vertical'?'column':'row';
+  track.querySelectorAll('.mg-slide').forEach(el=>{el.style.flex='0 0 100%';el.style.width='100%';el.style.height='100%';});
+  track.style.transform=axis==='vertical'?'translateY(-'+(idx*100)+'%)':'translateX(-'+(idx*100)+'%)';
   const c=sl.querySelector('.mg-count'); if(c)c.textContent=`${idx+1} / ${n}`;
   [idx,(idx+1)%n].forEach(k=>{const s=sl.querySelector(`.mg-slide[data-i="${k}"][data-bg]`);if(s&&!s.style.backgroundImage)s.style.backgroundImage=`url('${s.dataset.bg}')`;});
   sl.querySelectorAll('video').forEach(v=>{try{v.pause()}catch(_){}});
@@ -189,10 +194,15 @@ function showLb(i){
 function openLb(media,i){ensureLb();lbMedia=media;lb.hidden=false;document.body.style.overflow='hidden';showLb(i);}
 function closeLb(){if(!lb)return;lb.hidden=true;lb.querySelector('.mg-lb-stage').replaceChildren();document.body.style.overflow='';}
 if(grid){
+  grid.addEventListener('mg-swipe',e=>{
+    const sl=e.target.closest('.mg-slider');
+    if(!sl||!e.detail||e.detail.axis!=='vertical')return;
+    goTo(sl,+sl.dataset.cur+(e.detail.direction<0?-1:1),'vertical');
+  });
   grid.addEventListener('click',e=>{
     const sl=e.target.closest('.mg-slider'); if(!sl)return;
     const step=e.target.closest('[data-mg-step]');
-    if(step){goTo(sl,+sl.dataset.cur + +step.dataset.mgStep);return;}
+    if(step){goTo(sl,+sl.dataset.cur + +step.dataset.mgStep,'horizontal');return;}
     if(e.target.closest('[data-mg-open]')){const m=sliderData.get(sl);if(m)openLb(m,+sl.dataset.cur);}
   });
   /* Swiping the photo strip is owned by assets/maru-ghar-swipe.js: it clicks the
@@ -396,25 +406,97 @@ async function init() {
     return;
   }
   try {
-    const app=initializeApp(firebaseConfig); db=getFirestore(app); auth=getAuth(app); liveMode=true;
+    const app=initializeApp(firebaseConfig);
+    // Keep previously read listings available offline and queue Firestore writes until reconnection.
+    // If IndexedDB persistence is unavailable (private mode / restricted browser), fall back safely.
+    try {
+      db=initializeFirestore(app,{localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()})});
+      window.__mgOfflineCache='persistent';
+    } catch(cacheError) {
+      console.warn('Persistent Firestore cache unavailable; using memory cache:',cacheError);
+      db=getFirestore(app);
+      window.__mgOfflineCache='memory-fallback';
+    }
+    auth=getAuth(app); liveMode=true;
+    // Visible connectivity state; does not interrupt the page or clear cached listings.
+    let networkNotice=document.getElementById('mgNetworkStatus');
+    if(!networkNotice){
+      networkNotice=document.createElement('div');
+      networkNotice.id='mgNetworkStatus';
+      networkNotice.setAttribute('role','status');
+      networkNotice.setAttribute('aria-live','polite');
+      networkNotice.style.cssText='position:sticky;top:0;z-index:1200;display:none;padding:8px 12px;text-align:center;font-size:13px;font-weight:700;background:#fff1d6;color:#704500;border:1px solid #e0bd70;border-radius:10px;margin:6px 0';
+      const host=document.getElementById('listings')||grid?.parentElement||document.body;
+      host.insertBefore(networkNotice,host.firstChild);
+    }
+    const refreshNetworkNotice=()=>{
+      const offline=!navigator.onLine;
+      networkNotice.textContent=offline?'ઇન્ટરનેટ બંધ છે — અગાઉ લોડ થયેલી મિલકતો દેખાઈ શકે છે. નવી મિલકત મોકલવા માટે ઇન્ટરનેટ જરૂરી છે.':'';
+      networkNotice.style.display=offline?'block':'none';
+    };
+    window.addEventListener('offline',refreshNetworkNotice);
+    window.addEventListener('online',refreshNetworkNotice);
+    refreshNetworkNotice();
     // Admin shortcut buttons exist in the page but stay hidden for everyone except the signed-in admin.
     onAuthStateChanged(auth,u=>{const ok=!!u&&!u.isAnonymous&&u.uid===ADMIN_UID;['adminNavLink','adminQuick'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('hidden',!ok)})});
     // Do not block the first property render on secondary settings/city metadata reads.
     loadCities();
     loadSettings();
     const cityEl=document.getElementById('cityFilter');
+    const restoreSearchViewport=(y,gridAnchor,listAnchor)=>{
+      const root=document.documentElement,body=document.body;
+      const oldBehavior=root.style.scrollBehavior;
+      root.style.scrollBehavior='auto';
+      if(grid)grid.style.overflowAnchor='none';
+      const listingHost=document.getElementById('listings');
+      if(listingHost)listingHost.style.overflowAnchor='none';
+      if(body)body.style.overflowAnchor='none';
+      const restore=()=>window.scrollTo(0,y);
+      restore();
+      requestAnimationFrame(()=>{restore();requestAnimationFrame(restore);});
+      [120,320,700].forEach(ms=>setTimeout(()=>{
+        restore();
+        if(ms===700){
+          root.style.scrollBehavior=oldBehavior;
+          if(grid)grid.style.overflowAnchor=gridAnchor;
+          if(listingHost)listingHost.style.overflowAnchor=listAnchor;
+          if(body)body.style.overflowAnchor='';
+        }
+      },ms));
+    };
     window.mgSelectCity=async(nextCity)=>{
+      const savedY=window.scrollY||window.pageYOffset||0;
+      const gridAnchor=grid?grid.style.overflowAnchor:'';
+      const listingHost=document.getElementById('listings');
+      const listAnchor=listingHost?listingHost.style.overflowAnchor:'';
       currentCity=String(nextCity||'all');
       if(cityEl)cityEl.value=currentCity;
       populateAreaFilter(currentCity);
-      while(loadingMore)await new Promise(r=>setTimeout(r,80));
-      await loadApproved(true);
+      let wait=0;
+      while(loadingMore&&wait++<50)await new Promise(r=>setTimeout(r,100));
+      if(loadingMore)throw new Error('પહેલાની લિસ્ટિંગ લોડ થવામાં વિલંબ છે. ફરી પ્રયાસ કરો.');
+      try{await loadApproved(true);}
+      finally{restoreSearchViewport(savedY,gridAnchor,listAnchor);}
       return true;
     };
-    if(cityEl)cityEl.addEventListener('change',()=>{window.mgSelectCity(cityEl.value||'all');});
+    if(cityEl)cityEl.addEventListener('change',()=>{window.mgSelectCity(cityEl.value||'all').catch(e=>console.error('city listing refresh failed',e));});
     populateAreaFilter(currentCity);
     const areaEl=document.getElementById('areaFilter');
-    if(areaEl)areaEl.addEventListener('change',async()=>{while(loadingMore)await new Promise(r=>setTimeout(r,100));if(typeof window.filterProps==='function')window.filterProps();});
+    if(areaEl)areaEl.addEventListener('change',async()=>{
+      const savedY=window.scrollY||window.pageYOffset||0;
+      const root=document.documentElement,oldBehavior=root.style.scrollBehavior;
+      root.style.scrollBehavior='auto';
+      const host=document.getElementById('listings'),oldAnchor=host?host.style.overflowAnchor:'';
+      if(host)host.style.overflowAnchor='none';
+      try{
+        let wait=0;while(loadingMore&&wait++<50)await new Promise(r=>setTimeout(r,100));
+        if(typeof window.filterProps==='function')window.filterProps();
+      }finally{
+        const restore=()=>window.scrollTo(0,savedY);
+        restore();requestAnimationFrame(()=>{restore();requestAnimationFrame(restore);});
+        [120,320,700].forEach(ms=>setTimeout(()=>{restore();if(ms===700){root.style.scrollBehavior=oldBehavior;if(host)host.style.overflowAnchor=oldAnchor;}},ms));
+      }
+    });
     window.addEventListener('mg-language-changed',()=>populateAreaFilter(currentCity));
     await loadApproved(true);
     renderRecentlyViewed();
@@ -424,6 +506,53 @@ async function init() {
     setStatus('લિસ્ટિંગ લોડ ન થઈ. ઇન્ટરનેટ તપાસી ફરી પ્રયાસ કરો.',true);
   }
 }
+
+
+window.mgSearchProperties=async function(){
+  const input=document.getElementById('query');
+  const button=document.querySelector('.searchbox button[onclick*="mgSearchProperties"]');
+  const grid=document.getElementById('properties');
+  const list=document.getElementById('listings');
+  const savedY=window.scrollY||window.pageYOffset||0;
+  const oldAnchor=grid?grid.style.overflowAnchor:'';
+  const oldListAnchor=list?list.style.overflowAnchor:'';
+  let restoreTimers=[];
+  const restorePagePosition=()=>{
+    if(grid)grid.style.overflowAnchor='none';
+    if(list)list.style.overflowAnchor='none';
+    window.scrollTo({top:savedY,left:0,behavior:'auto'});
+  };
+  if(grid)grid.style.overflowAnchor='none';
+  if(list)list.style.overflowAnchor='none';
+  if(button){button.disabled=true;button.dataset.oldLabel=button.textContent;button.textContent='શોધી રહ્યું છે…';}
+  try{
+    // Keep the user's current position while result pages are appended.
+    // Do not blur the search input: mobile keyboards can otherwise force a viewport jump.
+    let safety=0,waitCycles=0;
+    while(liveMode&&hasMoreListings&&safety<30){
+      if(loadingMore){
+        // A concurrent page load must not trap Search in an endless wait.
+        if(waitCycles++>=50)break;
+        await new Promise(resolve=>setTimeout(resolve,100));
+        continue;
+      }
+      waitCycles=0;
+      await loadApproved(false);
+      safety++;
+      restorePagePosition();
+    }
+    if(typeof window.filterProps==='function')window.filterProps();
+    restorePagePosition();
+    const countEl=document.getElementById('count');
+    if(countEl&&countEl.textContent.includes('0 '))countEl.textContent='આ શોધ માટે કોઈ પ્રોપર્ટી મળી નથી. શહેર અથવા વિસ્તારનું નામ તપાસો.';
+  }catch(error){console.error('property search failed',error);if(typeof window.filterProps==='function')window.filterProps();}
+  finally{
+    [80,220,520,900].forEach(ms=>restoreTimers.push(setTimeout(()=>window.scrollTo({top:savedY,left:0,behavior:'auto'}),ms)));
+    if(grid)grid.style.overflowAnchor=oldAnchor;
+    if(list)list.style.overflowAnchor=oldListAnchor;
+    if(button){button.disabled=false;button.textContent=button.dataset.oldLabel||'શોધો';}
+  }
+};
 
 if(form) form.addEventListener('submit', async ev=>{
   ev.preventDefault();
