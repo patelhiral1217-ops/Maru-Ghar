@@ -39,7 +39,7 @@
   }
   function showCities(){
    const wrap=document.createElement('div');wrap.className='mg-city-browser-grid';
-   [...city.options].forEach(o=>wrap.append(button(o.value==='all'?t('allCities'):o.textContent,o.value===chosenCity,()=>{
+   [...city.options].filter(o=>o.value&&o.value!=='all').forEach(o=>wrap.append(button(o.textContent,o.value===chosenCity,()=>{
     if(busy)return;
     chosenCity=o.value;city.value=chosenCity;chosenArea='all';step=2;busy=false;
     let request;
