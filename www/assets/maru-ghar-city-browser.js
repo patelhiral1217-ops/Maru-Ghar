@@ -39,7 +39,7 @@
   }
   function showCities(){
    const wrap=document.createElement('div');wrap.className='mg-city-browser-grid';
-   [...city.options].filter(o=>{const norm=v=>String(v||'').trim().toLowerCase().replace(/\\s+/g,' ');const blocked=new Set(['all','આખું ગુજરાત','સમગ્ર ગુજરાત','ગુજરાત','all gujarat','across gujarat','whole gujarat','पूरा गुजरात','सम्पूर्ण गुजरात']);return !!o.value&&!blocked.has(norm(o.value))&&!blocked.has(norm(o.textContent));}).forEach(o=>wrap.append(button(o.textContent,o.value===chosenCity,()=>{
+   [...city.options].filter(o=>{const norm=v=>String(v||'').trim().toLowerCase();const blocked=['all','આખું ગુજરાત','સમગ્ર ગુજરાત','ગુજરાત','all gujarat','across gujarat','whole gujarat','पूरा गुजरात','सम्पूर्ण गुजरात'];return !!o.value&&!blocked.some(x=>norm(o.value)===x||norm(o.textContent)===x||norm(o.textContent).startsWith(x+' '));}).forEach(o=>wrap.append(button(o.textContent,o.value===chosenCity,()=>{
     if(busy)return;
     chosenCity=o.value;city.value=chosenCity;chosenArea='all';step=2;busy=false;
     let request;
