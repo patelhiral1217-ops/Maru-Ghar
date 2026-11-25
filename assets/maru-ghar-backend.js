@@ -551,8 +551,7 @@ window.mgSearchProperties=async function(){
     const countEl=document.getElementById('count');
     if(countEl&&countEl.textContent.includes('0 '))countEl.textContent='આ શોધ માટે કોઈ પ્રોપર્ટી મળી નથી. શહેર અથવા વિસ્તારનું નામ તપાસો.';
     // After Search is pressed, take the user directly to the matching results.
-    const resultsTarget=document.getElementById('listings')||grid;
-    if(resultsTarget)resultsTarget.scrollIntoView({behavior:'smooth',block:'start'});
+    // Keep the viewport at the search controls; results remain directly below them.
   }catch(error){console.error('property search failed',error);if(typeof window.filterProps==='function')window.filterProps();}
   finally{
     if(grid)grid.style.overflowAnchor=oldAnchor;
