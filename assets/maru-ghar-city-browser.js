@@ -20,7 +20,8 @@
   let step=1,chosenCity=city.value||'all',chosenArea='all',chosenPurpose='all',busy=false;
   let cityLoadPromise=Promise.resolve();
   const types=[['all','allProps'],['ઘર','house'],['ફ્લેટ','flat'],['દુકાન','shop'],['રેસિડેન્શિયલ પ્લોટ','res'],['કોમર્શિયલ પ્લોટ','com'],['ઓફિસ','office'],['વેરહાઉસ','warehouse'],['પી.જી. (PG)','pg']];
-  function close(){modal.hidden=true;document.body.style.overflow='';}
+  function updateTriggerLabel(){const selected=city.options[city.selectedIndex];trigger.textContent=selected&&selected.value&&selected.value!=='all'?selected.textContent:t('city');}
+  function close(){modal.hidden=true;document.body.style.overflow='';updateTriggerLabel();}
   function button(label,selected,fn,extra=''){const b=document.createElement('button');b.type='button';b.className='mg-city-choice'+(extra?' '+extra:'');b.textContent=label;b.classList.toggle('selected',!!selected);b.addEventListener('click',fn);return b;}
   function setProgress(){modal.querySelectorAll('[data-step]').forEach(x=>x.classList.toggle('active',Number(x.dataset.step)<=step));back.hidden=step===1;back.textContent='‹ '+t('back');$('mgCityBrowserTitle').textContent=step===1?t('chooseCity'):t('area');}
   function listLiveAreas(){
@@ -96,7 +97,7 @@
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden)close();});
   $('mgListingTitleButton')?.addEventListener('click',()=>$('listings')?.scrollIntoView({behavior:'smooth',block:'start'}));
   window.addEventListener('mg-language-changed',()=>{trigger.textContent=t('city');if(!modal.hidden)show();});
-  trigger.textContent=t('city');
+  updateTriggerLabel();
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
