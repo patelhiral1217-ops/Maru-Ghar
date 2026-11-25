@@ -86,7 +86,7 @@
     city.value=chosenCity;area.value=chosenArea;purpose.value=chosenPurpose;type.value=typeValue;
     if(typeof window.filterProps==='function')window.filterProps();
     close();
-    document.getElementById('listings')?.scrollIntoView({behavior:'smooth',block:'start'});
+    // Keep the user at the search controls; results navigation happens only after pressing Search.
    }catch(err){console.error('City/area filter apply failed:',err);}
   }
   trigger.addEventListener('click',()=>{chosenCity=city.value||'all';chosenArea=area.value||'all';chosenPurpose=purpose.value||'all';step=1;modal.hidden=false;document.body.style.overflow='hidden';show();});
