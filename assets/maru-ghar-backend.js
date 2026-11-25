@@ -548,12 +548,13 @@ window.mgSearchProperties=async function(){
       restorePagePosition();
     }
     if(typeof window.filterProps==='function')window.filterProps();
-    restorePagePosition();
     const countEl=document.getElementById('count');
     if(countEl&&countEl.textContent.includes('0 '))countEl.textContent='આ શોધ માટે કોઈ પ્રોપર્ટી મળી નથી. શહેર અથવા વિસ્તારનું નામ તપાસો.';
+    // After Search is pressed, take the user directly to the matching results.
+    const resultsTarget=document.getElementById('listings')||grid;
+    if(resultsTarget)resultsTarget.scrollIntoView({behavior:'smooth',block:'start'});
   }catch(error){console.error('property search failed',error);if(typeof window.filterProps==='function')window.filterProps();}
   finally{
-    [80,220,520,900].forEach(ms=>restoreTimers.push(setTimeout(()=>window.scrollTo({top:savedY,left:0,behavior:'auto'}),ms)));
     if(grid)grid.style.overflowAnchor=oldAnchor;
     if(list)list.style.overflowAnchor=oldListAnchor;
     if(button){button.disabled=false;button.textContent=button.dataset.oldLabel||'શોધો';}
