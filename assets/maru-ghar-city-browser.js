@@ -20,7 +20,7 @@
   let step=1,chosenCity=city.value||'all',chosenArea='all',chosenPurpose='all',busy=false;
   let cityLoadPromise=Promise.resolve();
   const types=[['all','allProps'],['ઘર','house'],['ફ્લેટ','flat'],['દુકાન','shop'],['રેસિડેન્શિયલ પ્લોટ','res'],['કોમર્શિયલ પ્લોટ','com'],['ઓફિસ','office'],['વેરહાઉસ','warehouse'],['પી.જી. (PG)','pg']];
-  function updateTriggerLabel(){const selected=city.options[city.selectedIndex];trigger.textContent=selected&&selected.value&&selected.value!=='all'?selected.textContent:t('city');}
+  function updateTriggerLabel(){const selected=city.options[city.selectedIndex];const cityLabel=selected&&selected.value&&selected.value!=='all'?selected.textContent:t('city');const areaLabel=chosenArea==='all'?t('allAreas'):(area.options[area.selectedIndex]?.textContent||chosenArea);trigger.textContent=chosenArea==='all'&&(!selected||selected.value==='all')?cityLabel:cityLabel+' • '+areaLabel;}
   function close(){modal.hidden=true;document.body.style.overflow='';updateTriggerLabel();}
   function button(label,selected,fn,extra=''){const b=document.createElement('button');b.type='button';b.className='mg-city-choice'+(extra?' '+extra:'');b.textContent=label;b.classList.toggle('selected',!!selected);b.addEventListener('click',fn);return b;}
   function setProgress(){modal.querySelectorAll('[data-step]').forEach(x=>x.classList.toggle('active',Number(x.dataset.step)<=step));back.hidden=step===1;back.textContent='‹ '+t('back');$('mgCityBrowserTitle').textContent=step===1?t('chooseCity'):t('area');}
@@ -86,6 +86,7 @@
     await cityLoadPromise;
     city.value=chosenCity;area.value=chosenArea;purpose.value=chosenPurpose;type.value=typeValue;
     if(typeof window.filterProps==='function')window.filterProps();
+    updateTriggerLabel();
     close();
     // Keep the user at the search controls; results navigation happens only after pressing Search.
    }catch(err){console.error('City/area filter apply failed:',err);}
@@ -96,7 +97,7 @@
   modal.addEventListener('click',e=>{if(e.target.closest('[data-close]'))close();});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden)close();});
   $('mgListingTitleButton')?.addEventListener('click',()=>$('listings')?.scrollIntoView({behavior:'smooth',block:'start'}));
-  window.addEventListener('mg-language-changed',()=>{trigger.textContent=t('city');if(!modal.hidden)show();});
+  window.addEventListener('mg-language-changed',()=>{updateTriggerLabel();if(!modal.hidden)show();});
   updateTriggerLabel();
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
