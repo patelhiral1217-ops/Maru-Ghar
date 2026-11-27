@@ -89,6 +89,13 @@ jobs:
           ./gradlew bundleRelease --no-daemon
           test -s app/build/outputs/bundle/release/app-release.aab
           ls -lh app/build/outputs/bundle/release/app-release.aab
+      - name: Preserve Android package validation artifact (not Play upload signed)
+        uses: actions/upload-artifact@v4
+        with:
+          name: maru-ghar-android-package-validation
+          path: android/app/build/outputs/bundle/release/app-release.aab
+          if-no-files-found: error
+          retention-days: 14
 
   play-aab:
     needs: [validate, android-package-check]
