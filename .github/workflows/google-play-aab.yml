@@ -21,6 +21,7 @@ jobs:
 
   play-aab:
     needs: validate
+    if: ${{ vars.MARU_PLAY_RELEASE_ENABLED == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
