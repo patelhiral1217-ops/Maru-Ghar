@@ -13,6 +13,7 @@
 - [x] Public account deletion instructions page added at `account-deletion.html` and linked from the privacy policy and store listing draft
 - [x] Existing OTA bridge included in the isolated AAB workflow
 - [x] Separate manual Google Play AAB workflow added; targets Android 16 / API 36
+- [x] Android 16 packaging workflow corrected to use Capacitor 8 (the supported API 36 line) and explicitly create its Android SDK variables file
 - [ ] Add permanent Play upload keystore as GitHub Actions secrets (never commit the keystore)
 - [ ] Set GitHub Actions repository variable `MARU_PLAY_RELEASE_ENABLED=true` only after all four signing secrets are configured
 - [ ] Run the manual AAB workflow and verify signed bundle
