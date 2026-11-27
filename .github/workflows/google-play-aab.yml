@@ -19,8 +19,59 @@ jobs:
           npm run copy-web
           npm test
 
-  play-aab:
+  android-package-check:
     needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: android-actions/setup-android@v4
+      - name: Install dependencies and build the existing web assets
+        run: |
+          npm install
+          npm run copy-web
+      - name: Bundle the existing OTA bridge for the native WebView
+        run: |
+          mkdir -p www/assets
+          npx esbuild scripts/maru-ghar-ota.js --bundle --format=esm --platform=browser --target=es2020 --outfile=www/assets/maru-ghar-ota.bundle.js
+          test -s www/assets/maru-ghar-ota.bundle.js
+      - name: Install Android 16 SDK
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0" "build-tools;35.0.0"
+      - name: Generate Capacitor Android project without changing app source
+        run: |
+          npm install @capacitor/cli@^7 @capacitor/core@^7 @capacitor/android@^7 @capacitor/push-notifications@^7 @capacitor/assets@^3 @capgo/capacitor-updater@^7
+          npx cap add android
+          cp google-services.json android/app/google-services.json
+          M=android/app/src/main/AndroidManifest.xml
+          grep -q POST_NOTIFICATIONS "$M" || sed -i 's#<application#<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />\n    <application#' "$M"
+          npx cap sync android
+          test -f android/variables.gradle
+          sed -i "s/compileSdkVersion = 35/compileSdkVersion = 36/; s/targetSdkVersion = 35/targetSdkVersion = 36/; s/buildToolsVersion = '35.0.0'/buildToolsVersion = '36.0.0'/" android/variables.gradle
+          grep -q 'compileSdkVersion = 36' android/variables.gradle
+          grep -q 'targetSdkVersion = 36' android/variables.gradle
+          grep -q "buildToolsVersion = '36.0.0'" android/variables.gradle
+      - name: Generate approved Maru Ghar launcher icon
+        run: |
+          test -s assets/maru-ghar-approved-app-icon.png
+          cp assets/maru-ghar-approved-app-icon.png assets/icon.png
+          ./node_modules/.bin/capacitor-assets generate --android --iconBackgroundColor '#12382f' --splashBackgroundColor '#12382f'
+          test -s android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
+      - name: Validate unsigned Android App Bundle packaging
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew bundleRelease --no-daemon
+          test -s app/build/outputs/bundle/release/app-release.aab
+          ls -lh app/build/outputs/bundle/release/app-release.aab
+
+  play-aab:
+    needs: [validate, android-package-check]
     if: ${{ vars.MARU_PLAY_RELEASE_ENABLED == 'true' }}
     runs-on: ubuntu-latest
     steps:
