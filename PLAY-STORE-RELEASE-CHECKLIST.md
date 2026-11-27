@@ -9,6 +9,8 @@
 - [x] Stable Capacitor application ID: `in.marughar.gandhinagar`
 - [x] Existing approved Maru Ghar launcher icon asset identified
 - [x] Existing Android CI workflow identified (APK only; test-key fallback is not for Play)
+- [x] Source-based privacy/Data Safety audit added in `PLAY-STORE-PRIVACY-AUDIT.md`
+- [x] Existing OTA bridge included in the isolated AAB workflow
 - [x] Separate manual Google Play AAB workflow added; targets Android 16 / API 36
 - [ ] Add permanent Play upload keystore as GitHub Actions secrets (never commit the keystore)
 - [ ] Run the manual AAB workflow and verify signed bundle
@@ -28,7 +30,7 @@ Keep a secure offline backup of the keystore and passwords. Losing the upload ke
 - [ ] Confirm developer account identity and Play Console access
 - [ ] Finalize app title, short description, full description, category, contact email, and support website
 - [ ] Prepare  phone/tablet screenshots and feature graphic from the real app
-- [ ] Verify privacy policy against actual Firebase Auth, Firestore, Storage, location, analytics, crash reporting, ads, and third-party SDK data flows
+- [ ] Resolve privacy policy gaps identified in `PLAY-STORE-PRIVACY-AUDIT.md` (anonymous Firebase UID, verified developer/privacy contact, retention details, Cloudinary deletion credentials)
 - [ ] Complete Data safety form accurately from actual data flows
 - [ ] Complete content rating questionnaire and target-audience declarations
 - [ ] Complete app access instructions for reviewer (admin-only areas must not be falsely represented as public)
