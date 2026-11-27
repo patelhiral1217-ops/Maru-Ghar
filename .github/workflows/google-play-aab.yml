@@ -1,5 +1,5 @@
 name: Prepare Maru Ghar Google Play AAB
-# Release workflow changes are validated on the isolated play-store-prep branch; no Firebase Hosting deployment.
+# Release workflow changes are validated on the isolated play-store-prep branch; no Firebase Hosting deployment; validation also checks the public account-deletion page.
 on:
   workflow_dispatch:
   push:
