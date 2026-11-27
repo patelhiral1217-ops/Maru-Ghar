@@ -10,6 +10,7 @@
 - [x] Existing approved Maru Ghar launcher icon asset identified
 - [x] Existing Android CI workflow identified (APK only; test-key fallback is not for Play)
 - [x] Source-based privacy/Data Safety audit added in `PLAY-STORE-PRIVACY-AUDIT.md`
+- [x] Public account deletion instructions page added at `account-deletion.html` and linked from the privacy policy and store listing draft
 - [x] Existing OTA bridge included in the isolated AAB workflow
 - [x] Separate manual Google Play AAB workflow added; targets Android 16 / API 36
 - [ ] Add permanent Play upload keystore as GitHub Actions secrets (never commit the keystore)
