@@ -34,8 +34,13 @@ jobs:
           test -n "$KS_PASS" || { echo "::error::Add MARU_PLAY_UPLOAD_KEYSTORE_PASSWORD repository secret."; exit 1; }
           test -n "$KS_ALIAS" || { echo "::error::Add MARU_PLAY_UPLOAD_KEY_ALIAS repository secret."; exit 1; }
           test -n "$KEY_PASS" || { echo "::error::Add MARU_PLAY_UPLOAD_KEY_PASSWORD repository secret."; exit 1; }
+      - name: Bundle the existing OTA bridge for the native WebView
+        run: |
+          mkdir -p www/assets
+          npx esbuild scripts/maru-ghar-ota.js --bundle --format=esm --platform=browser --target=es2020 --outfile=www/assets/maru-ghar-ota.bundle.js
+          test -s www/assets/maru-ghar-ota.bundle.js
       - name: Install Android 16 SDK
-        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0" "build-tools;35.0.0"
       - name: Generate Capacitor Android project without changing app source
         run: |
           npm install @capacitor/cli@^7 @capacitor/core@^7 @capacitor/android@^7 @capacitor/push-notifications@^7 @capacitor/assets@^3 @capgo/capacitor-updater@^7
@@ -45,9 +50,10 @@ jobs:
           grep -q POST_NOTIFICATIONS "$M" || sed -i 's#<application#<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />\n    <application#' "$M"
           npx cap sync android
           test -f android/variables.gradle
-          sed -i 's/compileSdkVersion = 35/compileSdkVersion = 36/; s/targetSdkVersion = 35/targetSdkVersion = 36/' android/variables.gradle
+          sed -i 's/compileSdkVersion = 35/compileSdkVersion = 36/; s/targetSdkVersion = 35/targetSdkVersion = 36/; s/buildToolsVersion = \'35.0.0\'/buildToolsVersion = \'36.0.0\'/' android/variables.gradle
           grep -q 'compileSdkVersion = 36' android/variables.gradle
           grep -q 'targetSdkVersion = 36' android/variables.gradle
+          grep -q "buildToolsVersion = '36.0.0'" android/variables.gradle
       - name: Generate approved Maru Ghar launcher icon
         run: |
           test -s assets/maru-ghar-approved-app-icon.png
