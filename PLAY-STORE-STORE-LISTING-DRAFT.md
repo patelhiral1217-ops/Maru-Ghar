@@ -37,6 +37,7 @@ Gujarati (ગુજરાતી). Add Hindi and English translations after the G
 
 વેબસાઇટ: https://maru-ghar-gandhinagar-8dbe4.web.app/
 ગોપનીયતા નીતિ: https://maru-ghar-gandhinagar-8dbe4.web.app/privacy.html
+એકાઉન્ટ ડિલીટ: https://maru-ghar-gandhinagar-8dbe4.web.app/account-deletion.html
 
 ## English short description (draft)
 Find homes, flats, shops and plots for rent or sale across Gujarat.
@@ -52,6 +53,7 @@ Maru Ghar does not publicly display an owner's private phone number on a propert
 
 Website: https://maru-ghar-gandhinagar-8dbe4.web.app/
 Privacy Policy: https://maru-ghar-gandhinagar-8dbe4.web.app/privacy.html
+Account deletion: https://maru-ghar-gandhinagar-8dbe4.web.app/account-deletion.html
 
 ## Required owner confirmation before publishing
 - Confirm the public app name and the default language.
