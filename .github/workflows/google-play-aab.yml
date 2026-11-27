@@ -1,6 +1,8 @@
 name: Prepare Maru Ghar Google Play AAB
 on:
   workflow_dispatch:
+  push:
+    branches: [play-store-prep]
 permissions:
   contents: read
 jobs:
@@ -16,6 +18,11 @@ jobs:
           distribution: temurin
           java-version: 21
       - uses: android-actions/setup-android@v4
+      - name: Install dependencies and run all existing app tests
+        run: |
+          npm install
+          npm run copy-web
+          npm test
       - name: Require permanent Play upload signing key
         env:
           KS_B64: ${{ secrets.MARU_PLAY_UPLOAD_KEYSTORE_BASE64 }}
@@ -27,11 +34,6 @@ jobs:
           test -n "$KS_PASS" || { echo "::error::Add MARU_PLAY_UPLOAD_KEYSTORE_PASSWORD repository secret."; exit 1; }
           test -n "$KS_ALIAS" || { echo "::error::Add MARU_PLAY_UPLOAD_KEY_ALIAS repository secret."; exit 1; }
           test -n "$KEY_PASS" || { echo "::error::Add MARU_PLAY_UPLOAD_KEY_PASSWORD repository secret."; exit 1; }
-      - name: Install dependencies and run all existing app tests
-        run: |
-          npm install
-          npm run copy-web
-          npm test
       - name: Install Android 16 SDK
         run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
       - name: Generate Capacitor Android project without changing app source
