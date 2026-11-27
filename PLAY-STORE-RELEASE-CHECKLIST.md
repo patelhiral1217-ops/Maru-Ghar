@@ -16,7 +16,9 @@
 - [x] Android 16 packaging workflow corrected to use Capacitor 8 (the supported API 36 line) and explicitly create its Android SDK variables file
 - [ ] Add permanent Play upload keystore as GitHub Actions secrets (never commit the keystore)
 - [ ] Set GitHub Actions repository variable `MARU_PLAY_RELEASE_ENABLED=true` only after all four signing secrets are configured
-- [ ] Run the manual AAB workflow and verify signed bundle
+- [x] Android 16 / API 36 Gradle release-bundle packaging passed in GitHub Actions (12 MB test bundle; not yet signed with the permanent Play upload key)
+- [x] Preserve the package-validation AAB as a short-lived GitHub Actions artifact for download/testing
+- [ ] Run the manual signed AAB workflow and verify the permanent Play upload signature
 - [ ] Test the release build on physical Android devices
 - [ ] Confirm versionCode is unique and versionName is correct before first upload
 
