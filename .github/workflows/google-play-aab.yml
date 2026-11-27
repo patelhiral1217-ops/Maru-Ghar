@@ -6,7 +6,21 @@ on:
 permissions:
   contents: read
 jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install dependencies and run the complete existing app test suite
+        run: |
+          npm install
+          npm run copy-web
+          npm test
+
   play-aab:
+    needs: validate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,11 +32,10 @@ jobs:
           distribution: temurin
           java-version: 21
       - uses: android-actions/setup-android@v4
-      - name: Install dependencies and run all existing app tests
+      - name: Install dependencies and build the existing web assets
         run: |
           npm install
           npm run copy-web
-          npm test
       - name: Require permanent Play upload signing key
         env:
           KS_B64: ${{ secrets.MARU_PLAY_UPLOAD_KEYSTORE_BASE64 }}
@@ -50,7 +63,7 @@ jobs:
           grep -q POST_NOTIFICATIONS "$M" || sed -i 's#<application#<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />\n    <application#' "$M"
           npx cap sync android
           test -f android/variables.gradle
-          sed -i 's/compileSdkVersion = 35/compileSdkVersion = 36/; s/targetSdkVersion = 35/targetSdkVersion = 36/; s/buildToolsVersion = \'35.0.0\'/buildToolsVersion = \'36.0.0\'/' android/variables.gradle
+          sed -i "s/compileSdkVersion = 35/compileSdkVersion = 36/; s/targetSdkVersion = 35/targetSdkVersion = 36/; s/buildToolsVersion = '35.0.0'/buildToolsVersion = '36.0.0'/" android/variables.gradle
           grep -q 'compileSdkVersion = 36' android/variables.gradle
           grep -q 'targetSdkVersion = 36' android/variables.gradle
           grep -q "buildToolsVersion = '36.0.0'" android/variables.gradle
