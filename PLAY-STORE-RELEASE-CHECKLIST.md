@@ -28,7 +28,8 @@ Keep a secure offline backup of the keystore and passwords. Losing the upload ke
 
 ## Store listing and policy work still requiring owner confirmation
 - [ ] Confirm developer account identity and Play Console access
-- [ ] Finalize app title, short description, full description, category, contact email, and support website
+- [x] Draft Gujarati and English app title, short description, and full description in `PLAY-STORE-STORE-LISTING-DRAFT.md`
+- [ ] Owner confirm title, category, contact email, support website, and all feature claims
 - [ ] Prepare  phone/tablet screenshots and feature graphic from the real app
 - [ ] Resolve privacy policy gaps identified in `PLAY-STORE-PRIVACY-AUDIT.md` (anonymous Firebase UID, verified developer/privacy contact, retention details, Cloudinary deletion credentials)
 - [ ] Complete Data safety form accurately from actual data flows
