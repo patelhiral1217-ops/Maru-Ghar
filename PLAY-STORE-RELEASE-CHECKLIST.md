@@ -13,6 +13,7 @@
 - [x] Existing OTA bridge included in the isolated AAB workflow
 - [x] Separate manual Google Play AAB workflow added; targets Android 16 / API 36
 - [ ] Add permanent Play upload keystore as GitHub Actions secrets (never commit the keystore)
+- [ ] Set GitHub Actions repository variable `MARU_PLAY_RELEASE_ENABLED=true` only after all four signing secrets are configured
 - [ ] Run the manual AAB workflow and verify signed bundle
 - [ ] Test the release build on physical Android devices
 - [ ] Confirm versionCode is unique and versionName is correct before first upload
@@ -23,6 +24,7 @@ Create these repository secrets in GitHub:
 - `MARU_PLAY_UPLOAD_KEYSTORE_PASSWORD`: keystore password
 - `MARU_PLAY_UPLOAD_KEY_ALIAS`: key alias
 - `MARU_PLAY_UPLOAD_KEY_PASSWORD`: private-key password
+- `MARU_PLAY_RELEASE_ENABLED=true` (repository variable): explicit opt-in to run the signed AAB build job
 
 Keep a secure offline backup of the keystore and passwords. Losing the upload key can delay updates; do not share it in chat or commit it to Git.
 
